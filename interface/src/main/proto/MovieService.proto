@@ -1,0 +1,34 @@
+
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "org.proto.grpc";
+package grpc;
+option java_outer_classname = "MovieServiceProto";
+
+
+message MovieRequest {
+    string id = 1;
+}
+
+message Genre {
+    string name = 1;
+}
+
+message MovieResponse {
+    string id = 1;
+    string title = 2;
+    int32 year = 3;
+    string release_date = 4;
+    string rated = 5;
+    string runtime = 6;
+    string director = 8;
+    string poster = 9;
+    string plot = 10;
+    string background = 11;
+    repeated Genre genres = 7;
+
+}
+
+service MovieService {
+    rpc getMovie (MovieRequest) returns (MovieResponse) {};
+}

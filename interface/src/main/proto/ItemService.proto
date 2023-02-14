@@ -1,0 +1,33 @@
+
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "org.proto.grpc";
+package grpc;
+option java_outer_classname = "ItemServiceProto";
+
+service ItemService {
+    rpc getItem (ItemRequest) returns (ItemResponse) {}
+    rpc getItems (ItemsRequest) returns (ItemsResponse) {}
+    rpc createItem (ItemRequest) returns (ItemResponse) {}
+    rpc updateItem (ItemRequest) returns (ItemResponse) {}
+    rpc deleteItem (ItemRequest) returns (ItemResponse) {}
+}
+
+message ItemsRequest {
+    repeated string ids = 1;
+}
+
+message ItemsResponse {
+    repeated ItemResponse items = 1;
+}
+
+message ItemRequest {
+    string id = 1;
+}
+
+message ItemResponse {
+    string id = 1;
+    string sku = 2;
+    double price = 4;
+    int32 quantity = 5;
+}

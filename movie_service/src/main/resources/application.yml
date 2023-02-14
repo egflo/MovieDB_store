@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: movie-service
+  data:
+    mongodb:
+      database: moviedb
+      host: localhost
+      port: 27017
+
+server:
+  port: 0
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+grpc:
+  server:
+      port: 9090
+  client:
+    inventory-grpc-server:
+      address: 'discovery:///inventory-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+background_api:
+  key: ${BACKGROUND_API_KEY}
+
+dgs:
+  graphql:
+    graphiql:
+      enabled: true
+

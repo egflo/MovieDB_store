@@ -1,0 +1,41 @@
+type Query {
+    movie(id: String): Movie
+    movies(title: String, limit: Int, page: Int, sort: String): [Movie]
+
+}
+
+type Cast {
+    id: ID!
+    name: String
+    characters: [String]
+    category: String
+    photo: String
+}
+
+type Tag {
+    id: ID!
+    name: String
+}
+
+type Movie {
+    id: ID!
+    title: String
+    year: Int
+    rated: String
+    runtime: String
+    genres: [String]
+    director: String
+    writer: String
+    boxOffice: String
+    production: String
+    plot: String
+    language: String
+    country: String
+    awards: String
+    poster: String
+    background: String
+    cast: [Cast]
+    popularity: Float
+    revenue: Int
+    tags: [Tag]
+}

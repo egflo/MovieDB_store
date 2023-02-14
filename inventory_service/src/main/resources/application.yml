@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/inventorydb
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 0
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+grpc:
+    server:
+        port: 9091
+    client:
+        movie-grpc-server:
+          address: 'discovery:///movie-service'
+          enableKeepAlive: true
+          keepAliveWithoutCalls: true
+          negotiationType: plaintext

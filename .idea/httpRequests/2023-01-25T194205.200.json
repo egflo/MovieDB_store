@@ -1,0 +1,89 @@
+[
+  {
+    "predicate": "Paths: [/movie-service/**], match trailing slash: true",
+    "route_id": "46fa8972-50ef-4261-8cc5-38be0db9f30a",
+    "filters": [
+      "[[RewritePath /movie-service/(?<segment>.*) = '/${segment}'], order = 0]"
+    ],
+    "uri": "lb://movie-service",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/order-service/**], match trailing slash: true",
+    "route_id": "98ef21c6-1e63-4e84-81c2-5a2e59918776",
+    "filters": [
+      "[[RewritePath /order-service/(?<segment>.*) = '/${segment}'], order = 0]"
+    ],
+    "uri": "lb://order-service",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/inventory-service/**], match trailing slash: true",
+    "route_id": "abdf88b1-ca10-4e0b-98d3-4ca921acb195",
+    "filters": [
+      "[[RewritePath /inventory-service/(?<segment>.*) = '/${segment}'], order = 0]"
+    ],
+    "uri": "lb://inventory-service",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/order-service/**], match trailing slash: true",
+    "route_id": "ReactiveCompositeDiscoveryClient_ORDER-SERVICE",
+    "filters": [
+      "[[RewritePath /order-service/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+    ],
+    "uri": "lb://ORDER-SERVICE",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/inventory-service/**], match trailing slash: true",
+    "route_id": "ReactiveCompositeDiscoveryClient_INVENTORY-SERVICE",
+    "filters": [
+      "[[RewritePath /inventory-service/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+    ],
+    "uri": "lb://INVENTORY-SERVICE",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/gateway-api/**], match trailing slash: true",
+    "metadata": {
+      "management.port": "8760"
+    },
+    "route_id": "ReactiveCompositeDiscoveryClient_GATEWAY-API",
+    "filters": [
+      "[[RewritePath /gateway-api/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+    ],
+    "uri": "lb://GATEWAY-API",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/movie-service/**], match trailing slash: true",
+    "route_id": "ReactiveCompositeDiscoveryClient_MOVIE-SERVICE",
+    "filters": [
+      "[[RewritePath /movie-service/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+    ],
+    "uri": "lb://MOVIE-SERVICE",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/movies/**], match trailing slash: true",
+    "route_id": "movie-service",
+    "filters": [],
+    "uri": "lb://MOVIE-SERVICE",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/orders/**], match trailing slash: true",
+    "route_id": "order-service",
+    "filters": [],
+    "uri": "lb://ORDER-SERVICE",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/inventory/**], match trailing slash: true",
+    "route_id": "inventory-service",
+    "filters": [],
+    "uri": "lb://INVENTORY-SERVICE",
+    "order": 0
+  }
+]
