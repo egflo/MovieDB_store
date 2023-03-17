@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <change beforePath="$PROJECT_DIR$/tax_service/src/main/resources/application 2.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -399,7 +399,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679039029436</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <created>1679069668551</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679069668551</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
