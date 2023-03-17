@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aws_template.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +47,9 @@
         <option value="TypeScript JSX File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="master" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -347,7 +349,7 @@
       <workItem from="1678827258549" duration="1654000" />
       <workItem from="1678828943291" duration="16916000" />
       <workItem from="1678926135440" duration="18183000" />
-      <workItem from="1679004965555" duration="9381000" />
+      <workItem from="1679004965555" duration="10432000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1676356948888</created>
@@ -370,7 +372,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679036149524</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <created>1679037441273</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1679037441273</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
