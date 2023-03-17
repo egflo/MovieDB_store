@@ -1,26 +1,22 @@
-import { initializeApp } from "firebase/app";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-    onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut,
-} from "firebase/auth";
-import {
-  getFirestore,
-  query,
-  getDocs,
-  collection,
-  where,
-  addDoc,
-} from "firebase/firestore";
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { getAnalytics } from "firebase/analytics";
 import axios from "axios";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import useToastContext from "../hooks/useToastContext";
+import {ToastType} from "../components/Toast";
+
+import {
+    GoogleAuthProvider,
+    getAuth,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signOut,
+} from "firebase/auth";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,17 +32,48 @@ const firebaseConfig = {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-
-// Initialize Firebase
+// Initialize firebase
 const app = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(app);
+// Initialize auth && firestore with the 'firebaseApp' property
 export const auth = getAuth(app);
+export const firestore = getFirestore(app);
 
-const getUserToken = async () => {
-    const user = auth.currentUser;
+export default app;
 
-    return null;
+
+async function getIdToken() {
+    let user = auth.currentUser;
+
+    if (user) {
+        return await user.getIdToken(true);
+    } else {
+        return new Promise((resolve, reject) => {
+            const unsub = auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    const token = await user.getIdToken(true);
+                    resolve(token)
+                } else {
+                    console.log("User not logged in")
+                    reject(new Error("User not logged in"))
+                }
+                unsub();
+            });
+        } )
+    }
 }
+
+export const fetcher = async (url) => {
+    const token = await getIdToken();
+    if (token) {
+        return axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    }
+    return axios.get(url);
+}
+
 
 
 export const axiosInstance = axios.create({
@@ -55,19 +82,17 @@ export const axiosInstance = axios.create({
         'Accept': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
-
     },
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(async config => {
-
-    const user = auth.currentUser;
     return config
 }, (error) => {
     return Promise.reject(error)
 })
+
 
 const login = (username, password) => {
     signInWithEmailAndPassword(auth, username, password)
@@ -77,7 +102,7 @@ const logout = () => {
 };
 
 export function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
+    const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
         'login_hint': 'user@example.com'
     });
@@ -127,4 +152,3 @@ export function signOutUser() {
 export function isUserLoggedIn() {
     return auth.currentUser;
 }
-

@@ -4,9 +4,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import  { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import {ToastProvider} from "../contexts/ToastContext";
 import {AuthProvider} from "../contexts/AuthContext";
+import {SWRConfig} from "swr";
 
 
-const theme = createTheme({
+export const theme = createTheme({
+
+  typography: {
+    fontFamily: [
+        'Roboto',
+        'sans-serif',
+    ].join(','),
+  } ,
+
+
   palette: {
     mode: 'dark',
     background: {
@@ -38,12 +48,15 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
   return (
-      <AuthProvider>
-        <ToastProvider>
-          <ThemeProvider theme={theme}>
-            {getLayout(<Component {...pageProps} />)}
-          </ThemeProvider>
-        </ToastProvider>
-      </AuthProvider>
+      <SWRConfig value={{
+      }}>
+        <AuthProvider>
+          <ToastProvider>
+            <ThemeProvider theme={theme}>
+              {getLayout(<Component {...pageProps} />)}
+            </ThemeProvider>
+          </ToastProvider>
+        </AuthProvider>
+        </SWRConfig>
     )
 }

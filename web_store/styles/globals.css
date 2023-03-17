@@ -17,6 +17,16 @@ a {
   box-sizing: border-box;
 }
 
+
+.header {
+
+  width: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+  background-size: 400% 400%;
+  animation: gradient 1.5s ease infinite;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -26,6 +36,14 @@ a {
     background: #555555;
 
   }
+}
+
+
+.error {
+  color: red;
+  marginTop: '0.25rem';
+  marginBottom: '0.25rem';
+
 }
 
 .container-main {
@@ -42,10 +60,10 @@ a {
   flex-shrink: 0;
   height: 250px;
 
-
   position: -webkit-sticky;
   position: sticky;
-  top: 75px;
+
+  top: 0px;
 }
 
 .results-container {
@@ -59,6 +77,14 @@ a {
 .content__background {
   position: absolute;
   opacity: 0.7;
+}
+
+.button-container {
+  position: absolute;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
@@ -151,9 +177,8 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: left;
-
-    padding: 10px;
     gap: 5px;
+    padding: 0px 10px 0px 10px;
   }
 
   .container__header__left {
@@ -178,20 +203,18 @@ a {
 
   .button {
     backdrop-filter: blur(5px);
-    position: absolute;
     display: flex;
     justify-content: center;
     justify-items: center;
     align-items: center;
-    background: rgba(255, 255, 255, .15) none;
+    background: rgba(50, 50, 50, .50) none;
     color: inherit;
     border: none;
-    padding: 0;
+    padding: 5px;
     font: inherit;
     cursor: pointer;
     outline: inherit;
-    height: 100%;
-    z-index: 1;
+    border-radius: 5px;
   }
 
   .content__image {
@@ -201,11 +224,18 @@ a {
     boxShadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 10px;
   }
-
-
-
 }
 
+
+.action-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  font: inherit;
+  cursor: pointer;
+}
 
 /* Path: components/Nav.module.css */
 
@@ -324,7 +354,6 @@ a {
 .container__action{
   display: flex;
   justify-items: center;
-  border-radius: 25px;
   display: inline-block;
 }
 
@@ -332,14 +361,14 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  justify-items: center;
+  align-content: center;
   align-items: flex-start;
   gap: 10px;
 }
 
 .content__action_items > * {
   background: rgb(0,0,0,0.5);
-
+  border-radius: 25px;
 }
 
 .container__ratings {
@@ -389,9 +418,10 @@ a {
   min-width: 20rem;
   display: inline-block;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
-.content__card:hover {
+.content__cardd:hover {
   transform: scale(1.1);
   transition: all 0.3s ease-in-out;
   z-index: 99;
@@ -541,7 +571,8 @@ a {
 
 .pie, .c100 .bar, .c100.p51 .fill, .c100.p52 .fill, .c100.p53 .fill, .c100.p54 .fill, .c100.p55 .fill, .c100.p56 .fill, .c100.p57 .fill, .c100.p58 .fill, .c100.p59 .fill, .c100.p60 .fill, .c100.p61 .fill, .c100.p62 .fill, .c100.p63 .fill, .c100.p64 .fill, .c100.p65 .fill, .c100.p66 .fill, .c100.p67 .fill, .c100.p68 .fill, .c100.p69 .fill, .c100.p70 .fill, .c100.p71 .fill, .c100.p72 .fill, .c100.p73 .fill, .c100.p74 .fill, .c100.p75 .fill, .c100.p76 .fill, .c100.p77 .fill, .c100.p78 .fill, .c100.p79 .fill, .c100.p80 .fill, .c100.p81 .fill, .c100.p82 .fill, .c100.p83 .fill, .c100.p84 .fill, .c100.p85 .fill, .c100.p86 .fill, .c100.p87 .fill, .c100.p88 .fill, .c100.p89 .fill, .c100.p90 .fill, .c100.p91 .fill, .c100.p92 .fill, .c100.p93 .fill, .c100.p94 .fill, .c100.p95 .fill, .c100.p96 .fill, .c100.p97 .fill, .c100.p98 .fill, .c100.p99 .fill, .c100.p100 .fill {
   position: absolute;
-  border: 0.14em solid #307bbb;
+  border-radius:  50%;
+  border: 0.14em solid black;
   width: 0.72em;
   height: 0.72em;
   clip: rect(0em, 0.5em, 1em, 0em);
@@ -550,6 +581,7 @@ a {
   -ms-transform: rotate(0deg);
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
+
 }
 
 .pie-fill, .c100.p51 .bar:after, .c100.p51 .fill, .c100.p52 .bar:after, .c100.p52 .fill, .c100.p53 .bar:after, .c100.p53 .fill, .c100.p54 .bar:after, .c100.p54 .fill, .c100.p55 .bar:after, .c100.p55 .fill, .c100.p56 .bar:after, .c100.p56 .fill, .c100.p57 .bar:after, .c100.p57 .fill, .c100.p58 .bar:after, .c100.p58 .fill, .c100.p59 .bar:after, .c100.p59 .fill, .c100.p60 .bar:after, .c100.p60 .fill, .c100.p61 .bar:after, .c100.p61 .fill, .c100.p62 .bar:after, .c100.p62 .fill, .c100.p63 .bar:after, .c100.p63 .fill, .c100.p64 .bar:after, .c100.p64 .fill, .c100.p65 .bar:after, .c100.p65 .fill, .c100.p66 .bar:after, .c100.p66 .fill, .c100.p67 .bar:after, .c100.p67 .fill, .c100.p68 .bar:after, .c100.p68 .fill, .c100.p69 .bar:after, .c100.p69 .fill, .c100.p70 .bar:after, .c100.p70 .fill, .c100.p71 .bar:after, .c100.p71 .fill, .c100.p72 .bar:after, .c100.p72 .fill, .c100.p73 .bar:after, .c100.p73 .fill, .c100.p74 .bar:after, .c100.p74 .fill, .c100.p75 .bar:after, .c100.p75 .fill, .c100.p76 .bar:after, .c100.p76 .fill, .c100.p77 .bar:after, .c100.p77 .fill, .c100.p78 .bar:after, .c100.p78 .fill, .c100.p79 .bar:after, .c100.p79 .fill, .c100.p80 .bar:after, .c100.p80 .fill, .c100.p81 .bar:after, .c100.p81 .fill, .c100.p82 .bar:after, .c100.p82 .fill, .c100.p83 .bar:after, .c100.p83 .fill, .c100.p84 .bar:after, .c100.p84 .fill, .c100.p85 .bar:after, .c100.p85 .fill, .c100.p86 .bar:after, .c100.p86 .fill, .c100.p87 .bar:after, .c100.p87 .fill, .c100.p88 .bar:after, .c100.p88 .fill, .c100.p89 .bar:after, .c100.p89 .fill, .c100.p90 .bar:after, .c100.p90 .fill, .c100.p91 .bar:after, .c100.p91 .fill, .c100.p92 .bar:after, .c100.p92 .fill, .c100.p93 .bar:after, .c100.p93 .fill, .c100.p94 .bar:after, .c100.p94 .fill, .c100.p95 .bar:after, .c100.p95 .fill, .c100.p96 .bar:after, .c100.p96 .fill, .c100.p97 .bar:after, .c100.p97 .fill, .c100.p98 .bar:after, .c100.p98 .fill, .c100.p99 .bar:after, .c100.p99 .fill, .c100.p100 .bar:after, .c100.p100 .fill {
@@ -566,8 +598,7 @@ a {
   height: 1em;
   border-radius: 50%;
   float: left;
-  margin: 0 0.1em 0.1em 0;
-  background-color: #ccc;
+  background-color: rgba(0, 0, 0, 0.7);
 
 }
 .c100 *, .c100 *:before, .c100 *:after {
@@ -614,14 +645,14 @@ a {
 }
 .c100:after {
   position: absolute;
-  top: 0.14em;
-  left: 0.14em;
+  top: 0.08em;
+  left: 0.08em;
+  width: 0.825em;
+  height: 0.825em;
   display: block;
-  content: " ";
+  content: "";
   border-radius: 50%;
   background-color: #222222;
-  width: 0.72em;
-  height: 0.72em;
   -moz-transition-property: all;
   -o-transition-property: all;
   -webkit-transition-property: all;
@@ -636,6 +667,7 @@ a {
   transition-timing-function: ease-in;
 }
 .c100 .slice {
+  border-radius: 10px;
   position: absolute;
   width: 1em;
   height: 1em;
@@ -1264,7 +1296,7 @@ a {
 
 
 .c100.green .bar, .c100.green .fill {
-  border-color: #4db53c !important;
+  border-color: #4db53c  !important;
 }
 .c100.green:hover > span {
   color: #4db53c;

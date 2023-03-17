@@ -11,6 +11,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {Logout} from "../actions/Logout";
 import {ShoppingBasket} from "@mui/icons-material";
 import {Login} from "../actions/Login";
+import { Nav } from "react-bootstrap";
 
 
 export default function NavigationActionItems() {
@@ -47,6 +48,8 @@ export default function NavigationActionItems() {
     if (user) {
         return (
             <>
+                <Nav.Item>
+
                 <IconButton
                     onClick={handleAccountClick}
                     size="large"
@@ -61,6 +64,9 @@ export default function NavigationActionItems() {
                     </Typography>
                 </IconButton>
 
+                </Nav.Item>
+
+                <Nav.Item>
                 <IconButton
                     onClick={handleFavoritesClick}
                     size="large"
@@ -75,6 +81,9 @@ export default function NavigationActionItems() {
                     </Typography>
                 </IconButton>
 
+                </Nav.Item>
+
+                <Nav.Item>
                 <IconButton
                     onClick={handleCartClick}
                     size="large"
@@ -89,7 +98,11 @@ export default function NavigationActionItems() {
                     </Typography>
                 </IconButton>
 
+                </Nav.Item>
+
+                <Nav.Item>
                 <Logout/>
+                </Nav.Item>
 
             </>
         );

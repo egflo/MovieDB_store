@@ -1,27 +1,27 @@
 package com.inventory_service.service;
 
 import com.inventory_service.DTO.ItemDTO;
+import com.inventory_service.model.Item;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 
 public interface ItemServiceImp {
 
-    public ResponseEntity<?> getAll(Pageable pagable);
+    public Page<Item> getAll(Pageable pageable);
 
-    public ResponseEntity<?> addItem(ItemDTO request);
+    public Item addItem(ItemDTO request);
 
-    public ResponseEntity<?> removeItem(ItemDTO request);
+    public void removeItem(String id);
 
-    public ResponseEntity<?> updateItem(ItemDTO request);
+    public Item updateItem(ItemDTO request);
 
-    public ResponseEntity<?> getItem(ItemDTO request);
+    public Item getItemById(String itemId);
 
-    public ResponseEntity<?> getItemById(String itemId);
+    public Page<Item> getItemsBySKU(String sku, Pageable pageable);
 
-    public ResponseEntity<?> getItemsBySKU(String sku, Pageable pageable);
-
-    public ResponseEntity<?> delete(String id);
+    public void delete(String id);
 
 
 

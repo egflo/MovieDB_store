@@ -2,14 +2,17 @@ package com.order_service.request;
 
 public class OrderRequest {
     private String userId;
-    private AddressRequest address;
+
+    private String paymentId;
+
+    private AddressRequest shipping;
 
     public OrderRequest() {
     }
 
-    public OrderRequest(String userId, AddressRequest address) {
+    public OrderRequest(String userId, AddressRequest shipping) {
         this.userId = userId;
-        this.address = address;
+        this.shipping = shipping;
     }
 
     public String getUserId() {
@@ -20,11 +23,26 @@ public class OrderRequest {
         this.userId = userId;
     }
 
-    public AddressRequest getAddress() {
-        return address;
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    public void setAddress(AddressRequest address) {
-        this.address = address;
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public AddressRequest getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(AddressRequest shipping) {
+        this.shipping = shipping;
+    }
+
+    public String toString() {
+        return "OrderRequest{" +
+                "userId='" + userId + '\'' +
+                ", shipping=" + shipping +
+                '}';
     }
 }

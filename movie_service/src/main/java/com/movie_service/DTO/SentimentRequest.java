@@ -1,9 +1,11 @@
 package com.movie_service.DTO;
 
+import com.movie_service.models.Status;
+
 public class SentimentRequest {
     private String userId;
     private String objectId;
-    private  String status;
+    private String status;
     private Long created;
 
 

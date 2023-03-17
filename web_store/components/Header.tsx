@@ -11,12 +11,7 @@ type HeaderProps = {
 export default function Header({title}: HeaderProps) {
 
     return (
-        <Box className="header"
-             sx={{
-                 backgroundColor: theme => theme.palette.background.paper,
-             }
-             }>
-
+        <Box className="header">
             <Box className="header__sub" style={
                 {
                     display:'flex',
@@ -25,7 +20,6 @@ export default function Header({title}: HeaderProps) {
                     gap:'10px',
                 }
             }>
-
                 <Box className="container__main__shape"></Box>
                 <Typography
                     sx={{

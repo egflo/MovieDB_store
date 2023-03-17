@@ -1,20 +1,15 @@
 package com.order_service.service;
 
-
-import com.order_service.dto.ChargeDTO;
 import com.order_service.dto.PaymentIntentDTO;
+import com.order_service.request.PaymentIntentRequest;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
 import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Transactional
 @Service
@@ -27,20 +22,18 @@ public class StripeService {
         Stripe.apiKey = secretKey;
     }
 
-    public PaymentIntentDTO createCharge(ChargeDTO request) {
-        try {
-            List<Object> paymentMethodTypes =
-                    new ArrayList<>();
-            paymentMethodTypes.add("card");
 
-            Map<String, Object> params = new HashMap<>();
-            params.put("amount", request.getAmount());
-            params.put("currency", request.getCurrency());
-            params.put("description", request.getDescription());
-            params.put(
-                    "payment_method_types",
-                    paymentMethodTypes
-            );
+    public PaymentIntentDTO createPaymentIntent(PaymentIntentRequest request) {
+        try {
+
+            PaymentIntentCreateParams params =
+                    PaymentIntentCreateParams.builder()
+                            .setCurrency(request.getCurrency())
+                            .setAmount(request.getAmount().longValue() * 100L)
+                            .addPaymentMethodType(request.getPaymentMethodType())
+                            .setReceiptEmail(request.getStripeEmail())
+
+                            .build();
 
             PaymentIntent paymentIntent =
                     PaymentIntent.create(params);
@@ -49,8 +42,6 @@ public class StripeService {
 
         } catch (CardException e) {
             // Since it's a decline, CardException will be caught
-            System.out.println("Status is: " + e.getCode());
-            System.out.println("Message is: " + e.getMessage());
             return new PaymentIntentDTO(null, e);
         } catch (RateLimitException e) {
             // Too many requests made to the API too quickly
@@ -73,6 +64,7 @@ public class StripeService {
         } catch (Exception e) {
             // Something else happened, completely unrelated to Stripe
             return new PaymentIntentDTO(null, null);
+
         }
     }
 

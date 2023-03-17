@@ -1,5 +1,7 @@
 package com.inventory_service.DTO;
 
+import org.proto.grpc.MovieResponse;
+
 public class MovieDTO {
     String id;
     String title;
@@ -9,7 +11,11 @@ public class MovieDTO {
     Integer year;
 
 
-    public MovieDTO() {
+    public MovieDTO(MovieResponse movieResponse) {
+        this.id = movieResponse.getId();
+        this.title = movieResponse.getTitle();
+        this.poster = movieResponse.getPoster();
+        this.year = movieResponse.getYear();
     }
 
     public MovieDTO(String id, String title, String poster, Integer year) {

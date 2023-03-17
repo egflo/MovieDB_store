@@ -37,19 +37,12 @@ public class MovieController {
     ) {
 
 
-        if(headers.get("Authorization") != null) {
-            String token = headers.get("authorization").get(0).split(" ")[1].trim();
-            System.out.println("token: " + token);
-        }
-
-
         Sort.Direction sortDirection = Sort.Direction.DESC;
         if (direction.isPresent()) {
             if (direction.get() == 1) {
                 sortDirection = Sort.Direction.ASC;
             }
         }
-
 
         return new ResponseEntity<>(service.findAll(PageRequest.of(
                 page.orElse(0),
@@ -113,16 +106,6 @@ public class MovieController {
             @PathVariable String id
     ) {
 
-        System.out.println("headers: " + headers.get("authorization"));
-
-        if (headers.get("Authorization") != null) {
-            String token = headers.get("authorization").get(0).split(" ")[1].trim();
-            DecodedJWT jwt = JWT.decode(token);
-            String subject = jwt.getSubject();
-
-            System.out.println("Subject: " + subject);
-        }
-
 
         return new ResponseEntity<>(service.findByMovieId(id), HttpStatus.OK);
     }
@@ -149,13 +132,6 @@ public class MovieController {
                         Sort.by(sortDirection, sortBy.orElse("ratings.numVotes"))
                 )), HttpStatus.OK);
 
-    }
-
-    @GetMapping("/search/title/{title}")
-    public ResponseEntity<?> searchByTitle(
-            @PathVariable String title
-    ) {
-        return new ResponseEntity<>(service.findMoviesByTitle(title), HttpStatus.OK);
     }
 
     @GetMapping("/recommend/{id}")
@@ -189,7 +165,7 @@ public class MovieController {
             @RequestParam Optional<String> sortBy,
             @PathVariable String id
     ) {
-        return new ResponseEntity<>(service.getMovieSuggestions(id, PageRequest.of(
+        return new ResponseEntity<>(service.getSuggestions(id, PageRequest.of(
                 page.orElse(0),
                 limit.orElse(25),
                 Sort.by(Sort.Direction.DESC, sortBy.orElse("id"))
@@ -220,19 +196,35 @@ public class MovieController {
         )), HttpStatus.OK);
     }
 
-    @PostMapping("/rate")
-    public ResponseEntity<?> like(
-            @RequestHeader("Authorization") String token,
-            @RequestBody SentimentRequest request
+    @GetMapping("/bookmarks/")
+    public ResponseEntity<?> getBookmarks(
+            @RequestHeader HttpHeaders headers,
+            @RequestParam Optional<Integer> limit,
+            @RequestParam Optional<Integer> page,
+            @RequestParam Optional<String> sortBy,
+            @RequestParam Optional<Integer> direction
     ) {
-        System.out.println("token: " + token);
-        System.out.println("request: " + request);
 
-        DecodedJWT jwt = JWT.decode(token.split(" ")[1].trim());
+        String token = headers.get("authorization").get(0).split(" ")[1].trim();
+        DecodedJWT jwt = JWT.decode(token);
         String subject = jwt.getSubject();
-        request.setUserId(subject);
-        return new ResponseEntity<>(service.rate(request), HttpStatus.OK);
-    }
 
+        System.out.println("token: " + token);
+        System.out.println("subject: " + subject);
+
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        if (direction.isPresent()) {
+            if (direction.get() == 1) {
+                sortDirection = Sort.Direction.ASC;
+            }
+        }
+
+        return new ResponseEntity<>(service.getBookmarks(subject, PageRequest.of(
+                page.orElse(0),
+                limit.orElse(25),
+                Sort.by(sortDirection, sortBy.orElse("id"))
+
+        )), HttpStatus.OK);
+    }
 
 }

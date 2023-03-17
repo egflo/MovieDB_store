@@ -4,10 +4,14 @@ import com.inventory_service.DTO.CartDTO;
 import com.inventory_service.DTO.ItemDTO;
 import com.inventory_service.service.CartService;
 import com.inventory_service.service.ItemService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +27,11 @@ public class ItemController {
 
 
 
-    @GetMapping("/")
-    public ResponseEntity<?> get(@RequestHeader HttpHeaders headers, ItemDTO request) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> get(@RequestHeader HttpHeaders headers,
+                                 @PathVariable String id) throws Exception {
 
-        return service.getItem(request);
+        return ResponseEntity.ok(service.getItemById(id));
     }
 
 
@@ -34,7 +39,7 @@ public class ItemController {
     public ResponseEntity<?> add(@RequestHeader HttpHeaders headers, @RequestBody ItemDTO request) {
 
 
-        return service.addItem(request);
+        return new ResponseEntity<>(service.addItem(request), null, HttpStatus.CREATED);
     }
 
 
@@ -43,7 +48,7 @@ public class ItemController {
                                         @RequestBody ItemDTO request) {
 
 
-        return service.updateItem(request);
+        return ResponseEntity.ok(service.updateItem(request));
     }
 
 
@@ -52,7 +57,9 @@ public class ItemController {
     public ResponseEntity<?> deleteCart(@RequestHeader HttpHeaders headers,
                                                      @PathVariable String id) {
 
-        return service.delete(id);
+        service.delete(id);
+        String message = "Item with id: " + id + " deleted successfully";
+        return ResponseEntity.ok(message);
     }
 
 
@@ -69,15 +76,13 @@ public class ItemController {
             @RequestParam Optional<String> sortBy
     ) {
 
-        return service.getAll(
+        return ResponseEntity.ok(service.getAll(
                 PageRequest.of(
                         page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
+                        limit.orElse(10),
+                        Sort.by(sortBy.orElse("id"))
                 )
-        );
-
+        ));
     }
-
 
 }

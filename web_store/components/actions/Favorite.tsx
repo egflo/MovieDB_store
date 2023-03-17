@@ -9,102 +9,82 @@ import { useSWRConfig } from "swr"
 import useToastContext from "../../hooks/useToastContext";
 import Box from "@mui/material/Box";
 import {Movie} from "../../models/Movie";
+import {CircularProgress} from "@mui/material";
+import useAuthContext from "../../hooks/useAuthContext";
 
 
-let BOOKMARKS = "movie-service/bookmark";
+let BOOKMARK_URL = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/bookmark/`
 
 type FavoriteProps = {
     movie: Movie
-    bookmark: Bookmark | null
-    selected: boolean
 }
-
-
-export default function Favorite(props: FavoriteProps) {
-    const { mutate } = useSWRConfig()
-    const [bookmarked, setBookmarked] = React.useState<Bookmark | null>(props.bookmark);
-    const [selected, setSelected] = React.useState(props.selected || false);
+export default function Favorite({movie}: FavoriteProps) {
+    // @ts-ignore
+    const [bookmarked, setBookmarked] = React.useState<Bookmark | null>(movie.bookmark);
+    const [loading, setLoading] = React.useState(false);
     const toast = useToastContext();
+    const auth = useAuthContext();
+    const { mutate } = useSWRConfig()
 
     async function handleSelected() {
-        let user = auth.currentUser;
-        if (user == null) {
+
+        console.log(bookmarked);
+        if (!auth.isAuthenticated) {
             toast.show("You must be logged in to add to favorites", ToastType.ERROR);
             return;
         }
 
-        let token = await user.getIdToken(false);
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`;
 
-        if (bookmarked != null) {
-            axiosInstance.delete(BOOKMARKS + "/" + bookmarked.id).then((response) => {
-                if (response.status === 200) {
-                    toast.show("Removed from favorites", ToastType.INFO);
+        if (bookmarked) {
+            const DELETE_BOOKMARK = `${BOOKMARK_URL}${bookmarked.id}`
+            axiosInstance.delete(DELETE_BOOKMARK).then((response) => {
+                if (response.status < 300) {
                     setBookmarked(null);
+                    toast.show("Removed from favorites", ToastType.INFO);
                 } else {
                     toast.show("Could not remove from favorites", ToastType.ERROR);
                 }
-            });
+            }).catch((error) => {
+                toast.show(error.message, ToastType.ERROR);
+            } );
         }
         else {
-            axiosInstance.post(BOOKMARKS + "/", {
-                movieId: props.movie.id,
-                userId: user.uid,
+
+            axiosInstance.post(BOOKMARK_URL, {
+                movieId: movie.id,
+                userId: auth.user?.uid,
                 created: new Date(),
             }).then((response) => {
                 if (response.status === 200) {
-                    const data = response.data;
-                    setBookmarked(data.data)
-                    setSelected(data.success);
-                    toast.show(data.message, data.success ? ToastType.SUCCESS : ToastType.ERROR);
+                    setBookmarked(response.data);
+                    toast.show("Added to favorites", ToastType.INFO);
                 } else {
-                    toast.show(response.status.toString(), ToastType.ERROR);
+                    toast.show(response.data, ToastType.ERROR);
                 }
-            });
+            }).catch((error) => {
+                toast.show(error.message, ToastType.ERROR);
+            } );
         }
     }
-
-    useEffect(() => {
-        // If the selected state is already set, don't do anything
-        if (bookmarked) {
-            return;
-        }
-        // if user is not logged in, don't do anything
-        let user = auth.currentUser;
-        if (user == null) {
-            return;
-        }
-
-        // Get the token
-        //Check if the movie is already bookmarked
-        axiosInstance.get(BOOKMARKS + "/movie/" + props.movie.id).then((response) => {
-            if (response.status === 200) {
-                const data = response.data;
-                if (data.success) {
-                    setBookmarked(data.data);
-                    setSelected(data.success);
-                }
-            } else {
-                setBookmarked(null);
-            }
-        });
-    }, [auth.currentUser]);
 
     return (
         <Box
             className="container__action"
         >
+
             <IconButton
+                disabled={loading}
                 onClick={handleSelected}
                 sx={{
-                    color: selected ? "red" : "white.500"
+                    color: bookmarked ? "red" : "black.500"
                 }}
                 aria-label="add to favorites"
-                color={selected ? "primary" : "inherit"}
+                color={bookmarked ? "primary" : "inherit"}
             >
                 <FavoriteIcon/>
             </IconButton>
         </Box>
 
-    )
+    );
 }

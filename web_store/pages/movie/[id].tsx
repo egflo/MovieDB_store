@@ -1,5 +1,5 @@
 import {Movie} from "../../models/Movie";
-import {GetStaticPaths, GetStaticProps} from 'next'
+import {GetServerSideProps, GetStaticPaths, GetStaticProps} from 'next'
 import type {ParsedUrlQuery} from 'querystring'
 import {Layout} from "../../components/Layout";
 import Card from '@mui/material/Card';
@@ -23,15 +23,23 @@ import {Paper} from "@mui/material";
 import Box from "@mui/material/Box";
 import Cart from "../../components/actions/Cart";
 import Header from "../../components/Header";
+import {cookies} from "next/headers";
+import nookies from "nookies";
+import {Direction, SortBy} from "../../components/search/searchTypes";
+import {SearchProps} from "../search/[term]";
+import axios, {AxiosRequestConfig} from "axios";
+import Button from "@mui/material/Button";
 
 export interface QParams extends ParsedUrlQuery {
     id?: string
 }
 
-const API_URL_ID: string = '/movie-service/movie/';
-const API_URL_SUGGEST: string = '/movie-service/movie/suggest/';
-const API_URL_REVIEWS: string = '/movie-service/review/movie/';
-function MoviePage({data}: {data: Movie}) {
+const API_URL_ID: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/`;
+const API_URL_SUGGEST: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/suggest/`;
+const API_URL_REVIEWS: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/review/movie/`;
+
+
+function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
     const router = useRouter();
 
     function testURL(url: string) {
@@ -102,6 +110,7 @@ function MoviePage({data}: {data: Movie}) {
     return (
         <Box
             sx={{
+                position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
 
@@ -118,7 +127,6 @@ function MoviePage({data}: {data: Movie}) {
                                 height: '100%',
                                 backgroundSize: 'cover',
                                 backgroundImage: `url(${testURL(data.background) ? data.background : "/background.png"})`,
-
                             }
                         }>
                     </Box>
@@ -146,20 +154,6 @@ function MoviePage({data}: {data: Movie}) {
                                 src={testURL(data.poster) ? data.poster : "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"}
                                 alt={data.title}
                             />
-
-
-                            {data.ratings &&
-                                <Box className="container__header__left__score"
-                                     style={ {
-                                         position: 'absolute',
-                                         bottom: '0',
-                                         right: '10px',
-                                     }}
-                                >
-                                    <Score score={data.ratings.rating}></Score>
-
-                                </Box>
-                            }
 
                         </Box>
 
@@ -207,11 +201,30 @@ function MoviePage({data}: {data: Movie}) {
                             }
 
 
-                            <Box className="content__action_items">
-                                <Favorite movie={data} bookmark={null}></Favorite>
-                                <Share movie={data}></Share>
-                                <Rate movie={data}></Rate>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    alignItems: 'center',
+                                    alignContent: 'flex-start',
+                                    gap: '5px'
+                                }}>
+
+
+                                {data.ratings &&
+
+                                    <Score score={data.ratings.rating}></Score>
+                                }
+
+                                <Box className="content__action_items">
+
+                                    <Favorite movie={data}></Favorite>
+                                    <Share movie={data}></Share>
+                                    <Rate movie={data}></Rate>
+                                </Box>
                             </Box>
+
 
                             {data.ratings &&
 
@@ -287,6 +300,8 @@ function MoviePage({data}: {data: Movie}) {
 
                 </Box>
 
+            <Box className="blur-line"></Box>
+
             {data.cast && data.cast.length > 0 &&
                 <Scroll title={"Cast & Crew"}>
                     <Box className="container-fluid">
@@ -295,7 +310,8 @@ function MoviePage({data}: {data: Movie}) {
 
                                 <Box key={index} className="col">
 
-                                    <Card sx={{ width: 180, height: 270, pointer: 'cursor'}} onClick={() => onCastClick(cast.id)} >
+                                    <Card sx={{ width: 180, height: 270, cursor: 'pointer' }}
+                                          onClick={() => onCastClick(cast.id)} >
                                         <CardMedia
                                             component="img"
                                             alt={cast.name}
@@ -325,15 +341,11 @@ function MoviePage({data}: {data: Movie}) {
 
                     </Box>
                 </Scroll>
-
             }
 
-
-            <ScrollPagination path={API_URL_REVIEWS + data.movieId + '?sortBy=created'} style={CardStyle.VERTICAL} type={ContentType.REVIEW} view={ViewType.HORIZONTAL} title={"Reviews"} />
+            <ScrollPagination path={API_URL_REVIEWS + data.movieId + '?sortBy=created'} style={CardStyle.VERTICAL} type={ContentType.REVIEW} view={ViewType.HORIZONTAL} title={"Reviews"} token={token}/>
 
             <ScrollPagination path={API_URL_SUGGEST + data.movieId + '?sortBy=popularity'} style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL} title={"Related"}/>
-
-
 
             <Header title={"Description"} />
 
@@ -383,49 +395,74 @@ function MoviePage({data}: {data: Movie}) {
             </Box>
 
 
+            {data.item &&
+                <Box className="buy-button-container"
+                     sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 1, position: 'fixed', bottom: 50, width: '100%', zIndex: 1000}}>
+                    <Cart item={data.item} />
+                </Box>
+            }
+
         </Box>
     )
 }
 
-//https://stackoverflow.com/questions/65783199/error-getstaticpaths-is-required-for-dynamic-ssg-pages-and-is-missing-for-xxx
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
 
-    return {
-        paths: [], //indicates that no page needs be created at build time
-        fallback: 'blocking' //indicates the type of fallback
-    }
-}
-
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
     // @ts-ignore
     const slug = context.params['id'];
+
     if (!slug) {
+
         return {
             notFound: true,
         }
     }
 
-    let fetcher = (url: string) => axiosInstance.get(url).then((response: { data: any; }) => response.data)
+    const cookie = nookies.get(context);
+    const token = cookie.token;
+
+    //Add authorization header to axios if token is present else remove it
+    const axiosInstance = axios.create({
+        baseURL: process.env.NEXT_PUBLIC_API_URL,
+    } as AxiosRequestConfig);
+
+    if (token) {
+        axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    }
+
+    let fetcher = (url: string) => axiosInstance.get(url)
+        .then((response: { data: any; }) => response.data)
+        .catch((error: any) => {
+            console.log(error)
+            return null
+        })
+
+
+    console.log(API_URL_ID + slug)
+
     const data = await fetcher(API_URL_ID + slug)
 
-    if(!data) {
-        return {
-            notFound: true,
-        }
-    }
-    if (data.error) {
-        return {
-            notFound: true,
-        }
+    if (!data) {
+            return {
+                notFound: true,
+            }
     }
 
     return {
         props: {
-            data
+            data: data,
+            token: token
         }
     }
 }
+
+
+
+
+
+//https://stackoverflow.com/questions/65783199/error-getstaticpaths-is-required-for-dynamic-ssg-pages-and-is-missing-for-xxx
+
 export default MoviePage;
 
 

@@ -6,7 +6,7 @@ export interface Cart {
     userId: string;
     quantity: number;
     created: string;
-    price: string;
+    price: number;
 
     movie: {
         id: string;

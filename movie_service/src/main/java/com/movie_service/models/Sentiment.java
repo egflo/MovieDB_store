@@ -17,12 +17,12 @@ public class Sentiment {
 
     private Date created;
 
-    private String status; // liked, disliked, loved, hated
+    private Status status;
 
     public Sentiment() {
     }
 
-    public Sentiment(String userId, ObjectId objectId, Date created, String status) {
+    public Sentiment(String userId, ObjectId objectId, Date created, Status status) {
         this.userId = userId;
         this.objectId = objectId;
         this.created = created;
@@ -53,11 +53,11 @@ public class Sentiment {
         this.created = created;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

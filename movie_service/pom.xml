@@ -32,11 +32,18 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>org.proto</groupId>
-            <artifactId>interface</artifactId>
-            <version>1.0</version>
+            <groupId>com.github.egflo</groupId>
+            <artifactId>interface_grpc</artifactId>
+            <version>v1.2.10</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-starter -->
         <dependency>
@@ -99,6 +106,27 @@
             <groupId>com.netflix.graphql.dgs</groupId>
             <artifactId>graphql-dgs-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot2</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -106,6 +134,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- REMOVE IF on X86 NOT ARM -->
+                <configuration>
+                    <image>
+                        <builder>dashaun/builder:tiny</builder>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>

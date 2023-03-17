@@ -1,16 +1,10 @@
 import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import * as React from "react";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import Toast, {ToastState, ToastType, Alert} from "../Toast";
-import Snackbar from "@mui/material/Snackbar";
 import StarIcon from "@mui/icons-material/Star";
 import Card from "@mui/material/Card";
 import {Backdrop, CardHeader} from "@mui/material";
-import Rating from '@mui/material/Rating';
 import CardContent from "@mui/material/CardContent";
-import ClickAwayListener from
-        "@mui/material/ClickAwayListener";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ThumbUp from "@mui/icons-material/ThumbUp";
@@ -21,6 +15,11 @@ import useToastContext from "../../hooks/useToastContext";
 import {AxiosResponse} from "axios/index";
 import {useRef} from "react";
 import {Movie} from "../../models/Movie";
+
+
+
+const RATE_API : string = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/sentiment/rate`
+
 
 enum RateType {
     LIKE = "like",
@@ -35,7 +34,6 @@ type RateProps = {
 
 export default function Rate(props: RateProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const [value, setValue] = React.useState<RateType | null>(RateType.LIKE);
     const [selected, setSelected] = React.useState(false);
     let toast = useToastContext();
 
@@ -62,27 +60,26 @@ export default function Rate(props: RateProps) {
 
 
     function handleSelected(type: RateType) {
-        setValue(type)
         let user = auth.currentUser;
         if (user != null) {
             let uid = user.uid;
             user.getIdToken(true).then(function (idToken) {
                 axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
 
-                axiosInstance.post("movie-service/movie/rate", {
+                axiosInstance.post(RATE_API, {
                     objectId: props.movie.id,
                     status: type,
                     userId: uid,
                     created: Date.now()
                 }).then((response: AxiosResponse) => {
-                    if (response.status === 200) {
+                    if (response.status < 300) {
                         toast.show("Rating Updated", ToastType.INFO);
                     } else {
                         toast.show("Error updating rating", ToastType.ERROR);
                     }
 
                 }).catch((error) => {
-                    toast.show(error.message, ToastType.ERROR);
+                    toast.show(error.response.data, ToastType.ERROR);
                 });
             })
         }
@@ -124,7 +121,7 @@ export default function Rate(props: RateProps) {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    flexDirection: 'column'
+                                    flexDirection: 'row'
                                 }}
                             >
                                 <IconButton

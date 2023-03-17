@@ -66,9 +66,12 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>${protobuf-maven-plugin.version}</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.14.0:exe:osx-x86_64</protocArtifact>
+                    <protocArtifact>com.google.protobuf:protoc:3.17.2:exe:osx-x86_64</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${io.grpc.version}:exe:osx-x86_64</pluginArtifact>
+                    <additionalProtoPathElements>
+                        <additionalProtoPathElement>${project.basedir}/src/main/proto</additionalProtoPathElement>
+                    </additionalProtoPathElements>
                 </configuration>
                 <executions>
                     <execution>

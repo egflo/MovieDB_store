@@ -1,12 +1,11 @@
 import {GetServerSideProps, GetStaticPaths, GetStaticProps} from "next";
-import {QParams} from "../cast/[id]";
-import {Movie} from "../../models/Movie";
 import {Layout} from "../../components/Layout";
-import * as React from 'react';
 import Toolbar from "../../components/search/toolbar";
 import Result from "../../components/search/result";
 import {Direction, SortBy} from "../../components/search/searchTypes";
 import Box from "@mui/material/Box";
+import nookies from "nookies";
+import React from "react";
 
 
 
@@ -18,8 +17,6 @@ function SearchPage({searchProps}: {searchProps: SearchProps}) {
     const [genre, setGenre] = React.useState(searchProps.genres);
     const [tag, setTag] = React.useState(searchProps.tags);
     const [total, setTotal] = React.useState(100);
-
-    console.log("Search Props: ", searchProps);
 
 
     return (
@@ -41,48 +38,6 @@ function SearchPage({searchProps}: {searchProps: SearchProps}) {
 
 //https://stackoverflow.com/questions/65783199/error-getstaticpaths-is-required-for-dynamic-ssg-pages-and-is-missing-for-xxx
 
-/*
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-
-    return {
-        paths: [], //indicates that no page needs be created at build time
-        fallback: 'blocking' //indicates the type of fallback
-    }
-}
-export const getStaticProps: GetStaticProps<QParams> = async ({params}) => {
-    console.log(params);
-    const slug = params
-    if (!slug) {
-        return {
-            notFound: true,
-        }
-    }
-    const res = await fetch(API_URL_SEARCH + slug.term)
-    const data = await res.json()
-
-    return {
-        props: {
-            slug,
-        }
-    }
-}
-
-export const getServersideProps: GetServerSideProps = async (context) => {
-    console.log("getServersideProps");
-    const page = context.query.hasOwnProperty('page') ? parseInt(context.query.page, 10) : 1;
-
-    console.info(context.params.query, page, start);
-
-
-    const { slug } = context.query;
-    return {
-        props: {
-            term: slug
-        }
-    }
-}
-
- */
 
 export interface SearchProps {
     term: string
@@ -101,7 +56,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const sortBy = context.query.hasOwnProperty('sortBy') ? context.query.sortBy : SortBy.RATING;
     const genres = context.query.hasOwnProperty('genres') ? context.query.genres : "";
     const tags = context.query.hasOwnProperty('tags') ? context.query.tags : "";
-
 
     let object = {
         term: context.query.term,

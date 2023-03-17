@@ -24,6 +24,11 @@ public class BookmarkController {
     @Autowired
     private BookmarkService service;
 
+    @DeleteMapping("/movie/{id}/user/{userId}")
+    public ResponseEntity<?> deleteBookmark(@PathVariable String id, @PathVariable String userId) {
+        service.deleteBookmarkByMovieIdAndUserId(id, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAll(
@@ -33,7 +38,7 @@ public class BookmarkController {
     ) {
 
 
-        return new ResponseEntity<>(service.findAll(PageRequest.of(
+        return new ResponseEntity<>(service.getBookmarks(PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
                 Sort.by(sortBy.orElse("year"))
@@ -56,7 +61,7 @@ public class BookmarkController {
         System.out.println("subject: " + subject);
 
 
-        return new ResponseEntity<>(service.findAllByUserId(subject,PageRequest.of(
+        return new ResponseEntity<>(service.getBookmarksByUserId(subject,PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
                 Sort.by(sortBy.orElse("year"))
@@ -92,7 +97,7 @@ public class BookmarkController {
         DecodedJWT jwt = JWT.decode(token);
         String subject = jwt.getSubject();
 
-        return new ResponseEntity<>(service.get(id,subject), HttpStatus.OK);
+        return new ResponseEntity<>(service.getBookmark(id), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -104,12 +109,9 @@ public class BookmarkController {
         DecodedJWT jwt = JWT.decode(token);
         String subject = jwt.getSubject();
 
-        BookmarkRequest req = new BookmarkRequest();
-        req.setMovieId(request.getMovieId());
-        req.setUserId(subject);
-        req.setCreated(request.getCreated());
+        request.setUserId(subject);
 
-        return new ResponseEntity<>(service.create(req), HttpStatus.OK);
+        return new ResponseEntity<>(service.addBookmark(request), HttpStatus.OK);
     }
 
 
@@ -117,6 +119,8 @@ public class BookmarkController {
     public ResponseEntity<?> delete(
             @PathVariable String id
     ) {
-        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
+
+        service.deleteBookmark(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+
+
+
 @Entity
 @Table(name = "item")
 public class Item {
@@ -20,20 +23,21 @@ public class Item {
 
     private int quantity;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private Date created;
 
     private Date updated;
 
-    //@OneToOne(fetch = FetchType.LAZY)
-   // @JoinColumn(name = "id")
-    //private Type type;
+    @ManyToOne
+    @JoinColumn(name = "type")
+    private Type type;
 
     public Item() {
     }
 
-    public Item(String id, Double price, int quantity, Type type, String SKU, String status
+    public Item(String id, Double price, int quantity, Type type, String SKU, Status status
             , Date created, Date updated) {
         this.id = id;
         this.price = price;
@@ -70,13 +74,13 @@ public class Item {
         this.quantity = quantity;
     }
 
-    //public Type getType() {
-    //    return type;
-    //}
+    public Type getType() {
+        return type;
+    }
 
-    //public void setType(Type type) {
-     //   this.type = type;
-   // }
+    public void setType(Type type) {
+        this.type = type;
+    }
 
     public String getSKU() {
         return SKU;
@@ -86,11 +90,11 @@ public class Item {
         this.SKU = SKU;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -109,6 +113,8 @@ public class Item {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
+
 
     @Override
     public String toString() {

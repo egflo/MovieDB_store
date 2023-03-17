@@ -1,6 +1,15 @@
 import {Cast} from "./Cast";
 import {Rating} from "./Rating";
 import {Tag} from "./Tag";
+import {Item} from "./Item";
+
+interface Bookmark {
+    id: string;
+    movieId: string;
+    userId: string;
+    created: String;
+}
+
 
 export interface Movie {
     id: string;
@@ -22,6 +31,11 @@ export interface Movie {
     cast: Cast[];
     ratings: Rating;
     movieId: string;
-
     tags: Tag[];
+
+    //Optional
+    bookmark?: Bookmark;
+
+    item?: Item;
+
 }

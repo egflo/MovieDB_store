@@ -2,8 +2,14 @@ package com.inventory_service.service;
 
 
 import com.inventory_service.DTO.ItemDTO;
+import com.inventory_service.exception.IdNotFoundException;
 import com.inventory_service.model.Item;
+import com.inventory_service.model.Status;
 import com.inventory_service.repository.ItemRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
+
 @Service
 @Transactional
 public class ItemService implements ItemServiceImp {
@@ -21,29 +28,46 @@ public class ItemService implements ItemServiceImp {
     @Autowired
     private ItemRepository itemRepository;
 
-
-
     public boolean inventoryUpdate(String id, int quantity) {
-        Optional<Item> item = itemRepository.findById(id);
-        if(item.isPresent()){
-            if(item.get().getQuantity() >= quantity){
-                item.get().setQuantity(item.get().getQuantity() - quantity);
-                itemRepository.save(item.get());
+        Optional<Item> present = itemRepository.findById(id);
+
+        if(present.isPresent()){
+            Item item = present.get();
+            if(item.getStatus().equals(Status.OUT_OF_STOCK)){
+                return false;
+            }
+            if(item.getQuantity() >= quantity){
+                item.setQuantity(item.getQuantity() - quantity);
+                itemRepository.save(item);
+
+                //TODO: send message to kafka
+                //Update inventory status
+                if(item.getQuantity() == 0){
+                    item.setStatus(Status.OUT_OF_STOCK);
+                    itemRepository.save(item);
+                }
+
+                if(item.getQuantity() < 10){
+                    item.setStatus(Status.LIMITED);
+                    itemRepository.save(item);
+                }
                 return true;
             }
         }
+
         return false;
     }
 
     @Override
-    public ResponseEntity<?> getAll(Pageable pagable) {
-
+    @RateLimiter(name = "RateLimiterService")
+    //@TimeLimiter(name = "TimeLimiterService")
+    public Page<Item> getAll(Pageable pagable) {
         Page<Item> items = itemRepository.findAll(pagable);
-        return ResponseEntity.ok(items);
+        return items;
     }
 
     @Override
-    public ResponseEntity<?> addItem(ItemDTO request) {
+    public Item addItem(ItemDTO request) {
         Item item = new Item();
         item.setSKU(request.getSKU());
         item.setId(request.getId());
@@ -53,22 +77,22 @@ public class ItemService implements ItemServiceImp {
         item.setUpdated(new Date());
 
         Item save = itemRepository.save(item);
-        return ResponseEntity.ok(save);
+        return save;
     }
 
     @Override
-    public ResponseEntity<?> removeItem(ItemDTO request) {
+    public void removeItem(String id) {
 
-        Optional<Item> item = itemRepository.findById(request.getId());
+        Optional<Item> item = itemRepository.findById(id);
         if(item.isPresent()){
             itemRepository.delete(item.get());
-            return ResponseEntity.ok("Item removed from cart");
         }
-        return ResponseEntity.ok("Item not found");
+
+        throw new IdNotFoundException("Item not found with id: " + id);
     }
 
     @Override
-    public ResponseEntity<?> updateItem(ItemDTO request) {
+    public Item updateItem(ItemDTO request) {
 
         Optional<Item> item = itemRepository.findById(request.getId());
         if(item.isPresent()){
@@ -76,43 +100,40 @@ public class ItemService implements ItemServiceImp {
             item.get().setPrice(request.getPrice());
             item.get().setUpdated(new Date());
             Item save = itemRepository.save(item.get());
-            return ResponseEntity.ok(save);
+            return save;
         }
-        return ResponseEntity.ok("Item not found");
+
+        throw new IdNotFoundException("Item not found with id: " + request.getId());
     }
 
-    @Override
-    public ResponseEntity<?> getItem(ItemDTO request) {
-        Optional<Item> item = itemRepository.findById(request.getId());
-        if(item.isPresent()){
-            return ResponseEntity.ok(item.get());
-        }
-        return ResponseEntity.ok("Item not found");
-    }
 
     @Override
-    public ResponseEntity<?> getItemById(String id) {
+    //@CircuitBreaker(name = "CircuitBreakerService")
+    @RateLimiter(name = "RateLimiterService")
+    public Item getItemById(String id) {
         Optional<Item> item = itemRepository.findById(id);
         if(item.isPresent()){
-            return ResponseEntity.ok(item.get());
+            return item.get();
         }
-        return ResponseEntity.ok("Item not found");
+
+        throw new IdNotFoundException("Item not found with id: " + id);
     }
 
     @Override
-    public ResponseEntity<?> getItemsBySKU(String sku, Pageable pageable) {
+    public Page<Item> getItemsBySKU(String sku, Pageable pageable) {
         Page<Item> items = itemRepository.findAllBySKU(sku, pageable);
-        return ResponseEntity.ok(items);
+        return items;
     }
 
     @Override
-    public ResponseEntity<?> delete(String id) {
+    public void delete(String id) {
 
         Optional<Item> item = itemRepository.findItemById(id);
         if(item.isPresent()){
             itemRepository.delete(item.get());
-            return ResponseEntity.ok("Item deleted");
         }
-        return ResponseEntity.ok("Item not found");
+        else {
+            throw new IdNotFoundException("Item not found with id: " + id);
+        }
     }
 }

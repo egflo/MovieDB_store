@@ -1,32 +1,119 @@
 spring:
   application:
-    name: inventory-service
+    name: ${EUREKA_INSTANCE_HOSTNAME:inventory-service}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/inventorydb
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD:root}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/${MYSQL_DATABASE:InventoryDB}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    database: mysql
 
 server:
-  port: 0
+  port: ${SERVER_PORT:8082}
 
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    preferIpAddress: true
+    preferIpAddress: ${PREFER_IP_ADDRESS:true}
 
 grpc:
     server:
-        port: 9091
+        port: ${GRPC_PORT:9092}
     client:
         movie-grpc-server:
-          address: 'discovery:///movie-service'
+          address: ${GRPC_MOVIE_ADDRESS:discovery:///movie-service}
           enableKeepAlive: true
           keepAliveWithoutCalls: true
           negotiationType: plaintext
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+      enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiter:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+        default:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            permittedNumberOfCallsInHalfOpenState: 3
+            minimumNumberOfCalls: 5
+            waitDurationInOpenState: 60s
+            automaticTransitionFromOpenToHalfOpenEnabled: true
+            eventConsumerBufferSize: 10
+            recordExceptions:
+            - java.io.IOException
+            - java.net.SocketTimeoutException
+            - org.springframework.web.client.HttpServerErrorException
+            - org.springframework.web.client.HttpClientErrorException
+            - org.springframework.web.client.ResourceAccessException
+            - org.springframework.web.client.RestClientException
+            - org.springframework.web.client.HttpStatusCodeException
+            - org.springframework.web.client.RestClientResponseException
+            - org.springframework.web.client.UnknownHttpStatusCodeException
+            - org.springframework.web.client.RestClientException
+            - org.springframework.web.client.HttpServerErrorException
+            - org.springframework.web.client.HttpClientErrorException
+            - org.springframework.web.client.ResourceAccessException
+            - org.springframework.web.client.RestClientException
+            - org.springframework.web.client.HttpStatusCodeException
+            - org.springframework.web.client.RestClientResponseException
+            - org.springframework.web.client.UnknownHttpStatusCodeException
+            - org.springframework.web.client.RestClientException
+
+        CircuitBreakerService:
+          registerHealthIndicator: true
+          slidingWindowSize: 10
+          permittedNumberOfCallsInHalfOpenState: 3
+          minimumNumberOfCalls: 5
+          waitDurationInOpenState: 60s
+          automaticTransitionFromOpenToHalfOpenEnabled: true
+          eventConsumerBufferSize: 10
+
+  retry:
+    instances:
+      RetryService:
+        maxAttempts: 3
+        waitDuration: 1s
+
+    metrics:
+      enabled: true
+
+  timelimiter:
+    instances:
+      TimeLimiterService:
+        timeoutDuration: 5s
+        cancelRunningFuture: true
+        eventConsumerBufferSize: 10
+
+  bulkhead:
+    instances:
+      default:
+        maxConcurrentCalls: 25
+        maxWaitDuration: 0s
+        eventConsumerBufferSize: 10
+
+  ratelimiter:
+    instances:
+      RateLimiterService:
+        limitForPeriod: 10
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0s
+
+

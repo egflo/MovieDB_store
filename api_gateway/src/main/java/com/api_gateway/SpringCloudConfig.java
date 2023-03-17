@@ -5,12 +5,14 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class SpringCloudConfig {
 
    // @Autowired
    // private TokenRelayGatewayFilterFactory filterFactory;
 
+    /**
+    // * This method is used to route the request to the appropriate microservice
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -25,5 +27,6 @@ public class SpringCloudConfig {
                         .uri("lb://inventory-service"))
                 .build();
     }
+    **/
 
 }

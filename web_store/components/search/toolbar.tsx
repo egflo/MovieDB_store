@@ -3,7 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import {Pagination} from "@mui/material";
+import {Pagination, TextField} from "@mui/material";
 import {Direction, Sort, SortBy} from "./searchTypes";
 import {TablePagination} from "@mui/material";
 import React from "react";
@@ -108,6 +108,7 @@ export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, 
                             <MenuItem value={4}>25</MenuItem>
                         </Select>
                     </FormControl>
+
                 </Box>
                 <div className="col" style={{display:'flex', justifyContent:"right", alignItems:"center"}}>
                     <Pagination color="primary" count={total} page={page} onChange={handleChange} />

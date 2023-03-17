@@ -8,7 +8,6 @@
     <file url="file://$PROJECT_DIR$/interface/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/interface/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/interface/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/interface/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/inventory_service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/inventory_service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/inventory_service/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
@@ -19,5 +18,6 @@
     <file url="file://$PROJECT_DIR$/movie_service/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order_service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order_service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tax_service/src/main/java" charset="UTF-8" />
   </component>
 </project>

@@ -1,67 +1,80 @@
 import {Review} from "../models/Review";
-import React, {useEffect, useState} from "react";
+import React, {DependencyList, EffectCallback, useEffect, useRef, useState} from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faStar} from "@fortawesome/free-solid-svg-icons";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import ThumbUp from "@mui/icons-material/ThumbUp";
 import ThumbDown from "@mui/icons-material/ThumbDown";
 import {Backdrop} from "@mui/material";
 import Divider from '@mui/material/Divider';
-import {Alert, ToastState, ToastType} from "./Toast";
-import Snackbar from "@mui/material/Snackbar";
+import {ToastType} from "./Toast";
 import {auth, axiosInstance} from "../utils/firebase";
 import useToastContext from "../hooks/useToastContext";
 import {AxiosResponse} from "axios";
+import {SentimentState} from "../models/SentimentState";
+import StarIcon from '@mui/icons-material/Star';
 
-enum ReviewState {
-    NONE = "none",
-    LIKE = "like",
-    DISLIKE = "dislike"
-}
+
+const RATE_API : string = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/sentiment/rate`
+
+
+const useEffectAfterMount = (cb: EffectCallback, dependencies: DependencyList | undefined) => {
+    const mounted = useRef(true);
+
+    useEffect(() => {
+        if (!mounted.current) {
+            return cb();
+        }
+        mounted.current = false;
+    }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
+};
 
 export default function ReviewCard({review}:{review: Review}) {
-    const [reviewState, setReviewState] = useState(ReviewState.NONE);
+    const [state, setState] = useState(review.status ? review.status : SentimentState.NONE);
     const [openBackdrop, setOpenBackdrop] = useState(false);
     const toast = useToastContext();
+    const didMountRef = useRef(false);
+
 
     function handleCardClick(value: Review) {
         setOpenBackdrop(true);
     }
 
-    function handleChange() {
-
+    function handleChange(value: SentimentState) {
         let user = auth.currentUser;
         if (user != null) {
+
             let uid = user.uid;
             user.getIdToken(true).then(function (idToken) {
                 axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
 
-                axiosInstance.post("movie-service/review/rate", {
+                axiosInstance.post(RATE_API, {
                     objectId: review.id,
-                    status: reviewState,
+                    status: value,
                     userId: uid,
                     created: Date.now()
                 }).then((response: AxiosResponse) => {
                     if (response.status === 200) {
                         toast.show("Review updated", ToastType.INFO);
+                        setState(value)
                     } else {
                         toast.show("Error updating review", ToastType.ERROR);
+                        setState(SentimentState.NONE)
                     }
 
                 }).catch((error) => {
-                    toast.show(error.message, ToastType.ERROR);
+                    toast.show(error.response.data, ToastType.ERROR);
+                    setState(SentimentState.NONE)
                 });
             })
         }
 
         else {
             toast.show("You must be logged in to rate a review", ToastType.ERROR);
-            setReviewState(ReviewState.NONE);
+            setState(SentimentState.NONE);
         }
     }
 
@@ -69,9 +82,14 @@ export default function ReviewCard({review}:{review: Review}) {
         setOpenBackdrop(false);
     }
 
+    useEffectAfterMount(() => {
+        //handleChange(state);
+    } , [state]);
+
+
     return (
         <>
-            <Card sx={{ minWidth: 275 }}>
+            <Card sx={{ minWidth: 275, maxWidth: 500, cursor: 'pointer' }}>
                 <CardContent sx={{ height: 320}}  onClick={() => handleCardClick(review)}>
                     <Box>
                         <Typography variant="h6" component="div" sx={{
@@ -92,7 +110,7 @@ export default function ReviewCard({review}:{review: Review}) {
                             </Typography>
 
                             <Box>
-                                <FontAwesomeIcon icon={faStar} color="gold" size="1x"/>
+                                <StarIcon sx={{ color: 'gold' }}/>
                                 <span className="rating-head"> {review.rating} </span>
                                 <span style={{fontSize: '0.8rem'}} className="rating-tail"> / 10 </span>
                             </Box>
@@ -122,32 +140,32 @@ export default function ReviewCard({review}:{review: Review}) {
                 <CardActions disableSpacing>
                     <IconButton aria-label="like"
                                 onClick={() => {
-                                    if (reviewState === ReviewState.LIKE) {
-                                        setReviewState(ReviewState.NONE);
-                                    } else {
-                                        setReviewState(ReviewState.LIKE);
+                                    if(state === SentimentState.LIKE) {
+                                        handleChange(SentimentState.NONE);
                                     }
-                                    handleChange();
+                                    else {
+                                        handleChange(SentimentState.LIKE);
+                                    }
                                 }}
                     >
                         <ThumbUp
                             sx={{ color:
-                                reviewState === ReviewState.LIKE ? "green" : "grey.500"
+                                state === SentimentState.LIKE ? "green" : "grey.500"
                         }}/>
                     </IconButton>
                     <IconButton aria-label="dislike"
                                 onClick={() => {
-                                    if (reviewState === ReviewState.DISLIKE) {
-                                        setReviewState(ReviewState.NONE);
-                                    } else {
-                                        setReviewState(ReviewState.DISLIKE);
+                                    if(state === SentimentState.DISLIKE) {
+                                        handleChange(SentimentState.NONE);
                                     }
-                                    handleChange();
+                                    else {
+                                        handleChange(SentimentState.DISLIKE);
+                                    }
                                 }}
                     >
                         <ThumbDown
                             sx={{
-                                color: reviewState === ReviewState.DISLIKE ? "red" : "grey.500"
+                                color: state === SentimentState.DISLIKE ? "red" : "grey.500"
                             }}/>
                     </IconButton>
                 </CardActions>
@@ -169,7 +187,7 @@ export default function ReviewCard({review}:{review: Review}) {
                             <Typography className="text-muted">
                                 {review.user.firstname} {review.user.lastname}</Typography>
 
-                            <FontAwesomeIcon icon={faStar} color="gold" size="1x" />
+                            <StarIcon sx={{ color: 'gold' }}/>
                             <span className="rating-head"> {review.rating} </span>
                             <span style={{color:'gray', fontSize: '0.8rem'}} className="rating-tail"> / 10 </span>
                         </div>

@@ -9,13 +9,18 @@ import {ContentType} from "../components/ContentType";
 import {ViewType} from "../components/ViewType";
 import Box from "@mui/material/Box";
 import {auth} from "../utils/firebase";
+import React from "react";
+import useAuthContext from "../hooks/useAuthContext";
 
-const API_URL_BOOKMARK: string = '/movie-service/bookmark/?sortBy=created';
-const API_URL_VOTES: string = '/movie-service/movie/all?sortBy=ratings.numOfVotes';
-const API_URL_POPULAR: string = '/movie-service/movie/all?sortBy=popularity';
-const API_URL_BOXOFFICE: string = '/movie-service/movie/all?sortBy=revenue';
+
+const API_URL_BOOKMARK: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/bookmarks/?sortBy=created`;
+const API_URL_VOTES: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=ratings.numOfVotes`;
+const API_URL_POPULAR: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity`;
+const API_URL_BOXOFFICE: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=revenue`;
 
 export default function Home() {
+    const auth = useAuthContext();
+
   return (
 
     <Box className={styles.container}>
@@ -27,11 +32,6 @@ export default function Home() {
       </Head>
 
       <Box className={styles.main}>
-
-        <Typography className={styles.title} sx={{color: theme => theme.palette.text.primary,}}>
-          Welcome to <a href="https://nextjs.org">MovieDB</a>
-        </Typography>
-
           <Box
             sx={{
               display: 'flex',
@@ -44,7 +44,7 @@ export default function Home() {
               }}
          >
 
-            {auth.currentUser ? (
+            {auth.user ? (
                 <div className="container__main">
                   <div className="container__main__title">
                     <div className="container__main__shape"></div>
@@ -54,12 +54,13 @@ export default function Home() {
                       Favorites
                     </Typography>
                   </div>
-                  <ScrollPagination path={API_URL_BOOKMARK} style={CardStyle.HORIZONTAL} type={ContentType.BOOKMARK} view={ViewType.HORIZONTAL}/>
+                    <ScrollPagination path={API_URL_BOOKMARK} style={CardStyle.HORIZONTAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL} token={auth.token}/>
                 </div>
             ) : (null)}
 
 
-          <div className="container__main">
+
+        <div className="container__main">
             <div className="container__main__title">
               <div className="container__main__shape"></div>
               <Typography variant="h4" component="h2" sx={{

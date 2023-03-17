@@ -11,17 +11,26 @@ import Link from "next/link";
 import {axiosInstance} from "../utils/firebase";
 import useToastContext from "../hooks/useToastContext";
 import {ToastType} from "./Toast";
+import {useSWRConfig} from "swr";
+
 interface CartItemProps {
     item: Cart;
+    mutate: any;
+}
+
+function formatPrice(price: number) {
+    return price.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
 }
 
 
-let CART = "inventory-service/cart";
+const CART_API:string = `${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/cart/`;
 
 export const CartItem = (props: CartItemProps) => {
     const [quantity, setQuantity] = React.useState(props.item.quantity);
     const toast = useToastContext();
-
     function onUpdate(value: number) {
         let data = {
             id: props.item.id,
@@ -31,10 +40,12 @@ export const CartItem = (props: CartItemProps) => {
         }
 
         // update the cart
-        axiosInstance.put(`${CART}/${props.item.id}`, data).then((response) => {
+        axiosInstance.put(`${CART_API}/${props.item.id}`, data).then((response) => {
             if (response.status === 200) {
                 toast.show("Cart updated", ToastType.SUCCESS);
                 setQuantity(value);
+                props.mutate();
+
             } else {
                 toast.show("Could not update cart", ToastType.ERROR);
             }
@@ -42,27 +53,25 @@ export const CartItem = (props: CartItemProps) => {
     }
 
     function onDelete() {
-        axiosInstance.delete(`${CART}/${props.item.id}`).then((response) => {
+        axiosInstance.delete(`${CART_API}/${props.item.id}`).then((response) => {
             if (response.status === 200) {
                 toast.show("Cart updated", ToastType.SUCCESS);
+                props.mutate();
+
             } else {
                 toast.show("Could not delete item", ToastType.ERROR);
             }
         });
-
     }
 
     useEffect(() => {
-        console.log("Quantity changed");
+        props.mutate();
     }, [quantity]);
-
 
     return (
         <Card
             sx={{
                 minWidth: 500,
-
-                color: theme => theme.palette.text.primary,
             }}
         >
             <Grid container
@@ -160,7 +169,7 @@ export const CartItem = (props: CartItemProps) => {
                         }}
                 >
                     <Typography gutterBottom variant="h5">
-                        {props.item.price}
+                        {formatPrice(props.item.price)}
                     </Typography>
                 </Grid>
             </Grid>

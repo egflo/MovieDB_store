@@ -56,9 +56,6 @@ public class Movie {
     @Field("keywords")
     List<Tag> tags;
 
-    Bookmark bookmark;
-
-
     public Movie() {
     }
 
@@ -266,11 +263,4 @@ public Movie(String movieId, String title, Integer year, String rated, String ru
         this.tags = tags;
     }
 
-   // public Bookmark getBookmark() {
-    //    return bookmark;
-   // }
-
-    //public void setBookmark(Bookmark bookmark) {
-    //    this.bookmark = bookmark;
-    //}
 }

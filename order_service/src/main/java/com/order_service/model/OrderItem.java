@@ -12,6 +12,12 @@ public class OrderItem {
 
     private String itemId;
 
+    private String description;
+
+    private String photo;
+
+    private String sku;
+
     private int quantity;
 
     private double price;
@@ -27,12 +33,15 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(String itemId, int quantity, double price, Date createdAt, Date updatedAt) {
+    public OrderItem(String itemId, int quantity, double price, Date createdAt, Date updatedAt, String description, String photo, String sku) {
         this.itemId = itemId;
         this.quantity = quantity;
         this.price = price;
         this.created = createdAt;
-        this.updated= updatedAt;
+        this.updated = updatedAt;
+        this.description = description;
+        this.photo = photo;
+        this.sku = sku;
     }
 
     public long getId() {
@@ -73,7 +82,7 @@ public class OrderItem {
     }
 
     public void setCreated(Date createdAt) {
-        this.created = created;
+        this.created = createdAt;
     }
 
     public Date getUpdated() {
@@ -81,7 +90,35 @@ public class OrderItem {
     }
 
     public void setUpdated(Date updatedAt) {
-        this.updated = updated;
+        this.updated = updatedAt;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

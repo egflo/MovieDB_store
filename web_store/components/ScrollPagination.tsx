@@ -1,6 +1,6 @@
 import React, {MutableRefObject, useEffect, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleLeft, faAngleRight, faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {Movie} from "../models/Movie";
 import {CardStyle} from "./CardStyle";
 import MovieCard from "./MovieCard";
@@ -13,10 +13,13 @@ import ReviewCard from "./ReviewCard";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useSWRInfinite from "swr/infinite";
-import { useIdToken } from 'react-firebase-hooks/auth';
 import Header from "./Header";
 import useOnScreen from "../hooks/useOnScreen";
 import {CircularProgress} from "@mui/material";
+import useAuthContext from "../hooks/useAuthContext";
+import {ChevronRight} from "@mui/icons-material";
+import {ChevronLeft} from "@mui/icons-material";
+
 
 type AppProps = {
     path: string
@@ -24,10 +27,16 @@ type AppProps = {
     type: ContentType
     view: ViewType
     title?: string
-    token?: String
+    token?: string | undefined
 }
 
-let fetcher = (url: string) => axiosInstance.get(url).then((response: { data: any; }) => response.data.content)
+let fetcher = (path: string, token: string | undefined) => {
+    if (token) {
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+    return axiosInstance.get(path).then(res => res.data.content)
+}
+
 const PAGE_SIZE = 10;
 const getKey = (index: any, previousPageData: any, path: any, pageSize: any) => {
     if (previousPageData && !previousPageData.length) return null // reached the end
@@ -36,23 +45,22 @@ const getKey = (index: any, previousPageData: any, path: any, pageSize: any) => 
 export default function ScrollPagination({path, style, type, view, title, token}: AppProps) {
     let scrl = useRef() as MutableRefObject<HTMLDivElement>;
     let ref = useRef() as MutableRefObject<HTMLDivElement>;
-
     const isVisible = useOnScreen(ref);
+    const auth = useAuthContext();
 
+    const[show, setShow] = useState(false);
     const [page, setPage] = useState(0);
     const [last, setLast] = useState(false);
-    const [limit, setLimit] = React.useState(10);
     const [scroll, setScroll] = useState(0);
     const [scrollEnd, setScrollEnd] = useState(false);
 
 
-    if (token) {
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-
     const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
         (...args) => getKey(...args, path, PAGE_SIZE),
-        fetcher
+        (...args) => fetcher(...args, token),
+        {
+            revalidateOnFocus: false,
+        }
     )
 
     const items = data ? [].concat(...data) : [];
@@ -64,7 +72,6 @@ export default function ScrollPagination({path, style, type, view, title, token}
     const isReachingEnd =
         isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
     const isRefreshing = isValidating && data && data.length === size;
-
 
     useEffect(() => {
         if (isVisible && !isReachingEnd && !isRefreshing) {
@@ -117,8 +124,6 @@ export default function ScrollPagination({path, style, type, view, title, token}
         //Document Height
         let documentHeight = document.body.offsetHeight;
 
-        console.log("scrollPosition: " + scrollPosition);
-
         //Scroll End
         if (scrollPosition + windowHeight >= documentHeight) {
             if (isReachingEnd) {
@@ -130,15 +135,9 @@ export default function ScrollPagination({path, style, type, view, title, token}
         }
     }
 
-    const loadMore = () => {
-        if(!last) {
-            setPage(page + 1);
-        }
-    }
 
     return (
         <>
-
             {items && items.length > 0 && (
                 <>
                     {title &&
@@ -146,79 +145,94 @@ export default function ScrollPagination({path, style, type, view, title, token}
                         <Header title={title} />
 
                     }
-                    {view === ViewType.HORIZONTAL && (
-                        <Box
-                            sx={{position: 'relative'}}>
-                            {scroll !== 0 && (
-                                <div className="button" onClick={() => slide(-150)}>
-                                    <FontAwesomeIcon icon={faChevronLeft} size="3x" color="#0F52BA"/>
-                                </div>
-                            )}
 
-                            <Box className="container__scroll" ref={scrl} onScroll={scrollCheckHorizontal}>
-                                <Box className="container-fluid">
-                                    <Box className="row flex-row flex-nowrap g-2 ">
+                    <Box sx={{position: 'relative', p: 1}} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+                        {view === ViewType.HORIZONTAL && (
+                            <Box>
+                                {scroll !== 0 && (
+                                    <Box className="button-container" sx={{display: show ? 'block' : 'none', left: '10px', top: '40%'}}>
+                                        <Box className="button" onClick={() => slide(-450)}>
+                                            <ChevronLeft color="primary" sx={{fontSize:"3.5rem"}}/>
+                                        </Box>
+                                    </Box>
+                                )}
 
-                                        {type === ContentType.MOVIE && items.map((movie: Movie, index) => (
-                                            <Box key={index} className="col" >
-                                                <MovieCard style={style} movie={movie as Movie} />
-                                            </Box>
-                                        ))}
-                                        {type === ContentType.BOOKMARK && items.map((bookmark: Bookmark, index) => (
-                                            <div key={index} className="col" >
-                                                <MovieCard style={style} movie={bookmark.movie as Movie}/>
-                                            </div>
-                                        ))}
+                                <Box className="container__scroll" ref={scrl} onScroll={scrollCheckHorizontal}>
+                                    <Box className="container-fluid">
+                                        <Box className="row flex-row flex-nowrap  gap-3">
 
-                                        {type === ContentType.REVIEW && items.map((review: Review, index) => (
-                                            <div key={index} className="col" >
-                                                <ReviewCard review={review as Review}/>
-                                            </div>
+                                            {type === ContentType.MOVIE && items.map((movie: Movie, index) => (
+                                                <Box key={index} className="col p-0" >
+                                                    <MovieCard style={style} movie={movie as Movie} />
+                                                </Box>
+                                            ))}
+                                            {type === ContentType.BOOKMARK && items.map((bookmark: Bookmark, index) => (
+                                                <div key={index} className="col p-0" >
+                                                    <MovieCard style={style} movie={bookmark.movie as Movie}/>
+                                                </div>
+                                            ))}
 
-                                        ))}
+                                            {type === ContentType.REVIEW && items.map((review: Review, index) => (
+                                                <div key={index} className="col p-0" >
+                                                    <ReviewCard review={review as Review}/>
+                                                </div>
 
+                                            ))}
+
+                                        </Box>
                                     </Box>
                                 </Box>
+
+                                {!scrollEnd
+                                    && (
+                                        <Box className="button-container" sx={{right: '10px', top: '40%', display: show ? 'block' : 'none'}}>
+                                            <Box className="button" onClick={() => slide(450)}>
+                                                <ChevronRight color="primary" sx={{fontSize:"3.5rem"}}/>
+                                            </Box>
+                                        </Box>
+                                    )}
+
                             </Box>
+                        )}
 
-                            {!scrollEnd
-                                && (
-                                <div className="button" style={{right: '0', top: '0'}} onClick={() => slide(150)}>
-                                    <FontAwesomeIcon icon={faChevronRight} size="3x" color="#0F52BA"/>
-                                </div>
-                            )}
+                        {view === ViewType.VERTICAL && (
 
-                        </Box>
-                    )}
+                            <>
+                                <Box className="container-fluid" sx={{padding: 1}}>
+                                    {isEmpty ?
+                                        <Box className="row flex-row flex-wrap g-2">
+                                            <Box className="col" >
+                                                <Typography variant="h6" component="h6" gutterBottom>
+                                                    No Content
+                                                </Typography>
+                                            </Box>
+                                        </Box> : null}
 
-                    {view === ViewType.VERTICAL && (
-                        <Box className="container-fluid" sx={{padding: 1}}>
-                            {isEmpty ?
-                                <Box className="row flex-row flex-wrap g-2">
-                                    <Box className="col" >
-                                        <Typography variant="h6" component="h6" gutterBottom>
-                                            No Content
-                                        </Typography>
+                                    <Box className="row flex-row flex-wrap g-2">
+                                        {type === ContentType.MOVIE && items.map((movie: Movie) => (
+                                            <Box key={movie.id} className="col" >
+                                                <MovieCard style={style} movie={movie}/>
+                                            </Box>
+                                        ))}
+                                        {type === ContentType.BOOKMARK && items.map((bookmark: Bookmark) => (
+                                            <div key={bookmark.id} className="col" >
+                                                <MovieCard style={style} movie={bookmark.movie}/>
+                                            </div>
+                                        ))}
                                     </Box>
-                                </Box> : null}
 
-                            <Box className="row flex-row flex-wrap g-2">
-                                {type === ContentType.MOVIE && items.map((movie: Movie) => (
-                                    <Box key={movie.id} className="col" >
-                                        <MovieCard style={style} movie={movie}/>
-                                    </Box>
-                                ))}
-                                {type === ContentType.BOOKMARK && items.map((bookmark: Bookmark) => (
-                                    <div key={bookmark.id} className="col" >
-                                        <MovieCard style={style} movie={bookmark.movie}/>
-                                    </div>
-                                ))}
-                            </Box>
-                            <Box ref={ref}>
-                                {isLoadingMore ? <CircularProgress/> : isReachingEnd ? 'Done' : ''}
-                            </Box>
-                        </Box>
-                    )}
+                                </Box>
+
+
+                                <Box ref={ref} sx={{border: "1px solid blue"}}>
+                                    {isLoadingMore ? <CircularProgress/> : isReachingEnd ? 'Done' : ''}
+                                </Box>
+
+                            </>
+
+                        )}
+                    </Box>
+
                 </>
             )}
 
@@ -227,3 +241,4 @@ export default function ScrollPagination({path, style, type, view, title, token}
     )
 
 }
+

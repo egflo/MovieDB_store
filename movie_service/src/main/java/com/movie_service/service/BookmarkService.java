@@ -3,6 +3,7 @@ package com.movie_service.service;
 
 import com.movie_service.DTO.BookmarkRequest;
 import com.movie_service.DTO.Response;
+import com.movie_service.exception.IdNotFoundException;
 import com.movie_service.models.Bookmark;
 import com.movie_service.models.Movie;
 import com.movie_service.repository.BookmarkRepository;
@@ -14,10 +15,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class BookmarkService {
+public class BookmarkService implements BookmarkServiceImp {
 
     @Autowired
     private BookmarkRepository repository;
@@ -25,130 +28,97 @@ public class BookmarkService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Page<Bookmark> findAllByUserId(String id, Pageable pageable) {
+    @Override
+    public Bookmark getBookmark(String id) {
+        Optional<Bookmark> bookmark = repository.findById(new ObjectId(id));
+        if (bookmark.isPresent()) {
+            return bookmark.get();
+        }
 
-        Page<Bookmark> bookmarks = repository.getBookmarkByUserId(id, pageable);
-        return bookmarks;
+        throw new IdNotFoundException("Bookmark not found");
     }
 
-    public Page<Bookmark> findAll(Pageable pageable) {
-        Page<Bookmark> result = repository.findAll(pageable);
-        return result;
+    @Override
+    public Page<Bookmark> getBookmarksByUserId(String userId, Pageable pageable) {
+        return repository.getBookmarkByUserId(userId, pageable);
     }
 
+    @Override
+    public Bookmark addBookmark(BookmarkRequest bookmark) {
+        Optional<Movie> movie = movieRepository.getMovieById(new ObjectId(bookmark.getMovieId()));
 
+        if (movie.isPresent()) {
+            Bookmark newBookmark = new Bookmark();
+            newBookmark.setMovie(movie.get());
+            newBookmark.setUserId(bookmark.getUserId());
+            newBookmark.setCreated(new Date());
+            return repository.save(newBookmark);
+        }
 
-    public Page<Bookmark> findByMovieId(String id, Pageable pageable) {
-        return repository.findBookmarkByMovie_Id(id, pageable);
+        throw new IdNotFoundException("Movie not found");
     }
 
-    public Page<Bookmark> findByUserId(String id, Pageable pageable) {
-        return repository.getBookmarkByUserId(id, pageable);
+    @Override
+    public void deleteBookmark(String id) {
+        Optional<Bookmark> bookmark = repository.findById(new ObjectId(id));
+        if (bookmark.isPresent()) {
+            repository.delete(bookmark.get());
+            return;
+        }
+
+        throw new IdNotFoundException("Bookmark not found");
+
     }
 
-    public Page<Bookmark> findByCreatedAfter(String date, Pageable pageable) {
+    @Override
+    public Page<Bookmark> getBookmarksByMovieId(String movieId, Pageable pageable) {
+        return repository.findBookmarkByMovie_Id(movieId, pageable);
+    }
+
+    @Override
+    public Page<Bookmark> getBookmarksByCreatedAfter(String date, Pageable pageable) {
         return repository.findBookmarkByCreatedAfter(date, pageable);
     }
 
-    public Bookmark save(Bookmark bookmark) {
-        return repository.save(bookmark);
+    @Override
+    public Page<Bookmark> getBookmarks(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
-    public void deleteById(String id) {
-        repository.deleteById(new ObjectId(id));
+    @Override
+    public Bookmark updateBookmark(String id, BookmarkRequest bookmark) {
+        Optional<Bookmark> bookmarkOptional = repository.findById(new ObjectId(id));
+        if (bookmarkOptional.isPresent()) {
+            Bookmark newBookmark = bookmarkOptional.get();
+            newBookmark.setUserId(bookmark.getUserId());
+            newBookmark.setCreated(new Date());
+            return repository.save(newBookmark);
+        }
+
+        throw new IdNotFoundException("Bookmark not found");
     }
 
-    public void deleteByMovieId(String id) {
-        repository.deleteBookmarkByMovie_Id(id);
-    }
-
-    public void deleteByUserId(String id) {
-        repository.deleteBookmarkByUserId(id);
-    }
-
-    public Response getByMovieIdAndUserId(String movie_id, String user_id) {
-        Response response = new Response();
-        Optional<Bookmark> bookmark = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movie_id), user_id);
+    @Override
+    public Bookmark getByMovieIdAndUserId(String movieId, String userId) {
+        Optional<Bookmark> bookmark = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movieId), userId);
         if (bookmark.isPresent()) {
-            response.setData(bookmark.get());
-            response.setMessage("Bookmark found");
-            response.setSuccess(true);
-            response.setStatus(HttpStatus.OK);
-        } else {
-            response.setStatus(HttpStatus.NOT_FOUND);
-            response.setMessage("Bookmark not found");
-            response.setSuccess(false);
-        }
-        return response;
-    }
-
-    public Response get(String id, String userId) {
-        Optional<Bookmark> result = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(id), userId);
-
-        Response response = new Response();
-        if (result.isPresent()) {
-            response.setStatus(HttpStatus.OK);
-            response.setSuccess(true);
-            response.setMessage("Bookmark found");
-            response.setData(result.get());
-        } else {
-            response.setStatus(HttpStatus.NOT_FOUND);
-            response.setSuccess(false);
-            response.setMessage("Bookmark not found");
-        }
-        return response;
-    }
-
-    public Response delete(String id) {
-        Response response = new Response();
-        try {
-            repository.deleteById(new ObjectId(id));
-            response.setMessage("Bookmark deleted successfully");
-            response.setSuccess(true);
-            response.setStatus(HttpStatus.OK);
-        } catch (Exception e) {
-            response.setMessage("Bookmark not found");
-            response.setSuccess(false);
-            response.setStatus(HttpStatus.NOT_FOUND);
+            return bookmark.get();
         }
 
-        return response;
+        throw new IdNotFoundException("Bookmark not found");
     }
 
-    public Response create(BookmarkRequest request) {
-        Response response = new Response();
-        try {
-            Bookmark bookmark = new Bookmark();
-            Optional<Bookmark> exists =
-                    repository.getBookmarkByMovie_IdAndUserId(new ObjectId(request.getMovieId()), request.getUserId());
+    public Optional<Bookmark> getBookmarkByMovieIdAndUserId(String movieId, String userId) {
+        return repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movieId), userId);
+    }
 
-            if (exists.isPresent()) {
-                response.setMessage("Bookmark already exists");
-                response.setStatus(HttpStatus.CONFLICT);
-                response.setSuccess(false);
-                return response;
-            }
-
-            Optional<Movie> movie = movieRepository.getMovieById(new ObjectId(request.getMovieId()));
-            if (movie.isPresent()) {
-                bookmark.setMovie(movie.get());
-                bookmark.setUserId(request.getUserId());
-                bookmark.setCreated(request.getCreated());
-                response.setMessage("Bookmark created successfully");
-                response.setStatus(HttpStatus.OK);
-                response.setData(repository.save(bookmark));
-                response.setSuccess(true);
-            } else {
-                response.setSuccess(false);
-                response.setMessage("Movie not found");
-                response.setStatus(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            response.setMessage("Bookmark not added");
-            response.setStatus(HttpStatus.NOT_FOUND);
-            System.out.println(e);
+    public void deleteBookmarkByMovieIdAndUserId(String movieId, String userId) {
+        Optional<Bookmark> bookmark = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movieId), userId);
+        if (bookmark.isPresent()) {
+            repository.delete(bookmark.get());
+            return;
         }
-        return response;
-    }
 
+        throw new IdNotFoundException("Bookmark not found");
+    }
 }

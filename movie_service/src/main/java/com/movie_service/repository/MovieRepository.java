@@ -24,7 +24,7 @@ public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
     @Query(value = "{ 'cast.castId' : ?0 }")
     Page<Movie> findMovieByCastId (String castId, Pageable pageable);
 
-    List<Movie> findMovieByTitleContainingIgnoreCase(String title);
+    Page<Movie> findMovieByTitleContainingIgnoreCase(String title, Pageable pageable);
 
 
     //@Query(value = "{'keywords': {'$elemMatch': {'tag_id': ?0}}}")

@@ -25,6 +25,7 @@ message MovieResponse {
     string poster = 9;
     string plot = 10;
     string background = 11;
+    string sku = 12;
     repeated Genre genres = 7;
 
 }

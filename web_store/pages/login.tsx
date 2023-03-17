@@ -6,12 +6,13 @@ import Box from "@mui/material/Box";
 export default function LoginPage() {
     return (
         <Box className="login-page"
-                style={{
+                sx={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '100vh',
                     width: '100vw',
+                    backgroundColor: theme => theme.palette.background.default,
                 }}
         >
 

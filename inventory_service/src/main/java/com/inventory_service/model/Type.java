@@ -2,6 +2,8 @@ package com.inventory_service.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "type")
 public class Type {
@@ -9,6 +11,9 @@ public class Type {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)
+    private Set<Item> items;
 
     public Type() {
     }

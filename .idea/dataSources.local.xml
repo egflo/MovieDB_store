@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-223.8617.56">
+  <component name="dataSourceStorageLocal" created-in="IU-223.8836.41">
     <data-source name="@mongodb" uuid="78397c7c-065a-4fc3-93c4-c693abf6c007">
       <database-info product="Mongo DB" version="6.0.1" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.17" dbms="MONGO" exact-version="6.0.1" exact-driver-version="1.17" />
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
@@ -21,7 +21,10 @@
       <user-name>egflo</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="inventoryDB" />
+          <node kind="schema">
+            <name qname="InventoryDB" />
+            <name qname="information_schema" />
+          </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>
@@ -38,7 +41,9 @@
             <node kind="database" qname="@">
               <node kind="schema" qname="@" />
             </node>
-            <node kind="database" qname="orderDB" />
+            <node kind="database" qname="OrderDB">
+              <node kind="schema" qname="public" />
+            </node>
           </node>
         </introspection-scope>
       </schema-mapping>

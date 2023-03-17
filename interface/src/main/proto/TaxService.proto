@@ -1,0 +1,36 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "org.proto.grpc";
+package grpc;
+
+option java_outer_classname = "TaxServiceProto";
+
+
+service TaxService {
+    rpc GetTax (TaxRequest) returns (TaxResponse) {}
+}
+
+message TaxRequest {
+    string postCode = 1;
+}
+
+message TaxResponse {
+    repeated TaxItem items = 1;
+}
+
+message TaxItem {
+    int64 id = 1;
+    string city = 2;
+    string state = 3;
+    string county = 4;
+    string stateCode = 5;
+    string countyCode = 6;
+    string postCode = 7;
+    bool military = 8;
+    float latitude = 9;
+    float longitude = 10;
+    float rate = 11;
+}
+
+
+

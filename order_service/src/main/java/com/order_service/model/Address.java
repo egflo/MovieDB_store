@@ -8,30 +8,33 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long orderId;
-
     @Column(name = "first_name")
     private String firstName;
-
     @Column(name = "last_name")
     private String lastName;
-
     private String street;
     private String city;
     private String state;
     private String postcode;
+    private String country;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     public Address() {
     }
 
-    public Address(Long orderId, String firstName, String lastName, String street, String city, String state, String postcode) {
-        this.orderId = orderId;
+    public Address(String firstName, String lastName, String street,
+                   String city, String state, String postcode, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.street = street;
         this.city = city;
         this.state = state;
         this.postcode = postcode;
+        this.country = country;
     }
 
     public long getId() {
@@ -40,14 +43,6 @@ public class Address {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public String getFirstName() {
@@ -97,4 +92,17 @@ public class Address {
     public void setPostcode(String zip) {
         this.postcode = zip;
     }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
 }

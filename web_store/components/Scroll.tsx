@@ -1,15 +1,15 @@
 import React, {MutableRefObject, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronRight, faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {Box} from "@mui/material";
 import Header from "./Header";
+import {ChevronRight, ChevronLeft} from "@mui/icons-material";
 
 
 export default function Scroll({title, children}: { title?: String, children: any}) {
     let scrl = useRef() as MutableRefObject<HTMLDivElement>;
     const [scroll, setScroll] = useState(0);
     const [scrollEnd, setScrollEnd] = useState(false);
-
+    const [show, setShow] = useState(false);
 
     const slide = (shift: any) => {
         scrl.current.scrollLeft += shift;
@@ -50,15 +50,19 @@ export default function Scroll({title, children}: { title?: String, children: an
             <Box
                 sx={{
                     position: 'relative',
-                    padding: '10px 0px',
-
+                    p: 1,
                 }}
+                onMouseEnter={() => setShow(true)}
+                onMouseLeave={() => setShow(false)}
             >
 
                 {scroll !== 0 && (
-                    <Box className="button" onClick={() => slide(-150)}>
-                        <FontAwesomeIcon icon={faChevronLeft} size="3x" color="#0F52BA"/>
+                    <Box className="button-container" sx={{display: show ? 'block' : 'none', left: '10px', top: '40%'}}>
+                        <Box className="button" onClick={() => slide(-150)}>
+                            <ChevronLeft color="primary" sx={{fontSize:"3.5rem"}}/>
+                        </Box>
                     </Box>
+
                 )}
 
                 <Box className="container__scroll" ref={scrl} onScroll={scrollCheck}>
@@ -66,8 +70,10 @@ export default function Scroll({title, children}: { title?: String, children: an
                 </Box>
 
                 {!scrollEnd && (
-                    <Box className="button" style={{right: '0', top: '0'}} onClick={() => slide(150)}>
-                        <FontAwesomeIcon icon={faChevronRight} size="3x" color="#0F52BA"/>
+                    <Box className="button-container" sx={{right: '10px', top: '40%', display: show ? 'block' : 'none'}}>
+                        <Box className="button" onClick={() => slide(150)}>
+                            <ChevronRight color="primary" sx={{fontSize:"3.5rem"}}/>
+                        </Box>
                     </Box>
                 )}
 

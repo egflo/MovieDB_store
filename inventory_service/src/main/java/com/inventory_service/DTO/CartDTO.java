@@ -1,12 +1,18 @@
 package com.inventory_service.DTO;
 
+import com.inventory_service.model.Cart;
+
 public class CartDTO {
     Integer id;
     String userId;
     String itemId;
     Integer quantity;
 
-    public CartDTO() {
+    public CartDTO(Cart cart) {
+        this.id = cart.getId();
+        this.userId = cart.getUserId();
+        this.itemId = cart.getItemId();
+        this.quantity = cart.getQuantity();
     }
 
     public CartDTO(Integer id, String userId, String itemId, Integer quantity, String created) {

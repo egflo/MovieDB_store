@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,7 @@ public class AddressController {
     @GetMapping("/{id}")
     public @ResponseBody ResponseEntity<?> getAddressById(@PathVariable(value = "id") Integer id)
     {
-
-        return addressService.getAddress(id);
+        return ResponseEntity.ok(addressService.getAddress(id));
     }
 
     @PostMapping("/")
@@ -33,7 +33,7 @@ public class AddressController {
             @RequestHeader HttpHeaders headers,
             @RequestBody AddressDTO request) {
 
-        return addressService.createAddress(request);
+        return new ResponseEntity<>(addressService.createAddress(request), HttpStatus.CREATED);
     }
 
 
@@ -44,8 +44,8 @@ public class AddressController {
             @PathVariable(value = "id") Integer id) {
 
 
-        return null;
-        //return addressService.deleteAddress(id);
+        addressService.deleteAddress(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -62,13 +62,13 @@ public class AddressController {
             @RequestParam Optional<String> sortBy
     ) {
         // This returns a JSON or XML with the movies
-        return addressService.getAllAddresses(
+        return ResponseEntity.ok(addressService.getAllAddresses(
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(5),
                         Sort.Direction.ASC, sortBy.orElse("id")
                 )
-        );
+        ));
     }
 
     @GetMapping("/firstname/{fname}")
@@ -79,14 +79,14 @@ public class AddressController {
             @RequestParam Optional<String> sortBy
     ) {
         // This returns a JSON or XML with the movies
-        return addressService.getAddressesByFirstName(
+        return ResponseEntity.ok(addressService.getAddressesByFirstName(
                 fname,
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(5),
                         Sort.Direction.ASC, sortBy.orElse("id")
                 )
-        );
+        ));
     }
 
     @GetMapping("/lastname/{lname}")
@@ -97,14 +97,14 @@ public class AddressController {
             @RequestParam Optional<String> sortBy
     ) {
         // This returns a JSON or XML with the movies
-        return addressService.getAddressesByLastName(
+        return ResponseEntity.ok(addressService.getAddressesByLastName(
                 lname,
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(5),
                         Sort.Direction.ASC, sortBy.orElse("id")
                 )
-        );
+        ));
     }
 
     @GetMapping("/postcode/{postcode}")
@@ -115,20 +115,15 @@ public class AddressController {
             @RequestParam Optional<String> sortBy
     ) {
         // This returns a JSON or XML with the movies
-        return addressService.getAddressesByPostcode(
+        return ResponseEntity.ok(addressService.getAddressesByPostcode(
                 postcode,
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(5),
                         Sort.Direction.ASC, sortBy.orElse("id")
                 )
-        );
+        ));
     }
 
-    @GetMapping("/customer/{id}")
-    public @ResponseBody ResponseEntity<?> getCustomerById(@PathVariable(value = "id") Integer id)
-    {
-        return addressService.getAddress(id);
-    }
 
 }

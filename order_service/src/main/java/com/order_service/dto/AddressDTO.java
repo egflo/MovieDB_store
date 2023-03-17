@@ -1,6 +1,7 @@
 package com.order_service.dto;
 
 public class AddressDTO {
+    Long id;
     private String userId;
     private Long orderId;
     private String firstName;
@@ -13,7 +14,8 @@ public class AddressDTO {
     public AddressDTO() {
     }
 
-    public AddressDTO(String userId, Long orderId, String firstName, String lastName, String street, String city, String state, String postcode) {
+    public AddressDTO(Long id, String userId, Long orderId, String firstName, String lastName, String street, String city, String state, String postcode) {
+        this.id = id;
         this.userId = userId;
         this.orderId = orderId;
         this.firstName = firstName;
@@ -22,6 +24,14 @@ public class AddressDTO {
         this.city = city;
         this.state = state;
         this.postcode = postcode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserId() {

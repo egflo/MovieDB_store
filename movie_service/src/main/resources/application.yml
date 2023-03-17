@@ -1,27 +1,27 @@
 spring:
   application:
-    name: movie-service
+    name: ${EUREKA_INSTANCE_HOSTNAME:movie-service}
   data:
     mongodb:
-      database: moviedb
-      host: localhost
-      port: 27017
+      database: ${MONGO_DB:moviedb}
+      uri: ${MONGO_URI:mongodb://localhost:27017}
 
 server:
-  port: 0
+  port: ${SERVER_PORT:8080}
 
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    preferIpAddress: true
+    preferIpAddress: ${PREFER_IP_ADDRESS:true}
+
 grpc:
   server:
-      port: 9090
+      port: ${GRPC_PORT:9090}
   client:
     inventory-grpc-server:
-      address: 'discovery:///inventory-service'
+      address: ${GRPC_INVENTORY_ADDRESS:discovery:///inventory-service}
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
@@ -33,4 +33,89 @@ dgs:
   graphql:
     graphiql:
       enabled: true
+
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+      enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiter:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 60s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - java.io.IOException
+          - java.net.SocketTimeoutException
+          - org.springframework.web.client.HttpServerErrorException
+          - org.springframework.web.client.HttpClientErrorException
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.RestClientException
+          - org.springframework.web.client.HttpStatusCodeException
+          - org.springframework.web.client.RestClientResponseException
+          - org.springframework.web.client.UnknownHttpStatusCodeException
+          - org.springframework.web.client.RestClientException
+          - org.springframework.web.client.HttpServerErrorException
+          - org.springframework.web.client.HttpClientErrorException
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.RestClientException
+          - org.springframework.web.client.HttpStatusCodeException
+          - org.springframework.web.client.RestClientResponseException
+          - org.springframework.web.client.UnknownHttpStatusCodeException
+          - org.springframework.web.client.RestClientException
+
+      CircuitBreakerService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 60s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        eventConsumerBufferSize: 10
+
+  retry:
+    instances:
+      RetryService:
+        maxAttempts: 3
+        waitDuration: 1s
+
+    metrics:
+      enabled: true
+
+  timelimiter:
+    instances:
+      TimeLimiterService:
+        timeoutDuration: 5s
+        cancelRunningFuture: true
+        eventConsumerBufferSize: 10
+
+  bulkhead:
+    instances:
+      default:
+        maxConcurrentCalls: 25
+        maxWaitDuration: 0s
+        eventConsumerBufferSize: 10
+
+  ratelimiter:
+    instances:
+      RateLimiterService:
+        limitForPeriod: 10
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0s
 

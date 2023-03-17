@@ -1,4 +1,5 @@
 import {User} from "./User";
+import {SentimentState} from "./SentimentState";
 
 export interface Review {
     id: string;
@@ -9,4 +10,5 @@ export interface Review {
     text: string;
     user: User;
     date: string;
+    status: SentimentState;
 }

@@ -1,28 +1,27 @@
 package com.inventory_service.service;
 
 import com.inventory_service.DTO.CartDTO;
+import com.inventory_service.model.Cart;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface CartServiceImp {
-    public ResponseEntity<?> getAll(Pageable pagable);
+    public Page<Cart> getAll(Pageable pageable);
+
+    public Page<Cart> findAllByItemId(String itemId, Pageable pageable);
+
+    public Cart add(CartDTO request);
+
+    public void delete(Integer id);
+
+    public Cart update(CartDTO request);
+
+    public Optional<Cart> findById(Integer id);
 
 
-    public ResponseEntity<?> findAllByItemId(String itemId, Pageable pagable);
-
-    public ResponseEntity<?> addItem(CartDTO request);
-
-    public ResponseEntity<?> removeItem(CartDTO request);
-
-    public ResponseEntity<?> updateItem(CartDTO request);
-
-    public ResponseEntity<?> clearCart(CartDTO request);
-
-    public ResponseEntity<?> getCart(CartDTO request);
-
-    public ResponseEntity<?> getCartItems(CartDTO request);
-
-    public ResponseEntity<?> getCartItemsQty(CartDTO request);
-
-    public ResponseEntity<?> getCartByUserId(String userId);
+    public List<Cart> findAllByUserId(String userId);
 }

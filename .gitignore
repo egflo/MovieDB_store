@@ -1,2 +1,7 @@
 # Project exclude paths
 /interface/target/
+
+
+#Ignore aws template files
+aws_template.yaml
+docker-compose.yml

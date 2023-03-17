@@ -1,5 +1,4 @@
-import * as React from "react";
-import theme from "tailwindcss/defaultTheme";
+
 import Box from "@mui/material/Box";
 
 

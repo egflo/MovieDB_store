@@ -1,24 +1,37 @@
 package com.order_service.request;
 
 public class AddressRequest {
+    long id;
     String firstName;
     String lastName;
     String street;
     String city;
     String state;
     String postcode;
+    String country;
 
     public AddressRequest() {
     }
 
-    public AddressRequest(String firstName, String lastName, String street, String city, String state, String postcode) {
+    public AddressRequest(long id, String firstName, String lastName, String street, String city, String state, String postcode, String country) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.street = street;
         this.city = city;
         this.state = state;
         this.postcode = postcode;
+        this.country = country;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
 
     public String getFirstName() {
         return firstName;
@@ -66,6 +79,14 @@ public class AddressRequest {
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     @Override

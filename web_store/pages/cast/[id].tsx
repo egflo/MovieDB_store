@@ -17,11 +17,14 @@ import Header from "../../components/Header";
 import Box from "@mui/material/Box";
 
 
+
+const API_URL_MOVIES: string = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/cast/`;
+const API_URL_CAST: string = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/cast/`;
+
 export interface QParams extends ParsedUrlQuery {
     id?: string
 }
 
-const API_URL_MOVIES: string = 'movie-service/movie/cast/';
 
 function CastPage({data}: {data: CastDetails}) {
     const [open, setOpen] = useState(false);
@@ -32,7 +35,6 @@ function CastPage({data}: {data: CastDetails}) {
         setOpen(false);
     }
     function handleToggle() {
-        console.log("handleToggle");
         setOpen(!open);
     }
 
@@ -124,7 +126,7 @@ function CastPage({data}: {data: CastDetails}) {
 
             <Header title={"Filmography"}/>
 
-            <ScrollPagination path={API_URL_MOVIES + data.castId + "?sortBy=popularity"}
+            <ScrollPagination path={API_URL_MOVIES + data.castId + "?sortBy=popularity&limit=50"}
                               style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.VERTICAL}/>
 
             <Backdrop
@@ -163,7 +165,7 @@ export const getStaticProps: GetStaticProps<QParams> = async ({params}) => {
             notFound: true,
         }
     }
-    const res = await axiosInstance.get("movie-service/cast/" + slug.id)
+    const res = await axiosInstance.get(API_URL_CAST + slug.id)
     const data = await res.data
 
     return {

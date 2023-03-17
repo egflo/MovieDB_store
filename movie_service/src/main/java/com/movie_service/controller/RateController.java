@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/rate")
+@RequestMapping("/sentiment")
 public class RateController {
     @Autowired
     private SentimentService service;
@@ -28,9 +28,7 @@ public class RateController {
             @RequestParam Optional<String> sortBy
     ) {
 
-        System.out.println("limit: " + limit);
-
-        return new ResponseEntity<>(service.findAll(PageRequest.of(
+        return new ResponseEntity<>(service.getAllSentiments(PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
                 Sort.by(sortBy.orElse("year"))
@@ -41,7 +39,7 @@ public class RateController {
     public ResponseEntity<?> getById(
             @PathVariable String id
     ) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getSentiment(id), HttpStatus.OK);
     }
 
 
@@ -53,5 +51,18 @@ public class RateController {
         return new ResponseEntity<>(service.findByUserIdAndObjectId(id, userId), HttpStatus.OK);
     }
 
+    @PostMapping("/rate")
+    public ResponseEntity<?> like(
+            @RequestHeader("Authorization") String token,
+            @RequestBody SentimentRequest request
+    ) {
+        System.out.println("token: " + token);
+        System.out.println("request: " + request);
+
+        DecodedJWT jwt = JWT.decode(token.split(" ")[1].trim());
+        String subject = jwt.getSubject();
+        request.setUserId(subject);
+        return new ResponseEntity<>(service.createSentiment(request), HttpStatus.OK);
+    }
 
 }

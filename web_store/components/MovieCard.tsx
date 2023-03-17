@@ -7,9 +7,6 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import {CardActions} from "@mui/material";
 import IconButton, {IconButtonProps} from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import StarIcon from '@mui/icons-material/Star';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import {styled} from "@mui/material/styles";
@@ -21,7 +18,6 @@ import Rate from "./actions/Rate";
 import {KeyedMutator} from "swr";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
-import CartExpanded from "./actions/CartExpanded";
 import Cart from "./actions/Cart";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -63,7 +59,7 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
     function CardVertical() {
         return (
 
-            <Card sx={{ minWidth: 170, maxWidth: 170, onHover: 'pointer'}} onClick={() => handleCardClick(movie.movieId)}>
+            <Card sx={{ minWidth: 170, maxWidth: 170, cursor: 'pointer'}} onClick={() => handleCardClick(movie.movieId)}>
                 {testURL(movie.poster) ? (
 
                     <CardMedia
@@ -136,7 +132,7 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
                     <Typography variant="h5" className="content__title">{movie.title}</Typography>
 
                     <Box className="content__description" style={{height:'1.5rem'}}>
-                        {!!movie.ratings.rottenTomatoes &&
+                        {!!movie.ratings?.rottenTomatoes &&
                             (
                                 <div style={{
                                     display: 'flex',
@@ -207,7 +203,10 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
 
                     </Typography>
 
-                    <Cart itemId={movie.id} />
+                    {movie.item && (
+                        <Cart item={movie.item} />
+                    )}
+
                 </CardContent>
 
                 <Divider sx={{
@@ -215,7 +214,7 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
                 }}/>
 
                 <CardActions disableSpacing sx={{color:'grey'}}>
-                    <Favorite movie={movie} bookmark={null} selected={false}/>
+                    <Favorite movie={movie}/>
                     <Share movie={movie}></Share>
                     <Rate movie={movie}></Rate>
                     <ExpandMore

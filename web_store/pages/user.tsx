@@ -10,6 +10,10 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useRouter } from 'next/router'
 import Header from "../components/Header";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import IconButton from "@mui/material/IconButton";
 
 const logout = () => {
     signOut(auth);
@@ -41,51 +45,135 @@ export default function UserPage() {
 
     if (user) {
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    p: 2,
-                    backgroundColor: theme => theme.palette.background.paper,
-                    width: "100vw",
-                }}
-            >
-                <Header title={"User"}></Header>
-                <Card>
-                    <CardContent>
-                        <div className="row align-items-center">
-                            <div className="col-md-2">
-                                <img
-                                    src={"./firebase.png"}
-                                    alt="User's profile picture"
-                                    className="rounded-circle img-fluid profile-picture"
-                                />
+            <>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        p: 2,
+                        backgroundColor: theme => theme.palette.background.paper,
+                        width: "100vw",
+                    }}
+                >
+                    <Header title={"User"}></Header>
+                    <Card>
+                        <CardContent>
+                            <div className="row align-items-center">
+                                <div className="col-md-2">
+                                    <img
+                                        src={"./firebase.png"}
+                                        alt="User's profile picture"
+                                        className="rounded-circle img-fluid profile-picture"
+                                    />
+                                </div>
+                                <div className="col-md  text-md-left">
+                                    <Typography variant="h5" component="div">
+                                        {user.email}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        UID: {user.uid}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Provider ID: {user.providerId}
+                                    </Typography>
+
+                                    <Typography variant="body2" color="text.secondary">
+                                        Email Verified: {user.emailVerified ? 'Yes' : 'No'}
+                                    </Typography>
+
+                                </div>
+
+                                <div className="col-md-3">
+                                    <Button onClick={logout}>Log out</Button>
+                                </div>
                             </div>
-                            <div className="col-md  text-md-left">
-                                <Typography variant="h5" component="div">
-                                    {user.email}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    UID: {user.uid}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    Provider ID: {user.providerId}
-                                </Typography>
+                        </CardContent>
+                    </Card>
+                </Box>
 
-                                <Typography variant="body2" color="text.secondary">
-                                    Email Verified: {user.emailVerified ? 'Yes' : 'No'}
-                                </Typography>
+                <Box className="container-fluid" >
 
-                            </div>
+                        <Box className="row flex-row flex-wrap g-2">
 
-                            <div className="col-md-3">
-                                <Button onClick={logout}>Log out</Button>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                            <Box className="col-md-4">
 
-            </Box>
+                                <Card className={'action-card'}
+                                        onClick={() => router.push('/orders')}>
+
+                                    <CardContent>
+                                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', textAlign: 'left' }}>
+
+                                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: "inherit" }}>
+                                                <LocalShippingIcon sx={{ fontSize: 75 }} />
+                                            </Box>
+
+                                            <Box>
+                                                <Typography variant="h5" component="div">
+                                                    Your Orders
+                                                </Typography>
+                                                <Typography variant="subtitle2" component="div" color="grey">
+                                                    Track, return, or buy things again
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+
+                            </Box>
+
+                            <Box className="col-md-4">
+                                <Card className={'action-card'}
+                                        onClick={() => router.push('/favorites')}
+                                >
+                                    <CardContent>
+                                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', textAlign: 'left' }}>
+
+                                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: "inherit" }}>
+                                                <FavoriteIcon sx={{ fontSize: 75 }} />
+                                            </Box>
+
+                                            <Box>
+                                                <Typography variant="h5" component="div">
+                                                    Your Bookmarks
+                                                </Typography>
+                                                <Typography variant="subtitle2" component="div" color="grey">
+                                                    Save items you like for later
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                            </Box>
+
+                            <Box className="col-md-4">
+                                <Card className={'action-card'}>
+                                    <CardContent>
+                                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', textAlign: 'left' }}>
+
+                                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: "inherit" }}>
+                                                <AdminPanelSettingsIcon sx={{ fontSize: 75 }} />
+                                            </Box>
+
+                                            <Box>
+                                                <Typography variant="h5" component="div">
+                                                    Login & Security
+                                                </Typography>
+                                                <Typography variant="subtitle2" component="div" color="grey">
+                                                    Change your password, email, and more
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+
+                            </Box>
+                        </Box>
+                </Box>
+
+
+
+
+            </>
 
 
         );

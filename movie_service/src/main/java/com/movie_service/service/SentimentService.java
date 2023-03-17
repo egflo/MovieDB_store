@@ -2,70 +2,71 @@ package com.movie_service.service;
 
 import com.movie_service.DTO.Response;
 import com.movie_service.DTO.SentimentRequest;
+import com.movie_service.exception.IdNotFoundException;
 import com.movie_service.models.Sentiment;
+import com.movie_service.models.Status;
 import com.movie_service.repository.SentimentRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+
 import java.util.Date;
 import java.util.Optional;
 
+
+
 @Service
-public class SentimentService {
+public class SentimentService implements SentimentServiceImp {
 
     @Autowired
     private SentimentRepository repository;
 
-    public Page<Sentiment> findAll(Pageable pageable) {
-        Page<Sentiment> result = repository.findAll(pageable);
-        return result;
-    }
+    @Autowired
+    ConversionService conversionService;
 
-    public Optional<Sentiment> findById(String id) {
-        return repository.findById(new ObjectId(id));
-    }
-
-    public Page<Sentiment> findByObjectId(String id, Pageable pageable) {
-        return repository.getSentimentByObjectId(new ObjectId(id), pageable);
-    }
-
-    public Page<Sentiment> findByUserId(String id, Pageable pageable) {
-        return repository.getSentimentByUserId(id, pageable);
-    }
-
+    @Override
     public Page<Sentiment> findByCreatedAfter(String date, Pageable pageable) {
         return repository.getSentimentByCreatedAfter(new Date(date), pageable);
     }
 
 
+    @Override
     public Optional<Sentiment> findByUserIdAndObjectId(String userId, String objectId) {
         return repository.getSentimentByUserIdAndObjectId(userId, new ObjectId(objectId));
     }
 
-    public Response save(SentimentRequest request) {
 
-        Response response = new Response();
-        System.out.println(request);
+    @Override
+    public Sentiment getSentiment(String id) {
+        if (repository.findById(new ObjectId(id)).isPresent()) {
+            return repository.findById(new ObjectId(id)).get();
+        }
+
+        throw new IdNotFoundException("Sentiment not found with id: " + id);
+    }
+
+    @Override
+    public Sentiment createSentiment(SentimentRequest request) {
+
         Optional<Sentiment> sentiment = findByUserIdAndObjectId(request.getUserId(), request.getObjectId());
         if (sentiment.isPresent()) {
             Sentiment sentiment1 = sentiment.get();
-            sentiment1.setStatus(request.getStatus());
-            repository.save(sentiment1);
-
-            response.setMessage("Updated existing sentiment");
-            response.setStatus(HttpStatus.OK);
-            response.setSuccess(true);
-            return response;
+            //String to Enum
+            Status status = conversionService.convert(request.getStatus(), Status.class);
+            sentiment1.setStatus(status);
+            return repository.save(sentiment1);
         }
 
         Sentiment sentiment1 = new Sentiment();
         sentiment1.setObjectId(new ObjectId(request.getObjectId()));
         sentiment1.setUserId(request.getUserId());
-        sentiment1.setStatus(request.getStatus());
+        Status status = conversionService.convert(request.getStatus(), Status.class);
+        sentiment1.setStatus(status);
 
         if (request.getCreated() != null) {
             sentiment1.setCreated(new Date(request.getCreated()));
@@ -74,18 +75,39 @@ public class SentimentService {
             sentiment1.setCreated(new Date());
         }
 
-        repository.save(sentiment1);
-
-        response.setMessage("Created new sentiment");
-        response.setSuccess(true);
-        response.setStatus(HttpStatus.OK);
-        return response;
-    }
-    public void delete(String id) {
-        repository.deleteById(new ObjectId(id));
+        return repository.save(sentiment1);
     }
 
-    public Sentiment get(String id) {
-        return repository.findById(new ObjectId(id)).get();
+    @Override
+    public void deleteSentiment(String id) {
+        if(repository.findById(new ObjectId(id)).isPresent()) {
+            repository.deleteById(new ObjectId(id));
+            return;
+        }
+
+        throw new IdNotFoundException("Sentiment not found with id: " + id);
+
     }
+
+    @Override
+    public Sentiment updateSentiment(String id, SentimentRequest sentiment) {
+        return createSentiment(sentiment);
+    }
+
+    @Override
+    public Page<Sentiment> getSentimentByObjectId(String objectId, Pageable pageRequest) {
+        return repository.getSentimentByObjectId(new ObjectId(objectId), pageRequest);
+    }
+
+    @Override
+    public Page<Sentiment> getSentimentByUserId(String userId, Pageable pageRequest) {
+        return repository.getSentimentByUserId(userId, pageRequest);
+    }
+
+    @Override
+    public Page<Sentiment> getAllSentiments(Pageable pageRequest) {
+        return repository.findAll(pageRequest);
+    }
+
+
 }

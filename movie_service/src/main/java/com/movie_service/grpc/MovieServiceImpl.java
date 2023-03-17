@@ -33,6 +33,7 @@ public class MovieServiceImpl extends MovieServiceGrpc.MovieServiceImplBase {
                 .setYear(movie.get().getYear())
                 .setDirector(movie.get().getDirector())
                 .setPoster(movie.get().getPoster())
+                .setSku(movie.get().getMovieId())
                 .build();
 
         responseObserver.onNext(response);

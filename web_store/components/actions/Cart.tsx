@@ -3,14 +3,16 @@ import Button from "@mui/material/Button";
 import useToastContext from "../../hooks/useToastContext";
 import {ToastType} from "../Toast";
 import {axiosInstance, auth} from "../../utils/firebase";
-
+import {Item} from "../../models/Item";
 
 
 type CartProps = {
-    itemId: string;
+    item: Item;
 }
 
-export default function Cart({itemId}: CartProps) {
+const API_CART:string = `${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/cart/`;
+
+export default function Cart({item}: CartProps) {
     const {show} = useToastContext();
     const [quantity, setQuantity] = useState(1);
 
@@ -22,16 +24,14 @@ export default function Cart({itemId}: CartProps) {
 
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-            axiosInstance.post("inventory-service/cart/", {
-                itemId: itemId,
+            axiosInstance.post(API_CART, {
+                itemId: item.id,
                 userId: auth.currentUser?.uid,
                 quantity: quantity,
             }).then((response) => {
-                console.log(response);
                 show("Added to cart", ToastType.INFO);
 
             }).catch((error) => {
-                console.log(error);
                 show("Could not add to cart", ToastType.ERROR);
             });
         }
@@ -42,8 +42,8 @@ export default function Cart({itemId}: CartProps) {
     }
 
     return (
-        <Button onClick={addToCart} variant="contained" color="primary">
-            Add to cart
+        <Button onClick={addToCart} variant="contained" color="primary" size={"large"}>
+            Add to cart for ${item.price} ({item.quantity})
         </Button>
     );
 }

@@ -1,5 +1,7 @@
 package com.inventory_service.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.inventory_service.DTO.CartDTO;
 import com.inventory_service.service.CartService;
 import jakarta.persistence.*;
@@ -17,6 +19,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+
 //https://www.amitph.com/spring-rest-http-header/
 @RestController
 @RequestMapping("/cart")
@@ -25,20 +33,20 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    @GetMapping("/")
+    public ResponseEntity<?> getCart(@RequestHeader HttpHeaders headers) {
+        String token = headers.get("authorization").get(0).split(" ")[1].trim();
 
+        DecodedJWT jwt = JWT.decode(token);
+        String subject = jwt.getSubject();
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<?> getCart(@RequestHeader HttpHeaders headers
-            , @PathVariable String id) {
-
-        return cartService.getCartByUserId(id);
+        return ResponseEntity.ok(cartService.findAllByUserId(subject));
     }
 
     @PostMapping("/")
     public ResponseEntity<?> addCart(@RequestHeader HttpHeaders headers, @RequestBody CartDTO request) {
 
-
-        return cartService.addItem(request);
+        return ResponseEntity.ok(cartService.add(request));
     }
 
 
@@ -48,7 +56,7 @@ public class CartController {
                                         @RequestBody CartDTO request) {
 
         request.setId(id);
-        return cartService.updateItem(request);
+        return ResponseEntity.ok(cartService.update(request));
     }
 
 
@@ -57,10 +65,8 @@ public class CartController {
     public ResponseEntity<?> deleteCart(@RequestHeader HttpHeaders headers,
                                                      @PathVariable Integer id) {
 
-        CartDTO request = new CartDTO();
-        request.setId(id);
-
-        return cartService.removeItem(request);
+        cartService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 
@@ -77,13 +83,13 @@ public class CartController {
             @RequestParam Optional<String> sortBy
     ) {
 
-        return cartService.getAll(
+        return ResponseEntity.ok(cartService.getAll(
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(5),
                         Sort.Direction.ASC, sortBy.orElse("id")
                 )
-        );
+        ));
 
     }
 
@@ -91,10 +97,7 @@ public class CartController {
     public ResponseEntity<?> findCartById(
             @PathVariable Integer id) {
 
-        CartDTO request = new CartDTO();
-        request.setId(id);
-
-        return cartService.getCart(request);
+          return ResponseEntity.ok(cartService.findById(id));
     }
 
     @GetMapping("/item/{id}")
@@ -105,13 +108,14 @@ public class CartController {
             @RequestParam Optional<String> sortBy) {
 
 
-        return cartService.findAllByItemId(id,
+        return ResponseEntity.ok(cartService.findAllByItemId(
+                id,
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(5),
                         Sort.Direction.ASC, sortBy.orElse("id")
                 )
-        );
+        ));
     }
 
 }

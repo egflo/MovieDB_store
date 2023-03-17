@@ -11,6 +11,9 @@ import {useRouter} from "next/router";
 import Box from "@mui/material/Box";
 
 
+const API_CART:string = `${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/cart/`;
+
+
 type CartProps = {
     itemId: string;
 }
@@ -24,7 +27,7 @@ export default function CartExpanded({itemId}: CartProps) {
             const token = await auth.currentUser?.getIdToken(true);
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-            axiosInstance.post("inventory-service/cart/", {
+            axiosInstance.post(API_CART, {
                 itemId: itemId,
                 userId: auth.currentUser?.uid,
                 quantity: Number(quantity),

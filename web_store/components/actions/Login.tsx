@@ -1,6 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import {useAuthState, useSignOut} from 'react-firebase-hooks/auth';
-import {signInWithGoogle, auth} from "../../utils/firebase";
+
 import Button from "@mui/material/Button";
 import React from "react";
 import {CircularProgress} from "@mui/material";
@@ -11,7 +9,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import LoginIcon from "@mui/icons-material/Login";
-import {LoginForm} from "../LoginForm";
+import {LoginForm} from "../forms/LoginForm";
 
 export function Login() {
     const ref = React.useRef(null);

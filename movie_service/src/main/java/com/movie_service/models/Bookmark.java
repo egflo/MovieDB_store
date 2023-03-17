@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 
 //Entity class for the bookmark collection in the database
 //This class is used to store the bookmarked movies of a user
@@ -20,12 +22,12 @@ public class Bookmark {
         @DBRef
         private Movie movie;
 
-        private String created;
+        private Date created;
 
         public Bookmark() {
         }
 
-        public Bookmark(String userId,  Movie movie, String created) {
+        public Bookmark(String userId,  Movie movie, Date created) {
             this.userId = userId;
             this.movie = movie;
             this.created = created;
@@ -55,11 +57,11 @@ public class Bookmark {
             this.movie = movie;
         }
 
-        public String getCreated() {
+        public Date getCreated() {
             return created;
         }
 
-        public void setCreated(String created) {
+        public void setCreated(Date created) {
             this.created = created;
         }
 
