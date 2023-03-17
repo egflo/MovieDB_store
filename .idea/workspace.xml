@@ -4,214 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Initial">
-      <change afterPath="$PROJECT_DIR$/api_gateway/dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aws_template.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka_server/dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/interface/src/main/java/org/proto/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/interface/src/main/proto/TaxService.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/ProductDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartResponseBodyAdvice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/exception/ControllerExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/exception/IdNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/exception/InventoryException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/exception/QuantityExceededException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Status.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service_grpc/CartServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/ReviewDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/ReviewRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/StringToEnumConverter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/WebConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/BookmarkResponseBodyAdvice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieResponseBodyAdvice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/ReviewResponseBodyAdvice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/exception/ControllerExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/exception/DuplicateException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/exception/IdNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Status.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/API.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CastServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/ReviewServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/SentimentServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/OrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/CartItemDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/CheckoutResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/ItemResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/OrderItemDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentIntentResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/AddressException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/ControllerExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/IdNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/OrderException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Status.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/AddressServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/CartService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/GrpcConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/MovieService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/RateService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/DTO/RateDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/DTO/TaxDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/TaxServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/controller/RateController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/grpc/GrpcConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/grpc/RateServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/model/Rate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/repository/RateRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/service/RateService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/tax_service/service/RateServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tax_service/src/test/java/com/tax_service/TaxServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/Location.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/forms/Address.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/forms/Checkout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/order/OrderCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/order/result.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/order/searchTypes.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/order/severity-pill.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/order/toolbar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/Checkout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/Item.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/Order.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/SentimentState.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/checkout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/orders.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/utils/firebaseAdmin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/utils/serviceAccountKey.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/78397c7c-065a-4fc3-93c4-c693abf6c007.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/78397c7c-065a-4fc3-93c4-c693abf6c007.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/orderDB.TPQMuA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/orderDB.TPQMuA/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/orderDB.TPQMuA/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/SpringCloudConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/SpringCloudConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/resources/service-account.json" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/resources/service-account.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka_server/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/eureka_server/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka_server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka_server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka_server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka_server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/interface/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/src/main/java/org/proto/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/src/main/proto/CartService.proto" beforeDir="false" afterPath="$PROJECT_DIR$/interface/src/main/proto/CartService.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/src/main/proto/MovieService.proto" beforeDir="false" afterPath="$PROJECT_DIR$/interface/src/main/proto/MovieService.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/MovieDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/ItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Type.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/BookmarkDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/BookmarkDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/MovieDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/SentimentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/SentimentRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/BookmarkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/BookmarkController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/RateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/RateController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/ReviewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/ItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/MovieServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/MovieServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Bookmark.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Bookmark.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Movie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Sentiment.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Sentiment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/MovieRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/ReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/ReviewRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/ReviewService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/SentimentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/SentimentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/AddressDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/AddressDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/ChargeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/PaymentIntentRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Address.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/OrderItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/AddressRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/AddressRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/OrderRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/AddressRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/AddressRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/AddressService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/AddressService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/StripeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/StripeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/AuthButton.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/AuthScrollPagination.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/CartItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/CartItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/GoogleAuth.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/forms/LoginForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/MovieCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/MovieCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/MoviesScroll.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/ReviewCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/ReviewCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/Score.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Score.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/Scroll.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Scroll.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/ScrollPagination.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/ScrollPagination.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Cart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/CartExpanded.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/CartExpanded.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Favorite.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Favorite.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Rate.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Rate.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/cart/Item.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/NavigationActionItems.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/NavigationActionItems.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/NavigationBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/NavigationBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/search/result.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/search/result.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/search/toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/search/toolbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/contexts/AuthContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/contexts/AuthContext.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/models/Cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Cart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/models/Movie.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Movie.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/models/Review.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Review.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/next.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/_app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/_app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/cart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/cast/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/cast/[id].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/favorites.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/favorites.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/movie/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/movie/[id].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/search/[term].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/search/[term].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/user.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/styles/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/utils/firebase.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/utils/firebase.js" afterDir="false" />
-    </list>
+    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -254,7 +47,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/tax_service" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-commons/3.0.1/spring-data-commons-3.0.1.jar!/org/springframework/data/repository/CrudRepository.class" root0="SKIP_INSPECTION" />
@@ -331,11 +124,11 @@
       <recent name="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web_store" />
       <recent name="$PROJECT_DIR$/web_store/components/forms" />
       <recent name="$PROJECT_DIR$/interface/src/main" />
       <recent name="$PROJECT_DIR$/interface/src/main/resources" />
       <recent name="$PROJECT_DIR$/interface/src" />
-      <recent name="$PROJECT_DIR$/interface/src/main/proto" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.movie_service.grpc" />
@@ -551,7 +344,7 @@
       <workItem from="1678827258549" duration="1654000" />
       <workItem from="1678828943291" duration="16916000" />
       <workItem from="1678926135440" duration="18183000" />
-      <workItem from="1679004965555" duration="7632000" />
+      <workItem from="1679004965555" duration="7984000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1676356948888</created>
@@ -560,7 +353,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676356948888</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <created>1679036032873</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1679036032873</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -588,7 +388,8 @@
       <path value="$PROJECT_DIR$/order_service" />
     </ignored-roots>
     <MESSAGE value="Initial" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial" />
+    <MESSAGE value="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
