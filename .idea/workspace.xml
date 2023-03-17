@@ -5,26 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <change afterPath="$PROJECT_DIR$/tax_service/dockerfile 2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/tax_service/src/main/resources/application 2.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/DTO/RateDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/DTO/TaxDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/TaxServiceApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/controller/RateController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/grpc/GrpcConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/grpc/RateServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/model/Rate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/repository/RateRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/service/RateService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/classes/com/tax_service/service/RateServiceImp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/target/test-classes/com/tax_service/TaxServiceApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,19 +55,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="SYNC" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN"
-  }
-}]]></component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="aa5f70e4-e7c7-40a5-a28d-17e26f9c4a35" />
-        <option name="url" value="https://github.com/egflo/MovieDB_store.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-commons/3.0.1/spring-data-commons-3.0.1.jar!/org/springframework/data/repository/CrudRepository.class" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/web_store/node_modules/next/types/index.d.ts" root0="SKIP_INSPECTION" />
@@ -114,52 +82,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "openjdk-18",
-    "last_opened_file_path": "/Users/egflo/IdeaProjects/MovieDB_store",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.17693317",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "spring.configuration.checksum": "eeca21d9972e6a06860dec80ed371c71",
-    "ts.external.directory.path": "/Users/egflo/IdeaProjects/MovieDB_store/web_store/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/egflo/IdeaProjects/MovieDB_store/tax_service&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.17693317&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;d44836ba906ededc7b123dc2fb147163&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/egflo/IdeaProjects/MovieDB_store/web_store/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql",
-      "mongo",
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;,
+      &quot;mongo&quot;,
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.movie_service.DTO.ReviewRequest" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/tax_service" />
       <recent name="$PROJECT_DIR$/interface/src/main/proto" />
       <recent name="$PROJECT_DIR$/tax_service/src/main/resources" />
       <recent name="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller" />
+      <recent name="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/web_store" />
@@ -285,13 +253,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TaxServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="tax_service" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.tax_service.TaxServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="TaxServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="tax_service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.tax_service.TaxServiceApplication" />
@@ -319,7 +280,6 @@
       <item itemvalue="Application.Main" />
       <item itemvalue="HTTP Request.ApiGatewayApplication | #1" />
       <item itemvalue="npm.dev" />
-      <item itemvalue="Spring Boot.TaxServiceApplication (1)" />
       <item itemvalue="Spring Boot.TaxServiceApplication" />
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.EurekaServerApplication" />
@@ -391,8 +351,8 @@
       <workItem from="1678828943291" duration="16916000" />
       <workItem from="1678926135440" duration="18183000" />
       <workItem from="1679004965555" duration="11589000" />
-      <workItem from="1679039678653" duration="878000" />
-      <workItem from="1679040579710" duration="2170000" />
+      <workItem from="1679039678653" duration="184000" />
+      <workItem from="1679068295718" duration="306000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1676356948888</created>
@@ -436,35 +396,7 @@
       <option name="project" value="LOCAL" />
       <updated>1679039029436</updated>
     </task>
-    <task id="LOCAL-00007" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <created>1679039914616</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1679039914616</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <created>1679040267715</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1679040267715</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <created>1679040323889</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1679040323889</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <created>1679068530589</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1679068530589</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -500,19 +432,7 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/master" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -520,26 +440,6 @@
     <option name="OPEN_GENERIC_TABS">
       <map>
         <entry key="1c3346a2-831e-4225-b113-826491678afc" value="TOOL_WINDOW" />
-      </map>
-    </option>
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="Branch">
-          <value>
-            <list>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="origin/master" />
-                </option>
-              </RecentGroup>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="master" />
-                </option>
-              </RecentGroup>
-            </list>
-          </value>
-        </entry>
       </map>
     </option>
   </component>
