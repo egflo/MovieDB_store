@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
+    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <change afterPath="$PROJECT_DIR$/tax_service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/src/main/java/com/example/tax_service/TaxServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tax_service/src/test/java/com/example/tax_service/TaxServiceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tax_service/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/tax_service/HELP.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,7 +63,7 @@
     <option name="NEW_BASE" value="master" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/tax_service" />
     <option name="ROOT_SYNC" value="SYNC" />
   </component>
   <component name="HighlightingSettingsPerFile">
@@ -104,7 +117,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.17693317",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "spring.configuration.checksum": "d44836ba906ededc7b123dc2fb147163",
+    "spring.configuration.checksum": "eeca21d9972e6a06860dec80ed371c71",
     "ts.external.directory.path": "/Users/egflo/IdeaProjects/MovieDB_store/web_store/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -251,6 +264,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TaxServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="tax_service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.tax_service.TaxServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TaxServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="tax_service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.tax_service.TaxServiceApplication" />
@@ -278,6 +298,7 @@
       <item itemvalue="Application.Main" />
       <item itemvalue="HTTP Request.ApiGatewayApplication | #1" />
       <item itemvalue="npm.dev" />
+      <item itemvalue="Spring Boot.TaxServiceApplication (1)" />
       <item itemvalue="Spring Boot.TaxServiceApplication" />
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.EurekaServerApplication" />
@@ -349,7 +370,8 @@
       <workItem from="1678828943291" duration="16916000" />
       <workItem from="1678926135440" duration="18183000" />
       <workItem from="1679004965555" duration="11589000" />
-      <workItem from="1679039678653" duration="509000" />
+      <workItem from="1679039678653" duration="878000" />
+      <workItem from="1679040579710" duration="1318000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1676356948888</created>
@@ -400,7 +422,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679039914616</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <created>1679040267715</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679040267715</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <created>1679040323889</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1679040323889</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -436,7 +472,19 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -444,6 +492,26 @@
     <option name="OPEN_GENERIC_TABS">
       <map>
         <entry key="1c3346a2-831e-4225-b113-826491678afc" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/master" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="master" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
