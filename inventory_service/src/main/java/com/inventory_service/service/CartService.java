@@ -84,8 +84,16 @@ public class CartService implements CartServiceImp {
     }
 
     @Override
-    public void delete(Integer id) {
-        cartRepository.deleteById(id);
+    public Cart delete(Integer id) {
+        Optional<Cart> cart = cartRepository.findById(id);
+        if(cart.isPresent()){
+            cartRepository.delete(cart.get());
+            return cart.get();
+        }
+        else{
+            throw new IdNotFoundException("Cart id not found");
+        }
+
     }
 
     @Override

@@ -160,17 +160,19 @@ const CheckoutForm = ({data}: CheckoutFormProps) => {
     const router = useRouter();
 
 
-    const processOrder = async () => {
+    const processOrder = async (id: String) => {
         const order_data = {
             userId:  data.userId,
-            paymentId: data.paymentIntentId,
+            paymentId: id,
             shipping : {
                 firstName: ref.current.values.firstname,
                 lastName: ref.current.values.lastname,
                 unit: ref.current.values.unit,
                 street: ref.current.values.street,
                 city: ref.current.values.city,
+                state: ref.current.values.state,
                 postcode: ref.current.values.postcode,
+                country: 'US'
             }
 
         }
@@ -180,7 +182,10 @@ const CheckoutForm = ({data}: CheckoutFormProps) => {
             headers: {
 
             }
-        });
+        }).then(res => res.data)
+            .catch(err => {
+                toast.show(err.message, ToastType.ERROR);
+            });
         console.log(res);
     }
 
@@ -228,7 +233,8 @@ const CheckoutForm = ({data}: CheckoutFormProps) => {
                 // execution. Set up a webhook or plugin to listen for the
                 // payment_intent.succeeded event that handles any business critical
                 // post-payment actions.
-                await processOrder();
+                let id = result.paymentIntent?.id;
+                await processOrder(id);
                 toast.show('Order successful'
                     , ToastType.SUCCESS);
                 router.push('/');
@@ -244,7 +250,7 @@ const CheckoutForm = ({data}: CheckoutFormProps) => {
                     <Card>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                Address Information
+                                Address
                             </Typography>
                             <Formik
                                 innerRef={ref}
@@ -342,7 +348,7 @@ const CheckoutForm = ({data}: CheckoutFormProps) => {
                     <Card>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                Payment Information
+                                Payment
                             </Typography>
                             <PaymentElement />
                         </CardContent>
@@ -432,17 +438,18 @@ const CheckoutForm = ({data}: CheckoutFormProps) => {
 
 
 export default function CheckoutPage(props: any) {
+    const router = useRouter();
 
     const {data, isLoading, isError, mutate} = useCheckout(props.token);
 
-    console.log(isError);
 
-    if (isLoading) return <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}><CircularProgress></CircularProgress></Box>
+    if (isLoading) return <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}><CircularProgress></CircularProgress></div>
 
 
-    if (isError) return <Box><Typography>{isError.error.message}</Typography></Box>
+    if (isError) return router.push('/cart');
 
-    if (!data) return  <Box><Typography>Failed to load. Try again later.</Typography></Box>
+    if (!data) return  router.push('/cart');
+
     const options = {
         // passing the client secret obtained from the server
         clientSecret: data.clientSecret

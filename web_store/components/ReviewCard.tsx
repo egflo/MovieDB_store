@@ -16,6 +16,7 @@ import useToastContext from "../hooks/useToastContext";
 import {AxiosResponse} from "axios";
 import {SentimentState} from "../models/SentimentState";
 import StarIcon from '@mui/icons-material/Star';
+import {ThumbDownAltOutlined, ThumbUpOffAltOutlined} from "@mui/icons-material";
 
 
 const RATE_API : string = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/sentiment/rate`
@@ -89,10 +90,11 @@ export default function ReviewCard({review}:{review: Review}) {
 
     return (
         <>
-            <Card sx={{ minWidth: 275, maxWidth: 500, cursor: 'pointer' }}>
-                <CardContent sx={{ height: 320}}  onClick={() => handleCardClick(review)}>
+            <Card
+                sx={{ minWidth: 275, maxWidth: 275, cursor: 'pointer' }}>
+                <CardContent sx={{ height: 250}}  onClick={() => handleCardClick(review)}>
                     <Box>
-                        <Typography variant="h6" component="div" sx={{
+                        <Typography variant="inherit"  className="text-md" component="div" sx={{
                             textOverflow: 'ellipsis',
                             overflow: 'hidden',
                             width: '100%',
@@ -105,12 +107,12 @@ export default function ReviewCard({review}:{review: Review}) {
                         </Typography>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', pt: 1, pb: 1, gap: 1}}>
-                            <Typography color="text.secondary">
+                            <Typography color="text.secondary" variant="body2">
                                 {review.user.firstname} {review.user.lastname}
                             </Typography>
 
                             <Box>
-                                <StarIcon sx={{ color: 'gold' }}/>
+                                <StarIcon fontSize={'small'} sx={{ color: 'gold' }}/>
                                 <span className="rating-head"> {review.rating} </span>
                                 <span style={{fontSize: '0.8rem'}} className="rating-tail"> / 10 </span>
                             </Box>
@@ -124,7 +126,7 @@ export default function ReviewCard({review}:{review: Review}) {
                         overflow: 'hidden',
                         width: '100%',
                         display: '-webkit-box',
-                        WebkitLineClamp: 9,
+                        WebkitLineClamp: 5,
                         WebkitBoxOrient: 'vertical',
                     }}>
                         {review.text}
@@ -139,6 +141,7 @@ export default function ReviewCard({review}:{review: Review}) {
 
                 <CardActions disableSpacing>
                     <IconButton aria-label="like"
+                                className={"hover:bg-green-700 hover:border-gray-700 hover:shadow-lg"}
                                 onClick={() => {
                                     if(state === SentimentState.LIKE) {
                                         handleChange(SentimentState.NONE);
@@ -148,12 +151,15 @@ export default function ReviewCard({review}:{review: Review}) {
                                     }
                                 }}
                     >
-                        <ThumbUp
+                        <ThumbUpOffAltOutlined
+                            fontSize={"small"}
                             sx={{ color:
-                                state === SentimentState.LIKE ? "green" : "grey.500"
+                                state === SentimentState.LIKE ? "green" : "white"
                         }}/>
                     </IconButton>
-                    <IconButton aria-label="dislike"
+                    <IconButton
+                        className={"hover:bg-red-700 hover:border-gray-700 hover:shadow-lg"}
+                        aria-label="dislike"
                                 onClick={() => {
                                     if(state === SentimentState.DISLIKE) {
                                         handleChange(SentimentState.NONE);
@@ -163,9 +169,10 @@ export default function ReviewCard({review}:{review: Review}) {
                                     }
                                 }}
                     >
-                        <ThumbDown
+                        <ThumbDownAltOutlined
+                            fontSize={"small"}
                             sx={{
-                                color: state === SentimentState.DISLIKE ? "red" : "grey.500"
+                                color: state === SentimentState.DISLIKE ? "red" : "white"
                             }}/>
                     </IconButton>
                 </CardActions>

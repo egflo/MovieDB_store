@@ -13,6 +13,9 @@ import com.order_service.request.AddressRequest;
 import com.order_service.request.OrderRequest;
 import com.order_service.request.PaymentIntentRequest;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
+import com.stripe.model.ChargeCollection;
+import com.stripe.model.PaymentIntent;
 import org.proto.grpc.CartResponse;
 import org.proto.grpc.RateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,9 +137,12 @@ public class OrderService implements OrderServiceImp {
     }
 
     @Override
-    public Order createOrder(OrderRequest orderRequest) {
+    public Order createOrder(OrderRequest orderRequest) throws StripeException {
 
         System.out.println(orderRequest);
+        PaymentIntent intent = stripeService.getPaymentIntent(orderRequest.getPaymentId());
+        Charge charge = stripeService.getCharge(intent.getLatestCharge());
+
 
         AddressRequest requestAddress = orderRequest.getShipping();
         CartResponse cart = cartService.getCart(orderRequest.getUserId());
@@ -158,6 +164,10 @@ public class OrderService implements OrderServiceImp {
         order.setCreated(new Date());
         order.setUpdated(new Date());
         order.setStatus(Status.CREATED);
+        order.setNetwork(charge.getPaymentMethodDetails().getCard().getNetwork());
+        order.setPaymentType(charge.getPaymentMethodDetails().getType());
+        order.setPaymentId(charge.getPaymentIntent());
+        order.setCurrency(charge.getCurrency());
 
 
         for (org.proto.grpc.CartItem item : cart.getItemsList()) {

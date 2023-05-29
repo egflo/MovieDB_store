@@ -16,7 +16,7 @@ public interface CartServiceImp {
 
     public Cart add(CartDTO request);
 
-    public void delete(Integer id);
+    public Cart delete(Integer id);
 
     public Cart update(CartDTO request);
 

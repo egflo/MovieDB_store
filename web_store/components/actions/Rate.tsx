@@ -1,7 +1,6 @@
 import IconButton from "@mui/material/IconButton";
 import React, {useEffect} from "react";
 import Toast, {ToastState, ToastType, Alert} from "../Toast";
-import StarIcon from "@mui/icons-material/Star";
 import Card from "@mui/material/Card";
 import {Backdrop, CardHeader} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
@@ -9,12 +8,13 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ThumbUp from "@mui/icons-material/ThumbUp";
 import ThumbDown from "@mui/icons-material/ThumbDown";
-import {Favorite} from "@mui/icons-material";
+import {Favorite, StarOutlined, StarOutlineOutlined, ThumbUpOffAltOutlined} from "@mui/icons-material";
 import {auth, axiosInstance} from "../../utils/firebase";
 import useToastContext from "../../hooks/useToastContext";
 import {AxiosResponse} from "axios/index";
 import {useRef} from "react";
 import {Movie} from "../../models/Movie";
+import {SentimentState} from "../../models/SentimentState";
 
 
 
@@ -35,6 +35,7 @@ type RateProps = {
 export default function Rate(props: RateProps) {
     const ref = useRef<HTMLDivElement>(null);
     const [selected, setSelected] = React.useState(false);
+    const [rate, setRate] = React.useState(props.movie.sentiment?.status || SentimentState.NONE);
     let toast = useToastContext();
 
     useEffect(() => {
@@ -82,6 +83,7 @@ export default function Rate(props: RateProps) {
                     toast.show(error.response.data, ToastType.ERROR);
                 });
             })
+
         }
         else {
             toast.show("Please login to rate this film", ToastType.ERROR);
@@ -90,6 +92,18 @@ export default function Rate(props: RateProps) {
     }
 
 
+    const rateIcon = () => {
+        switch (rate) {
+            case "LIKE":
+                return <ThumbUp/>;
+            case "DISLIKE":
+                return <ThumbDown/>;
+            case "LOVE":
+                return <Favorite/>;
+            default:
+                return <ThumbUpOffAltOutlined/>;
+        }
+    }
     return (
         <>
             <Box className="container__action">
@@ -99,7 +113,7 @@ export default function Rate(props: RateProps) {
                     aria-label="rate"
                     color={selected ? "primary" : "inherit"}
                 >
-                    <StarIcon/>
+                    {rateIcon()}
                 </IconButton>
             </Box>
 

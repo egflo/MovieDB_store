@@ -1,5 +1,6 @@
 package com.order_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
@@ -18,6 +19,14 @@ public class Order {
 
     private String userId;
 
+    private String paymentType;
+
+    private String currency;
+
+    private String network;
+
+
+    @JsonIgnore
     private String paymentId;
 
     private Status status;
@@ -163,6 +172,31 @@ public class Order {
     public void removeAddress(Address address) {
         this.address = null;
         address.setOrder(null);
+    }
+
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
     }
 
     public String toString() {

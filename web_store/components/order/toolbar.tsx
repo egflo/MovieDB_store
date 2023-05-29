@@ -74,8 +74,7 @@ export default function Toolbar({term, setTerm, limit, setLimit, sort, setSort, 
             }
         }>
             <Box className="row flex-row">
-                <Box className="col">
-
+                <Box className="col visible md:invisible">
                     <FormControl sx={{ m: 1, minWidth: 200 }}>
                         <InputLabel htmlFor="grouped-select">Sort By</InputLabel>
                         <Select

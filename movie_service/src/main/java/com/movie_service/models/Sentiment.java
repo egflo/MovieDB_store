@@ -29,6 +29,14 @@ public class Sentiment {
         this.status = status;
     }
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     public String getUserId() {
         return userId;
     }

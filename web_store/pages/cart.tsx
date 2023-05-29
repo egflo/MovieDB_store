@@ -13,6 +13,7 @@ import nookies from "nookies";
 import {axiosInstance} from "../utils/firebase";
 import {useRouter} from "next/router";
 import {Cart} from "../models/Cart";
+import Divider from "@mui/material/Divider";
 
 const CART = `${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/cart/`;
 
@@ -62,56 +63,58 @@ export default function CartPage(props: any) {
     }
 
     return (
-        <Box className="container-main">
+        <div className="container-main">
 
             {data.length === 0 && (
-                <Box
-                    sx={{
+                <div
+                    style={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 2,
-                        p: 2,
+                        padding: 2,
                     }}
                 >
-                    <Header title={"Cart"}></Header>
                     <Typography variant="h5" color="text.secondary">
                         Your cart is empty
                     </Typography>
-                </Box>
+                </div>
             )} {data.length > 0 && (
 
                 <>
-                    <Box
+                    <div
                         className="results-container"
-                        sx={{
+                        style={{
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
-                            p: 2,
+                            padding: 2,
                         }}
                     >
-                        <Header title={"Cart"}></Header>
 
                         {data.map((item: Cart) => (
                             <CartItem item={item} key={item.id} mutate={mutate}/>
                         ))}
-                    </Box>
+                    </div>
 
-                    <Box className="sticky-container">
-                        <Card className="sticky">
-                            <CardHeader title={"Order"}></CardHeader>
+                    <div className="sticky-container">
+                        <Card className="sticky w-full">
                             <CardContent>
+                                <Typography variant="h6" color="text.primary">
+                                    Order Summary
+                                </Typography>
+                                <Divider className={"bg-zinc-500 m-1"}></Divider>
                                 <Typography variant="body1" color="text.secondary">
                                     Subtotal: {formatPrice(calculateTotal(data))}
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
                                     Taxes: Calculated at checkout
                                 </Typography>
-                                <Typography variant="h5" color="text.secondary">
+                                <Typography variant="body1" color="text.secondary">
                                     Total: {formatPrice(calculateTotal(data))}
                                 </Typography>
                                 <Box className={"sticky-content"}>
                                     <Button
+                                        className={"bg-blue-800"}
                                         onClick={() => router.push('/checkout')}
                                         variant="contained" color="primary" size="large" fullWidth>
                                         Checkout
@@ -119,12 +122,12 @@ export default function CartPage(props: any) {
                                 </Box>
                             </CardContent>
                         </Card>
-                    </Box>
+                    </div>
                 </>
             )}
 
 
-        </Box>
+        </div>
 
 
     );

@@ -8,6 +8,7 @@ import useToastContext from "../../hooks/useToastContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {useRouter} from "next/router";
 import {ToastType} from "../Toast";
+import {ShoppingBagOutlined} from "@mui/icons-material";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -73,10 +74,15 @@ export function Logout() {
                 aria-label="Favorites"
                 sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
             >
-                <LogoutIcon />
-                <Typography variant="subtitle1" noWrap component="div" sx={{ display: { color:'inherit' } }}>
-                    Logout
-                </Typography>
+                <div className={'flex flex-row align-middle gap-2'}>
+                    <LogoutIcon fontSize={'medium'}/>
+
+                    <div className={'block md:hidden'}>
+                        <Typography variant="subtitle1">
+                            Logout
+                        </Typography>
+                    </div>
+                </div>
             </IconButton>
         </>
     );

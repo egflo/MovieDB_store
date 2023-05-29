@@ -1,7 +1,4 @@
 import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import * as React from "react";
-import {useEffect} from "react";
 import Toast, {ToastState, ToastType, Alert} from "../Toast";
 import {auth, axiosInstance} from "../../utils/firebase";
 import {Bookmark} from "../../models/Bookmark";
@@ -9,9 +6,9 @@ import { useSWRConfig } from "swr"
 import useToastContext from "../../hooks/useToastContext";
 import Box from "@mui/material/Box";
 import {Movie} from "../../models/Movie";
-import {CircularProgress} from "@mui/material";
 import useAuthContext from "../../hooks/useAuthContext";
-
+import FavoriteBorderOutlined from '@mui/icons-material/FavoriteBorderOutlined';
+import {useState} from "react";
 
 let BOOKMARK_URL = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/bookmark/`
 
@@ -20,15 +17,14 @@ type FavoriteProps = {
 }
 export default function Favorite({movie}: FavoriteProps) {
     // @ts-ignore
-    const [bookmarked, setBookmarked] = React.useState<Bookmark | null>(movie.bookmark);
-    const [loading, setLoading] = React.useState(false);
+    const [bookmarked, setBookmarked] = useState<Bookmark | null>(movie.bookmark);
+    const [loading, setLoading] = useState(false);
     const toast = useToastContext();
     const auth = useAuthContext();
     const { mutate } = useSWRConfig()
 
     async function handleSelected() {
 
-        console.log(bookmarked);
         if (!auth.isAuthenticated) {
             toast.show("You must be logged in to add to favorites", ToastType.ERROR);
             return;
@@ -82,7 +78,7 @@ export default function Favorite({movie}: FavoriteProps) {
                 aria-label="add to favorites"
                 color={bookmarked ? "primary" : "inherit"}
             >
-                <FavoriteIcon/>
+                <FavoriteBorderOutlined/>
             </IconButton>
         </Box>
 

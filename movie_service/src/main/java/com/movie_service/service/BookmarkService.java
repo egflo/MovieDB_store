@@ -46,6 +46,13 @@ public class BookmarkService implements BookmarkServiceImp {
     @Override
     public Bookmark addBookmark(BookmarkRequest bookmark) {
         Optional<Movie> movie = movieRepository.getMovieById(new ObjectId(bookmark.getMovieId()));
+        Optional<Bookmark> bookmarkOptional = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(bookmark.getMovieId()), bookmark.getUserId());
+
+        if (bookmarkOptional.isPresent()) {
+            Bookmark newBookmark = bookmarkOptional.get();
+            newBookmark.setCreated(new Date());
+            return repository.save(newBookmark);
+        }
 
         if (movie.isPresent()) {
             Bookmark newBookmark = new Bookmark();

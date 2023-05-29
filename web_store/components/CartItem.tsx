@@ -69,11 +69,7 @@ export const CartItem = (props: CartItemProps) => {
     }, [quantity]);
 
     return (
-        <Card
-            sx={{
-                minWidth: 500,
-            }}
-        >
+        <Card>
             <Grid container
                   spacing={0}
                   direction="row"
@@ -103,12 +99,12 @@ export const CartItem = (props: CartItemProps) => {
                     </Box>
                 </Grid>
 
-                <Grid item xs={8} sm={8}
+                <Grid item xs={6} sm={8}
+                      className={"border-r-0 border-zinc-600 md:border-r-2 md:border-zinc-600"}
                         sx={{
                             display: 'flex',
                             justifyContent: 'left',
                             alignItems: 'center',
-                            borderRight: '1px solid grey',
                             paddingLeft: 2,
                             }}
                 >
@@ -118,12 +114,12 @@ export const CartItem = (props: CartItemProps) => {
                                     textDecoration: 'none',
                                 }}
                         >
-                            <Typography gutterBottom variant="h5">
+                            <Typography gutterBottom variant="h6">
                                 {props.item.movie.title}
                             </Typography>
                         </Link>
 
-                        <Typography gutterBottom variant="subtitle1">
+                        <Typography gutterBottom variant="subtitle2">
                             {props.item.movie.year}
                         </Typography>
 
@@ -133,7 +129,7 @@ export const CartItem = (props: CartItemProps) => {
                                 alignItems: 'center',
                                 gap: 2,
                         }}>
-                            <FormControl sx={{width: 120 }} size="small">
+                            <FormControl sx={{width: 80 }} size="small">
                                 <Select
                                     native
                                     value={quantity}
@@ -152,6 +148,7 @@ export const CartItem = (props: CartItemProps) => {
                                 </Select>
                             </FormControl>
                             <Button
+                                className={"bg-blue-800 hidden md:block"}
                                 onClick={onDelete}
                                 variant="contained"
                                 color="primary"
@@ -168,7 +165,7 @@ export const CartItem = (props: CartItemProps) => {
                             alignItems: 'center',
                         }}
                 >
-                    <Typography gutterBottom variant="h5">
+                    <Typography  variant="h6">
                         {formatPrice(props.item.price)}
                     </Typography>
                 </Grid>

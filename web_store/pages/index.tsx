@@ -11,19 +11,26 @@ import Box from "@mui/material/Box";
 import {auth} from "../utils/firebase";
 import React from "react";
 import useAuthContext from "../hooks/useAuthContext";
+import Section from "../components/Section";
+import {theme} from "./_app";
+import {Hero} from "../components/hero/Hero";
+import {GetServerSideProps} from "next";
+import nookies from "nookies";
+import axios, {AxiosRequestConfig} from "axios/index";
+import {Movie} from "../models/Movie";
 
 
 const API_URL_BOOKMARK: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/bookmarks/?sortBy=created`;
-const API_URL_VOTES: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=ratings.numOfVotes`;
-const API_URL_POPULAR: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity`;
+const API_URL_VOTES: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=ratings.numOfVotes&limit=26`;
+const API_URL_POPULAR: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity&limit=26`;
 const API_URL_BOXOFFICE: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=revenue`;
 
-export default function Home() {
+export default function Home({token}: {token: string | undefined}) {
     const auth = useAuthContext();
 
   return (
 
-    <Box className={styles.container}>
+    <>
 
       <Head>
         <title>Create Next App</title>
@@ -31,78 +38,46 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Box className={styles.main}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              height: '100%',
-              gap: 2,
-              }}
-         >
+
+
+        <Box className="flex flex-col gap-2 overflow-hidden w-full"
+            sx={{minWidth: "100%", minHeight: "140vh", backgroundColor: theme.palette.background.default}}
+        >
+            <Hero/>
 
             {auth.user ? (
-                <div className="container__main">
-                  <div className="container__main__title">
-                    <div className="container__main__shape"></div>
-                    <Typography variant="h4" component="h2" sx={{
-                      color: theme => theme.palette.primary.contrastText,
-                    }}>
-                      Favorites
-                    </Typography>
-                  </div>
-                    <ScrollPagination path={API_URL_BOOKMARK} style={CardStyle.HORIZONTAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL} token={auth.token}/>
-                </div>
+                <Section title={"My List"} path={API_URL_BOOKMARK} token={token}/>
             ) : (null)}
 
+            <Section title={"Popular"} path={API_URL_POPULAR} token={token}/>
 
+            <Section title={"Top Rated"} path={API_URL_VOTES} token={token}/>
 
-        <div className="container__main">
-            <div className="container__main__title">
-              <div className="container__main__shape"></div>
-              <Typography variant="h4" component="h2" sx={{
-                color: theme => theme.palette.primary.contrastText,
-              }}>
-                Top Rated
-              </Typography>
-            </div>
-            <ScrollPagination path={API_URL_VOTES} style={CardStyle.HORIZONTAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL}/>
-          </div>
-
-          <div className="container__main">
-            <div className="container__main__title">
-              <div className="container__main__shape"></div>
-              <Typography variant="h4" component="h2" sx={{
-                color: theme => theme.palette.primary.contrastText,
-              }}>
-                Most Popular
-              </Typography>
-            </div>
-            <ScrollPagination path={API_URL_POPULAR} style={CardStyle.HORIZONTAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL}/>
-          </div>
-
-          <div className="container__main">
-            <div className="container__main__title">
-              <div className="container__main__shape"></div>
-              <Typography variant="h4" component="h2" sx={{
-                color: theme => theme.palette.primary.contrastText,
-              }}>
-                Box Office
-              </Typography>
-            </div>
-            <ScrollPagination path={API_URL_BOXOFFICE} style={CardStyle.HORIZONTAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL}/>
-          </div>
+            <Section title={"Box Office"} path={API_URL_BOXOFFICE} token={token}/>
 
         </Box>
 
-      </Box>
 
-    </Box>
+
+
+    </>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+
+    const cookie = nookies.get(context);
+    const token = cookie.token;
+
+    return {
+        props: {
+            token: token ? token : null
+        }
+    }
+}
+
+
 
 
 Home.getLayout = (page: any) => (

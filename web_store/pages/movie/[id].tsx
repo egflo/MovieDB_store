@@ -16,19 +16,14 @@ import Rate from "../../components/actions/Rate";
 import {Chip} from "@mui/material";
 import {useRouter} from "next/router";
 import {Tag} from "../../models/Tag";
-import {auth, axiosInstance} from "../../utils/firebase";
 import {ViewType} from "../../components/ViewType";
 import {ContentType} from "../../components/ContentType";
-import {Paper} from "@mui/material";
 import Box from "@mui/material/Box";
 import Cart from "../../components/actions/Cart";
-import Header from "../../components/Header";
-import {cookies} from "next/headers";
 import nookies from "nookies";
-import {Direction, SortBy} from "../../components/search/searchTypes";
-import {SearchProps} from "../search/[term]";
+
 import axios, {AxiosRequestConfig} from "axios";
-import Button from "@mui/material/Button";
+
 
 export interface QParams extends ParsedUrlQuery {
     id?: string
@@ -108,15 +103,7 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
     }
 
     return (
-        <Box
-            sx={{
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-
-
-            }}
-        >
+        <Box className="bg-black opacity-100">
 
             <Box className="container__content">
                     <Box
@@ -131,268 +118,262 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
                         }>
                     </Box>
 
-                    <Box
-                        className="content__background"
-                        style={
-                            {
-                                width: '100%',
-                                height: '100%',
-                                backgroundSize: 'cover',
-                                backdropFilter: 'blur(10px)',
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-
-                            }
-                        }>
-                    </Box>
 
 
-                    <Box className="container__header">
+                    <Box className="absolute bottom-0 w-full h-full bg-gradient-to-t from-zinc-900 to-transparent" />
 
-                        <Box className="container__header__left">
-                            <img className="content__image"
-                                 style={{width: '100%', height: '95%', objectFit: 'cover'}}
-                                src={testURL(data.poster) ? data.poster : "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"}
-                                alt={data.title}
-                            />
+
+                    <Box className="absolute w-full h-full">
+
+                        <Box className="container__header px-3 md:px-5 pt-5 lg:px-4 xl:px-40 ">
+
+                            <Box className="container__header__left">
+
+                                <img className="content__image"
+                                     style={{width: '100%', height: '95%', objectFit: 'cover'}}
+                                     src={testURL(data.poster) ? data.poster : "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"}
+                                     alt={data.title}
+                                />
+
+                            </Box>
+
+                            <Box className="container__info">
+
+
+                                <Box className="container__info__title">
+                                    <Typography variant="h5">
+                                        {data.title}
+                                    </Typography>
+                                </Box>
+
+                                <Box className="content__subtitle">
+                                    <Chip label={data.year} size="small" className="bg-zinc-700" />
+
+
+                                    <Chip label={data.rated ? data.rated : "N/A"} size="small" className="bg-zinc-700" />
+
+
+                                    <Chip label={data.runtime ? data.runtime + " min" : "N/A"} size="small" className="bg-zinc-700" />
+                                </Box>
+
+
+                                <Box
+
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        flexWrap: 'wrap',
+                                        alignItems: 'center',
+                                        alignContent: 'flex-start',
+                                        gap: '5px',
+                                    }}>
+
+
+                                    {data.ratings &&
+
+                                        <Score score={data.ratings.rating}></Score>
+                                    }
+
+                                    <Box className="content__action_items ">
+
+                                        <Favorite movie={data}></Favorite>
+                                        <Share movie={data}></Share>
+                                        <Rate movie={data}></Rate>
+                                    </Box>
+                                </Box>
+
+
+                                {data.ratings &&
+
+                                    <Box style={{
+                                        display:'flex',
+                                        flexDirection:'row',
+                                        flexWrap:'wrap',
+                                        alignItems:'center',
+                                        alignContent:'flex-start',
+                                        gap:'5px'
+                                    }}>
+                                        {testValue(data.ratings.imdb)  &&
+                                            <Box className="container__ratings">
+                                                <img className="content__rating" style={{padding:0}} src={"/imdb.png"} alt={"IMDB"}></img>
+                                                <Typography className="content__rating__text">{data.ratings.imdb}
+                                                    <span style={{color:'grey', fontSize: '0.8rem', margin:0}}> / 10 </span>
+                                                </Typography>
+                                            </Box>
+                                        }
+
+                                        {testValue(data.ratings.metacritic)  &&
+                                            <Box className="container__ratings hidden md:visible lg:visible xl:visible">
+                                                <img className="content__rating" style={{height:30}} src={"/metacritic.png"} alt={"meta"}></img>
+                                                <Typography
+                                                    className="content__rating__text">{formatNumber(data.ratings.metacritic)}</Typography></Box>
+                                        }
+
+                                        {data.ratings.rottenTomatoesStatus &&
+                                            <Box className="container__ratings">
+                                                <img className="content__rating" style={{height:30}} src={"/Fresh.png"} alt={"tomato"}></img>
+                                                <Typography className="content__rating__text">{formatNumber(data.ratings.rottenTomatoes)}%</Typography></Box>
+                                        }
+
+                                        {data.ratings.rottenTomatoesAudienceStatus &&
+                                            <Box className="container__ratings">
+                                                <img className="content__rating" style={{height:32}} src={'/' + data.ratings.rottenTomatoesAudienceStatus + '.png'} alt={"tomato"}></img>
+                                                <Typography className="content__rating__text">{formatNumber(data.ratings.rottenTomatoesAudience)}%
+                                                </Typography>
+                                            </Box>
+                                        }
+
+                                    </Box>
+                                }
+
+                                <Box className="description-container">
+                                    <Box className="description-item-container "
+                                         sx={{width:'100%'}}>
+                                        <Typography className="description-title">Overview</Typography>
+                                        <Typography className="description-text text-white" variant={"body2"}>{data.plot}</Typography>
+                                    </Box>
+                                </Box>
+
+                                {data.genres &&
+                                    <Box className="content__genres">
+                                        {data.genres.map((genre, index) => (
+                                            <Chip key={index}
+                                                  onClick={() => onGenreClick(genre)}
+                                                  sx={{
+                                                      "&:hover": {
+                                                          backgroundColor: "rgba(100,100,100,0.4)",
+                                                      },
+                                                      cursor: 'pointer',
+                                                  }}
+                                                  color="primary" label={genre}></Chip>
+                                        ))}
+                                    </Box>
+                                }
+
+                            </Box>
 
                         </Box>
 
+                        <Box className="md:grid grid-cols-5 px-2 lg:px-20 xl:px-40" >
 
-                        <Box className="container__info">
+                            <Box className="col-span-4 p-2  flex flex-col gap-2">
 
-                            <Box className="container__info__title">
-                                <Typography variant="h4">
-                                    {data.title}
-                                </Typography>
-                            </Box>
+                                {data.cast && data.cast.length > 0 &&
+                                    <Scroll title={"Cast & Crew"}>
+                                        <Box className="container-fluid">
+                                            <Box className="row flex-row flex-nowrap gap-3">
+                                                {data.cast.map((cast, index) => (
 
-                            <Box className="content__subtitle">
-                                <Typography variant="subtitle1" className="content__subtitle__text">
-                                    {data.year}
-                                </Typography>
+                                                    <Box key={index} className="col p-0">
 
-                                <span className="separator">&bull;</span>
+                                                        <Card sx={{width: 150, height: 200, cursor: 'pointer'}}
+                                                              onClick={() => onCastClick(cast.id)} >
+                                                            <CardMedia
+                                                                sx={{height: 120}}
+                                                                component="img"
+                                                                alt={cast.name}
+                                                                height="120"
+                                                                image={testURL(cast.photo) ? cast.photo: 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg'}
+                                                            />
+                                                            <CardContent>
+                                                                <Typography variant={"inherit"}  component="div" sx={
+                                                                    {
+                                                                        textOverflow: 'ellipsis',
+                                                                        overflow: 'hidden',
+                                                                        display: '-webkit-box',
+                                                                        WebkitLineClamp: 1,
+                                                                        WebkitBoxOrient: 'vertical',
 
-                                <Typography variant="subtitle1" className="content__subtitle__text">
-                                    {data.rated ? data.rated : "N/A"}
-                                </Typography>
+                                                                    }}>
+                                                                    {cast.name}
+                                                                </Typography>
+                                                                <Typography variant="body2" color="text.secondary">
+                                                                    {cast.characters.join('/')}
+                                                                </Typography>
+                                                            </CardContent>
+                                                        </Card>
+                                                    </Box>
+                                                ))}
+                                            </Box>
 
-                                <span className="separator">&bull;</span>
+                                        </Box>
+                                    </Scroll>
+                                }
 
-                                <Typography variant="subtitle1" className="content__subtitle__text">
-                                    {data.runtime} min
-                                </Typography>
-                            </Box>
+                                <ScrollPagination path={API_URL_REVIEWS + data.movieId + '?sortBy=created'} style={CardStyle.VERTICAL} type={ContentType.REVIEW} view={ViewType.HORIZONTAL} title={"Reviews"} token={token}/>
 
-                            {data.genres &&
-                                <Box className="content__genres">
-                                    {data.genres.map((genre, index) => (
-                                        <Chip key={index}
-                                              onClick={() => onGenreClick(genre)}
-                                              sx={{
-                                                  "&:hover": {
-                                                      backgroundColor: "rgba(100,100,100,0.4)",
-                                                  },
-                                                  cursor: 'pointer',
-                                              }}
-                                              color="primary" label={genre}></Chip>
-                                    ))}
-                                </Box>
-                            }
+                                <ScrollPagination path={API_URL_SUGGEST + data.movieId + '?sortBy=popularity'} style={CardStyle.HORIZONTAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL} title={"Related"}/>
 
+
+                            </Box >
 
                             <Box
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'row',
                                     flexWrap: 'wrap',
-                                    alignItems: 'center',
-                                    alignContent: 'flex-start',
-                                    gap: '5px'
-                                }}>
+                                    gap: '5px',
+                                    padding: 1,
+                                }}
+                            >
+                                    <Typography className="invisible">Additional Information</Typography>
+
+                                    <div className="description-item">
+                                        <Typography className="description-title">Director</Typography>
+                                        <Typography className="description-text" variant={"body2"}>{data.director}</Typography>
+                                    </div>
+
+                                    <div className="description-item">
+                                        <Typography className="description-title">Writer(s)</Typography>
+                                        <Typography className="description-text" variant={"body2"}>{data.writer}</Typography>
+                                    </div>
+
+                                    <div className="description-item">
+                                        <Typography className="description-title">Production</Typography>
+                                        <Typography className="description-text" variant={"body2"}>{data.production}</Typography>
+                                    </div>
+
+                                    <div className="description-item">
+                                        <Typography className="description-title">Country</Typography>
+                                        <Typography className="description-text" variant={"body2"}>{data.country}</Typography>
+                                    </div>
+
+                                    <div className="description-item">
+                                        <Typography className="description-title">Language(s)</Typography>
+                                        <Typography className="description-text" variant={"body2"}>{data.language}</Typography>
+                                    </div>
+
+                                    <div className="description-item">
+                                        <Typography className="description-title">Box Office</Typography>
+                                        <Typography className="description-text" variant={"body2"}>{data.boxOffice}</Typography>
+                                    </div>
 
 
-                                {data.ratings &&
-
-                                    <Score score={data.ratings.rating}></Score>
-                                }
-
-                                <Box className="content__action_items">
-
-                                    <Favorite movie={data}></Favorite>
-                                    <Share movie={data}></Share>
-                                    <Rate movie={data}></Rate>
+                                <Box className="content__tags">
+                                    {data.tags.map((tag, index) => (
+                                        <Chip key={index}
+                                              onClick={() => onTagClick(tag)}
+                                              sx={{
+                                                  "&:hover": {
+                                                      backgroundColor: "rgba(100,100,100,0.4)",
+                                                  },
+                                                  cursor: 'pointer',
+                                              }}
+                                              color="primary" label={tag.name}></Chip>
+                                    ))}
                                 </Box>
                             </Box>
 
-
-                            {data.ratings &&
-
-                                <Box style={{
-                                    display:'flex',
-                                    flexDirection:'row',
-                                    flexWrap:'wrap',
-                                    alignItems:'center',
-                                    alignContent:'flex-start',
-                                    gap:'15px'
-                                }}>
-                                    {testValue(data.ratings.imdb)  &&
-                                        <Box className="container__ratings">
-                                            <img className="content__rating" style={{padding:0}} src={"/imdb.png"} alt={"IMDB"}></img>
-                                            <Typography className="content__rating__text">{data.ratings.imdb}
-                                                <span style={{color:'grey', fontSize: '0.8rem', margin:0}}> / 10 </span>
-                                            </Typography>
-                                        </Box>
-                                    }
-
-                                    {testValue(data.ratings.metacritic)  &&
-                                        <Box className="container__ratings">
-                                            <img className="content__rating" style={{height:30}} src={"/metacritic.png"} alt={"meta"}></img>
-                                            <Typography
-                                            className="content__rating__text">{formatNumber(data.ratings.metacritic)}</Typography></Box>
-                                    }
-
-                                    {data.ratings.rottenTomatoesStatus &&
-                                        <Box className="container__ratings">
-                                            <img className="content__rating" style={{height:30}} src={"/Fresh.png"} alt={"tomato"}></img>
-                                            <Typography className="content__rating__text">{formatNumber(data.ratings.rottenTomatoes)}%</Typography></Box>
-                                    }
-
-                                    {data.ratings.rottenTomatoesAudienceStatus &&
-                                        <Box className="container__ratings">
-                                            <img className="content__rating" style={{height:32}} src={'/' + data.ratings.rottenTomatoesAudienceStatus + '.png'} alt={"tomato"}></img>
-                                            <Typography className="content__rating__text">{formatNumber(data.ratings.rottenTomatoesAudience)}%
-                                            </Typography>
-                                        </Box>
-                                    }
-
-                                </Box>
-                            }
-
-                            <Box className="description-container">
-                                <Box className="description-item-container" sx={{width:'100%'}}>
-                                    <Typography className="description-title">Overview</Typography>
-                                    <Typography className="description-text">{data.plot}</Typography>
-                                </Box>
-                                <Box className="description-item-container">
-                                    <Typography className="description-title">Director</Typography>
-                                    <Typography className="description-text">{data.director}</Typography>
-                                </Box>
-
-                            </Box>
-
-                            <Box className="content__tags">
-                                {data.tags.map((tag, index) => (
-                                    <Chip key={index}
-                                          onClick={() => onTagClick(tag)}
-                                          sx={{
-                                              "&:hover": {
-                                                  backgroundColor: "rgba(100,100,100,0.4)",
-                                              },
-                                              cursor: 'pointer',
-                                          }}
-                                          color="primary" label={tag.name}></Chip>
-                                ))}
-                            </Box>
 
                         </Box>
-                    </Box>
 
-                </Box>
-
-            <Box className="blur-line"></Box>
-
-            {data.cast && data.cast.length > 0 &&
-                <Scroll title={"Cast & Crew"}>
-                    <Box className="container-fluid">
-                        <Box className="row flex-row flex-nowrap">
-                            {data.cast.map((cast, index) => (
-
-                                <Box key={index} className="col">
-
-                                    <Card sx={{ width: 180, height: 270, cursor: 'pointer' }}
-                                          onClick={() => onCastClick(cast.id)} >
-                                        <CardMedia
-                                            component="img"
-                                            alt={cast.name}
-                                            height="150"
-                                            image={testURL(cast.photo) ? cast.photo: 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg'}
-                                        />
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h6" component="div" sx={
-                                                {
-                                                    textOverflow: 'ellipsis',
-                                                    overflow: 'hidden',
-                                                    display: '-webkit-box',
-                                                    WebkitLineClamp: 1,
-                                                    WebkitBoxOrient: 'vertical',
-
-                                                }}>
-                                                {cast.name}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                {cast.characters.join('/')}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Box>
-                            ))}
-                        </Box>
 
                     </Box>
-                </Scroll>
-            }
 
-            <ScrollPagination path={API_URL_REVIEWS + data.movieId + '?sortBy=created'} style={CardStyle.VERTICAL} type={ContentType.REVIEW} view={ViewType.HORIZONTAL} title={"Reviews"} token={token}/>
 
-            <ScrollPagination path={API_URL_SUGGEST + data.movieId + '?sortBy=popularity'} style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.HORIZONTAL} title={"Related"}/>
 
-            <Header title={"Description"} />
-
-            <Box
-                 sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    gap: '10px',
-                    padding: 1,
-                 }}
-            >
-                <Paper elevation={1}>
-                    <div className="description-item">
-                        <Typography className="description-title">Writer(s)</Typography>
-                        <Typography className="description-text">{data.writer}</Typography>
-                    </div>
-                </Paper>
-
-                <Paper elevation={1}>
-                    <div className="description-item">
-                        <Typography className="description-title">Production</Typography>
-                        <Typography className="description-text">{data.production}</Typography>
-                    </div>
-                </Paper>
-
-                <Paper elevation={1}>
-                    <div className="description-item">
-                        <Typography className="description-title">Country</Typography>
-                        <Typography className="description-text">{data.country}</Typography>
-                    </div>
-                </Paper>
-
-                <Paper elevation={1}>
-                    <div className="description-item">
-                        <Typography className="description-title">Language(s)</Typography>
-                        <Typography className="description-text">{data.language}</Typography>
-                    </div>
-                </Paper>
-
-                <Paper elevation={1}>
-                    <div className="description-item">
-                        <Typography className="description-title">Box Office</Typography>
-                        <Typography className="description-text">{data.boxOffice}</Typography>
-                    </div>
-                </Paper>
             </Box>
+
 
 
             {data.item &&
@@ -439,7 +420,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         })
 
 
-    console.log(API_URL_ID + slug)
 
     const data = await fetcher(API_URL_ID + slug)
 
@@ -452,7 +432,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
         props: {
             data: data,
-            token: token
+            token: token ? token : null
         }
     }
 }

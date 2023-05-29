@@ -28,6 +28,7 @@ public class MovieDTO {
     String awards;
     String poster;
     String background;
+    String logo;
     List<Cast> cast;
     Rating ratings;
     String movieId;
@@ -38,6 +39,8 @@ public class MovieDTO {
     ItemDTO item;
 
     BookmarkDTO bookmark;
+
+    SentimentDTO sentiment;
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId().toString();
@@ -62,6 +65,7 @@ public class MovieDTO {
         this.popularity = movie.getPopularity();
         this.revenue = movie.getRevenue();
         this.tags = movie.getTags();
+        this.logo = movie.getLogo();
     }
 
 }

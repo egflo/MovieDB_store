@@ -51,12 +51,11 @@ export default function UserPage() {
                         display: 'flex',
                         flexDirection: 'column',
                         p: 2,
-                        backgroundColor: theme => theme.palette.background.paper,
-                        width: "100vw",
+                        width: '100%',
+                        alignItems: 'center',
                     }}
                 >
-                    <Header title={"User"}></Header>
-                    <Card>
+\                    <Card>
                         <CardContent>
                             <div className="row align-items-center">
                                 <div className="col-md-2">

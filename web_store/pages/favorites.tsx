@@ -16,22 +16,21 @@ export default function FavoritePage(props: any) {
 
 
     return (
-        <Box
-            sx={{
+        <div
+            style={{
                 display: 'flex',
                 flexDirection: 'column',
-                p: 2,
+                padding: 2,
                 width: "100vw",
             }}
         >
-            <Header title={"Bookmarks"}></Header>
             <ScrollPagination
                 path={BOOKMARKS}
-                style={CardStyle.EXPANDED}
+                style={CardStyle.VERTICAL}
                 type={ContentType.MOVIE}
                 view={ViewType.VERTICAL}
                 token={props.token}/>
-        </Box>
+        </div>
 
     );
 

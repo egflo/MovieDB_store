@@ -4,12 +4,15 @@ import com.order_service.dto.PaymentIntentDTO;
 import com.order_service.request.PaymentIntentRequest;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
+import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Transactional
 @Service
@@ -67,5 +70,40 @@ public class StripeService {
 
         }
     }
+
+    public PaymentIntent confirmPaymentIntent(String paymentIntentId) throws StripeException {
+        PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+        return paymentIntent.confirm();
+    }
+
+    public PaymentIntent cancelPaymentIntent(String paymentIntentId) throws StripeException {
+        PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+        return paymentIntent.cancel();
+    }
+
+    public PaymentIntent getPaymentIntent(String paymentIntentId) throws StripeException {
+        PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+        return paymentIntent;
+    }
+
+    public Charge getCharge(String chargeId) throws StripeException {
+        Charge charge = Charge.retrieve(chargeId);
+        return charge;
+    }
+
+
+    public PaymentIntent updatePaymentIntent(String paymentIntentId, PaymentIntentRequest request) throws StripeException {
+        PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+        PaymentIntentCreateParams params =
+                PaymentIntentCreateParams.builder()
+                        .setCurrency(request.getCurrency())
+                        .setAmount(request.getAmount().longValue() * 100L)
+                        .addPaymentMethodType(request.getPaymentMethodType())
+                        .setReceiptEmail(request.getStripeEmail())
+                        .build();
+        return paymentIntent.update((Map<String, Object>) params);
+    }
+
+
 
 }

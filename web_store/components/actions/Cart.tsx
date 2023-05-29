@@ -4,23 +4,25 @@ import useToastContext from "../../hooks/useToastContext";
 import {ToastType} from "../Toast";
 import {axiosInstance, auth} from "../../utils/firebase";
 import {Item} from "../../models/Item";
+import {useSWRConfig} from "swr";
 
 
 type CartProps = {
     item: Item;
+    children?: React.ReactNode;
 }
 
 const API_CART:string = `${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/cart/`;
 
-export default function Cart({item}: CartProps) {
+export default function Cart({item,children}: CartProps) {
     const {show} = useToastContext();
     const [quantity, setQuantity] = useState(1);
+    const { mutate } = useSWRConfig()
 
     const addToCart = async () => {
 
         if (auth.currentUser != null) {
             const token = await auth.currentUser?.getIdToken(true);
-            console.log(token);
 
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -30,6 +32,7 @@ export default function Cart({item}: CartProps) {
                 quantity: quantity,
             }).then((response) => {
                 show("Added to cart", ToastType.INFO);
+                mutate(API_CART);
 
             }).catch((error) => {
                 show("Could not add to cart", ToastType.ERROR);
@@ -42,7 +45,9 @@ export default function Cart({item}: CartProps) {
     }
 
     return (
-        <Button onClick={addToCart} variant="contained" color="primary" size={"large"}>
+
+
+        <Button onClick={addToCart} variant="contained" color="primary" size={"large"} className={" bg-blue-700"}>
             Add to cart for ${item.price} ({item.quantity})
         </Button>
     );

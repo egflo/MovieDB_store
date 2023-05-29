@@ -6,7 +6,9 @@ import MenuItem from "@mui/material/MenuItem";
 import {Pagination, TextField} from "@mui/material";
 import {Direction, Sort, SortBy} from "./searchTypes";
 import {TablePagination} from "@mui/material";
-import React from "react";
+import React, {useState} from "react";
+import Typography from "@mui/material/Typography";
+import {ArrowDownward, ExpandLess, ExpandMore} from "@mui/icons-material";
 
 type ToolbarProps = {
     limit: number;
@@ -20,6 +22,58 @@ type ToolbarProps = {
 
     total: number;
 }
+
+// @ts-ignore
+const SortButton = ({ sortOptions, defaultSort, onSort }) => {
+    const [showOptions, setShowOptions] = useState(false);
+    const [selectedSort, setSelectedSort] = useState(defaultSort);
+
+    const handleSortClick = (option: any) => {
+        setSelectedSort(option);
+        setShowOptions(false);
+        onSort(option);
+    };
+
+    //border-2 border-gray-500 rounded-full
+
+    return (
+        <div className="group relative">
+
+            <button onClick={() => setShowOptions(!showOptions)} className={"border-2 border-gray-500 rounded-full px-4 py-2 m-2 hover:bg-gray-500 text-white"}>
+                <div className="flex flex-row gap-2 align-content-center justify-center">
+                    <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, fontWeight: "bold" }}>
+                        Sort By:
+                    </Typography>
+                    <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1 }}>
+                        {selectedSort.label}
+                    </Typography>
+
+                    <div className="mt-1.0">
+
+                        {showOptions ? <ExpandMore fontSize={"small"}/> : <ExpandLess fontSize={"small"}/>}
+                    </div>
+                </div>
+            </button>
+            <div className="transition ease-in-out duration-700 bg-zinc-900 rounded-md shadow-md  w-full z-999"
+                    style={{overflow: "hidden", transitionProperty: "height", height: showOptions ? "300px" : "0px"}}
+            >
+
+                <ul className={"p-0"}>
+                    {sortOptions.map((option: any) => (
+                        <li key={option.value} onClick={() => handleSortClick(option)} className={"w-full px-4 py-2 m-2 hover:bg-gray-500 text-white m-0"}
+                            style={{listStyleType: "none"}}
+                        >
+                            <Typography variant="subtitle1" component="div">
+                                {option.label}
+                            </Typography>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+        </div>
+    );
+};
 
 export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, total}: ToolbarProps) {
     function processLimit(limit: number) {
@@ -39,8 +93,13 @@ export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, 
         }
     }
 
-    function processSort(value: number) {
-        switch (value) {
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
+
+    const handleSort = (option: any) => {
+        // sort items based on the selected option
+        switch (option.value) {
             case 0:
                 setSort({sortBy: SortBy.ID, direction: Direction.DESC});
                 break;
@@ -59,62 +118,28 @@ export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, 
             default:
                 setSort({sortBy: SortBy.ID, direction: Direction.DESC});
         }
-    }
-
-    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
     };
 
+
+    const options = [
+        { value: 0, label: 'Relevance' },
+        { value: 1, label: 'Newest' },
+        { value: 2, label: 'Oldest' },
+        { value: 3, label: 'Title A-Z' },
+        { value: 4, label: 'Title Z-A'}
+    ];
+
     return (
-        <Box className="container-fluid" sx={
-            {
-                width: "100%",
-                position: "sticky",
-                py: 2,
-                top: 60,
-                backgroundColor:  theme => theme.palette.background.default,
-                zIndex: 1000,
-            }
-        }>
-            <Box className="row flex-row">
-                <Box className="col">
+        <Box
+            className={"flex flex-row justify-between items-center"}
 
-                    <FormControl sx={{ m: 1, minWidth: 200 }}>
-                        <InputLabel htmlFor="grouped-select">Sort By</InputLabel>
-                        <Select
-                            defaultValue="" id="sort-select" label="Sort By"
-                            onChange={(event) => {
-                                processSort(Number(event.target.value));
-                            } }
-                        >
-                            <MenuItem value={0}>Relevance</MenuItem>
-                            <MenuItem value={1}>Year: Newest to Oldest</MenuItem>
-                            <MenuItem value={2}>Year: Oldest to Newest</MenuItem>
-                            <MenuItem value={3}>Title: Z - A</MenuItem>
-                            <MenuItem value={4}>Title: A - Z</MenuItem>
-                        </Select>
-                    </FormControl>
+            sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: "sticky", postion: "-webkit-sticky"}}>
+            <SortButton
+                sortOptions={options}
+                defaultSort={options[0]}
+                onSort={handleSort}
+            />
 
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel htmlFor="grouped-select">Limit By</InputLabel>
-                        <Select defaultValue="" id="limit-select" label="Limit By"
-                                onChange={(event) => {
-                                    processLimit(Number(event.target.value));
-                                } }
-                        >
-                            <MenuItem value={1}>10</MenuItem>
-                            <MenuItem value={2}>15</MenuItem>
-                            <MenuItem value={3}>20</MenuItem>
-                            <MenuItem value={4}>25</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                </Box>
-                <div className="col" style={{display:'flex', justifyContent:"right", alignItems:"center"}}>
-                    <Pagination color="primary" count={total} page={page} onChange={handleChange} />
-                </div>
-            </Box>
         </Box>
-
     );
 }

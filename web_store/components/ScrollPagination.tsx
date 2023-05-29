@@ -1,11 +1,9 @@
 import React, {MutableRefObject, useEffect, useRef, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+
 import {Movie} from "../models/Movie";
 import {CardStyle} from "./CardStyle";
 import MovieCard from "./MovieCard";
 import {auth, axiosInstance} from "../utils/firebase";
-import {Bookmark} from "../models/Bookmark";
 import {ContentType} from "./ContentType";
 import {ViewType} from "./ViewType";
 import {Review} from "../models/Review";
@@ -13,7 +11,6 @@ import ReviewCard from "./ReviewCard";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useSWRInfinite from "swr/infinite";
-import Header from "./Header";
 import useOnScreen from "../hooks/useOnScreen";
 import {CircularProgress} from "@mui/material";
 import useAuthContext from "../hooks/useAuthContext";
@@ -139,37 +136,49 @@ export default function ScrollPagination({path, style, type, view, title, token}
     return (
         <>
             {items && items.length > 0 && (
-                <>
-                    {title &&
 
-                        <Header title={title} />
-
-                    }
-
-                    <Box sx={{position: 'relative', p: 1}} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+                    <div
+                        className={""}
+                        style={{
+                            position: 'relative',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1,
+                        }}
+                        onMouseEnter={() => setShow(true)}
+                        onMouseLeave={() => setShow(false)}
+                    >
                         {view === ViewType.HORIZONTAL && (
-                            <Box>
+
+                            <>
+                                {title && (
+
+                                    <Box className="title">
+                                        <Typography variant="h5" sx={{color: "white"}}>
+                                            {title}
+                                        </Typography>
+                                    </Box>
+                                )}
+
                                 {scroll !== 0 && (
-                                    <Box className="button-container" sx={{display: show ? 'block' : 'none', left: '10px', top: '40%'}}>
+                                    <Box className="button-container" sx={{ left: '10px', top: '50%', opacity: show ? 1 : 0 }}>
                                         <Box className="button" onClick={() => slide(-450)}>
-                                            <ChevronLeft color="primary" sx={{fontSize:"3.5rem"}}/>
+                                            <ChevronLeft fontSize={"large"} color="inherit" sx={{color:"white"}}/>
                                         </Box>
                                     </Box>
                                 )}
 
-                                <Box className="container__scroll" ref={scrl} onScroll={scrollCheckHorizontal}>
+                                <div
+
+                                    className="container__scroll " ref={scrl} onScroll={scrollCheckHorizontal}>
+
                                     <Box className="container-fluid">
-                                        <Box className="row flex-row flex-nowrap  gap-3">
+                                        <Box className="row flex-row flex-nowrap gap-3">
 
                                             {type === ContentType.MOVIE && items.map((movie: Movie, index) => (
                                                 <Box key={index} className="col p-0" >
                                                     <MovieCard style={style} movie={movie as Movie} />
                                                 </Box>
-                                            ))}
-                                            {type === ContentType.BOOKMARK && items.map((bookmark: Bookmark, index) => (
-                                                <div key={index} className="col p-0" >
-                                                    <MovieCard style={style} movie={bookmark.movie as Movie}/>
-                                                </div>
                                             ))}
 
                                             {type === ContentType.REVIEW && items.map((review: Review, index) => (
@@ -181,18 +190,18 @@ export default function ScrollPagination({path, style, type, view, title, token}
 
                                         </Box>
                                     </Box>
-                                </Box>
+                                </div>
 
                                 {!scrollEnd
                                     && (
-                                        <Box className="button-container" sx={{right: '10px', top: '40%', display: show ? 'block' : 'none'}}>
+                                        <Box className="button-container" sx={{right: '10px', top: '50%', opacity: show ? 1 : 0}}>
                                             <Box className="button" onClick={() => slide(450)}>
-                                                <ChevronRight color="primary" sx={{fontSize:"3.5rem"}}/>
+                                                <ChevronRight fontSize={"large"} color="inherit" sx={{color:"white"}}/>
                                             </Box>
                                         </Box>
                                     )}
 
-                            </Box>
+                            </>
                         )}
 
                         {view === ViewType.VERTICAL && (
@@ -214,26 +223,20 @@ export default function ScrollPagination({path, style, type, view, title, token}
                                                 <MovieCard style={style} movie={movie}/>
                                             </Box>
                                         ))}
-                                        {type === ContentType.BOOKMARK && items.map((bookmark: Bookmark) => (
-                                            <div key={bookmark.id} className="col" >
-                                                <MovieCard style={style} movie={bookmark.movie}/>
-                                            </div>
-                                        ))}
                                     </Box>
 
                                 </Box>
 
 
-                                <Box ref={ref} sx={{border: "1px solid blue"}}>
+                                <div ref={ref}>
                                     {isLoadingMore ? <CircularProgress/> : isReachingEnd ? 'Done' : ''}
-                                </Box>
+                                </div>
 
                             </>
 
                         )}
-                    </Box>
 
-                </>
+                </div>
             )}
 
         </>

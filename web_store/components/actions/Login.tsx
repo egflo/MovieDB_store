@@ -1,11 +1,7 @@
 
-import Button from "@mui/material/Button";
 import React from "react";
-import {CircularProgress} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import useToastContext from "../../hooks/useToastContext";
-import LogoutIcon from "@mui/icons-material/Logout";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import LoginIcon from "@mui/icons-material/Login";
@@ -31,9 +27,6 @@ export function Login() {
                 onClick={handleToggle}
             >
                 <LoginIcon />
-                <Typography variant="subtitle1" noWrap component="div" sx={{ display: { color:'inherit' } }}>
-                    Login
-                </Typography>
             </IconButton>
 
             <Backdrop

@@ -3,6 +3,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Box} from "@mui/material";
 import Header from "./Header";
 import {ChevronRight, ChevronLeft} from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
+import {bgcolor} from "@mui/system";
 
 
 export default function Scroll({title, children}: { title?: String, children: any}) {
@@ -37,29 +39,35 @@ export default function Scroll({title, children}: { title?: String, children: an
         } else {
             setScrollEnd(false);
         }
-        console.log(scrollEnd);
     };
 
     return (
 
-        <Box>
-            {title &&
-                <Header title={title} />
-            }
 
             <Box
                 sx={{
                     position: 'relative',
-                    p: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
                 }}
                 onMouseEnter={() => setShow(true)}
                 onMouseLeave={() => setShow(false)}
             >
+                {title && (
+
+                    <Box className="title">
+                        <Typography variant="h5" sx={{color: "white"}}>
+                            {title}
+                        </Typography>
+                    </Box>
+                )}
+
 
                 {scroll !== 0 && (
-                    <Box className="button-container" sx={{display: show ? 'block' : 'none', left: '10px', top: '40%'}}>
-                        <Box className="button" onClick={() => slide(-150)}>
-                            <ChevronLeft color="primary" sx={{fontSize:"3.5rem"}}/>
+                    <Box className="button-container" sx={{ left: '10px', top: '45%', opacity: show ? 1 : 0 }}>
+                        <Box className="button" onClick={() => slide(-450)}>
+                            <ChevronLeft fontSize={"large"} color="inherit" sx={{color:"white"}}/>
                         </Box>
                     </Box>
 
@@ -70,15 +78,14 @@ export default function Scroll({title, children}: { title?: String, children: an
                 </Box>
 
                 {!scrollEnd && (
-                    <Box className="button-container" sx={{right: '10px', top: '40%', display: show ? 'block' : 'none'}}>
-                        <Box className="button" onClick={() => slide(150)}>
-                            <ChevronRight color="primary" sx={{fontSize:"3.5rem"}}/>
+                    <Box className="button-container" sx={{right: '10px', top: '45%', opacity: show ? 1 : 0}}>
+                        <Box className="button" onClick={() => slide(450)}>
+                            <ChevronRight fontSize={"large"} color="inherit" sx={{color:"white"}}/>
                         </Box>
                     </Box>
                 )}
 
             </Box>
-        </Box>
 
     )
 }

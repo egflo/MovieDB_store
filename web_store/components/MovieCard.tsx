@@ -19,6 +19,11 @@ import {KeyedMutator} from "swr";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Cart from "./actions/Cart";
+import Button from "@mui/material/Button";
+import {Info, ShoppingBagOutlined} from "@mui/icons-material";
+import TheatersIcon from "@mui/icons-material/Theaters";
+import {axiosInstance} from "../utils/firebase";
+import {SimpleCard} from "./cards/SimpleCard";
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -50,6 +55,7 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
     }
 
     function testURL(url: string) {
+
         if (url == null) {
             return false
         }
@@ -69,28 +75,18 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
                         alt={movie.title}
                     />
                 ) : (
-                        <div style = {{position:'relative', height:250}}>
-                            <img
-                                src={"/background.png"}
-                                alt={movie.title}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                    position: 'absolute',
-                                    top: '0',
-                                    left: '0',
+                        <div style = {{position:'relative', height:260}}>
 
-                                }}
-                            />
+                            <TheatersIcon
+                                className={'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 scale-125'}
+                                fontSize={'large'} color={'primary'}/>
 
-                            <Typography variant="h6" component="div" style={{
+
+                            <Typography variant="subtitle2" color="text.secondary" component="div" style={{
                                 position: 'absolute',
-                                top: '50%',
+                                top: '70%',
                                 left: '50%',
                                 transform: 'translate(-50%, -50%)',
-                                color: 'white',
-                                fontSize: '1.5rem',
                                 fontWeight: 'bold',
                                 textAlign: 'center',
                                 width: '100%',
@@ -111,60 +107,93 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
 
     function CardHorizontal() {
         return (
+            <Box className={"group bg-zinc-900 col-span relative h-[15vw] w-[25vw]"}>
+                <img src={movie.poster} alt="Movie" draggable={false} className="
+                cursor-pointer
+                object-cover
+                transition
+                duration
+                shadow-xl
+                rounded-md
+                group-hover:opacity-90
+                sm:group-hover:opacity-0
+                delay-300
+                w-full
+                h-[15vw]" />
 
-            <Box className="content__card"
+                <Box className="
+                    absolute
+                    top-0
+                    transition
+                    duration-200
+                    z-10
+                    sm:visible
+                    delay-300
+                    w-full
+                    scale-0
+                    group-hover:focus-within:scale-100
+                    group-hover:focus:scale-100
+                    group-hover:scale-110
+                    group-hover:-translate-y-[6vw]
+                    group-hover:translate-x-[2vw]
+                    group-hover:opacity-100">
 
-                 onClick={() => {handleCardClick(movie.movieId)}}>
-                <img
-                    src={movie.background}
-                    alt={movie.title}
-                    className="content__image"
+                    <img  src={movie.poster} alt="Movie" draggable={false} className="
+                      cursor-pointer
+                      object-cover
+                      transition
+                      duration
+                      shadow-xl
+                      rounded-t-md
+                      w-full
+                      h-[12vw]" />
 
-                />
+                    <Box className="
+                      z-10
+                      bg-zinc-800
+                      p-2
+                      lg:p-4
+                      absolute
+                      w-full
+                      transition
+                      shadow-md
+                      rounded-b-md
+                      ">
+                        <Typography variant="h6" component="div" className="text-white font-semibold">
+                            {movie.title}
+                        </Typography>
 
-                <Box className="content__details"
-                     style={{
-                         color: 'white',
-                         textShadow: "0 0 2px rgba(0,0,0,0.5)",
-                         margin: "0 0 0 0",
-                     }}>
+                        <Box className="flex flex-row items-start align-content-center gap-1">
 
-                    <Typography variant="h5" className="content__title">{movie.title}</Typography>
+                            <Typography variant="subtitle2" className="text-white ">{movie.year}</Typography>
 
-                    <Box className="content__description" style={{height:'1.5rem'}}>
-                        {!!movie.ratings?.rottenTomatoes &&
-                            (
-                                <div style={{
-                                    display: 'flex',
-                                    gap: '5px',
-                                }}> <img className="content__rating" style={{height:'100%', width:'100%', padding:'1px'}} src={"/Fresh.png"} alt={"tomato"}></img>
-                                    <p className="content__rating__text">{movie.ratings.rottenTomatoes}%</p>
-                                    <span className="separator">&bull;</span>
-                                </div>
-                            )
+                            <Typography className="text-white">&bull;</Typography>
 
-                        }
+                            {movie.rated && movie.rated !== "NR" &&
+                                <Typography variant="subtitle2" className="text-white">{movie.rated}</Typography>
+                            }
 
-                        <Typography>{movie.year}</Typography>
+                            <Typography className="text-white">&bull;</Typography>
 
-                        <span className="separator">&bull;</span>
+                            {movie.genres && movie.genres.length > 0 && (
+                                <Typography variant="subtitle2" className="text-white">{movie.genres[0]}</Typography>
+                            )}
+                        </Box>
 
-                        {movie.rated && movie.rated !== "NR" &&
-                            <Typography>{movie.rated}</Typography>
-                        }
+                        <Typography variant="subtitle2"
+                                    className="text-white text-opacity-80 overflow-ellipsis overflow-hidden">
+                            {movie.plot}
+                        </Typography>
 
-                        <span className="separator">&bull;</span>
-
-                        {movie.genres && movie.genres.length > 0 && (
-                            <Typography>{movie.genres[0]}</Typography>
-                        )}
+                        <Button variant="contained" className="mt-2 w-full"
+                                onClick={() => handleCardClick(movie.movieId)}>
+                            <Info className="mr-2" />
+                            More Info
+                        </Button>
 
                     </Box>
-
                 </Box>
-
             </Box>
-
         )
     }
     function CardExpanded() {
@@ -203,9 +232,7 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
 
                     </Typography>
 
-                    {movie.item && (
-                        <Cart item={movie.item} />
-                    )}
+
 
                 </CardContent>
 
@@ -217,6 +244,9 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
                     <Favorite movie={movie}/>
                     <Share movie={movie}></Share>
                     <Rate movie={movie}></Rate>
+                    <IconButton>
+                        <ShoppingBagOutlined className="text-white" fontSize={"small"}/>
+                    </IconButton>
                     <ExpandMore
                         expand={expanded}
                         onClick={handleExpandClick}
@@ -240,7 +270,7 @@ function MovieCard({style, movie}: {style: CardStyle, movie: Movie}) {
     return (
        <>
               {style == CardStyle.VERTICAL && <CardVertical/>}
-              {style == CardStyle.HORIZONTAL && <CardHorizontal/>}
+              {style == CardStyle.HORIZONTAL && <SimpleCard movie={movie}/>}
               {style == CardStyle.EXPANDED && <CardExpanded/>}
        </>
 

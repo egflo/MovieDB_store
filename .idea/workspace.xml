@@ -4,8 +4,94 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment=" UI updates to store. Updated Modals.">
+      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/SentimentDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/.babelrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/.babelrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/.firebaserc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/Section.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/cards/DetailedCard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/cards/SimpleCard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/carousel/Carousel-Item.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/carousel/Carousel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/hero/Hero-Item.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/hero/Hero.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/navigation/CartNavIcon.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/navigation/SearchBar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/components/search/SearchItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/firebase.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/models/Sentiment.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/pages/order/[id].tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/postcss.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_store/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/78397c7c-065a-4fc3-93c4-c693abf6c007.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/78397c7c-065a-4fc3-93c4-c693abf6c007.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/resources/service-account.json" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/resources/service-account.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieResponseBodyAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieResponseBodyAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Sentiment.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Sentiment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/API.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/API.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/ControllerExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/ControllerExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/StripeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/StripeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tax_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/tax_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/CartItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/CartItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/MovieCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/MovieCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/ReviewCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/ReviewCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/Scroll.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Scroll.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/ScrollPagination.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/ScrollPagination.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Cart.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/CartExpanded.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/CartExpanded.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Favorite.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Favorite.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Logout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Logout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Rate.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Rate.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Share.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Share.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/NavigationActionItems.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/NavigationActionItems.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/NavigationBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/NavigationBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/order/OrderCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/order/OrderCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/order/result.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/order/result.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/order/toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/order/toolbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/search/result.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/search/result.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/search/toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/search/toolbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/models/Movie.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Movie.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/cart.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/cast/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/cast/[id].tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/checkout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/checkout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/favorites.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/favorites.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/movie/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/movie/[id].tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/orders.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/pages/user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/user.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/styles/globals.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,11 +125,12 @@
       <list>
         <option value="HTML File" />
         <option value="GraphQL File" />
-        <option value="TypeScript File" />
-        <option value="JavaScript File" />
         <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="TypeScript File" />
+        <option value="CSS File" />
+        <option value="JavaScript File" />
         <option value="TypeScript JSX File" />
       </list>
     </option>
@@ -71,11 +158,6 @@
         <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="workspaceImportEnabled" value="true" />
-      </MavenImportingSettings>
-    </option>
   </component>
   <component name="ProjectId" id="2Kl6aU98CFex4jDLewujdP1pT98" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -98,7 +180,8 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-18&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/egflo/IdeaProjects/MovieDB_store/tax_service&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/egflo/IdeaProjects/MovieDB_store/web_store/components/cards&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -109,15 +192,15 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.17693317&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;d44836ba906ededc7b123dc2fb147163&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;a3ff539cda7b199cab347387b2065842&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/egflo/IdeaProjects/MovieDB_store/web_store/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
       &quot;mysql&quot;,
-      &quot;mongo&quot;,
-      &quot;postgresql&quot;
+      &quot;postgresql&quot;,
+      &quot;mongo&quot;
     ]
   }
 }</component>
@@ -126,28 +209,28 @@
       <recent name="com.movie_service.DTO.ReviewRequest" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web_store/components/cards" />
       <recent name="$PROJECT_DIR$/tax_service" />
       <recent name="$PROJECT_DIR$/interface/src/main/proto" />
       <recent name="$PROJECT_DIR$/tax_service/src/main/resources" />
       <recent name="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller" />
-      <recent name="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web_store/components/hero" />
+      <recent name="$PROJECT_DIR$/web_store/components/carousel" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/web_store" />
       <recent name="$PROJECT_DIR$/web_store/components/forms" />
-      <recent name="$PROJECT_DIR$/interface/src/main" />
-      <recent name="$PROJECT_DIR$/interface/src/main/resources" />
-      <recent name="$PROJECT_DIR$/interface/src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.movie_service.grpc" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.movie_service.DTO" />
       <recent name="com.tax_service.grpc" />
       <recent name="com.inventory_service.controller" />
       <recent name="com.movie_service.controller" />
       <recent name="com.order_service.exception" />
-      <recent name="com.inventory_service.exception" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -164,12 +247,10 @@
       <option name="appServicePlanResourceGroup" />
       <option name="appSettingsKey" value="95728fc4-8fc0-401c-adc6-13856a3efc76" />
       <option name="artifact" />
-      <option name="autoPort" value="true" />
       <option name="debugOptions" />
       <option name="deployment" />
       <option name="deploymentStagingDirectoryPath" />
       <option name="funcPath" />
-      <option name="funcPort" value="0" />
       <option name="functionHostArguments" />
       <option name="hostJsonPath" />
       <option name="insightsName" />
@@ -356,6 +437,30 @@
       <workItem from="1679004965555" duration="11589000" />
       <workItem from="1679039678653" duration="184000" />
       <workItem from="1679068295718" duration="306000" />
+      <workItem from="1679070150170" duration="7130000" />
+      <workItem from="1679111887502" duration="3499000" />
+      <workItem from="1679180578767" duration="15653000" />
+      <workItem from="1679328553520" duration="1839000" />
+      <workItem from="1679427714510" duration="1722000" />
+      <workItem from="1679858276033" duration="643000" />
+      <workItem from="1679873127005" duration="2591000" />
+      <workItem from="1680919193726" duration="118000" />
+      <workItem from="1680919366692" duration="29563000" />
+      <workItem from="1681315912495" duration="362000" />
+      <workItem from="1681316389521" duration="13352000" />
+      <workItem from="1681607017618" duration="75105000" />
+      <workItem from="1682179573329" duration="7138000" />
+      <workItem from="1682207221673" duration="591000" />
+      <workItem from="1682238014020" duration="64824000" />
+      <workItem from="1682876409064" duration="57044000" />
+      <workItem from="1683218424639" duration="22862000" />
+      <workItem from="1683421447487" duration="39792000" />
+      <workItem from="1683939056054" duration="2714000" />
+      <workItem from="1684024181626" duration="10979000" />
+      <workItem from="1684286306323" duration="14615000" />
+      <workItem from="1684629487668" duration="16259000" />
+      <workItem from="1685226943950" duration="1580000" />
+      <workItem from="1685290525817" duration="3903000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1676356948888</created>
@@ -406,19 +511,30 @@
       <option name="project" value="LOCAL" />
       <updated>1679069668551</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Tax-Service Microservice Added. UI updates to store. Fault Tolerance.">
+      <created>1679070269397</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679070269397</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="1c3346a2-831e-4225-b113-826491678afc" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="1c3346a2-831e-4225-b113-826491678afc">
           <value>
             <State>
-              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
               <option name="FILTERS">
                 <map>
                   <entry key="branch">
@@ -437,6 +553,7 @@
                   </entry>
                 </map>
               </option>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
             </State>
           </value>
         </entry>
@@ -445,11 +562,6 @@
             <State />
           </value>
         </entry>
-      </map>
-    </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="1c3346a2-831e-4225-b113-826491678afc" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>
@@ -465,7 +577,8 @@
     </ignored-roots>
     <MESSAGE value="Initial" />
     <MESSAGE value="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
-    <option name="LAST_COMMIT_MESSAGE" value="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
+    <MESSAGE value=" UI updates to store. Updated Modals." />
+    <option name="LAST_COMMIT_MESSAGE" value=" UI updates to store. Updated Modals." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

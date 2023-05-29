@@ -1,14 +1,11 @@
 import {axiosInstance} from "../../utils/firebase";
 import useSWR from "swr";
 import Box from "@mui/material/Box";
-import * as React from "react";
-import {useTheme} from "@mui/material/styles";
 import {Sort} from "./searchTypes";
 import {CircularProgress} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {Order} from "../../models/Order";
 import {OrderCard} from "./OrderCard";
-import {AuthContext} from "../../contexts/AuthContext";
 import useAuthContext from "../../hooks/useAuthContext";
 
 

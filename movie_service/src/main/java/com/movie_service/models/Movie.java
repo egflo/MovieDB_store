@@ -42,6 +42,9 @@ public class Movie {
 
     String background;
 
+    @Field("logo")
+    String logo;
+
     List<Cast> cast;
 
     Rating ratings;
@@ -60,7 +63,7 @@ public class Movie {
     }
 
 public Movie(String movieId, String title, Integer year, String rated, String runtime, List<String> genres,
-             String director, String writer, String boxOffice, String production, String plot,
+             String director, String writer, String boxOffice, String production, String plot, String logo,
              String language, String country, String awards, String poster, String background,
              List<Cast> cast, Rating ratings, Double popularity, Long revenue) {
         this.title = title;
@@ -83,6 +86,7 @@ public Movie(String movieId, String title, Integer year, String rated, String ru
         this.movieId = movieId;
         this.popularity = popularity;
         this.revenue = revenue;
+        this.logo = logo;
     }
 
     public String getId() {
@@ -213,6 +217,14 @@ public Movie(String movieId, String title, Integer year, String rated, String ru
 
     public void setBackground(String background) {
         this.background = background;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public List<Cast> getCast() {

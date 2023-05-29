@@ -40,9 +40,9 @@ function CastPage({data}: {data: CastDetails}) {
 
     return (
         <>
-            <Box className="container__content">
+            <div className="container__content">
 
-                <Box
+                <div
                     className="content__background"
                     style={
                         {
@@ -54,87 +54,92 @@ function CastPage({data}: {data: CastDetails}) {
 
                         }
                     }>
-                </Box>
+                </div>
 
-                <Box
-                    className="content__background"
-                    style={
-                        {
-                            width: '100%',
-                            height: '100%',
-                            backgroundSize: 'cover',
-                            backdropFilter: 'blur(1.5rem)',
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-
-                        }
-                    }>
-                </Box>
+                <div className="absolute bottom-0 w-full h-full bg-gradient-to-t from-zinc-900 to-transparent" />
 
 
-                <Box className="container__header">
-                    <img
-                        className="content__image"
-                        style={
-                            {
 
-                                width: '300px',
-                                height: '450px',
-                                boxShadow: '0 0 10px rgba(0,0,0,0.5)',
-                                borderRadius: '10px'
 
+                <Box className="absolute w-full h-full">
+
+                    <Box className="container__header py-2 md:px-4 pt-5 lg:px-4 xl:px-40">
+
+                        <img
+                            className="container__header__left"
+                            style={
+                                {
+                                    boxShadow: '0 0 10px rgba(0,0,0,0.5)',
+                                    borderRadius: '10px'
+
+                                }
                             }
-                        }
-                        src={data.photo}
-                        alt={data.name}
-                    />
+                            src={data.photo && testURL(data.photo) ? data.photo : "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"}
+                            alt={data.name}
+                        />
 
-                    <Box className="container__info">
+                        <Box className="container__info">
 
-                        <div className="container__info__title">
-                            <Typography variant={"h3"}>{data.name}</Typography>
-                        </div>
+                            <div className="container__info__title">
 
-                        <div className="content__subtitle">
-                            <Typography>{data.dob}</Typography>
-                        </div>
+                                <Typography variant={"h4"}>{data.name}</Typography>
 
-                        <div className="description-container">
+                                {data.dob && data.dob !== "" && (
 
-                            <div className="description">
-                                <Typography className="description-title">Birth Place</Typography>
-                                <Typography className="description-text">{data.birthplace}</Typography>
+                                    <div className="content__subtitle">
+                                        <Typography>{data.dob}</Typography>
+                                    </div>
+                                )}
+
                             </div>
 
-                            <div className="description" onClick={() => {handleToggle()}}>
-                                <Typography className="description-title">Biography</Typography>
-                                <Typography className="description-text"
-                                      style={{
-                                          textOverflow: 'ellipsis',
-                                          overflow: 'hidden',
-                                          width: '100%',
-                                          display: '-webkit-box',
-                                          WebkitLineClamp: 9,
-                                          WebkitBoxOrient: 'vertical',
-                                          }}
-                                >{data.bio} </Typography>
+                            <div className="description-container px-2 md:px-0">
+
+                                {data.birthplace && data.birthplace !== "" && (
+                                    <div className="">
+                                        <Typography className="description-title">Birth Place</Typography>
+                                        <Typography className="description-text">{data.birthplace}</Typography>
+                                    </div>
+
+                                )}
+
+                                <div className="" onClick={() => {handleToggle()}}>
+                                    <Typography className="description-title">Biography</Typography>
+                                    <Typography className="description-text sm:align-middle "
+                                          style={{
+                                              textOverflow: 'ellipsis',
+                                              overflow: 'hidden',
+                                              width: '100%',
+                                              display: '-webkit-box',
+                                              WebkitLineClamp: 7,
+                                              WebkitBoxOrient: 'vertical',
+                                              }}
+                                    >{data.bio} </Typography>
+                                    <button className="description-button">Read More</button>
+                                </div>
                             </div>
-                        </div>
+                        </Box>
                     </Box>
-                </Box>
 
-            </Box>
+                        <ScrollPagination   path={API_URL_MOVIES + data.castId + "?sortBy=popularity&limit=50"}
+                                          style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.VERTICAL}/>
+                    </Box>
 
-            <Header title={"Filmography"}/>
 
-            <ScrollPagination path={API_URL_MOVIES + data.castId + "?sortBy=popularity&limit=50"}
-                              style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.VERTICAL}/>
+            </div>
+
+
+
+
+
+
 
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={open}
                 onClick={handleClose}
             >
-                <Card sx={{ maxWidth: '85vw' }}>
+                <Card sx={{ maxWidth: '85vw', maxHeight: '85vh', overflow: 'auto' }}>
                     <CardHeader>
                         <Typography variant={"h3"}>{"Biography"}</Typography>
                     </CardHeader>

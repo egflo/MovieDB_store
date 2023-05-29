@@ -64,8 +64,8 @@ public class MovieService implements MovieServiceImp {
 
     @Override
     public Movie findByMovieId(String id) {
-        //API api = new API(repository);
-        //api.background(id);
+        API api = new API(repository);
+        api.background(id);
         Optional<Movie> movie = repository.getMovieByMovieId(id);
         if (movie.isPresent()) {
             return movie.get();

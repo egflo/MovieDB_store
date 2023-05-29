@@ -9,14 +9,16 @@ import {useRouter} from "next/router";
 import {CircularProgress} from "@mui/material";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {Logout} from "../actions/Logout";
-import {ShoppingBasket} from "@mui/icons-material";
+import {AccountCircleOutlined, FavoriteBorderOutlined, ShoppingBagOutlined, ShoppingBasket} from "@mui/icons-material";
 import {Login} from "../actions/Login";
 import { Nav } from "react-bootstrap";
+import {CartNavIcon} from "./CartNavIcon";
 
 
 export default function NavigationActionItems() {
     const router = useRouter();
     const [user, loading, error] = useAuthState(auth);
+
     const handleFavoritesClick = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         router.push('/favorites')
@@ -58,10 +60,14 @@ export default function NavigationActionItems() {
                     aria-label="Favorites"
                     sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
                 >
-                    <AccountCircleIcon />
-                    <Typography variant="subtitle1" noWrap component="div" sx={{ display: { color:'inherit' } }}>
-                        Account
-                    </Typography>
+                    <div className={'flex flex-row align-middle gap-2'}>
+                        <AccountCircleOutlined fontSize={'medium'}/>
+                        <div className={'block md:hidden'}>
+                            <Typography variant="subtitle1">
+                                Account
+                            </Typography>
+                        </div>
+                    </div>
                 </IconButton>
 
                 </Nav.Item>
@@ -75,33 +81,24 @@ export default function NavigationActionItems() {
                     aria-label="Favorites"
                     sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
                 >
-                    <FavoriteIcon />
-                    <Typography variant="subtitle1" noWrap component="div" sx={{ display: { color:'inherit' } }}>
-                        Favorites
-                    </Typography>
+                    <div className={'flex flex-row align-middle gap-2'}>
+                    <FavoriteBorderOutlined fontSize={'medium'}/>
+                        <div className={'block md:hidden'}>
+                            <Typography variant="subtitle1">
+                                Favorites
+                            </Typography>
+                        </div>
+                    </div>
                 </IconButton>
 
                 </Nav.Item>
 
                 <Nav.Item>
-                <IconButton
-                    onClick={handleCartClick}
-                    size="large"
-                    edge="end"
-                    color="inherit"
-                    aria-label="Favorites"
-                    sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
-                >
-                    <ShoppingBasket />
-                    <Typography variant="subtitle1" noWrap component="div" sx={{ display: { color:'inherit' } }}>
-                        Cart
-                    </Typography>
-                </IconButton>
-
+                    <CartNavIcon user={user} />
                 </Nav.Item>
 
                 <Nav.Item>
-                <Logout/>
+                        <Logout/>
                 </Nav.Item>
 
             </>
@@ -110,7 +107,9 @@ export default function NavigationActionItems() {
 
     return (
         <>
+            <Nav.Item>
             <Login></Login>
+            </Nav.Item>
         </>
     );
 }

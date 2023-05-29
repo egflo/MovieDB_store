@@ -49,6 +49,13 @@ public class CartController {
         return ResponseEntity.ok(cartService.add(request));
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<?> addCart(@RequestHeader HttpHeaders headers, @PathVariable Integer id, @RequestBody CartDTO request) {
+
+        request.setId(id);
+        return ResponseEntity.ok(cartService.add(request));
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCart(@RequestHeader HttpHeaders headers,
@@ -65,8 +72,7 @@ public class CartController {
     public ResponseEntity<?> deleteCart(@RequestHeader HttpHeaders headers,
                                                      @PathVariable Integer id) {
 
-        cartService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cartService.delete(id));
     }
 
 

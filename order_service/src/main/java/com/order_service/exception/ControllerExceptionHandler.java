@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.concurrent.TimeoutException;
 
 public class ControllerExceptionHandler {
+
+    @ExceptionHandler({StripeException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleStripeException(StripeException e) {
+        return new ResponseEntity<>(e.getUserMessage(), HttpStatus.BAD_REQUEST);
+
+    }
+
     @ExceptionHandler({CardException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handleCardException(CardException e) {
@@ -35,12 +43,6 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({AuthenticationException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
-        return new ResponseEntity<>(e.getUserMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({StripeException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handleStripeException(StripeException e) {
         return new ResponseEntity<>(e.getUserMessage(), HttpStatus.BAD_REQUEST);
     }
 

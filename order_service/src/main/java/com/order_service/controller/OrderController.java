@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.order_service.request.PaymentIntentRequest;
 import com.order_service.request.OrderRequest;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -54,7 +55,7 @@ public class OrderController {
     }
 
     @PostMapping("/")
-    public @ResponseBody ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
+    public @ResponseBody ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) throws StripeException {
 
         return new ResponseEntity<>(orderService.createOrder(orderRequest), HttpStatus.CREATED);
     }

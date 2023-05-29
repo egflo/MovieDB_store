@@ -1,4 +1,4 @@
-import {GetServerSideProps, GetServerSidePropsContext, GetStaticPaths, GetStaticProps} from "next";
+    import {GetServerSideProps, GetServerSidePropsContext, GetStaticPaths, GetStaticProps} from "next";
 import Box from "@mui/material/Box";
 import {Direction, SortBy} from "../components/order/searchTypes";
 import Toolbar from "../components/order/toolbar";

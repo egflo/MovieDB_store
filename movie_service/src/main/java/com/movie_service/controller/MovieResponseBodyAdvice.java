@@ -8,10 +8,14 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.movie_service.DTO.BookmarkDTO;
 import com.movie_service.DTO.ItemDTO;
 import com.movie_service.DTO.MovieDTO;
+import com.movie_service.DTO.SentimentDTO;
 import com.movie_service.grpc.ItemService;
 import com.movie_service.models.Bookmark;
 import com.movie_service.models.Movie;
+import com.movie_service.models.Sentiment;
 import com.movie_service.service.BookmarkService;
+import com.movie_service.service.ReviewService;
+import com.movie_service.service.SentimentService;
 import org.proto.grpc.ItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -41,6 +45,9 @@ public class MovieResponseBodyAdvice  implements ResponseBodyAdvice<Object> {
 
     @Autowired
     private BookmarkService bookmarkService;
+
+    @Autowired
+    private SentimentService sentimentService;
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -78,6 +85,17 @@ public class MovieResponseBodyAdvice  implements ResponseBodyAdvice<Object> {
                 MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(bookmark);
                 mappingJacksonValue.setFilters(filterProvider);
 
+
+                Optional<Sentiment> sentiment = sentimentService.findByUserIdAndObjectId(
+                        subject,
+                        movie.getId()
+                );
+
+                if(sentiment.isPresent()){
+                    SentimentDTO sentimentDTO = new SentimentDTO(sentiment.get());
+                    movieDTO.setSentiment(sentimentDTO);
+                }
+
                 if(bookmark.isPresent()){
                     movieDTO.setBookmark(new BookmarkDTO(bookmark.get()));
                 }
@@ -106,6 +124,16 @@ public class MovieResponseBodyAdvice  implements ResponseBodyAdvice<Object> {
                     String token = header.get("authorization").get(0).split(" ")[1].trim();
                     DecodedJWT jwt = JWT.decode(token);
                     String subject = jwt.getSubject();
+
+                    Optional<Sentiment> sentiment = sentimentService.findByUserIdAndObjectId(
+                            subject,
+                            movie.getId()
+                    );
+
+                    if(sentiment.isPresent()){
+                        SentimentDTO sentimentDTO = new SentimentDTO(sentiment.get());
+                        movieDTO.setSentiment(sentimentDTO);
+                    }
 
                     Optional<Bookmark> bookmark = bookmarkService.getBookmarkByMovieIdAndUserId(
                             movie.getId(),

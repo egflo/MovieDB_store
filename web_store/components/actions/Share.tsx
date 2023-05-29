@@ -1,20 +1,13 @@
 import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import * as React from "react";
-import {useEffect, useRef} from "react";
-import Toast, {ToastState, ToastType, Alert} from "../Toast";
-import Snackbar from "@mui/material/Snackbar";
-import StarIcon from "@mui/icons-material/Star";
+
+import React, {useEffect, useRef} from "react";
 import Card from "@mui/material/Card";
 import {Backdrop, CardHeader} from "@mui/material";
-import Rating from '@mui/material/Rating';
 import CardContent from "@mui/material/CardContent";
-import ClickAwayListener from
-        "@mui/material/ClickAwayListener";
-import ShareIcon from "@mui/icons-material/Share";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import {Movie} from "../../models/Movie";
+import {ShareOutlined} from "@mui/icons-material";
 
 type ShareProps = {
     movie: Movie;
@@ -58,7 +51,8 @@ export default function Share(props: ShareProps) {
                         aria-label="share"
                         color={selected ? "primary" : "inherit"}
                     >
-                        <ShareIcon/>
+
+                        <ShareOutlined/>
                     </IconButton>
                 </Box>
 

@@ -20,17 +20,19 @@ export const Layout = (props: { children: any; }) => {
 
     return (
         <Fragment>
-            <NavigationBar />
 
             <DashboardLayoutRoot>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}
-                >
-                    {children}
-                </Box>
+                <NavigationBar />
+
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        {children}
+                    </div>
+
             </DashboardLayoutRoot>
         </Fragment>
     );
