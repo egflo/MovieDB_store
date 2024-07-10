@@ -9,6 +9,9 @@ import {SearchItem} from "./SearchItem";
 import {MutableRefObject, useEffect, useRef, useState} from "react";
 import useOnScreen from "../../hooks/useOnScreen";
 import useSWRInfinite from "swr/infinite";
+import {SimpleCard} from "../cards/SimpleCard";
+import ExpandedCard from "../cards/ExpandedCard";
+import HorizontalCard from "../cards/HorizontalCard";
 
 
 const API_URL_SEARCH: string = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/search/`;
@@ -29,6 +32,8 @@ type ResultProps = {
     tag: String;
 
     setTotal: (total: number) => void;
+
+    view: boolean;
 }
 
 
@@ -47,7 +52,7 @@ const getKey = (index: any, previousPageData: any, path: any, pageSize: any) => 
 
 
 
-export default function Result({limit, setLimit, sort, setSort, term, genre, tag, setTotal}: ResultProps) {
+export default function Result({limit, setLimit, sort, setSort, term, genre, tag, setTotal, view}: ResultProps) {
     let ref = useRef() as MutableRefObject<HTMLDivElement>;
     const isVisible = useOnScreen(ref);
     const auth = useAuthContext();
@@ -57,6 +62,7 @@ export default function Result({limit, setLimit, sort, setSort, term, genre, tag
     const [last, setLast] = useState(false);
 
     let path = API_URL_SEARCH + term + "?sortBy=" + sort.sortBy + "&direction=" + sort.direction;
+
 
     if (genre.length > 0) {
         path += "&genres=" + genre;
@@ -99,7 +105,7 @@ export default function Result({limit, setLimit, sort, setSort, term, genre, tag
 
     return (
         <div>
-            <Box className="container-fluid overflow-hidden m-auto">
+            <Box className="container-fluid ">
                 {isEmpty ?
                     <Box className="row flex-row flex-wrap g-2">
                         <Box className="col" >
@@ -109,13 +115,12 @@ export default function Result({limit, setLimit, sort, setSort, term, genre, tag
                         </Box>
                     </Box> : null}
 
-                <Box className="row flex-row flex-wrap justify-content-md-center">
-                    {items.map((movie: Movie) => (
-                        <Box className="col-6 col-sm-2 col-md-3 col-lg-3 col-xl-3 mb-2 " key={movie.id}>
-                            <SearchItem movie={movie} />
+                <Box className="row flex-row flex-wrap g-4 justify-content-center">
+                    {items.map((movie: Movie, index: number) => (
+                        <Box key={index} className={view ? "col flex-grow-0" : "col-12"}>
+                            {view ? <SimpleCard movie={movie}/> : <HorizontalCard movie={movie}/>}
                         </Box>
                     ))}
-
                 </Box>
 
             </Box>

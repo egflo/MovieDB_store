@@ -9,7 +9,18 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      textShadow: {
+        'black': '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
+      }
+    },
+  },
+  variants: {
+    extend: {
+      transform: ['hover'],
+      scale: ['hover'],
+      opacity: ['hover'],
+    },
   },
   plugins: [],
 }

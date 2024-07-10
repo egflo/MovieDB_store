@@ -7,6 +7,7 @@ import com.movie_service.DTO.SentimentRequest;
 import com.movie_service.exception.IdNotFoundException;
 import com.movie_service.models.Review;
 import com.movie_service.models.Sentiment;
+import com.movie_service.models.User;
 import com.movie_service.repository.ReviewRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,13 @@ public class ReviewService implements ReviewServiceImp {
         review.setText(reviewRequest.content());
         review.setTitle(reviewRequest.title());
         review.setDate(new Date().toString());
+
+        User user = new User();
+        user.setId(1);
+        user.setFirstname("John");
+        user.setLastname("Doe");
+        user.setEmail("doe@doe.com");
+        review.setUser(user);
 
         return repository.save(review);
     }

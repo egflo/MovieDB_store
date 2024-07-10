@@ -42,26 +42,23 @@ function CastPage({data}: {data: CastDetails}) {
         <>
             <div className="container__content">
 
-                <div
-                    className="content__background"
-                    style={
-                        {
-                            width: '100%',
-                            height: '100%',
-                            backgroundSize: 'cover',
-                            backdropFilter: 'blur(1.5rem)',
-                            backgroundImage: `url(${"/background.png"})`,
-
-                        }
-                    }>
+                <div className={'hidden md:block w-screen h-[80vh] opacity-40 shadow'}>
+                    <Box
+                        style={
+                            {
+                                width: '100%',
+                                height: '100%',
+                                backgroundSize: 'cover',
+                                backgroundImage: `url(/background.png)`,
+                            }
+                        }>
+                    </Box>
                 </div>
 
-                <div className="absolute bottom-0 w-full h-full bg-gradient-to-t from-zinc-900 to-transparent" />
+                <Box className="absolute bottom-0 w-full h-full bg-gradient-to-t from-black to-transparent" />
 
 
-
-
-                <Box className="absolute w-full h-full">
+                <Box className="absolute w-full h-full pt-5">
 
                     <Box className="container__header py-2 md:px-4 pt-5 lg:px-4 xl:px-40">
 
@@ -86,7 +83,7 @@ function CastPage({data}: {data: CastDetails}) {
 
                                 {data.dob && data.dob !== "" && (
 
-                                    <div className="content__subtitle">
+                                    <div className="hidden lg:block">
                                         <Typography>{data.dob}</Typography>
                                     </div>
                                 )}
@@ -103,17 +100,19 @@ function CastPage({data}: {data: CastDetails}) {
 
                                 )}
 
-                                <div className="" onClick={() => {handleToggle()}}>
+                                <div onClick={() => {
+                                    handleToggle()
+                                }}>
                                     <Typography className="description-title">Biography</Typography>
                                     <Typography className="description-text sm:align-middle "
-                                          style={{
-                                              textOverflow: 'ellipsis',
-                                              overflow: 'hidden',
-                                              width: '100%',
-                                              display: '-webkit-box',
-                                              WebkitLineClamp: 7,
-                                              WebkitBoxOrient: 'vertical',
-                                              }}
+                                                style={{
+                                                    textOverflow: 'ellipsis',
+                                                    overflow: 'hidden',
+                                                    width: '100%',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 7,
+                                                    WebkitBoxOrient: 'vertical',
+                                                }}
                                     >{data.bio} </Typography>
                                     <button className="description-button">Read More</button>
                                 </div>
@@ -121,25 +120,19 @@ function CastPage({data}: {data: CastDetails}) {
                         </Box>
                     </Box>
 
-                        <ScrollPagination   path={API_URL_MOVIES + data.castId + "?sortBy=popularity&limit=50"}
-                                          style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.VERTICAL}/>
-                    </Box>
+                    <ScrollPagination path={API_URL_MOVIES + data.castId + "?sortBy=popularity&limit=50"}
+                                      style={CardStyle.VERTICAL} type={ContentType.MOVIE} view={ViewType.VERTICAL}/>
+                </Box>
 
 
             </div>
 
-
-
-
-
-
-
             <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
                 open={open}
                 onClick={handleClose}
             >
-                <Card sx={{ maxWidth: '85vw', maxHeight: '85vh', overflow: 'auto' }}>
+                <Card sx={{maxWidth: '85vw', maxHeight: '85vh', overflow: 'auto'}}>
                     <CardHeader>
                         <Typography variant={"h3"}>{"Biography"}</Typography>
                     </CardHeader>

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Autocomplete, Box, CircularProgress, TextField, Typography} from "@mui/material";
-import {NoSSR} from "next/dist/shared/lib/dynamic-no-ssr";
 import {useRouter} from "next/router";
 import {Movie} from "../../models/Movie";
 import {styled} from "@mui/material/styles";
@@ -20,22 +19,17 @@ const SearchBox = styled((props) => (
 
         [theme.breakpoints.down('sm')]: {
             minWidth: '58vw',
-            width: '58vw',
-
-
+            width: '75vw',
         },
 
         [theme.breakpoints.up('sm')]: {
-            minWidth: '470px',
+            minWidth: '475px',
         },
 
         // border: '1px solid #e2e2e1',
         border: '0px',
         overflow: 'hidden',
-        borderTopLeftRadius: '5px',
-        borderBottomLeftRadius: '5px',
-        borderTopRightRadius: '0px',
-        borderBottomRightRadius: '0px',
+        borderRadius: '5px',
         //backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
         transition: theme.transitions.create([
             'border-color',
@@ -56,7 +50,7 @@ function SearchBar() {
     const [options, setOptions] = useState(new Array<Movie>());
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -101,11 +95,10 @@ function SearchBar() {
         <div className="flex flex-row items-center justify-center">
             {expanded && (
                 <div className={"transition duration-500"}>
-                    <NoSSR>
                         <Autocomplete
                             id="autocomplete"
                             size="small"
-
+                            forcePopupIcon={false}
                             open={open}
                             onOpen={() => {
                                 setOpen(true);
@@ -148,6 +141,7 @@ function SearchBar() {
                                             variant="filled"
                                             InputProps={{
                                                 ...params.InputProps,
+                                                disableUnderline: true,
                                                 endAdornment: (
                                                     <React.Fragment>
                                                         {loading ? <CircularProgress color="inherit" size={20} /> : null}
@@ -163,13 +157,13 @@ function SearchBar() {
 
                             renderOption={(option: any, state) => {
                                 return (
-                                    <Box onClick={() => { router.push('/movie/' + state.movieId); }}
+                                    <Box
+                                        className={"hover:bg-zinc-950"}
+                                        onClick={() => { router.push('/movie/' + state.movieId); }}
                                          sx={{ display: 'flex',
                                              alignItems: 'center',
                                              p: 0.5, cursor: 'pointer',
                                              gap: 2,
-                                             '&:hover': { backgroundColor: 'grey' },
-
                                          }}
 
                                     >
@@ -193,7 +187,6 @@ function SearchBar() {
                                     </Box>
                                 );}}
                         />
-                    </NoSSR>
                 </div>
             )}
 
@@ -201,7 +194,7 @@ function SearchBar() {
                 onClick={handleExpandClick}
                 sx={{color:'#197EFF'}}
                 color="inherit"
-                className="search-icon">
+                className="search-icon hidden">
                 <SearchIcon />
             </IconButton>
         </div>

@@ -1,19 +1,23 @@
 package com.order_service.request;
 
 public class AddressRequest {
-    long id;
-    String firstName;
-    String lastName;
-    String street;
-    String city;
-    String state;
-    String postcode;
-    String country;
+    String id;
+    private String userId;
+    private String firstName;
+    private String lastName;
+    private String street;
+    private String city;
+    private String state;
+    private String postcode;
+    private String country;
+    private boolean isDefault;
 
     public AddressRequest() {
     }
 
-    public AddressRequest(long id, String firstName, String lastName, String street, String city, String state, String postcode, String country) {
+    public AddressRequest(String id, String firstName, String
+            lastName, String street, String city, String state,
+                          String postcode, String country, boolean isDefault) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,13 +26,14 @@ public class AddressRequest {
         this.state = state;
         this.postcode = postcode;
         this.country = country;
+        this.isDefault = isDefault;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -89,6 +94,14 @@ public class AddressRequest {
         this.country = country;
     }
 
+    public boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
     @Override
     public String toString() {
         return "AddressRequest{" +
@@ -99,5 +112,21 @@ public class AddressRequest {
                 ", state='" + state + '\'' +
                 ", postcode='" + postcode + '\'' +
                 '}';
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
     }
 }

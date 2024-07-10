@@ -3,6 +3,7 @@ package com.movie_service.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.movie_service.DTO.BookmarkRequest;
+import com.movie_service.DTO.Response;
 import com.movie_service.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -50,21 +51,26 @@ public class BookmarkController {
             @RequestHeader HttpHeaders headers,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
+            @RequestParam Optional<String> sortBy,
+            @RequestParam Optional<Integer> direction
     ) {
 
         String token = headers.get("authorization").get(0).split(" ")[1].trim();
         DecodedJWT jwt = JWT.decode(token);
         String subject = jwt.getSubject();
 
-        System.out.println("token: " + token);
-        System.out.println("subject: " + subject);
 
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        if (direction.isPresent()) {
+            if (direction.get() == 1) {
+                sortDirection = Sort.Direction.ASC;
+            }
+        }
 
         return new ResponseEntity<>(service.getBookmarksByUserId(subject,PageRequest.of(
                 page.orElse(0),
-                limit.orElse(10),
-                Sort.by(sortBy.orElse("year"))
+                limit.orElse(25),
+                Sort.by(sortDirection, sortBy.orElse("id"))
         )), HttpStatus.OK);
     }
 
@@ -120,7 +126,8 @@ public class BookmarkController {
             @PathVariable String id
     ) {
 
-        service.deleteBookmark(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        Response response = service.deleteBookmark(id);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

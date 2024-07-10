@@ -4,7 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import  { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import {ToastProvider} from "../contexts/ToastContext";
 import {AuthProvider} from "../contexts/AuthContext";
+import {CartProvider} from "../contexts/CartContext";
 import {SWRConfig} from "swr";
+import BookmarkProvider from "../contexts/BookmarkContext";
 
 
 export const theme = createTheme({
@@ -16,12 +18,10 @@ export const theme = createTheme({
     ].join(','),
   } ,
 
-
   palette: {
     mode: 'dark',
     background: {
-        //paper: '#121221',
-       paper: '#1a1a1a',
+        paper: '#121221',
     },
     primary: {
       light: '#757ce8',
@@ -39,8 +39,6 @@ export const theme = createTheme({
   },
 });
 
-
-
 export default function App({ Component, pageProps }: AppProps) {
 
   //@ts-ignore
@@ -49,14 +47,19 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
       <SWRConfig value={{
+        refreshInterval: 30000,
       }}>
         <AuthProvider>
-          <ToastProvider>
-            <ThemeProvider theme={theme}>
-              {getLayout(<Component {...pageProps} />)}
-            </ThemeProvider>
-          </ToastProvider>
+          <BookmarkProvider>
+            <CartProvider>
+              <ToastProvider>
+                <ThemeProvider theme={theme}>
+                  {getLayout(<Component {...pageProps} />)}
+                </ThemeProvider>
+              </ToastProvider>
+            </CartProvider>
+          </BookmarkProvider>
         </AuthProvider>
-        </SWRConfig>
+      </SWRConfig>
     )
 }

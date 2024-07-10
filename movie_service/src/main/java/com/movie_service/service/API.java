@@ -26,8 +26,8 @@ public class API { ;
         this.repository = repository;
     }
 
-    //@Value("${background_api.key}")
-    String API_KEY = "";
+    @Value("${background_api.key}")
+    String API_KEY;
 
     public int background(String movie_id)  {
         int row_ratings, row_movie = 0;
@@ -37,9 +37,10 @@ public class API { ;
             Movie movie = repository.getMovieByMovieId(movie_id).get();
 
             String movie_background = movie.getBackground();
+            String logo_type = movie.getLogo();
 
-            if (movie_background != null && movie_background.length() > 0) {
-                //return 0;
+            if (logo_type != null && logo_type.length() > 0) {
+                return 0;
             }
 
             // Create a neat value object to hold the URL
@@ -66,20 +67,26 @@ public class API { ;
             JsonObject json = new JsonParser().parse(content).getAsJsonObject();
             JsonArray data = json.get("moviebackground").getAsJsonArray();
             JsonArray posters = json.get("movieposter").getAsJsonArray();
+            JsonArray logos = json.get("hdmovielogo").getAsJsonArray();
 
             if(data.size() != 0) {
                 JsonObject object = data.get(0).getAsJsonObject();
                 JsonObject poster = posters.get(0).getAsJsonObject();
+                JsonObject logo = logos.get(0).getAsJsonObject();
 
                 JsonElement poster_url = poster.get("url");
                 JsonElement background_url = object.get("url");
+                JsonElement logo_url = logo.get("url");
 
 
                 System.out.println("URL " + background_url.getAsString());
                 System.out.println("Poster " + poster_url.getAsString());
+                System.out.println("Logo " + logo_url.getAsString());
+
 
                 movie.setBackground(background_url.getAsString());
                 movie.setPoster(poster_url.getAsString());
+                movie.setLogo(logo_url.getAsString());
 
                 repository.save(movie);
 

@@ -7,7 +7,7 @@ import {auth, axiosInstance} from "../utils/firebase";
 import {ContentType} from "./ContentType";
 import {ViewType} from "./ViewType";
 import {Review} from "../models/Review";
-import ReviewCard from "./ReviewCard";
+import ReviewCard from "./cards/ReviewCard";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useSWRInfinite from "swr/infinite";
@@ -16,6 +16,10 @@ import {CircularProgress} from "@mui/material";
 import useAuthContext from "../hooks/useAuthContext";
 import {ChevronRight} from "@mui/icons-material";
 import {ChevronLeft} from "@mui/icons-material";
+import {CriticReview} from "../models/CriticReview";
+import CriticReviewCard from "./cards/CriticReviewCard";
+import {OrderCard} from "./order/OrderCard";
+import {Order} from "../models/Order";
 
 
 type AppProps = {
@@ -31,6 +35,7 @@ let fetcher = (path: string, token: string | undefined) => {
     if (token) {
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
+
     return axiosInstance.get(path).then(res => res.data.content)
 }
 
@@ -56,7 +61,7 @@ export default function ScrollPagination({path, style, type, view, title, token}
         (...args) => getKey(...args, path, PAGE_SIZE),
         (...args) => fetcher(...args, token),
         {
-            revalidateOnFocus: false,
+           // revalidateOnFocus: false,
         }
     )
 
@@ -137,106 +142,122 @@ export default function ScrollPagination({path, style, type, view, title, token}
         <>
             {items && items.length > 0 && (
 
-                    <div
-                        className={""}
-                        style={{
-                            position: 'relative',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 1,
-                        }}
-                        onMouseEnter={() => setShow(true)}
-                        onMouseLeave={() => setShow(false)}
-                    >
-                        {view === ViewType.HORIZONTAL && (
+                <>
 
-                            <>
-                                {title && (
+                <Box
+                    sx={{
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1,
+                    }}
+                    onMouseEnter={() => setShow(true)}
+                    onMouseLeave={() => setShow(false)}
+                >
+                    {view === ViewType.HORIZONTAL && (
 
-                                    <Box className="title">
-                                        <Typography variant="h5" sx={{color: "white"}}>
-                                            {title}
-                                        </Typography>
+                        <>
+                            {title && (
+
+                                <Box className="title" sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box sx={{ width: 5, height: 24, backgroundColor: 'primary.main', borderRadius:1 }} />
+
+                                    <Typography variant="h6" sx={{ color: "white", marginLeft: 1}}>
+                                        {title}
+                                    </Typography>
+                                </Box>
+                            )}
+
+                            {scroll !== 0 && (
+                                <Box className="button-container"
+                                     sx={{left: '10px', top: '50%', opacity: show ? 0.95 : 0, transition: 'opacity 0.5s'}}>
+                                    <Box className="button" onClick={() => slide(-450)}>
+                                        <ChevronLeft fontSize={"large"} color="inherit" sx={{color: "white"}}/>
                                     </Box>
-                                )}
+                                </Box>
+                            )}
 
-                                {scroll !== 0 && (
-                                    <Box className="button-container" sx={{ left: '10px', top: '50%', opacity: show ? 1 : 0 }}>
-                                        <Box className="button" onClick={() => slide(-450)}>
-                                            <ChevronLeft fontSize={"large"} color="inherit" sx={{color:"white"}}/>
-                                        </Box>
-                                    </Box>
-                                )}
+                            <div className="container__scroll " ref={scrl} onScroll={scrollCheckHorizontal}>
 
-                                <div
+                                <Box className="container-fluid">
 
-                                    className="container__scroll " ref={scrl} onScroll={scrollCheckHorizontal}>
+                                    <Box className="row flex-row flex-nowrap gap-3">
 
-                                    <Box className="container-fluid">
-                                        <Box className="row flex-row flex-nowrap gap-3">
-
-                                            {type === ContentType.MOVIE && items.map((movie: Movie, index) => (
-                                                <Box key={index} className="col p-0" >
-                                                    <MovieCard style={style} movie={movie as Movie} />
-                                                </Box>
-                                            ))}
-
-                                            {type === ContentType.REVIEW && items.map((review: Review, index) => (
-                                                <div key={index} className="col p-0" >
-                                                    <ReviewCard review={review as Review}/>
-                                                </div>
-
-                                            ))}
-
-                                        </Box>
-                                    </Box>
-                                </div>
-
-                                {!scrollEnd
-                                    && (
-                                        <Box className="button-container" sx={{right: '10px', top: '50%', opacity: show ? 1 : 0}}>
-                                            <Box className="button" onClick={() => slide(450)}>
-                                                <ChevronRight fontSize={"large"} color="inherit" sx={{color:"white"}}/>
-                                            </Box>
-                                        </Box>
-                                    )}
-
-                            </>
-                        )}
-
-                        {view === ViewType.VERTICAL && (
-
-                            <>
-                                <Box className="container-fluid" sx={{padding: 1}}>
-                                    {isEmpty ?
-                                        <Box className="row flex-row flex-wrap g-2">
-                                            <Box className="col" >
-                                                <Typography variant="h6" component="h6" gutterBottom>
-                                                    No Content
-                                                </Typography>
-                                            </Box>
-                                        </Box> : null}
-
-                                    <Box className="row flex-row flex-wrap g-2">
-                                        {type === ContentType.MOVIE && items.map((movie: Movie) => (
-                                            <Box key={movie.id} className="col" >
-                                                <MovieCard style={style} movie={movie}/>
+                                        {type === ContentType.MOVIE && items.map((movie: Movie, index) => (
+                                            <Box key={index} className="col p-0">
+                                                <MovieCard style={style} movie={movie as Movie}/>
                                             </Box>
                                         ))}
-                                    </Box>
 
+                                        {type === ContentType.REVIEW && items.map((review: Review, index) => (
+                                            <div key={index} className="col p-0">
+                                                <ReviewCard review={review as Review}/>
+                                            </div>
+
+                                        ))}
+
+                                        {type === ContentType.CRITIC_REVIEW && items.map((review: CriticReview, index) => (
+                                            <div key={index} className="col p-0">
+                                                <CriticReviewCard review={review as CriticReview}/>
+                                            </div>
+                                        ))}
+
+                                        {type === ContentType.ORDER && items.map((order: Order, index) => (
+                                            <div key={index} className="col p-0">
+                                                <OrderCard order={order as Order}/>
+                                            </div>
+                                        ))}
+
+                                    </Box>
+                                </Box>
+                            </div>
+
+                            {!scrollEnd
+                                && (
+                                    <Box className="button-container"
+                                         sx={{right: '10px', top: '50%', opacity: show ? 0.95 : 0, transition: 'opacity 0.5s'}}>
+                                        <Box className="button" onClick={() => slide(450)}>
+                                            <ChevronRight fontSize={"large"} color="inherit" sx={{color: "white"}}/>
+                                        </Box>
+                                    </Box>
+                                )}
+
+                        </>
+                    )}
+
+                    {view === ViewType.VERTICAL && (
+
+                        <>
+                            <Box className="container-fluid">
+                                {isEmpty ?
+                                    <Box className="row flex-row flex-wrap g-2">
+                                        <Box className="col">
+                                            <Typography variant="h6" component="h6" gutterBottom>
+                                                No Content
+                                            </Typography>
+                                        </Box>
+                                    </Box> : null}
+
+                                <Box className="row flex-row flex-wrap g-4 justify-content-center">
+                                    {type === ContentType.MOVIE && items.map((movie: Movie) => (
+                                        <Box key={movie.id} className="col flex-grow-0">
+                                            <MovieCard style={style} movie={movie}/>
+                                        </Box>
+                                    ))}
                                 </Box>
 
+                            </Box>
 
-                                <div ref={ref}>
-                                    {isLoadingMore ? <CircularProgress/> : isReachingEnd ? 'Done' : ''}
-                                </div>
 
-                            </>
+                            <div ref={ref}>
+                                {isLoadingMore ? <CircularProgress/> : isReachingEnd ? 'Done' : ''}
+                            </div>
 
-                        )}
+                        </>
 
-                </div>
+                    )}
+
+                </Box></>
             )}
 
         </>

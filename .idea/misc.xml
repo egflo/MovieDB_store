@@ -17,6 +17,7 @@
         <option value="$PROJECT_DIR$/tax_service/pom.xml" />
       </list>
     </option>
+    <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-18" project-jdk-type="JavaSDK" />
   <component name="ProjectType">

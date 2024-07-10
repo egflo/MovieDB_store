@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+env.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -36,7 +38,5 @@ build/
 ### Resources ###
 src/main/resources/static/
 src/main/resources/templates/
-src/main/resources/application.properties
-src/main/resources/application.yml
 src/main/resources/service-account.json
 

@@ -1,6 +1,6 @@
 package com.order_service.repository;
 
-import com.order_service.model.Address;
+import com.order_service.model.Shipping;
 import com.order_service.model.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +19,17 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     Page<Order> findByUserId(String userId, Pageable page);
 
+    @Query("SELECT o FROM Order o JOIN o.items i WHERE LOWER(i.description) LIKE LOWER(CONCAT('%', ?1, '%')) AND o.userId = ?2")
+    Page<Order> findByUserIdAndTerm(String userId, String term, Pageable pageable);
+
     Page<Order> findById(Long orderId, PageRequest pageRequest);
 
     Page<Order> findByUserIdAndId(String userId, Long orderId, PageRequest pageRequest);
 
 
-    @Query("SELECT o FROM Order o WHERE o.address.postcode = ?1")
+    @Query("SELECT o FROM Order o WHERE o.shipping.postcode = ?1")
     Page<Order> findByPostcode(String postcode, PageRequest pageRequest);
+
+    @Query("SELECT o FROM Order o JOIN o.items i WHERE i.description = ?1 AND o.userId = ?2")
+    Page<Order> findByOrderItemDescription(String text, String userId, PageRequest pageRequest);
 }

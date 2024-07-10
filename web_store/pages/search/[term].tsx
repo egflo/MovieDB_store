@@ -4,7 +4,6 @@ import Toolbar from "../../components/search/toolbar";
 import Result from "../../components/search/result";
 import {Direction, SortBy} from "../../components/search/searchTypes";
 import Box from "@mui/material/Box";
-import nookies from "nookies";
 import React from "react";
 
 
@@ -17,20 +16,18 @@ function SearchPage({searchProps}: {searchProps: SearchProps}) {
     const [genre, setGenre] = React.useState(searchProps.genres);
     const [tag, setTag] = React.useState(searchProps.tags);
     const [total, setTotal] = React.useState(100);
-
+    const [view, setView] = React.useState(true);
 
     return (
         <Box
             sx={{
-                 display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    minHeight: '100vh',
-                    width: '100vw',
-                }}
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+            }}
         >
-            <Toolbar limit={limit} setLimit={setLimit} sort={sort} setSort={setSort} page={page} setPage={setPage} total={total}/>
-            <Result limit={limit} setLimit={setLimit} sort={sort} setSort={setSort} page={page} setPage={setPage} term={searchProps.term} genre={genre} tag={tag} setTotal={setTotal}/>
+            <Toolbar limit={limit} setLimit={setLimit} sort={sort} setSort={setSort} page={page} setPage={setPage} total={total} view={view} setView={setView}/>
+            <Result limit={limit} setLimit={setLimit} sort={sort} setSort={setSort} page={page} setPage={setPage} term={searchProps.term} genre={genre} tag={tag} setTotal={setTotal} view={view}/>
         </Box>
 
     );

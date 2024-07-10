@@ -75,6 +75,15 @@ export default function Toolbar({term, setTerm, limit, setLimit, sort, setSort, 
         }>
             <Box className="row flex-row">
                 <Box className="col visible md:invisible">
+
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <TextField
+                            id="outlined-basic"
+                            onChange={(event) => {setTerm(event.target.value)}}
+                            label="Search"
+                            variant="outlined" />
+                    </FormControl>
+
                     <FormControl sx={{ m: 1, minWidth: 200 }}>
                         <InputLabel htmlFor="grouped-select">Sort By</InputLabel>
                         <Select
@@ -88,33 +97,8 @@ export default function Toolbar({term, setTerm, limit, setLimit, sort, setSort, 
                             <MenuItem value={2}>Created: Oldest to Newest</MenuItem>
                         </Select>
                     </FormControl>
-
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel htmlFor="grouped-select">Limit By</InputLabel>
-                        <Select defaultValue="" id="limit-select" label="Limit By"
-                                onChange={(event) => {
-                                    processLimit(Number(event.target.value));
-                                } }
-                        >
-                            <MenuItem value={1}>10</MenuItem>
-                            <MenuItem value={2}>15</MenuItem>
-                            <MenuItem value={3}>20</MenuItem>
-                            <MenuItem value={4}>25</MenuItem>
-                        </Select>
-                    </FormControl>
-
-
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <TextField
-                            id="outlined-basic"
-                            onChange={(event) => {setTerm(event.target.value)}}
-                            label="Search"
-                            variant="outlined" />
-                    </FormControl>
                 </Box>
-                <div className="col" style={{display:'flex', justifyContent:"right", alignItems:"center"}}>
-                    <Pagination color="primary" count={total} page={page} onChange={handleChange} />
-                </div>
+
             </Box>
         </Box>
 

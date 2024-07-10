@@ -17,17 +17,12 @@ public class Address {
     private String state;
     private String postcode;
     private String country;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private String userId;
 
     public Address() {
     }
 
-    public Address(String firstName, String lastName, String street,
-                   String city, String state, String postcode, String country) {
+    public Address(String firstName, String lastName, String street, String city, String state, String postcode, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.street = street;
@@ -85,11 +80,11 @@ public class Address {
         this.state = state;
     }
 
-    public String getPostcode() {
+    public String getPostalCode() {
         return postcode;
     }
 
-    public void setPostcode(String zip) {
+    public void setPostalCode(String zip) {
         this.postcode = zip;
     }
 
@@ -101,8 +96,12 @@ public class Address {
         this.country = country;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

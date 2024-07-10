@@ -28,6 +28,8 @@ message ItemRequest {
 message ItemResponse {
     string id = 1;
     string sku = 2;
-    double price = 4;
+    int32 price = 4;
     int32 quantity = 5;
+    string currency = 6;
+    int32  type = 7;
 }

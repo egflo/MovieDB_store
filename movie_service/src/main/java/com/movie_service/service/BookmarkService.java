@@ -49,30 +49,37 @@ public class BookmarkService implements BookmarkServiceImp {
         Optional<Bookmark> bookmarkOptional = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(bookmark.getMovieId()), bookmark.getUserId());
 
         if (bookmarkOptional.isPresent()) {
+            // Update existing bookmark
             Bookmark newBookmark = bookmarkOptional.get();
             newBookmark.setCreated(new Date());
             return repository.save(newBookmark);
-        }
-
-        if (movie.isPresent()) {
+        } else if (movie.isPresent()) {
+            // Create new bookmark and save it
             Bookmark newBookmark = new Bookmark();
             newBookmark.setMovie(movie.get());
             newBookmark.setUserId(bookmark.getUserId());
             newBookmark.setCreated(new Date());
             return repository.save(newBookmark);
         }
-
+        // Movie not found
         throw new IdNotFoundException("Movie not found");
     }
 
     @Override
-    public void deleteBookmark(String id) {
+    public Response deleteBookmark(String id) {
         Optional<Bookmark> bookmark = repository.findById(new ObjectId(id));
+
         if (bookmark.isPresent()) {
+            Response response = new Response();
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("Bookmark deleted");
+            response.setSuccess(true);
+            response.setData(bookmark.get());
             repository.delete(bookmark.get());
-            return;
+            return  response;
         }
 
+        //return new Response(HttpStatus.NOT_FOUND, false, "Bookmark not found", null);
         throw new IdNotFoundException("Bookmark not found");
 
     }
@@ -112,7 +119,7 @@ public class BookmarkService implements BookmarkServiceImp {
             return bookmark.get();
         }
 
-        throw new IdNotFoundException("Bookmark not found");
+        return null;
     }
 
     public Optional<Bookmark> getBookmarkByMovieIdAndUserId(String movieId, String userId) {

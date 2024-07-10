@@ -7,7 +7,7 @@ public class CartItemDTO {
     String itemId;
     String userId;
     Integer quantity;
-    Double price;
+    Integer price;
 
     String name;
     String description;
@@ -58,11 +58,11 @@ public class CartItemDTO {
         this.quantity = quantity;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

@@ -4,8 +4,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/${MYSQL_DATABASE:InventoryDB}
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    username: ${MYSQL_USER:admin}
+    password: ${MYSQL_PASSWORD:admin}
   jpa:
     hibernate:
       ddl-auto: update

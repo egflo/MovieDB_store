@@ -3,4 +3,8 @@ export interface Item {
     sku: string;
     price: number;
     quantity: number;
+    description: string;
+    image: string;
+    name: string;
+    userId: string;
 }

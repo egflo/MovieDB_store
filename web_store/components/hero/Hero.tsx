@@ -1,10 +1,9 @@
 import Box from "@mui/material/Box";
-
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const movies = ["tt0468569", "tt4154756", "tt1375666","tt2488496"];
-const delay = 2500;
-
-//Hero
+const delay = 4000;
 import React, {useEffect} from "react";
 import {HeroItem} from "./Hero-Item";
 
@@ -20,18 +19,18 @@ export const Hero = () => {
 
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
-        //resetTimeout();
+        resetTimeout();
         // @ts-ignore
-        //timeoutRef.current = setTimeout(
-            //() =>
-             //  setIndex((prevIndex) =>
-              //      prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-              //  ),
-           // delay
-        //);
+        timeoutRef.current = setTimeout(
+            () =>
+               setIndex((prevIndex) =>
+                    prevIndex === movies.length - 1 ? 0 : prevIndex + 1
+                ),
+            delay
+        );
 
         return () => {
-            //resetTimeout();
+            resetTimeout();
         };
     }, [index]);
 
@@ -47,7 +46,7 @@ export const Hero = () => {
                 {movies.map((movie, i) => (
                     <Box
                         key={movie}
-                           className="h-full w-full absolute top-0 left-0 transition ease-in-out"
+                           className="h-full w-full absolute top-0 left-0 transition ease-in-out duration-1000"
                             style={{opacity: i === index ? 1 : 0}}
                     >
                         <HeroItem id={movie} />
@@ -69,7 +68,6 @@ export const Hero = () => {
             </div>
 
 
-            <Box className="absolute bottom-0 w-full h-full bg-gradient-to-t from-343 to-transparent" />
 
         </Box>
   );

@@ -37,7 +37,7 @@ export const HeroItem = (props: HeroItemProps) => {
                             className="object-cover w-full h-full" />
 
 
-                    <Box className="absolute bottom-0 w-full h-full bg-gradient-to-t from-zinc-900 to-transparent" />
+                    <Box className="absolute bottom-0 w-full h-full bg-gradient-to-t from-black to-transparent" />
 
 
                     <Box className="absolute top-0 left-0 w-full h-full m-4 flex flex-col justify-content-center items-start sm:display-none">

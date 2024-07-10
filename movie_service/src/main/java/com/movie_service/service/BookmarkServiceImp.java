@@ -1,6 +1,7 @@
 package com.movie_service.service;
 
 import com.movie_service.DTO.BookmarkRequest;
+import com.movie_service.DTO.Response;
 import com.movie_service.models.Bookmark;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ public interface BookmarkServiceImp {
 
     Bookmark addBookmark(BookmarkRequest bookmark);
 
-    void deleteBookmark(String id);
+    Response deleteBookmark(String id);
 
     Page<Bookmark> getBookmarksByMovieId(String movieId, Pageable pageable);
 

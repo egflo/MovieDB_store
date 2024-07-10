@@ -59,6 +59,8 @@ public class SentimentService implements SentimentServiceImp {
             //String to Enum
             Status status = conversionService.convert(request.getStatus(), Status.class);
             sentiment1.setStatus(status);
+
+
             return repository.save(sentiment1);
         }
 

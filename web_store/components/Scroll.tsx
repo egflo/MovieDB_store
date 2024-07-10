@@ -56,8 +56,10 @@ export default function Scroll({title, children}: { title?: String, children: an
             >
                 {title && (
 
-                    <Box className="title">
-                        <Typography variant="h5" sx={{color: "white"}}>
+                    <Box className="title" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ width: 5, height: 24, backgroundColor: 'primary.main', borderRadius:1 }} />
+
+                        <Typography variant="h6" sx={{ color: "white", marginLeft: 1}}>
                             {title}
                         </Typography>
                     </Box>

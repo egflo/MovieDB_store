@@ -1,1 +1,80 @@
-
+services:
+  gateway:
+    image: gateway:latest
+    container_name: gateway
+    ports:
+      - "8760:8760"
+    networks:
+      - eureka-net
+    restart: always
+    environment:
+      EUREKA_URI: http://eureka-server:8761/eureka
+  eureka-server:
+    image: eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - eureka-net
+    restart: always
+  movie-service:
+    image: movie-service:latest
+    container_name: movie-service
+    ports:
+      - "9090:9090"
+      - "8080:8080"
+    networks:
+      - eureka-net
+    restart: always
+    environment:
+      MONGO_DB: moviedb
+      MONGO_URI: mongodb://localhost:27017
+      EUREKA_URI: http://eureka-server:8761/eureka
+  inventory-service:
+    image: inventory-service:latest
+    container_name: inventory-service
+    ports:
+      - "9091:9090"
+      - "8081:8080"
+    networks:
+      - eureka-net
+    restart: always
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_DATABASE: InventoryDB
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      EUREKA_URI: http://eureka-server:8761/eureka
+  order-service:
+    image: order-service:latest
+    container_name: order-service
+    ports:
+      - "9092:9090"
+      - "8082:8080"
+    networks:
+      - eureka-net
+    restart: always
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: OrderDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      EUREKA_URI: http://eureka-server:8761/eureka
+  tax-service:
+    image: tax-service:latest
+    container_name: tax-service
+    ports:
+      - "9093:9090"
+      - "8083:8080"
+    networks:
+      - eureka-net
+    restart: always
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: TaxDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      EUREKA_URI: http://eureka-server:8761/eureka
+networks:
+  eureka-net:
+    driver: bridge

@@ -1,25 +1,10 @@
 import {Movie} from "../../models/Movie";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import {
-    ShoppingBagOutlined,
-    FavoriteBorderOutlined,
-    Info,
-    ThumbDownAltOutlined,
-    ThumbUpOffAltOutlined, Remove, ShoppingBag
-} from "@mui/icons-material";
 import * as React from "react";
 import {useRouter} from "next/router";
 import {useEffect, useRef, useState} from "react";
-import IconButton from "@mui/material/IconButton";
-import {Chip} from "@mui/material";
-import {ToastType} from "../Toast";
-import {auth, axiosInstance} from "../../utils/firebase";
-import useToastContext from "../../hooks/useToastContext";
-import useAuthContext from "../../hooks/useAuthContext";
-import {AxiosResponse} from "axios";
-import {Bookmark} from "../../models/Bookmark";
 import {DetailedCard} from "../cards/DetailedCard";
+import VerticalCard from "../cards/VerticalCard";
 
 interface CarouselItemProps {
     movie: Movie;
@@ -47,14 +32,16 @@ export const CarouselItem = (props: CarouselItemProps) => {
     // @ts-ignore
     return (
 
-        <Box
-            onMouseEnter={() => props.setHide(true)}
-            onMouseLeave={() => props.setHide(false)}
-            className={"group relative bg-zinc-900  w-[40vw] md:w-[18vw] md:max-w-[18vw] ]"}
-
-        >
-
-            <DetailedCard movie={movie} />
+        <Box className="carousel-container">
+            <Box className="flex justify-between items-center px-4 py-1">
+                <Box
+                    onMouseEnter={() => props.setHide(true)}
+                    onMouseLeave={() => props.setHide(false)}
+                    className={"mr-2"}
+                >
+                    <VerticalCard movie={movie} />
+                 </Box>
+            </Box>
         </Box>
 
 

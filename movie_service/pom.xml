@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.github.egflo</groupId>
             <artifactId>interface_grpc</artifactId>
-            <version>v1.2.10</version>
+            <version>1.2.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-starter -->
         <dependency>

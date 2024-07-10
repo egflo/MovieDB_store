@@ -1,53 +1,65 @@
 package com.order_service.dto;
 
+
+import com.order_service.model.UserAddress;
+import com.order_service.request.AddressRequest;
+
 public class AddressDTO {
-    Long id;
-    private String userId;
-    private Long orderId;
+    private String id;
     private String firstName;
     private String lastName;
     private String street;
     private String city;
     private String state;
     private String postcode;
+    private String country;
+    private boolean isDefault;
+
 
     public AddressDTO() {
     }
 
-    public AddressDTO(Long id, String userId, Long orderId, String firstName, String lastName, String street, String city, String state, String postcode) {
-        this.id = id;
-        this.userId = userId;
-        this.orderId = orderId;
+    public AddressDTO(UserAddress address) {
+        this.firstName = address.getFirstName();
+        this.lastName = address.getLastName();
+        this.street = address.getStreet();
+        this.city = address.getCity();
+        this.state = address.getState();
+        this.postcode = address.getPostcode();
+        this.country = address.getCountry();
+        this.isDefault = address.getIsDefault();
+    }
+
+    public AddressDTO(AddressRequest request) {
+        this.id = request.getId();
+        this.firstName = request.getFirstName();
+        this.lastName = request.getLastName();
+        this.street = request.getStreet();
+        this.city = request.getCity();
+        this.state = request.getState();
+        this.postcode = request.getPostcode();
+        this.country = request.getCountry();
+        this.isDefault = request.getIsDefault();
+    }
+
+    public AddressDTO(String firstName, String lastName, String street, String city, String state,
+                      String postcode, String country, boolean isDefault) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.street = street;
         this.city = city;
         this.state = state;
         this.postcode = postcode;
+        this.country = country;
+        this.isDefault = isDefault;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public String getFirstName() {
@@ -90,12 +102,29 @@ public class AddressDTO {
         this.state = state;
     }
 
-    public String getPostcode() {
+    public String getPostalCode() {
         return postcode;
     }
 
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
+    public void setPostalCode(String zip) {
+        this.postcode = zip;
     }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public boolean getisDefault() {
+        return isDefault;
+    }
+
+    public void setisDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
 
 }

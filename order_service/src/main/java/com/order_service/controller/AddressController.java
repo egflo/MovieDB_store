@@ -1,7 +1,8 @@
 package com.order_service.controller;
 
 import com.order_service.dto.AddressDTO;
-import com.order_service.service.AddressService;
+import com.order_service.service.ShippingService;
+import com.order_service.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class AddressController {
 
     @Autowired
-    private AddressService addressService;
+    private ShippingService addressService;
 
 
     @GetMapping("/{id}")

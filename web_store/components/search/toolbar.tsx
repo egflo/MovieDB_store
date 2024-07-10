@@ -1,14 +1,11 @@
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import {Pagination, TextField} from "@mui/material";
 import {Direction, Sort, SortBy} from "./searchTypes";
-import {TablePagination} from "@mui/material";
 import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
 import {ArrowDownward, ExpandLess, ExpandMore} from "@mui/icons-material";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import GridOnIcon from '@mui/icons-material/GridOn';
+
 
 type ToolbarProps = {
     limit: number;
@@ -20,7 +17,34 @@ type ToolbarProps = {
     page: number;
     setPage: (page: number) => void;
 
+    view: boolean;
+    setView: (view: boolean) => void;
+
     total: number;
+
+}
+
+const CardViewButton = ({view, onView}: {view: boolean, onView: (view: boolean) => void}) => {
+    //Let the user switch between card and list view
+    //Material UI Icons
+
+    const handleView = () => {
+        onView(!view);
+    }
+
+    return (
+        <div className="group relative flex flex-col">
+            <button onClick={handleView}
+                    className={"rounded px-4 py-2 m-2 hover:bg-gray-500 text-white"}>
+                <div className="flex flex-row gap-2 align-content-center justify-center">
+                    <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, fontWeight: "bold" }}>
+                        {view ?   <FormatListBulletedIcon fontSize={"small"}/> : <GridOnIcon fontSize={"small"}/>}
+                    </Typography>
+                </div>
+            </button>
+        </div>
+    );
+
 }
 
 // @ts-ignore
@@ -34,12 +58,10 @@ const SortButton = ({ sortOptions, defaultSort, onSort }) => {
         onSort(option);
     };
 
-    //border-2 border-gray-500 rounded-full
-
     return (
-        <div className="group relative">
+        <div className="group relative flex flex-col">
 
-            <button onClick={() => setShowOptions(!showOptions)} className={"border-2 border-gray-500 rounded-full px-4 py-2 m-2 hover:bg-gray-500 text-white"}>
+            <button onClick={() => setShowOptions(!showOptions)} className={" rounded px-4 py-2 m-2 hover:bg-gray-500 text-white"}>
                 <div className="flex flex-row gap-2 align-content-center justify-center">
                     <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, fontWeight: "bold" }}>
                         Sort By:
@@ -75,7 +97,8 @@ const SortButton = ({ sortOptions, defaultSort, onSort }) => {
     );
 };
 
-export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, total}: ToolbarProps) {
+export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, total, view, setView}: ToolbarProps) {
+
     function processLimit(limit: number) {
         switch (limit) {
             case 0:
@@ -131,13 +154,16 @@ export default function Toolbar({limit, setLimit, sort, setSort, page, setPage, 
 
     return (
         <Box
-            className={"flex flex-row justify-between items-center"}
-
-            sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: "sticky", postion: "-webkit-sticky"}}>
+            className={"flex flex-row justify-between items-center "}>
             <SortButton
                 sortOptions={options}
                 defaultSort={options[0]}
                 onSort={handleSort}
+            />
+
+            <CardViewButton
+                view={view}
+                onView={setView}
             />
 
         </Box>

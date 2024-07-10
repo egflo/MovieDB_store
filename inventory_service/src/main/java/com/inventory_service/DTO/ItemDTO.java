@@ -1,24 +1,28 @@
 package com.inventory_service.DTO;
 
+import java.util.Date;
+
 public class ItemDTO {
     String id;
     String SKU;
-    Double price;
+    Integer price;
     Integer quantity;
     String status;
-    String created;
+    Date updated;
+    String currency;
 
 
     public ItemDTO() {
     }
 
-    public ItemDTO(String id, String SKU, Double price, Integer quantity, String status, String created) {
+    public ItemDTO(String id, String SKU, Integer price, Integer quantity, String status, Date updated, String currency) {
         this.id = id;
         this.SKU = SKU;
         this.price = price;
         this.quantity = quantity;
         this.status = status;
-        this.created = created;
+        this.updated = updated;
+        this.currency = currency;
     }
 
     public String getId() {
@@ -37,11 +41,11 @@ public class ItemDTO {
         this.SKU = SKU;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -61,12 +65,20 @@ public class ItemDTO {
         this.status = status;
     }
 
-    public String getCreated() {
-        return created;
+    public String getUpdate() {
+        return updated.toString();
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public void setUpdate(Date created) {
+        this.updated = created;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     @Override
@@ -77,7 +89,15 @@ public class ItemDTO {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", status='" + status + '\'' +
-                ", created='" + created + '\'' +
+                ", created='" + updated + '\'' +
                 '}';
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }

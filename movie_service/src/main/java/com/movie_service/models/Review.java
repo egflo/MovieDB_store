@@ -12,7 +12,6 @@ public class Review {
     @Id
     private ObjectId id;
 
-
     @Field("movie_id")
     private String movieId;
 

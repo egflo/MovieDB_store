@@ -1,12 +1,14 @@
 server:
   port: 8760
 spring:
+  config:
+    import: file:env.properties
   security:
       oauth2:
         resourceserver:
           jwt:
-            jwk-set-uri:
-            issuer-uri:
+            jwk-set-uri: ${JWK_SET_URI}
+            issuer-uri: ${ISSUR_URI}
 
   application:
     name: gateway

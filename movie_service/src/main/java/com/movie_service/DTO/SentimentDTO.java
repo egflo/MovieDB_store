@@ -20,7 +20,7 @@ public class SentimentDTO {
     private Status status;
 
     public SentimentDTO(Sentiment sentiment) {
-        this.id = sentiment.getId().toHexString();
+        this.id = sentiment.getId();
         this.userId = sentiment.getUserId();
         this.objectId = sentiment.getObjectId();
         this.created = sentiment.getCreated();

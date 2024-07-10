@@ -7,14 +7,12 @@ import com.stripe.model.StripeError;
 
 public class PaymentIntentDTO {
     private PaymentIntent paymentIntent;
-    private StripeException stripeError;
 
     public PaymentIntentDTO() {
     }
 
-    public PaymentIntentDTO(PaymentIntent paymentIntent, StripeException stripeError) {
+    public PaymentIntentDTO(PaymentIntent paymentIntent) {
         this.paymentIntent = paymentIntent;
-        this.stripeError = stripeError;
     }
 
     public PaymentIntent getPaymentIntent() {
@@ -25,19 +23,12 @@ public class PaymentIntentDTO {
         this.paymentIntent = paymentIntent;
     }
 
-    public StripeException getStripeError() {
-        return stripeError;
-    }
-
-    public void setStripeError(StripeException stripeError) {
-        this.stripeError = stripeError;
-    }
 
     @Override
     public String toString() {
         return "PaymentIntentDTO{" +
                 "paymentIntent=" + paymentIntent +
-                ", stripeError=" + stripeError +
+                 +
                 '}';
     }
 

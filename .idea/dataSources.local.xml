@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-223.8836.41">
+  <component name="dataSourceStorageLocal" created-in="IU-241.18034.62">
     <data-source name="@mongodb" uuid="78397c7c-065a-4fc3-93c4-c693abf6c007">
-      <database-info product="Mongo DB" version="6.0.1" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.17" dbms="MONGO" exact-version="6.0.1" exact-driver-version="1.17" />
+      <database-info product="Mongo DB" version="6.0.1" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.18" dbms="MONGO" exact-version="6.0.1" exact-driver-version="1.18" />
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
       <secret-storage>master_key</secret-storage>
       <schema-mapping>
@@ -12,29 +12,31 @@
       </schema-mapping>
     </data-source>
     <data-source name="@mysql" uuid="d654d71e-60ea-4cf6-86e1-7d86068e8d57">
-      <database-info product="MySQL" version="8.0.32" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-java-8.0.25 (Revision: 08be9e9b4cba6aa115f9b27b215887af40b159e0)" dbms="MYSQL" exact-version="8.0.32" exact-driver-version="8.0">
+      <database-info product="MySQL" version="8.3.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-java-8.0.25 (Revision: 08be9e9b4cba6aa115f9b27b215887af40b159e0)" dbms="MYSQL" exact-version="8.3.0" exact-driver-version="8.0">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
       <secret-storage>master_key</secret-storage>
-      <user-name>egflo</user-name>
+      <user-name>mysql</user-name>
       <schema-mapping>
         <introspection-scope>
           <node kind="schema">
+            <name qname="@" />
             <name qname="InventoryDB" />
-            <name qname="information_schema" />
+            <name qname="reviewdb" />
+            <name qname="inventorydb" />
           </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="postgres@localhost" uuid="ee24ba39-7a05-4d72-94d0-b9fc165f87cf">
-      <database-info product="PostgreSQL" version="14.6 (Homebrew)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.5.0" dbms="POSTGRES" exact-version="14.6" exact-driver-version="42.5">
+    <data-source name="@localhost" uuid="ee24ba39-7a05-4d72-94d0-b9fc165f87cf">
+      <database-info product="PostgreSQL" version="14.6 (Homebrew)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.6.0" dbms="POSTGRES" exact-version="14.6" exact-driver-version="42.6">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>egflo</user-name>
+      <user-name>postgres</user-name>
       <schema-mapping>
         <introspection-scope>
           <node negative="1">
@@ -44,9 +46,30 @@
             <node kind="database" qname="OrderDB">
               <node kind="schema" qname="public" />
             </node>
+            <node kind="database" qname="TaxDB">
+              <node kind="schema" negative="1" />
+            </node>
           </node>
         </introspection-scope>
       </schema-mapping>
+    </data-source>
+    <data-source name="@atlas" uuid="da4a612c-48f7-4311-81b3-fa6b7629f2c3">
+      <database-info product="Mongo DB" version="6.3.0" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.18" dbms="MONGO" exact-version="6.3.0" exact-driver-version="1.18" />
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>egflo</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="MovieDB" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="moviedb@localhost" uuid="838619ca-60b0-48c9-bf5a-8454c214d1de">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MONGO" />
+      <schema-mapping />
     </data-source>
   </component>
 </project>

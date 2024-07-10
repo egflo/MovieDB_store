@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 
-
-
 @Entity
 @Table(name = "item")
 public class Item {
@@ -16,7 +14,10 @@ public class Item {
     private String id;
 
     @Column(name = "price")
-    private Double price;
+    private Integer price;
+
+    @Column(name ="currency")
+    private String currency;
 
     @Column(name = "SKU")
     private String SKU;
@@ -37,16 +38,16 @@ public class Item {
     public Item() {
     }
 
-    public Item(String id, Double price, int quantity, Type type, String SKU, Status status
-            , Date created, Date updated) {
+    public Item(String id, Integer price, String currency, String SKU, int quantity, Status status, Date created, Date updated, Type type) {
         this.id = id;
         this.price = price;
-        this.quantity = quantity;
-        //this.type = type;
+        this.currency = currency;
         this.SKU = SKU;
+        this.quantity = quantity;
         this.status = status;
         this.created = created;
         this.updated = updated;
+        this.type = type;
     }
 
     public String getId() {
@@ -57,14 +58,21 @@ public class Item {
         this.id = id;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
     public int getQuantity() {
         return quantity;

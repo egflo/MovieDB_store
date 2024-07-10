@@ -1,14 +1,23 @@
+app:
+  firebase:
+    path: ${FIREBASE_PATH}
+    db_url: ${FIREBASE_DB_URL}
+    project_id: ${FIREBASE_PROJECT_ID}
+
 spring:
+  config:
+    import: file:env.properties
   application:
     name: ${EUREKA_INSTANCE_HOSTNAME:order-service}
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DB:OrderDB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${POSTGRES_DB:OrderDB}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
   jpa:
-      hibernate:
-          ddl-auto: update
-      show-sql: true
+    hibernate:
+        ddl-auto: update
+    show-sql: true
+    database: postgresql
 
 server:
   port: ${SERVER_PORT:8081}

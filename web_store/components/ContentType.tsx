@@ -1,5 +1,7 @@
 export enum ContentType {
     MOVIE,
     BOOKMARK,
-    REVIEW
+    REVIEW,
+    CRITIC_REVIEW,
+    ORDER
 }

@@ -40,6 +40,7 @@ public class ItemServiceImp extends ItemServiceGrpc.ItemServiceImplBase {
                 .setSku(item.get().getSKU())
                 .setPrice(item.get().getPrice())
                 .setQuantity(item.get().getQuantity())
+                .setCurrency(item.get().getCurrency())
                 .build();
 
         responseObserver.onNext(response);

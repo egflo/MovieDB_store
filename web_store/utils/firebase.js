@@ -1,11 +1,7 @@
 
-import { getAnalytics } from "firebase/analytics";
 import axios from "axios";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import useToastContext from "../hooks/useToastContext";
-import {ToastType} from "../components/Toast";
-
 import {
     GoogleAuthProvider,
     getAuth,
@@ -17,8 +13,6 @@ import {
     signOut,
 } from "firebase/auth";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -127,27 +121,9 @@ export function signInWithGoogle() {
     });
 }
 
-export function signInWithEmail(email, password) {
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            console.log(user);
-            // ...
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
-}
 
-export function signOutUser() {
-    signOut(auth).then(() => {
-        // Sign-out successful.
-    }).catch((error) => {
-        // An error happened.
-    });
-}
+export {signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup };
+
 
 export function isUserLoggedIn() {
     return auth.currentUser;

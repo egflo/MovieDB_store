@@ -34,7 +34,7 @@
         total: number;
         created: number;
         updated: number;
-        address: Address;
+        shipping: Address;
         items: Item[];
     }
 

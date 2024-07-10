@@ -2,6 +2,7 @@ package com.inventory_service.service_grpc;
 
 
 import com.inventory_service.model.Cart;
+import com.inventory_service.model.Item;
 import com.inventory_service.repository.CartRepository;
 import com.inventory_service.repository.ItemRepository;
 import io.grpc.stub.StreamObserver;
@@ -14,6 +15,7 @@ import org.proto.grpc.MovieResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @GrpcService
 public class CartServiceImp extends CartServiceGrpc.CartServiceImplBase {
@@ -41,13 +43,18 @@ public class CartServiceImp extends CartServiceGrpc.CartServiceImplBase {
         for(Cart cart : carts) {
 
             MovieResponse movieResponse = movieService.getMovie(cart.getItemId());
+            Optional<Item> itemOptional = itemRepository.findItemById(cart.getItemId());
+            if(itemOptional.isEmpty()) {
+                continue;
+            }
 
             CartItem item = CartItem.newBuilder()
                     .setId(cart.getId())
                     .setUserId(cart.getUserId())
                     .setItemId(cart.getItemId())
                     .setQuantity(cart.getQuantity())
-                    .setPrice(itemRepository.findItemById(cart.getItemId()).get().getPrice())
+                    .setPrice(itemOptional.get().getPrice())
+                    .setCurrency(itemOptional.get().getCurrency())
                     .setName(movieResponse.getTitle())
                     .setDescription(movieResponse.getTitle())
                     .setImage(movieResponse.getPoster())

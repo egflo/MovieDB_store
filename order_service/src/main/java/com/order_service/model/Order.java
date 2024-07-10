@@ -31,11 +31,12 @@ public class Order {
 
     private Status status;
 
-    private Double subTotal;
 
-    private Double tax;
+    private Long subTotal;
 
-    private Double total;
+    private Long tax;
+
+    private Long total;
 
     private Date created;
 
@@ -43,7 +44,7 @@ public class Order {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "order")
     @PrimaryKeyJoinColumn
-    private Address address;
+    private Shipping shipping;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
@@ -54,7 +55,7 @@ public class Order {
         this.items = new HashSet<>();
     }
 
-    public Order(String userId, Status status, Double subTotal, Double tax, Double total, Date createdAt, Date updatedAt) {
+    public Order(String userId, Status status, Long subTotal, Long tax, Long total, Date createdAt, Date updatedAt) {
         this.userId = userId;
         this.status = status;
         this.subTotal = subTotal;
@@ -98,27 +99,27 @@ public class Order {
         this.status = status;
     }
 
-    public Double getSubTotal() {
+    public Long getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(Double subTotal) {
+    public void setSubTotal(Long subTotal) {
         this.subTotal = subTotal;
     }
 
-    public Double getTax() {
+    public Long getTax() {
         return tax;
     }
 
-    public void setTax(Double tax) {
+    public void setTax(Long tax) {
         this.tax = tax;
     }
 
-    public Double getTotal() {
+    public Long getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(Long total) {
         this.total = total;
     }
 
@@ -138,12 +139,12 @@ public class Order {
         this.updated = updatedAt;
     }
 
-    public Address getAddress() {
-        return address;
+    public Shipping getShipping() {
+        return shipping;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setShipping(Shipping shipping) {
+        this.shipping = shipping;
     }
 
     public Set<OrderItem> getItems() {
@@ -164,13 +165,13 @@ public class Order {
         item.setOrder(null);
     }
 
-    public void addAddress(Address address) {
-        this.address = address;
+    public void addShipping(Shipping address) {
+        this.shipping = address;
         address.setOrder(this);
     }
 
-    public void removeAddress(Address address) {
-        this.address = null;
+    public void removeShipping(Shipping address) {
+        this.shipping = null;
         address.setOrder(null);
     }
 
@@ -200,7 +201,7 @@ public class Order {
     }
 
     public String toString() {
-        return "Order [id=" + id + ", userId=" + userId + ", status=" + status + ", subTotal=" + subTotal + ", tax=" + tax + ", total=" + total + ", created=" + created + ", updated=" + updated + ", address=" + address + ", items=" + items + "]";
+        return "Order [id=" + id + ", userId=" + userId + ", status=" + status + ", subTotal=" + subTotal + ", tax=" + tax + ", total=" + total + ", created=" + created + ", updated=" + updated + ", address=" + shipping + ", items=" + items + "]";
     }
 
 

@@ -3,6 +3,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 import {auth} from "../../utils/firebase";
 import React from "react";
 import {useRouter} from "next/router";
@@ -21,12 +22,12 @@ export default function NavigationActionItems() {
 
     const handleFavoritesClick = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        router.push('/favorites')
+        router.push('/user/favorites')
     }
 
     const handleAccountClick = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        router.push('/user')
+        router.push('/user/info')
     }
 
     const handleCartClick = (e: { preventDefault: () => void; }) => {
@@ -61,7 +62,7 @@ export default function NavigationActionItems() {
                     sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
                 >
                     <div className={'flex flex-row align-middle gap-2'}>
-                        <AccountCircleOutlined fontSize={'medium'}/>
+                        <AccountCircleOutlined fontSize={'medium'} className={"blue-500"}/>
                         <div className={'block md:hidden'}>
                             <Typography variant="subtitle1">
                                 Account
@@ -108,7 +109,24 @@ export default function NavigationActionItems() {
     return (
         <>
             <Nav.Item>
-            <Login></Login>
+                <IconButton
+                    onClick={() => router.push('/login')}
+                    size="large"
+                    edge="end"
+                    color="inherit"
+                    aria-label="Login"
+                    sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
+                >
+                    <div className={'flex flex-row align-middle gap-2'}>
+                        <LoginIcon fontSize={'medium'}/>
+                        <div className={'block md:hidden'}>
+                            <Typography variant="subtitle1">
+                                Login
+                            </Typography>
+                        </div>
+                    </div>
+                </IconButton>
+
             </Nav.Item>
         </>
     );

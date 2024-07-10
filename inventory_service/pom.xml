@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.github.egflo</groupId>
             <artifactId>interface_grpc</artifactId>
-            <version>v1.2.7</version>
+            <version>1.2.14</version>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>

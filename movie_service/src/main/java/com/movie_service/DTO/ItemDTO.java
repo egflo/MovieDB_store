@@ -6,21 +6,16 @@ import org.proto.grpc.ItemResponse;
 public class ItemDTO {
     String id;
     String sku;
-    Double price;
+    Integer price;
     Integer quantity;
-
-    public ItemDTO(String id, String sku, Double price, Integer quantity) {
-        this.id = id;
-        this.sku = sku;
-        this.price = price;
-        this.quantity = quantity;
-    }
+    String currency;
 
     public ItemDTO(ItemResponse itemResponse) {
         this.id = itemResponse.getId();
         this.sku = itemResponse.getSku();
         this.price = itemResponse.getPrice();
         this.quantity = itemResponse.getQuantity();
+        this.currency = itemResponse.getCurrency();
     }
 
     public String getId() {
@@ -39,11 +34,11 @@ public class ItemDTO {
         this.sku = sku;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -53,6 +48,14 @@ public class ItemDTO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 
     @Override

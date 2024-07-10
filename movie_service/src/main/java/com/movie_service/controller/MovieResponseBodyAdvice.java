@@ -63,6 +63,10 @@ public class MovieResponseBodyAdvice  implements ResponseBodyAdvice<Object> {
         //if Movie inject inventory
         if (body instanceof Movie) {
             Movie movie = (Movie) body;
+
+
+
+
             ItemResponse item = inventoryService.getItem(movie.getId());
             ItemDTO itemDTO = new ItemDTO(item);
             MovieDTO movieDTO = new MovieDTO(movie);
@@ -107,6 +111,7 @@ public class MovieResponseBodyAdvice  implements ResponseBodyAdvice<Object> {
         //if Page<Movie> inject inventory
         if (body instanceof Page) {
 
+
             //If Page<Movie> inject inventory
             Page<Movie> movies = (Page<Movie>) body;
 
@@ -114,6 +119,18 @@ public class MovieResponseBodyAdvice  implements ResponseBodyAdvice<Object> {
             List<MovieDTO> content = new ArrayList<>();
 
             for (Movie movie : movies) {
+
+                //if movie doesn't have item, skip or else inject item
+                //if movie doesn't have a title, skip
+                if(movie.getTitle() == null){
+                    continue;
+                }
+
+                if(movie.getTitle().isEmpty()){
+                    continue;
+                }
+
+
                 ItemResponse item = inventoryService.getItem(movie.getId());
                 ItemDTO itemDTO = new ItemDTO(item);
 

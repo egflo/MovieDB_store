@@ -59,18 +59,25 @@ public class CartService implements CartServiceImp {
         System.out.println("CartDTO: " + request.toString());
 
         Optional<Cart> cart = cartRepository.findByItemIdAndUserId(request.getItemId(), request.getUserId());
+        //boolean inventory = itemService.inventoryUpdate(request.getItemId(), request.getQuantity());
 
-        boolean inventory = itemService.inventoryUpdate(request.getItemId(), request.getQuantity());
-        if(!inventory){
-            throw new InventoryException("Not enough inventory");
+        //if(!inventory){
+         //   throw new InventoryException("Not enough inventory");
+        //}
+
+        //MAXIMUM QUANTITY
+        if(request.getQuantity() > 4){
+            throw new InventoryException("Maximum quantity is 4");
         }
 
         if(cart.isPresent()){
-            cart.get().setQuantity(cart.get().getQuantity() + request.getQuantity());
-            cart.get().setUpdated(new Date());
-            Cart update = cartRepository.save(cart.get());
-            return update;
+            //Update
+            Cart updateCart = cart.get();
+            updateCart.setQuantity(request.getQuantity());
+            updateCart.setUpdated(new Date());
+            return cartRepository.save(updateCart);
         }
+
 
         Cart newCart = new Cart();
         newCart.setItemId(request.getItemId());
@@ -78,8 +85,7 @@ public class CartService implements CartServiceImp {
         newCart.setQuantity(request.getQuantity());
         newCart.setCreated(new Date());
         newCart.setUpdated(new Date());
-        Cart save = cartRepository.save(newCart);
-        return save;
+        return cartRepository.save(newCart);
 
     }
 

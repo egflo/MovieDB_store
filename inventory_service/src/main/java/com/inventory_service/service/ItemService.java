@@ -36,21 +36,50 @@ public class ItemService implements ItemServiceImp {
             if(item.getStatus().equals(Status.OUT_OF_STOCK)){
                 return false;
             }
-            if(item.getQuantity() >= quantity){
-                item.setQuantity(item.getQuantity() - quantity);
-                itemRepository.save(item);
+
+            //Update inventory
+            //Check if quantity is available
+            //If available, update inventory
+            //If not available, return false
+            //If quantity is 0, update status to OUT_OF_STOCK
+            //If quantity is less than 10, update status to LIMITED
+            //Save item
+
+            //if quuantity is greater than or equal to the requested quantity
+
+            if(item.getQuantity() >= quantity && item.getStatus().equals(Status.IN_STOCK) || item.getStatus().equals(Status.LIMITED)){
+
+                int newQuantity = item.getQuantity() - quantity;
+
+                //if quantity is less than 0, return false
+                if(newQuantity < 0){
+                    return false;
+                }
+
+                item.setQuantity(newQuantity);
+                item = itemRepository.save(item);
 
                 //TODO: send message to kafka
                 //Update inventory status
+
+                //If quantity is 0, update status to OUT_OF_STOCK
                 if(item.getQuantity() == 0){
                     item.setStatus(Status.OUT_OF_STOCK);
                     itemRepository.save(item);
                 }
 
-                if(item.getQuantity() < 10){
+                //If quantity is less than 10, update status to LIMITED
+                //Save item
+                else if(item.getQuantity() < 10){
                     item.setStatus(Status.LIMITED);
                     itemRepository.save(item);
                 }
+
+                else {
+                    item.setStatus(Status.IN_STOCK);
+                    itemRepository.save(item);
+                }
+
                 return true;
             }
         }
@@ -73,6 +102,8 @@ public class ItemService implements ItemServiceImp {
         item.setId(request.getId());
         item.setQuantity(request.getQuantity());
         item.setPrice(request.getPrice());
+        item.setStatus(Status.IN_STOCK);
+        item.setCurrency(request.getCurrency());
         item.setCreated(new Date());
         item.setUpdated(new Date());
 

@@ -4,7 +4,7 @@ package com.inventory_service.DTO;
 import com.inventory_service.model.Cart;
 
 public class CartResponse extends CartDTO {
-    Double price;
+    Integer price;
     MovieDTO movie;
 
 
@@ -12,11 +12,11 @@ public class CartResponse extends CartDTO {
         super(cart);
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

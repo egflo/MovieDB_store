@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.concurrent.TimeoutException;
+@ControllerAdvice
 
 public class ControllerExceptionHandler {
 
@@ -101,6 +102,14 @@ public class ControllerExceptionHandler {
     public ResponseEntity<?> handleException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+    //Stripe Exception Handler
+
+
+
+
+
 
 
 }

@@ -1,86 +1,82 @@
 import IconButton from "@mui/material/IconButton";
 import Toast, {ToastState, ToastType, Alert} from "../Toast";
 import {auth, axiosInstance} from "../../utils/firebase";
-import {Bookmark} from "../../models/Bookmark";
-import { useSWRConfig } from "swr"
+import useSWR, { useSWRConfig } from "swr"
 import useToastContext from "../../hooks/useToastContext";
 import Box from "@mui/material/Box";
 import {Movie} from "../../models/Movie";
 import useAuthContext from "../../hooks/useAuthContext";
 import FavoriteBorderOutlined from '@mui/icons-material/FavoriteBorderOutlined';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useBookmarkContext} from "../../contexts/BookmarkContext";
 
 let BOOKMARK_URL = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/bookmark/`
+const BOOKMARKS = `${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/bookmarks/?sortBy=created`;
 
 type FavoriteProps = {
     movie: Movie
+    //Optional function to be called when a bookmark is added
+    onBookmarkAdded?: (id: string) => void;
+    onBookmarkRemoved?: (id: string) => void;
 }
-export default function Favorite({movie}: FavoriteProps) {
+const fetcher = (url: string, token: string | null) =>
+    axiosInstance.get(url, { headers: { Authorization: `Bearer ${token}` } }).then(res => res.data);
+
+
+export default function Favorite({movie, onBookmarkAdded, onBookmarkRemoved}: FavoriteProps) {
+    const {addBookmark, removeBookmark, getBookmark, error} = useBookmarkContext();
     // @ts-ignore
-    const [bookmarked, setBookmarked] = useState<Bookmark | null>(movie.bookmark);
     const [loading, setLoading] = useState(false);
     const toast = useToastContext();
     const auth = useAuthContext();
-    const { mutate } = useSWRConfig()
 
-    async function handleSelected() {
+    const bookmark = getBookmark(movie.id);
 
-        if (!auth.isAuthenticated) {
+    const handleSelected = async () => {
+        if (!auth.user) {
             toast.show("You must be logged in to add to favorites", ToastType.ERROR);
             return;
         }
+        setLoading(true);
 
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`;
-
-        if (bookmarked) {
-            const DELETE_BOOKMARK = `${BOOKMARK_URL}${bookmarked.id}`
-            axiosInstance.delete(DELETE_BOOKMARK).then((response) => {
-                if (response.status < 300) {
-                    setBookmarked(null);
-                    toast.show("Removed from favorites", ToastType.INFO);
-                } else {
-                    toast.show("Could not remove from favorites", ToastType.ERROR);
+        try {
+            if (bookmark) {
+                await removeBookmark(bookmark.id);
+                if (onBookmarkRemoved) {
+                    onBookmarkRemoved(bookmark.id);
                 }
-            }).catch((error) => {
-                toast.show(error.message, ToastType.ERROR);
-            } );
-        }
-        else {
-
-            axiosInstance.post(BOOKMARK_URL, {
-                movieId: movie.id,
-                userId: auth.user?.uid,
-                created: new Date(),
-            }).then((response) => {
-                if (response.status === 200) {
-                    setBookmarked(response.data);
-                    toast.show("Added to favorites", ToastType.INFO);
-                } else {
-                    toast.show(response.data, ToastType.ERROR);
+                toast.show('Removed from favorites', ToastType.SUCCESS);
+            } else {
+                await addBookmark(movie.id);
+                if (onBookmarkAdded) {
+                    onBookmarkAdded(movie.id);
                 }
-            }).catch((error) => {
-                toast.show(error.message, ToastType.ERROR);
-            } );
+                toast.show('Added to favorites', ToastType.SUCCESS);
+            }
+        } catch (error) {
+            toast.show('An error occurred while updating the bookmark', ToastType.ERROR);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <Box
-            className="container__action"
+            className="container__action flex flex-col justify-center items-center"
         >
 
             <IconButton
-                disabled={loading}
+                disabled={loading || !auth.isAuthenticated}
                 onClick={handleSelected}
-                sx={{
-                    color: bookmarked ? "red" : "black.500"
-                }}
+                //Make opacity red using rgba
+                className={"hover:bg-[rgb(239,68,68,0.5)] hover:text-red-500 hover:shadow-lg"}
                 aria-label="add to favorites"
-                color={bookmarked ? "primary" : "inherit"}
             >
-                <FavoriteBorderOutlined/>
+                <FavoriteBorderOutlined  color={bookmark ? "error" : "inherit"} className={"size-6 md:size-6"} />
             </IconButton>
         </Box>
 
     );
 }
+
+

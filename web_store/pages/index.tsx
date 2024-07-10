@@ -1,35 +1,22 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
 import {Layout} from "../components/Layout";
-import Typography from "@mui/material/Typography";
-import ScrollPagination from "../components/ScrollPagination";
-import {CardStyle} from "../components/CardStyle";
-import {ContentType} from "../components/ContentType";
-import {ViewType} from "../components/ViewType";
 import Box from "@mui/material/Box";
-import {auth} from "../utils/firebase";
 import React from "react";
-import useAuthContext from "../hooks/useAuthContext";
-import Section from "../components/Section";
-import {theme} from "./_app";
+import {Section} from "../components/carousel/Section";
 import {Hero} from "../components/hero/Hero";
 import {GetServerSideProps} from "next";
 import nookies from "nookies";
-import axios, {AxiosRequestConfig} from "axios/index";
-import {Movie} from "../models/Movie";
+import Carousel from "../components/carousel/CTEST";
+
+const API_URL_BOOKMARK: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/bookmarks/?sortBy=created&limit=27`;
+const API_URL_VOTES: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=ratings.numOfVotes&limit=27`;
+const API_URL_POPULAR: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity&limit=27`;
+const API_URL_BOXOFFICE: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=revenue&limit=27`;
 
 
-const API_URL_BOOKMARK: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/bookmarks/?sortBy=created`;
-const API_URL_VOTES: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=ratings.numOfVotes&limit=26`;
-const API_URL_POPULAR: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity&limit=26`;
-const API_URL_BOXOFFICE: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=revenue`;
-
-export default function Home({token}: {token: string | undefined}) {
-    const auth = useAuthContext();
+export default function Home() {
 
   return (
-
     <>
 
       <Head>
@@ -39,26 +26,32 @@ export default function Home({token}: {token: string | undefined}) {
       </Head>
 
 
-
-        <Box className="flex flex-col gap-2 overflow-hidden w-full"
-            sx={{minWidth: "100%", minHeight: "140vh", backgroundColor: theme.palette.background.default}}
+        <Box className="flex flex-col w-full overflow-x-hidden"
+             sx={{
+                 '&::-webkit-scrollbar': { display: 'none' },
+             }}
         >
+
             <Hero/>
 
-            {auth.user ? (
-                <Section title={"My List"} path={API_URL_BOOKMARK} token={token}/>
-            ) : (null)}
+            <Section title={"My Watchlist"} path={API_URL_BOOKMARK} authenticated={true}/>
 
-            <Section title={"Popular"} path={API_URL_POPULAR} token={token}/>
 
-            <Section title={"Top Rated"} path={API_URL_VOTES} token={token}/>
+            <Carousel title={"Top Rated"}
+                      path={API_URL_VOTES}
+                      authenticated={false}
+                      vertical={false}/>
 
-            <Section title={"Box Office"} path={API_URL_BOXOFFICE} token={token}/>
+            <Carousel title={"Most Popular"}
+                      path={API_URL_POPULAR}
+                      authenticated={false}
+                      vertical={false}/>
+
+            <Box className="w-full h-96 "/>
+
+
 
         </Box>
-
-
-
 
     </>
   )
