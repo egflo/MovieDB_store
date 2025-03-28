@@ -1,4 +1,4 @@
-package com.user_service.DTO;
+package com.order_service.dto;
 
 import com.stripe.model.PaymentMethod;
 

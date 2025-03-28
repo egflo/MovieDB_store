@@ -1,4 +1,4 @@
 package com.inventory_service.model;
 
-public enum Type {
+public class CartItem {
 }

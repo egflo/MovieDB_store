@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e1b02312-b8e2-46e6-ae03-6cb55ba0bf07" name="n1.local" url="http://n1.local">
+        <fileTransfer rootFolder="/mnt/user/appdata/idea" accessType="SFTP" host="n1.local" port="22" sshConfigId="5bc744dd-611d-4019-8569-f30679236d24" sshConfig="root@n1.local:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,11 +1,10 @@
-package com.order_service.model;
+package com.user_service.models;
 
-import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import com.user_service.DTO.AddressRequest;
 
-@NoArgsConstructor
 public class Address {
 
+    private String id;
     private String firstName;
     private String lastName;
     private String street;
@@ -15,6 +14,39 @@ public class Address {
     private String country;
     private boolean isDefault;
 
+    public Address() {
+    }
+
+    public Address(String firstName, String lastName, String street, String city, String state, String postcode, String country, boolean isDefault) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.postcode = postcode;
+        this.country = country;
+        this.isDefault = isDefault;
+    }
+
+    public Address(AddressRequest request) {
+        this.id = request.getId();
+        this.firstName = request.getFirstName();
+        this.lastName = request.getLastName();
+        this.street = request.getStreet();
+        this.city = request.getCity();
+        this.state = request.getState();
+        this.postcode = request.getPostcode();
+        this.country = request.getCountry();
+        this.isDefault = request.getIsDefault();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
