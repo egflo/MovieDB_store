@@ -2,7 +2,6 @@ package com.movie_service.repository;
 
 
 import com.movie_service.models.CriticReview;
-import com.movie_service.models.Review;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

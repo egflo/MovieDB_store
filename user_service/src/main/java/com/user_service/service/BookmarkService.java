@@ -1,128 +1,113 @@
 package com.user_service.service;
 
-
-import com.movie_service.DTO.BookmarkRequest;
-import com.movie_service.DTO.Response;
-import com.movie_service.exception.IdNotFoundException;
-import com.movie_service.models.Bookmark;
-import com.movie_service.models.Movie;
-import com.movie_service.repository.BookmarkRepository;
-import com.movie_service.repository.MovieRepository;
+import com.user_service.DTO.BookmarkDTO;
+import com.user_service.DTO.BookmarkRequest;
+import com.user_service.exception.IdNotFoundException;
+import com.user_service.grpc.MovieService;
+import com.user_service.models.Bookmark;
+import com.user_service.models.Movie;
+import com.user_service.models.User;
+import com.user_service.repository.BookmarkRepository;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.proto.grpc.MovieResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class BookmarkService implements BookmarkServiceImp {
 
-    @Autowired
-    private BookmarkRepository repository;
+    private static final Logger logger = Logger.getLogger("BookmarkService");
 
-    @Autowired
-    private MovieRepository movieRepository;
+    private final BookmarkRepository repository;
+    private final MovieService movieService;
+
+    public BookmarkService(BookmarkRepository repository,
+                           MovieService movieService) {
+        this.repository = repository;
+        this.movieService = movieService;
+    }
 
     @Override
-    public Bookmark getBookmark(String id) {
+    public BookmarkDTO getBookmark(String id) {
         Optional<Bookmark> bookmark = repository.findById(new ObjectId(id));
         if (bookmark.isPresent()) {
-            return bookmark.get();
+            return new BookmarkDTO(bookmark.get());
         }
-
         throw new IdNotFoundException("Bookmark not found");
     }
 
     @Override
-    public Page<Bookmark> getBookmarksByUserId(String userId, Pageable pageable) {
-        return repository.getBookmarkByUserId(userId, pageable);
+    public Page<BookmarkDTO> getBookmarksByUserId(String userId, Pageable pageable) {
+        return repository.getBookmarkByUserId(userId, pageable).map(BookmarkDTO::new);
     }
 
     @Override
-    public Bookmark addBookmark(BookmarkRequest bookmark) {
-        Optional<Movie> movie = movieRepository.getMovieById(new ObjectId(bookmark.getMovieId()));
-        Optional<Bookmark> bookmarkOptional = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(bookmark.getMovieId()), bookmark.getUserId());
+    public BookmarkDTO addBookmark(BookmarkRequest request) {
+        Optional<Bookmark> bookmarkOptional =
+                repository.getBookmarkByMovie_IdAndUserId(new ObjectId(request.getMovieId()), request.getUserId());
 
-        if (bookmarkOptional.isPresent()) {
-            // Update existing bookmark
-            Bookmark newBookmark = bookmarkOptional.get();
-            newBookmark.setCreated(new Date());
-            return repository.save(newBookmark);
-        } else if (movie.isPresent()) {
-            // Create new bookmark and save it
-            Bookmark newBookmark = new Bookmark();
-            newBookmark.setMovie(movie.get());
-            newBookmark.setUserId(bookmark.getUserId());
-            newBookmark.setCreated(new Date());
-            return repository.save(newBookmark);
-        }
-        // Movie not found
-        throw new IdNotFoundException("Movie not found");
+        // Update existing bookmark
+        // Create new bookmark and save it
+        Bookmark newBookmark = bookmarkOptional.orElseGet(Bookmark::new);
+        newBookmark.setUserId(request.getUserId());
+
+        MovieResponse movie = movieService.getMovie(request.getMovieId());
+        Movie m = new Movie(movie);
+        newBookmark.setMovie(m);
+        newBookmark.setCreated(new Date());
+        return new BookmarkDTO(repository.save(newBookmark));
     }
 
     @Override
-    public Response deleteBookmark(String id) {
+    public void deleteBookmark(String id) {
         Optional<Bookmark> bookmark = repository.findById(new ObjectId(id));
-
-        if (bookmark.isPresent()) {
-            Response response = new Response();
-            response.setStatus(HttpStatus.OK);
-            response.setMessage("Bookmark deleted");
-            response.setSuccess(true);
-            response.setData(bookmark.get());
-            repository.delete(bookmark.get());
-            return  response;
-        }
-
+        bookmark.ifPresent(value -> repository.delete(value));
         //return new Response(HttpStatus.NOT_FOUND, false, "Bookmark not found", null);
         throw new IdNotFoundException("Bookmark not found");
-
     }
 
     @Override
-    public Page<Bookmark> getBookmarksByMovieId(String movieId, Pageable pageable) {
-        return repository.findBookmarkByMovie_Id(movieId, pageable);
+    public Page<BookmarkDTO> getBookmarksByMovieId(String movieId, Pageable pageable) {
+        return repository.findBookmarkByMovie_Id(movieId, pageable).map(BookmarkDTO::new);
     }
 
     @Override
-    public Page<Bookmark> getBookmarksByCreatedAfter(String date, Pageable pageable) {
-        return repository.findBookmarkByCreatedAfter(date, pageable);
+    public Page<BookmarkDTO> getBookmarksByCreatedAfter(String date, Pageable pageable) {
+        return repository.findBookmarkByCreatedAfter(date, pageable).map(BookmarkDTO::new);
     }
 
     @Override
-    public Page<Bookmark> getBookmarks(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<BookmarkDTO> getBookmarks(Pageable pageable) {
+        return repository.findAll(pageable).map(BookmarkDTO::new);
     }
 
     @Override
-    public Bookmark updateBookmark(String id, BookmarkRequest bookmark) {
+    public BookmarkDTO updateBookmark(String id, BookmarkRequest bookmark) {
         Optional<Bookmark> bookmarkOptional = repository.findById(new ObjectId(id));
         if (bookmarkOptional.isPresent()) {
             Bookmark newBookmark = bookmarkOptional.get();
             newBookmark.setUserId(bookmark.getUserId());
             newBookmark.setCreated(new Date());
-            return repository.save(newBookmark);
+            return new BookmarkDTO(repository.save(newBookmark));
         }
 
         throw new IdNotFoundException("Bookmark not found");
     }
 
     @Override
-    public Bookmark getByMovieIdAndUserId(String movieId, String userId) {
+    public BookmarkDTO getByMovieIdAndUserId(String movieId, String userId) {
         Optional<Bookmark> bookmark = repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movieId), userId);
-        if (bookmark.isPresent()) {
-            return bookmark.get();
-        }
+        return bookmark.map(BookmarkDTO::new).orElse(null);
 
-        return null;
     }
 
-    public Optional<Bookmark> getBookmarkByMovieIdAndUserId(String movieId, String userId) {
-        return repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movieId), userId);
+    public Optional<BookmarkDTO> getBookmarkByMovieIdAndUserId(String movieId, String userId) {
+        return repository.getBookmarkByMovie_IdAndUserId(new ObjectId(movieId), userId).map(BookmarkDTO::new);
     }
 
     public void deleteBookmarkByMovieIdAndUserId(String movieId, String userId) {
@@ -131,7 +116,6 @@ public class BookmarkService implements BookmarkServiceImp {
             repository.delete(bookmark.get());
             return;
         }
-
         throw new IdNotFoundException("Bookmark not found");
     }
 }

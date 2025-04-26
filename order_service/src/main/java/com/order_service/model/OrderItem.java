@@ -31,17 +31,8 @@ public class OrderItem {
     private Order order;
 
     public OrderItem() {
-    }
-
-    public OrderItem(String itemId, int quantity, double price, Date createdAt, Date updatedAt, String description, String photo, String sku) {
-        this.itemId = itemId;
-        this.quantity = quantity;
-        this.price = price;
-        this.created = createdAt;
-        this.updated = updatedAt;
-        this.description = description;
-        this.photo = photo;
-        this.sku = sku;
+        this.created = new Date();
+        this.updated = new Date();
     }
 
     public long getId() {
@@ -55,7 +46,6 @@ public class OrderItem {
     public String getItemId() {
         return itemId;
     }
-
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
@@ -116,7 +106,6 @@ public class OrderItem {
     public void setSku(String sku) {
         this.sku = sku;
     }
-
 
     public void setOrder(Order order) {
         this.order = order;

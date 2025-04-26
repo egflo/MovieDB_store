@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class CommmentReqeust {
+public class CommentReqeust {
 
     @NotNull
     String text;
@@ -17,4 +17,11 @@ public class CommmentReqeust {
     @NotNull
     String reviewId;
 
+    @NotNull
+    String movieId;
+
+    @NotNull
+    String userId;
+
+    String parent; // parent comment id if it is a reply else null
 }

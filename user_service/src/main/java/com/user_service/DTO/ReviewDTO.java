@@ -1,37 +1,10 @@
 package com.user_service.DTO;
 
-
+import com.user_service.models.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Date;
-
-@Getter
-@Setter
-@NoArgsConstructor
-class ReviewUserDTO {
-    String id;
-
-    String email;
-
-    String displayName;
-
-}
-
-class ReviewMovieDTO {
-
-    String id;
-
-    String title;
-
-    Integer year;
-
-    String movieId;
-
-    String poster;
-}
-
 
 @Getter
 @Setter
@@ -42,17 +15,17 @@ public class ReviewDTO {
 
     private String movieId;
 
-    private Integer rating;
+    private String userId;
 
-    private Integer sentiment;
+    private Integer rating;
 
     private String title;
 
     private String content;
 
-    private ReviewUser user;
+    private UserMeta user;
 
-    private ReviewMovie movie;
+    private Movie movie;
 
     private Date date;
 
@@ -62,19 +35,25 @@ public class ReviewDTO {
 
     private Integer dislikes;
 
-    private SentimentDTO status;
+    //optional field might be null
+    private SentimentDTO sentiment;
 
-    public ReviewDTO(UserReview review) {
+    public ReviewDTO(Review review) {
         this.id = review.getId().toString();
-        this.movieId = review.getMovieId();
+        this.movieId = review.getMovieId().toString();
+        this.userId = review.getUserId();
         this.rating = review.getRating();
-        this.sentiment = review.getSentiment();
         this.title = review.getTitle();
         this.content = review.getContent();
-        this.date = review.getDate();
-        this.movie = review.getMovie();
         this.user = review.getUser();
+        this.movie = review.getMovie();
+        this.date = review.getDate();
         this.love = review.getLove();
+        this.likes = review.getLikes();
+        this.dislikes = review.getDislikes();
     }
 
+    public void setSentiment(Sentiment sentiment) {
+        this.sentiment = new SentimentDTO(sentiment);
+    }
 }

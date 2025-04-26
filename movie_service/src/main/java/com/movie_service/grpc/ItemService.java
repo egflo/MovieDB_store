@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ItemService {
 
+    static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ItemService.class);
+
     @Value("${grpc.server.port}")
     private int grpcServerPort;
 
@@ -22,9 +24,17 @@ public class ItemService {
 
     public ItemResponse getItem(String id) {
 
+        LOGGER.info("getItem");
         //itemServiceBlockingStub = ItemServiceGrpc.newBlockingStub(itemServiceBlockingStub.getChannel());
-
         ItemRequest request = ItemRequest.newBuilder().setId(id).build();
+        LOGGER.info("request: {}", request);
         return itemServiceBlockingStub.getItem(request);
+    }
+
+    public ItemResponse getItemBySku(String sku) {
+        LOGGER.info("getItemBySku");
+        ItemRequest request = ItemRequest.newBuilder().setId(sku).build();
+        LOGGER.info("request: {}", request);
+        return itemServiceBlockingStub.getItemBySku(request);
     }
 }

@@ -4,204 +4,263 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment=" UI updates to store. Updated Modals.">
-      <change afterPath="$PROJECT_DIR$/movie_service/env.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/CriticReviewController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/CriticReview.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/CriticReviewRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CriticReviewService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CriticReviewServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/env.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/FirebaseConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/CardDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/InvoiceDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentMethodDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentSheetDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/RefundDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/ShippingDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/UserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/FirebaseServiceException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/StripeServiceException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Shipping.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/UserAddress.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/ShippingRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderItemRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/ShippingRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/FirebaseService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/ShippingServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/UserServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/.firebaserc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/api/fetcher.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/colorthief.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/HorizontalScroll.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/ScrollInfinite.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/actions/CartButton.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/actions/RateUI.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cards/CriticReviewCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cards/ExpandedCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cards/HorizontalCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cards/PosterCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cards/TestCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cards/VerticalCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/carousel/CTEST.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/carousel/CarouselUpdate.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/carousel/Section.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cart/Cart.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cart/CartItem.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/cart/QuantityButton.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/forms/EditPaymentForm.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/forms/PaymentForm.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/invoice/AddressForm.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/invoice/AddressSelect.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/invoice/ItemForm.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/invoice/PaymentForm.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/invoice/PaymentStatus.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/order/resultInfinite.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/user/Addresses.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/user/Bookmarks.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/user/Payments.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/components/withAuth.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/contexts/BookmarkContext.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/contexts/CartContext.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/firebase.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/hooks/useDominantColor.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/hooks/useInfiniteScroll.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/Address.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/CriticReview.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/PaymentMethod.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/models/RateType.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/api/get-colors.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/api/proxy-image.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/user/address/[id].tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/user/address/add.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/user/address/info.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/pages/user/payments.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/public/cards/amex.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/public/cards/discover.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/public/cards/mastercard.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/public/cards/paypal.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_store/public/cards/visa.svg" afterDir="false" />
+    <list default="true" id="ae635de4-6d70-4feb-a7ac-863d65e15550" name="Changes" comment="Updates.">
+      <change afterPath="$PROJECT_DIR$/user_service/src/main/resources/service-account.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/cast/[id]/Cast.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/cast/[id]/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/InfiniteScrollableContainer.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/ProfileImage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/ScrollableContainer.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/Sentiment.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/actions/Cart.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/actions/Favorite.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/actions/Login.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/actions/Logout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/actions/Rate.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/components/actions/Share.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/globals.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/login/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Address.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Bookmark.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Cart.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Cast.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/CastDetails.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/CriticReview.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Invoice.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Item.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Movie.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Order.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/PaymentMethod.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/RateType.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Rating.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Review.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Sentiment.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/SentimentState.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/Tag.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/models/User.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/movie/[id]/Movie.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/movie/[id]/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/navigation.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/register/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/ui/CastItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/ui/CriticReviewItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/ui/PosterItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/ui/RatingsSection.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/app/ui/UserReviewItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/lib/firebase/AuthContext.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/lib/firebase/AuthProvider.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/lib/firebase/UserInfo.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/lib/firebase/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/lib/firebase/firebase.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/next.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/postcss.config.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/avatar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/cards/amex.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/cards/discover.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/cards/mastercard.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/cards/paypal.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/cards/visa.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/chevron.left.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/chevron.right.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/file.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/globe.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/imdb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/metacritic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/next.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/rotten_tomatoes/certified-fresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/rotten_tomatoes/fresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/rotten_tomatoes/rotten.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/rotten_tomatoes/spilled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/rotten_tomatoes/upright.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/vercel.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/public/window.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app/web_app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/78397c7c-065a-4fc3-93c4-c693abf6c007.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/78397c7c-065a-4fc3-93c4-c693abf6c007.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654d71e-60ea-4cf6-86e1-7d86068e8d57/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/OrderDB.LIxFGw/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ee24ba39-7a05-4d72-94d0-b9fc165f87cf/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api_gateway/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/ApiGatewayApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/FirebaseAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/FirebaseAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/FirebaseConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/FirebaseConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/JWTConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/JWTConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/java/com/api_gateway/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api_gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api_gateway/src/main/resources/service-account.json" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/src/main/resources/service-account.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/src/main/proto/CartService.proto" beforeDir="false" afterPath="$PROJECT_DIR$/interface/src/main/proto/CartService.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/src/main/proto/ItemService.proto" beforeDir="false" afterPath="$PROJECT_DIR$/interface/src/main/proto/ItemService.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker_script.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker_script.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka_server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka_server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka_server/src/test/java/com/eureka_server/EurekaServerApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/eureka_server/src/test/java/com/eureka_server/EurekaServerApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/CartRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/ItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/ItemDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/exception/ControllerExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/exception/ControllerExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/ProductDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/DTO/ProductDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/NullAwareUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/NullAwareUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartResponseBodyAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/CartResponseBodyAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/controller/ItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/CartServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/CartServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/GrpcConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/GrpcConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/ItemServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/ItemServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/grpc/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Status.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/model/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/repository/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/repository/CartRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/repository/ItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/repository/ItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/repository/ItemTransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/repository/ItemTransactionRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartServiceImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service_grpc/CartServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service_grpc/CartServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service_grpc/ItemServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service_grpc/ItemServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemTransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemTransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemTransactionServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/ItemTransactionServiceImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/inventory_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.env" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/app/HomePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/ItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/ItemDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/SentimentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/SentimentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/BookmarkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/BookmarkController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/BookmarkResponseBodyAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/api_gateway/env.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/DTO/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/MovieServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/MovieServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/CriticReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/CriticReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieResponseBodyAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/MovieResponseBodyAdvice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Review.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Sentiment.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/models/Sentiment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/StatusController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/controller/StatusController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/exception/ControllerExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/exception/ControllerExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/ItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/MovieServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/grpc/MovieServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/CriticReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/repository/CriticReviewRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/security/AuthInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/security/AuthInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/security/AuthenticationFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/security/AuthenticationFacade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/API.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/API.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/BookmarkServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/ReviewService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/SentimentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/SentimentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CriticReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CriticReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CriticReviewServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/CriticReviewServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/java/com/movie_service/service/MovieServiceImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_service/src/main/resources/schema/schema.graphqls" beforeDir="false" afterPath="$PROJECT_DIR$/movie_service/src/main/resources/schema/schema.graphqls" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/AddressController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/controller/PaymentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/AddressDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/AddressDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/CartItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/CartItemDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentIntentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentIntentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/ControllerExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/exception/ControllerExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentMethodDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/PaymentMethodDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/grpc/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/grpc/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/grpc/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/grpc/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/grpc/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/grpc/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/CartItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/AddressRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Shipping.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/Shipping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/model/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/AddressRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/AddressRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/PaymentIntentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/PaymentRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/AddressService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/ShippingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/AddressServiceImp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderItemRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/OrderItemRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/ShippingRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/request/ShippingRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/OrderServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/RateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/RateService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/ShippingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/ShippingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/StripeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/java/com/order_service/service/StripeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tax_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/tax_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tax_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tax_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/AppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/AppRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/AddressRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/AddressRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/BookmarkDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/BookmarkDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/BookmarkRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/BookmarkRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/CardDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/CardDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/CommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/CommentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/CommentReqeust.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/CommentReqeust.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/PaymentMethodDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/PaymentMethodDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/ReviewDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/ReviewDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/ReviewRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/ReviewRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/SentimentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/SentimentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/SentimentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/SentimentRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/UserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/UserRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/UserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/DTO/UserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/FirebaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/FirebaseConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/SentimentChangeListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/SentimentChangeListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/UserServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/AddressController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/BookmarkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/BookmarkController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/SentimentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/SentimentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/exception/ControllerExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/exception/ControllerExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/exception/StripeServiceException.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/exception/StripeServiceException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/grpc/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/grpc/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/grpc/UserServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/grpc/UserServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Bookmark.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Bookmark.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Sentiment.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Sentiment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/Status.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/UserMeta.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/models/UserMeta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/repository/CommentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/repository/ReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/repository/ReviewRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/repository/SentimentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/repository/SentimentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/BookmarkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/BookmarkService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/BookmarkServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/BookmarkServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/FirebaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/FirebaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/ReviewServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/ReviewServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/SentimentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/SentimentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/SentimentServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/user_service/service/SentimentServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/com/user_service/UserServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/test/java/com/user_service/UserServiceApplicationTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_store/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/CartItem.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/ContentType.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/ContentType.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/MovieCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/MovieCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/ReviewCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/cards/ReviewCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/Scroll.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Scroll.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/ScrollPagination.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/ScrollPagination.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/Section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/Section.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Cart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Favorite.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Favorite.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/actions/Rate.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/actions/Rate.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/cards/DetailedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/cards/DetailedCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/cards/SimpleCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/cards/SimpleCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/carousel/Carousel-Item.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/carousel/Carousel-Item.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/forms/Address.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/forms/AddressForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/hero/Hero-Item.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/hero/Hero-Item.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/hero/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/hero/Hero.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/CartNavIcon.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/CartNavIcon.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/NavigationActionItems.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/NavigationActionItems.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/NavigationBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/NavigationBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/navigation/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/navigation/SearchBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/order/OrderCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/order/OrderCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/order/searchTypes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/order/searchTypes.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/order/toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/order/toolbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/search/result.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/search/result.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/components/search/toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/search/toolbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/models/Checkout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Invoice.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/models/Item.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Item.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/models/Order.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Order.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/components/cards/ReviewCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/components/cards/ReviewCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_store/models/Review.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/models/Review.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_store/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_store/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/_app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/_app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/cart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/cast/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/cast/[id].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/checkout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/checkout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/favorites.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/user/favorites.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/login.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_store/pages/movie/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/movie/[id].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/order/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/user/order/[id].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/orders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/user/orders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/search/[term].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/search/[term].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/pages/user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/pages/user/info.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/serviceAccountKey.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/styles/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/tailwind.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/utils/firebase.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_store/utils/firebase.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_store/utils/firebaseAdmin.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,18 +271,16 @@
     <projectState path="$PROJECT_DIR$/grpc_interface">
       <ProjectState />
     </projectState>
+    <projectState path="$PROJECT_DIR$/user_service">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="grpc_interface" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -235,12 +292,12 @@
       <list>
         <option value="HTML File" />
         <option value="GraphQL File" />
-        <option value="Enum" />
         <option value="CSS File" />
-        <option value="Class" />
+        <option value="Enum" />
         <option value="Interface" />
-        <option value="TypeScript File" />
+        <option value="Class" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
       </list>
     </option>
@@ -261,6 +318,22 @@
     &quot;assignee&quot;: &quot;egflo&quot;
   }
 }</component>
+  <component name="GitLabMergeRequestFiltersHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPENED&quot;,
+    &quot;assignee&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+      &quot;username&quot;: &quot;egflo&quot;,
+      &quot;fullname&quot;: &quot;egflo&quot;
+    }
+  }
+}</component>
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;https://gitlab.com/egflo/MovieDB_store&quot;,
+    &quot;second&quot;: &quot;8b3e82a6-5733-49ee-b07e-66b0814a6c81&quot;
+  }
+}</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/egflo/MovieDB_store.git&quot;,
@@ -268,6 +341,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/com/google/firebase/firebase-admin/9.1.1/firebase-admin-9.1.1.jar!/com/google/firebase/auth/UserMetadata.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/com/google/firebase/firebase-admin/9.4.1/firebase-admin-9.4.1.jar!/com/google/firebase/auth/UserRecord.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/proto/interface/1.0/interface-1.0.jar!/org/proto/grpc/AddressesResponse.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/proto/interface/1.0/interface-1.0.jar!/org/proto/grpc/CartItem.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/proto/interface/1.0/interface-1.0.jar!/org/proto/grpc/CartResponse.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-commons/3.0.1/spring-data-commons-3.0.1.jar!/org/springframework/data/repository/CrudRepository.class" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/web_store/node_modules/next/types/index.d.ts" root0="SKIP_INSPECTION" />
   </component>
@@ -278,13 +356,13 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2Kl6aU98CFex4jDLewujdP1pT98" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -295,25 +373,44 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "DefaultHtmlFileTemplate": "HTML File",
+    "Docker.docker-compose.yml.eureka-server: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.gateway: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.inventory-service: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.movie-service: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.order-service: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.user-service: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
     "HTTP Request.ApiGatewayApplication | #1.executor": "Run",
+    "Node.js.console.js.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "/Users/egflo/Library/Application Support/JetBrains/IntelliJIdea2024.3/plugins/Shell Script/shellcheck",
     "Spring Boot.ApiGatewayApplication.executor": "Run",
     "Spring Boot.EurekaServerApplication.executor": "Run",
     "Spring Boot.InventoryServiceApplication.executor": "Run",
+    "Spring Boot.MovieServiceApplication (1).executor": "Run",
     "Spring Boot.MovieServiceApplication.executor": "Run",
     "Spring Boot.OrderServiceApplication.executor": "Run",
     "Spring Boot.TaxServiceApplication.executor": "Run",
+    "Spring Boot.UserServiceApplication.executor": "Run",
+    "StatusDashboardGroupingRule": "true",
     "WebServerToolWindowFactoryState": "false",
+    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
+    "WebServerToolWindowPanel.toolwindow.show.date": "false",
+    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
+    "WebServerToolWindowPanel.toolwindow.show.size": "false",
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "openjdk-18",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/egflo/IdeaProjects/MovieDB_store/web_store/components/order",
+    "last_opened_file_path": "/Users/egflo/IdeaProjects/MovieDB_store/eureka_server/src/main/resources",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -328,46 +425,51 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.17693317",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
     "spring.configuration.checksum": "a3ff539cda7b199cab347387b2065842",
     "ts.external.directory.path": "/Users/egflo/IdeaProjects/MovieDB_store/web_store/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
+      "mongo",
       "mysql",
-      "postgresql",
-      "mongo"
+      "postgresql"
     ]
   }
 }]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.movie_service.DTO.ReviewRequest" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/web_store/components/order" />
-      <recent name="$PROJECT_DIR$/web_store/models" />
-      <recent name="$PROJECT_DIR$/web_store/components/actions" />
-      <recent name="$PROJECT_DIR$/web_store/components" />
-      <recent name="$PROJECT_DIR$/web_store/components/cards" />
+      <recent name="$PROJECT_DIR$/eureka_server/src/main/resources" />
+      <recent name="$PROJECT_DIR$/web_app/app/cast/[id]" />
+      <recent name="$PROJECT_DIR$/web_app/app/components" />
+      <recent name="$PROJECT_DIR$/web_app/app/ui" />
+      <recent name="$PROJECT_DIR$/web_app/public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/web_store/components" />
-      <recent name="$PROJECT_DIR$/web_store/components/cart" />
-      <recent name="$PROJECT_DIR$/web_store/public/cards" />
-      <recent name="$PROJECT_DIR$/web_store/pages/user" />
-      <recent name="$PROJECT_DIR$/web_store/pages/user/address" />
+      <recent name="$PROJECT_DIR$/web_app/app/movie/[id]" />
+      <recent name="$PROJECT_DIR$/web_app/app/ui" />
+      <recent name="$PROJECT_DIR$/web_app/public" />
+      <recent name="$PROJECT_DIR$/web_app/public/rotten_tomatoes" />
+      <recent name="$PROJECT_DIR$/api_gateway" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.api_gateway" />
+      <recent name="com.user_service" />
       <recent name="com.movie_service.grpc" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.order_service.model" />
-      <recent name="com.order_service.request" />
-      <recent name="com.order_service.exception" />
-      <recent name="com.movie_service.controller" />
-      <recent name="com.movie_service.service" />
+      <recent name="com.order_service.controller" />
+      <recent name="com.inventory_service.DTO" />
+      <recent name="com.user_service.controller" />
+      <recent name="com.order_service.dto" />
+      <recent name="com.user_service.DTO" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -378,6 +480,19 @@
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
+    <option name="hiddenConfigurations">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <set>
+              <option value="MovieServiceApplication (1)" />
+              <option value="TaxServiceApplication" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="openRunningConfigInTab" value="true" />
   </component>
   <component name="RunManager" selected="npm.dev">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
@@ -410,25 +525,163 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.proto.Main" />
-      <module name="interface" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.proto.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
+    <configuration name="ApiGatewayApplication | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/ApiGatewayApplication.http" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="envFilePaths">
+        <option value="$PROJECT_DIR$/local.env" />
+      </option>
+      <module name="api_gateway" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.api_gateway.ApiGatewayApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="true" />
+        <option name="IS_SUBST" value="true" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+          <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH="local.env" />
+        </ENTRIES>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
       </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ApiGatewayApplication | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/ApiGatewayApplication.http" requestIdentifier="#1" runType="Run single request">
-      <method v="2" />
+    <configuration name="EurekaServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="eureka_server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.eureka_server.EurekaServerApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="true" />
+        <option name="IS_SUBST" value="true" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+          <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH="local.env" />
+        </ENTRIES>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="api_gateway" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.api_gateway.ApiGatewayApplication" />
+    <configuration name="InventoryServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="inventory_service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.inventory_service.InventoryServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MovieServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="envFilePaths">
+        <option value="$PROJECT_DIR$/local.env" />
+      </option>
+      <module name="movie_service" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.movie_service.MovieServiceApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="true" />
+        <option name="IS_SUBST" value="true" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MovieServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="envFilePaths">
+        <option value="$PROJECT_DIR$/local.env" />
+      </option>
+      <module name="movie_service" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.movie_service.MovieServiceApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="true" />
+        <option name="IS_SUBST" value="true" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OrderServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="envFilePaths">
+        <option value="$PROJECT_DIR$/local.env" />
+      </option>
+      <module name="order_service" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.order_service.OrderServiceApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="true" />
+        <option name="IS_SUBST" value="true" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+          <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH="local.env" />
+        </ENTRIES>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TaxServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="tax_service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.tax_service.TaxServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="user_service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.user_service.UserServiceApplication" />
       <extension name="net.ashald.envfile">
         <option name="IS_ENABLED" value="false" />
         <option name="IS_SUBST" value="false" />
@@ -448,49 +701,74 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EurekaServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="eureka_server" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.eureka_server.EurekaServerApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="InventoryServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="inventory_service" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.inventory_service.InventoryServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MovieServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="movie_service" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.movie_service.MovieServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="OrderServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="order_service" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.order_service.OrderServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TaxServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="tax_service" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.tax_service.TaxServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.inventory-service: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="inventory-service" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.movie-service: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="movie-service" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.order-service: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="order-service" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.user-service: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="user-service" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/web_store/package.json" />
+      <package-json value="$PROJECT_DIR$/web_app/package.json" />
       <command value="run" />
       <scripts>
         <script value="dev" />
@@ -500,27 +778,37 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Main" />
+      <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.inventory-service: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.movie-service: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.order-service: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.user-service: Compose Deployment" />
       <item itemvalue="HTTP Request.ApiGatewayApplication | #1" />
       <item itemvalue="npm.dev" />
+      <item itemvalue="Spring Boot.UserServiceApplication" />
+      <item itemvalue="Spring Boot.MovieServiceApplication (1)" />
+      <item itemvalue="Spring Boot.OrderServiceApplication" />
       <item itemvalue="Spring Boot.TaxServiceApplication" />
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.EurekaServerApplication" />
       <item itemvalue="Spring Boot.InventoryServiceApplication" />
       <item itemvalue="Spring Boot.MovieServiceApplication" />
-      <item itemvalue="Spring Boot.OrderServiceApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.user-service: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.movie-service: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.inventory-service: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.order-service: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
@@ -685,7 +973,142 @@
       <workItem from="1719445843581" duration="446000" />
       <workItem from="1719448021477" duration="24667000" />
       <workItem from="1719792863305" duration="90206000" />
-      <workItem from="1720383850244" duration="42548000" />
+      <workItem from="1720383850244" duration="49285000" />
+      <workItem from="1720660077480" duration="22446000" />
+      <workItem from="1720841268769" duration="29670000" />
+      <workItem from="1721435651890" duration="4167000" />
+      <workItem from="1721488577157" duration="808000" />
+      <workItem from="1721575312838" duration="6730000" />
+      <workItem from="1721780370485" duration="1435000" />
+      <workItem from="1722102670671" duration="23648000" />
+      <workItem from="1722213761621" duration="28346000" />
+      <workItem from="1722310186077" duration="772000" />
+      <workItem from="1722310978085" duration="13314000" />
+      <workItem from="1722532242060" duration="454000" />
+      <workItem from="1722532905327" duration="1787000" />
+      <workItem from="1723311602684" duration="1288000" />
+      <workItem from="1723388924439" duration="784000" />
+      <workItem from="1723937236884" duration="962000" />
+      <workItem from="1723939059633" duration="6982000" />
+      <workItem from="1724342148193" duration="3855000" />
+      <workItem from="1724947650327" duration="6587000" />
+      <workItem from="1725202254697" duration="17516000" />
+      <workItem from="1725897957676" duration="70000" />
+      <workItem from="1725898040456" duration="33755000" />
+      <workItem from="1726186236619" duration="22611000" />
+      <workItem from="1726362352312" duration="31987000" />
+      <workItem from="1726528542878" duration="16607000" />
+      <workItem from="1726679872282" duration="1016000" />
+      <workItem from="1726694572708" duration="38365000" />
+      <workItem from="1726963691571" duration="12000" />
+      <workItem from="1726967528883" duration="30337000" />
+      <workItem from="1727123611490" duration="73071000" />
+      <workItem from="1727501706861" duration="877000" />
+      <workItem from="1727502645886" duration="6275000" />
+      <workItem from="1727625370537" duration="6279000" />
+      <workItem from="1727813388921" duration="33000" />
+      <workItem from="1727813553418" duration="18906000" />
+      <workItem from="1728020441429" duration="730000" />
+      <workItem from="1728022761168" duration="12450000" />
+      <workItem from="1728154006346" duration="2410000" />
+      <workItem from="1728179347447" duration="56387000" />
+      <workItem from="1728832951979" duration="29671000" />
+      <workItem from="1729301723193" duration="22000" />
+      <workItem from="1729301754462" duration="12004000" />
+      <workItem from="1729475895836" duration="1617000" />
+      <workItem from="1729545498423" duration="119000" />
+      <workItem from="1729545694760" duration="3045000" />
+      <workItem from="1729996851220" duration="517000" />
+      <workItem from="1730047015722" duration="728000" />
+      <workItem from="1730254737932" duration="50000" />
+      <workItem from="1730254800507" duration="598000" />
+      <workItem from="1730328830762" duration="3745000" />
+      <workItem from="1730757382312" duration="1221000" />
+      <workItem from="1730771003671" duration="165000" />
+      <workItem from="1730771179687" duration="58832000" />
+      <workItem from="1731204656787" duration="13425000" />
+      <workItem from="1731270423518" duration="409000" />
+      <workItem from="1731277738013" duration="20412000" />
+      <workItem from="1731379043474" duration="21717000" />
+      <workItem from="1731540316986" duration="639000" />
+      <workItem from="1731543178108" duration="31604000" />
+      <workItem from="1731811400253" duration="44106000" />
+      <workItem from="1732167966091" duration="1744000" />
+      <workItem from="1732210922486" duration="33466000" />
+      <workItem from="1732410141004" duration="17429000" />
+      <workItem from="1732473780992" duration="58156000" />
+      <workItem from="1732869444358" duration="29286000" />
+      <workItem from="1733109587847" duration="39617000" />
+      <workItem from="1733557151899" duration="66261000" />
+      <workItem from="1734040755876" duration="837000" />
+      <workItem from="1734042267107" duration="1063000" />
+      <workItem from="1734070224491" duration="28195000" />
+      <workItem from="1734675825275" duration="26107000" />
+      <workItem from="1735440105049" duration="27617000" />
+      <workItem from="1735795660153" duration="31082000" />
+      <workItem from="1736227684751" duration="307000" />
+      <workItem from="1736228015635" duration="45428000" />
+      <workItem from="1736752085988" duration="21386000" />
+      <workItem from="1737157648622" duration="16660000" />
+      <workItem from="1737257655482" duration="11058000" />
+      <workItem from="1737416918988" duration="18687000" />
+      <workItem from="1737696435441" duration="1264000" />
+      <workItem from="1737769751804" duration="26014000" />
+      <workItem from="1738090291612" duration="12076000" />
+      <workItem from="1738274619173" duration="1089000" />
+      <workItem from="1738279221509" duration="12525000" />
+      <workItem from="1738684071831" duration="28320000" />
+      <workItem from="1739060853142" duration="49929000" />
+      <workItem from="1739493090416" duration="6965000" />
+      <workItem from="1739571673144" duration="1640000" />
+      <workItem from="1739595838157" duration="2408000" />
+      <workItem from="1739740776429" duration="9320000" />
+      <workItem from="1739899143302" duration="3479000" />
+      <workItem from="1739926202603" duration="7667000" />
+      <workItem from="1740024111068" duration="11395000" />
+      <workItem from="1740179392850" duration="19807000" />
+      <workItem from="1740328488415" duration="651000" />
+      <workItem from="1740338253392" duration="20824000" />
+      <workItem from="1740608121326" duration="20117000" />
+      <workItem from="1740711165716" duration="13898000" />
+      <workItem from="1740783370391" duration="1832000" />
+      <workItem from="1740793002285" duration="2277000" />
+      <workItem from="1740799502798" duration="139683000" />
+      <workItem from="1741313252000" duration="160000" />
+      <workItem from="1741313442702" duration="39675000" />
+      <workItem from="1741480309530" duration="31602000" />
+      <workItem from="1741628486933" duration="66285000" />
+      <workItem from="1741922257568" duration="95916000" />
+      <workItem from="1742522392611" duration="37516000" />
+      <workItem from="1742688772518" duration="16000" />
+      <workItem from="1742693866908" duration="74468000" />
+      <workItem from="1743009439370" duration="23853000" />
+      <workItem from="1743178521116" duration="10165000" />
+      <workItem from="1743262684211" duration="2487000" />
+      <workItem from="1743353213346" duration="20006000" />
+      <workItem from="1743478336883" duration="55046000" />
+      <workItem from="1743734852367" duration="14447000" />
+      <workItem from="1743784707667" duration="3571000" />
+      <workItem from="1743788499047" duration="71000" />
+      <workItem from="1743804440223" duration="27563000" />
+      <workItem from="1743955364406" duration="14445000" />
+      <workItem from="1743977844751" duration="27073000" />
+      <workItem from="1744156748513" duration="20446000" />
+      <workItem from="1744302173403" duration="7402000" />
+      <workItem from="1744331129177" duration="24327000" />
+      <workItem from="1744410278364" duration="5992000" />
+      <workItem from="1744472693700" duration="6091000" />
+      <workItem from="1744479925379" duration="1497000" />
+      <workItem from="1744481442947" duration="4401000" />
+      <workItem from="1744505340767" duration="3096000" />
+      <workItem from="1744562750290" duration="27139000" />
+      <workItem from="1744652086566" duration="2269000" />
+      <workItem from="1744677507793" duration="74374000" />
+      <workItem from="1745026899846" duration="1431000" />
+      <workItem from="1745028564914" duration="6925000" />
+      <workItem from="1745095415776" duration="59775000" />
+      <workItem from="1745423853746" duration="21670000" />
+      <workItem from="1745508097244" duration="45795000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1676356948888</created>
@@ -750,45 +1173,51 @@
       <option name="project" value="LOCAL" />
       <updated>1685379983790</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Updates.">
+      <option name="closed" value="true" />
+      <created>1720631226406</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1720631226406</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="javascript:npm:react" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:tailwindcss" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-commons" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="executable:az" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.cloud:spring-cloud-context" />
+    <option featureType="dependencySupport" implementationName="java:org.hibernate.validator:hibernate-validator" />
+    <option featureType="dependencySupport" implementationName="executable:terraform" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-webmvc" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-websocket" />
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
+    <option featureType="dependencySupport" implementationName="java:io.grpc:grpc-api" />
+    <option featureType="dependencySupport" implementationName="java:com.netflix.graphql.dgs:graphql-dgs" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:next" />
+    <option featureType="dependencySupport" implementationName="java:org.thymeleaf:thymeleaf" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.ws.rs:jakarta.ws.rs-api" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.security:spring-security-core" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.validation:jakarta.validation-api" />
+    <option featureType="dependencySupport" implementationName="java:io.projectreactor:reactor-core" />
+    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
+    <option featureType="dependencySupport" implementationName="executable:podman" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-messaging" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:postcss" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="1c3346a2-831e-4225-b113-826491678afc" value="TOOL_WINDOW" />
-      </map>
-    </option>
     <option name="TAB_STATES">
       <map>
-        <entry key="1c3346a2-831e-4225-b113-826491678afc">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="roots">
-                    <value>
-                      <list>
-                        <option value="$PROJECT_DIR$/tax_service" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
-            </State>
-          </value>
-        </entry>
         <entry key="MAIN">
           <value>
             <State />
@@ -810,18 +1239,8 @@
     <MESSAGE value="Initial" />
     <MESSAGE value="Tax-Service Microservice Added. UI updates to store. Fault Tolerance." />
     <MESSAGE value=" UI updates to store. Updated Modals." />
-    <option name="LAST_COMMIT_MESSAGE" value=" UI updates to store. Updated Modals." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/inventory_service/src/main/java/com/inventory_service/service/CartService.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Updates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

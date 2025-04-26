@@ -1,4 +1,4 @@
-package com.order_service.exception;
+package com.user_service.exception;
 
 public class StripeServiceException extends RuntimeException {
     public StripeServiceException(String message) {

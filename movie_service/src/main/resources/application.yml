@@ -1,7 +1,4 @@
 spring:
-  config:
-    import: file:env.properties
-
   application:
     name: ${EUREKA_INSTANCE_HOSTNAME:movie-service}
 
@@ -11,18 +8,19 @@ spring:
       uri: ${MONGO_URI:mongodb://localhost:27017}
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:0}
 
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    preferIpAddress: ${PREFER_IP_ADDRESS:true}
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
+    preferIpAddress: ${PREFER_IP_ADDRESS:false}
 
 grpc:
   server:
-      port: ${GRPC_PORT:9090}
+      port: ${GRPC_PORT:0}
   client:
     inventory-grpc-server:
       address: ${GRPC_INVENTORY_ADDRESS:discovery:///inventory-service}
@@ -31,13 +29,12 @@ grpc:
       negotiationType: plaintext
 
 background_api:
-  key: ${BACKGROUND_API_KEY}
+  key: ${BACKGROUND_API_KEY:your_background_api_key}
 
 dgs:
   graphql:
     graphiql:
       enabled: true
-
 
 management:
   endpoint:

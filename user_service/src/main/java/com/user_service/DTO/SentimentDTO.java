@@ -1,7 +1,9 @@
 package com.user_service.DTO;
 
-import com.movie_service.models.Sentiment;
-import com.movie_service.models.Status;
+
+import com.user_service.models.Sentiment;
+import com.user_service.models.Status;
+import jdk.jshell.Snippet;
 
 import java.util.Date;
 
@@ -17,9 +19,9 @@ public class SentimentDTO {
     private Status status;
 
     public SentimentDTO(Sentiment sentiment) {
-        this.id = sentiment.getId();
+        this.id = sentiment.getId().toHexString();
         this.userId = sentiment.getUserId();
-        this.objectId = sentiment.getObjectId();
+        this.objectId = sentiment.getObjectId().toHexString();
         this.created = sentiment.getCreated();
         this.status = sentiment.getStatus();
     }
@@ -30,6 +32,7 @@ public class SentimentDTO {
         this.created = created;
         this.status = status;
     }
+
 
     public  String getId() {
         return id;

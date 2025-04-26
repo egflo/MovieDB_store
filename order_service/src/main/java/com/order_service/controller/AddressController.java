@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller // This means that this class is a Controller
-@RequestMapping(path="/address") // This means URL's start with /demo (after Application path)
+@RequestMapping(path="/address")
 public class AddressController {
 
     @Autowired
@@ -23,7 +23,9 @@ public class AddressController {
 
 
     @GetMapping("/{id}")
-    public @ResponseBody ResponseEntity<?> getAddressById(@PathVariable(value = "id") Integer id)
+    public @ResponseBody ResponseEntity<?> getAddressById(
+            @RequestHeader(value = "uid", required = true) Optional<String> userId,
+            @PathVariable(value = "id") Integer id)
     {
         return ResponseEntity.ok(addressService.getAddress(id));
     }
@@ -31,7 +33,7 @@ public class AddressController {
     @PostMapping("/")
     @ResponseBody
     public ResponseEntity<?> addAddress(
-            @RequestHeader HttpHeaders headers,
+            @RequestHeader(value = "uid", required = true) Optional<String> userId,
             @RequestBody AddressDTO request) {
 
         return new ResponseEntity<>(addressService.createAddress(request), HttpStatus.CREATED);
@@ -41,14 +43,12 @@ public class AddressController {
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> deleteAddress(
-            @RequestHeader HttpHeaders headers,
+            @RequestHeader(value = "uid", required = true) Optional<String> userId,
             @PathVariable(value = "id") Integer id) {
-
 
         addressService.deleteAddress(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     /**
      *

@@ -1,6 +1,6 @@
-package com.user_service.controller;
+package com.order_service.controller;
 
-import com.user_service.service.StripeService;
+import com.order_service.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,10 +1,8 @@
 package com.inventory_service.model;
 
-
-
-
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.util.*;
 
 @Entity
 @Table(name="cart")
@@ -17,11 +15,18 @@ public class Cart {
     @Column(name = "userId")
     private String userId;
 
-    @Column(name = "itemId")
-    private String itemId;
+    // This will set the created and updated time automatically when we create a new object
+    @Temporal(TemporalType.TIMESTAMP)
+	@PrePersist
+	protected void onCreate() {
+		created = updated = new Date();
+	}
 
-    @Column(name = "quantity")
-    private Integer quantity;
+	@Temporal(TemporalType.TIMESTAMP)
+	@PreUpdate
+	protected void onUpdate() {
+		updated = new Date();
+	}
 
     @Column(name = "created")
     private Date created;
@@ -29,15 +34,20 @@ public class Cart {
     @Column(name = "updated")
     private Date updated;
 
+    @OneToMany(mappedBy="cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CartItem> items = new HashSet<>();
+
     public Cart() {
+        this.created = new Date();
+        this.updated = new Date();
+        this.items = new HashSet<>();
     }
 
-    public Cart(String userId, String itemId, Integer quantity, Date created, Date updated) {
+    public Cart(String userId, Date created, Date updated) {
         this.userId = userId;
-        this.itemId = itemId;
-        this.quantity = quantity;
         this.created = created;
         this.updated = updated;
+        this.items = new HashSet<>();
     }
 
     public Integer getId() {
@@ -56,22 +66,6 @@ public class Cart {
         this.userId = userId;
     }
 
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public Date getCreated() {
         return created;
     }
@@ -88,5 +82,27 @@ public class Cart {
         this.updated = updated;
     }
 
+    public Set<CartItem> getCartItems() {
+        return items;
+    }
 
+    public void addCartItem(CartItem cartItem) {
+        this.items.add(cartItem);
+        cartItem.setCart(this);
+    }
+
+    public void removeCartItem(CartItem cartItem) {
+        this.items.remove(cartItem);
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", cartItems=" + items +
+                '}';
+    }
 }

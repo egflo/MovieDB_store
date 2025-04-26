@@ -36,7 +36,7 @@ build/
 
 
 ### Resources ###
-src/main/resources/static/
-src/main/resources/templates/
-src/main/resources/service-account.json
+!**/src/main/resources/static/
+!**/src/main/resources/templates/
+!**/src/main/resources/service-account.json
 

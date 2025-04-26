@@ -1,4 +1,4 @@
-package com.order_service.service;
+package com.order_service.grpc;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.proto.grpc.MovieRequest;

@@ -1,40 +1,47 @@
 package com.user_service.controller;
 
-import com.user_service.service.StripeService;
+import com.user_service.DTO.AddressRequest;
+import com.user_service.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/payment-methods")
-public class PaymentController {
+@RequestMapping("/address")
+public class AddressController {
 
     @Autowired
-    private StripeService stripeService;
+    private FirebaseService firebaseService;
 
-    @GetMapping("/payment-methods")
-    public ResponseEntity<?> getPaymentMethods(@RequestHeader(value = "uid", required = true) String userId) {
-        return ResponseEntity.ok(stripeService.getPaymentMethods(userId));
+    @PostMapping("/address")
+    public ResponseEntity<?> addAddress(
+            @RequestHeader(value = "uid", required = true ) String userId,
+            @RequestBody AddressRequest address) {
+        return ResponseEntity.ok(firebaseService.addAddress(userId, address));
     }
 
-    @PostMapping("/payment-methods/default/{id}")
-    public ResponseEntity<?> defaultPaymentMethods(@RequestHeader(value = "uid", required = true) String userId, @PathVariable String id) {
-        stripeService.setDefaultPaymentMethod(userId,id);
-        return ResponseEntity.ok("Payment Updated");
+    @GetMapping("/address")
+    public ResponseEntity<?>
+    getAddress(@RequestHeader(value = "uid", required = true) String userId) {
+        return ResponseEntity.ok(firebaseService.getUserAddresses(userId));
     }
 
-    @PutMapping("/payment-methods/{id}")
-    public ResponseEntity<?> addPaymentMethods(@RequestHeader(value = "uid", required = true) String userId, @PathVariable String id) {
-        stripeService.addPaymentMethod(userId,id);
-        return ResponseEntity.ok("Payment Added");
+    @DeleteMapping("/address/{id}")
+    public ResponseEntity<?> deleteAddress(
+            @RequestHeader(value = "uid", required = true) String userId,
+            @PathVariable String id) {
+        firebaseService.deleteAddress(userId, id);
+        return ResponseEntity.ok("Address Deleted");
     }
 
-    @DeleteMapping("/payment-methods/{id}")
-    public ResponseEntity<?> deletePaymentMethods(@RequestHeader(value = "uid", required = true) String userId, @PathVariable String id) {
-        //String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        //DecodedJWT jwt = JWT.decode(token);
-        // String subject = jwt.getSubject();
-        stripeService.deletePaymentMethod(id);
-        return ResponseEntity.ok("Payment Deleted");
+    @PostMapping("/address/{id}")
+    public ResponseEntity<?> updateAddress(@RequestHeader(value = "uid", required = true) String userId, @PathVariable String id, @RequestBody AddressRequest address) {
+        return ResponseEntity.ok(firebaseService.updateAddress(userId, id, address));
+    }
+
+    @GetMapping("/address/{id}")
+    public ResponseEntity<?> getAddress(@RequestHeader(value = "uid", required = true) String userId,
+                                        @PathVariable String id) {
+        return ResponseEntity.ok(firebaseService.getAddress(userId, id));
     }
 }

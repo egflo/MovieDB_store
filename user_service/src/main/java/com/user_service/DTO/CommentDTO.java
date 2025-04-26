@@ -1,65 +1,56 @@
-package com.user_service.models;
+package com.user_service.DTO;
 
+import com.user_service.models.Comment;
+import com.user_service.models.Movie;
+import com.user_service.models.Sentiment;
+import com.user_service.models.UserMeta;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+
+@Getter
 @Setter
-@NoArgsConstructor
-@Document(collection = "comments")
-public class Comment {
-    @Id
-    ObjectId id;
+public class CommentDTO {
+    String id;
 
     String text;
 
-    @Field("user_id")
     String userId;
 
-    @Field("movie_id")
-    ObjectId movieId;
+    String movieId;
 
-    @Field("review")
-    ObjectId reviewId;
+    String reviewId;
 
     Date date;
 
     Integer likes;
 
-    @Getter
     UserMeta user;
 
-    @Getter
     Movie movie;
 
-    public String getId() {
-        return this.id.toString();
+    SentimentDTO sentiment;
+
+    public CommentDTO(Comment comment) {
+        this.id = comment.getId().toString();
+        this.text = comment.getText();
+        this.userId = comment.getUserId();
+        this.movieId = comment.getMovieId().toString();
+        this.reviewId = comment.getReviewId().toString();
+        this.date = comment.getDate();
+        this.likes = comment.getLikes();
+        this.user = comment.getUser();
+        this.movie = comment.getMovie();
     }
 
-    public String getMovieId() {
-        return this.movieId.toString();
-    }
-
-    public String getReviewId() {
-        return this.reviewId.toString();
-    }
-
-    public String getText() {
-        return  this.text;
-    }
-
-    public Integer getLikes () {
-        return  this.likes;
-    }
-
-    public Date getDate() {
-        return this.date;
+    public void setSentiment(Sentiment sentiment) {
+        this.sentiment = new SentimentDTO(sentiment);
     }
 
     @Override

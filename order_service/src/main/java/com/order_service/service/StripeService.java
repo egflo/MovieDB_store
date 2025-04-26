@@ -4,16 +4,18 @@ import com.order_service.dto.AddressDTO;
 import com.order_service.dto.PaymentMethodDTO;
 import com.order_service.dto.PaymentSheetDTO;
 import com.order_service.dto.UserDTO;
-import com.order_service.exception.FirebaseServiceException;
 import com.order_service.exception.StripeServiceException;
-import com.order_service.model.User;
+import com.order_service.grpc.CartService;
+import com.order_service.grpc.UserService;
 import com.order_service.request.AddressRequest;
 import com.order_service.request.PaymentRequest;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
 import com.stripe.model.*;
+import com.stripe.model.checkout.Session;
 import com.stripe.model.tax.Calculation;
 import com.stripe.param.*;
+import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.tax.CalculationCreateParams;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -28,11 +30,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Transactional
 @Service
 public class StripeService {
+
+    private static final Logger LOGGER = Logger.getLogger(StripeService.class.getName());
+
+
     @Value("${stripe.secret.key}")
     private String secretKey;
 
@@ -40,10 +47,10 @@ public class StripeService {
     private String publicKey;
 
     @Autowired
-    FirebaseService firebaseService;
+    CartService cartService;
 
     @Autowired
-    CartService cartService;
+    UserService userService;
 
     @PostConstruct
     public void init() {
@@ -66,9 +73,7 @@ public class StripeService {
         paymentSheetDTO.setCustomer(customer.getId());
         paymentSheetDTO.setPublishableKey(publicKey);
 
-
         return paymentSheetDTO;
-
     }
 
     public Object createPaymentSheet(String userId) throws StripeException {
@@ -76,11 +81,10 @@ public class StripeService {
 
         //Check if customer exists, if not create customer
         Customer customer = createCustomer(userId);
-
+        CartResponse cart = cartService.getCart(userId);
 
         //Create ephemeral key
         EphemeralKey ephemeralKey = generateEphemeralKey(customer.getId());
-
 
         AddressRequest addressRequest = new AddressRequest();
         addressRequest.setFirstName("John");
@@ -91,12 +95,10 @@ public class StripeService {
         addressRequest.setCountry("US");
         addressRequest.setPostcode("90001");
 
-
         AddressDTO addressDTO = new AddressDTO(addressRequest);
 
-
         //Calculate the total amount
-        Calculation calculation = calculation(userId, addressDTO);
+        Calculation calculation = calculation(userId, addressDTO, cart);
 
         //Create PaymentIntent
         PaymentIntent paymentIntent =
@@ -113,85 +115,73 @@ public class StripeService {
         return params;
     }
 
-
-    public Customer updateCustomer(String userId, String customerId) throws StripeException {
-
-        CustomerCreateParams customerParams = CustomerCreateParams.builder()
+    public Customer getCustomer(String id) throws StripeException {
+        //Retrieve customer based on customerId or firebase userId
+        CustomerSearchParams params = CustomerSearchParams.builder()
+                .setQuery("metadata['uid']:'" + id + "'")
                 .build();
 
-        Customer customer = Customer.create(customerParams);
+        CustomerSearchResult customers = Customer.search(params);
 
-        //Save to firestore
-        firebaseService.updateUser(userId, customer.getId());
-        return customer;
-    }
+        if(customers.getData().isEmpty()) {
+            LOGGER.info("Customer not found");
 
-    public Customer createCustomer(String userId) throws StripeException {
-        boolean exists = firebaseService.userExists(userId);
-
-
-        //Check if user exists, if not create user else get user
-        UserDTO user = null;
-        if (exists) {
-            user = firebaseService.getUser(userId);
-
-            //If not customer id, create customer
-            if (user.getCustomerId() == null || user.getCustomerId().isEmpty()) {
-                return updateCustomer(userId, user.getCustomerId());
-            }
-
-
-            return getCustomer(user.getId());
-        }
-
-        CustomerCreateParams customerParams = CustomerCreateParams.builder()
-                .build();
-
-        Customer customer = Customer.create(customerParams);
-        //Save to firestore
-        firebaseService.addUser(userId, customer.getId());
-
-        return customer;
-    }
-
-
-    public Customer createCustomer(String userId, String email) throws StripeException {
-
-        boolean exists = firebaseService.userExists(userId);
-
-        //Check if user exists, if not create user else get user
-        UserDTO user = null;
-        if (exists) {
-            user = firebaseService.getUser(userId);
-            Customer customer = getCustomer(user.getId());
+            Customer customer =  createCustomer(id);
             return customer;
         }
 
+        return customers.getData().get(0);
+    }
+
+    public Customer createCustomer(String userId) throws StripeException {
+        //Retrieve customer if exists based on firebase userId
+        CustomerSearchParams params = CustomerSearchParams.builder()
+                .setQuery("metadata['uid']:'" + userId + "'")
+                .build();
+
+        CustomerSearchResult customers = Customer.search(params);
+
+        if (!customers.getData().isEmpty()) {
+            return customers.getData().get(0);
+        }
+
         CustomerCreateParams customerParams = CustomerCreateParams.builder()
-                .setEmail(email)
+                .putMetadata("uid", userId)
                 .build();
 
         Customer customer = Customer.create(customerParams);
-        //Save to firestore
-        firebaseService.addUser(userId, customer.getId(), email);
-
         return customer;
     }
+
+    public Customer updateCustomer(String customerId, String userId) throws StripeException {
+        //Retrieve customer based on customerId and update metadata with firebase userId
+        Customer resource = Customer.retrieve(customerId);
+        CustomerUpdateParams params =
+                CustomerUpdateParams.builder()
+                        .putMetadata("uid", userId)
+                        .build();
+
+        Customer customer = resource.update(params);
+        return customer;
+    }
+
+    public void deleteCustomer(String customerId) throws StripeException {
+        Customer customer = Customer.retrieve(customerId);
+        customer.delete();
+    }
+
 
     public Invoice upcomingInvoice(String userId)  {
 
         try {
             Customer customer = createCustomer(userId);
-
             //Get addresses
-            List<AddressDTO> addresses = firebaseService.getUserAddresses(userId);
+            List<AddressDTO> addresses = userService.getAddresses(userId);
             //Find default address else use first address return null if no address
             AddressDTO defaultAddress = addresses.stream()
-                    .filter(AddressDTO::getisDefault)
+                    .filter(AddressDTO::isDefault)
                     .findFirst()
                     .orElse(addresses.get(0));
-
-
 
             CartResponse cart = cartService.getCart(userId);
             List<CartItem>  items= cart.getItemsList();
@@ -199,7 +189,7 @@ public class StripeService {
 
             for (CartItem item : items) {
                 InvoiceUpcomingParams.InvoiceItem invoiceItem = InvoiceUpcomingParams.InvoiceItem.builder()
-                        .setCurrency(item.getCurrency())
+                        .setCurrency(cart.getCurrency())
                         .setAmount(((long) item.getQuantity() * item.getPrice()))
                         .build();
                 invoiceItems.add(invoiceItem);
@@ -211,34 +201,12 @@ public class StripeService {
                     .build();
 
             Invoice invoice = Invoice.upcoming(params);
-
             return invoice;
 
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getStripeError());
-            System.out.println(e.getStripeError());
             throw new StripeServiceException(e.getMessage(), e);
         }
 
-    }
-
-
-    public Customer getCustomer(String userId) throws StripeException {
-
-        UserDTO user = firebaseService.getUser(userId);
-        String customerId = user.getCustomerId();
-
-        return Customer.retrieve(customerId);
-    }
-
-    public void deleteCustomer(String id) throws StripeException {
-
-        UserDTO user = firebaseService.getUser(id);
-        String customerId = user.getCustomerId();
-
-        Customer customer = Customer.retrieve(customerId);
-        customer.delete();
     }
 
     // Method to generate ephemeral key
@@ -300,7 +268,6 @@ public class StripeService {
         }
     }
 
-
     public PaymentIntent createPaymentIntent(PaymentRequest request, String customerId)  {
         try {
 
@@ -344,29 +311,25 @@ public class StripeService {
         }
     }
 
-    public Calculation calculation(String userId, AddressDTO userAddress) throws StripeException {
-        //Get Users cart items for calculation
-        CartResponse cart = cartService.getCart(userId);;
-
+    public Calculation calculation(String userId, AddressDTO userAddress, CartResponse cart) throws StripeException {
         List<CalculationCreateParams.LineItem> lineItems = cart.getItemsList().stream()
                 .map(item -> CalculationCreateParams.LineItem.builder()
                         .setAmount(((long) item.getQuantity() * item.getPrice()))
                         .setQuantity((long) item.getQuantity())
-                        .setReference(item.getSku())
+                        .setReference(item.getItemId())
                         .build())
                 .collect(Collectors.toList());
-
 
         CalculationCreateParams.CustomerDetails.Address address = CalculationCreateParams.CustomerDetails.Address
                 .builder()
                 .setLine1(userAddress.getStreet())
                 .setCity(userAddress.getCity())
                 .setCountry(userAddress.getCountry())
-                .setPostalCode(userAddress.getPostalCode())
+                .setPostalCode(userAddress.getPostcode())
                 .build();
 
         //Set Shipping Cost
-       // lineItems.add(CalculationCreateParams.LineItem.builder()
+        //lineItems.add(CalculationCreateParams.LineItem.builder()
                // .setAmount(500L)
                // .setQuantity(1L)
                 //.setReference("SHIPPING")
@@ -381,7 +344,7 @@ public class StripeService {
                                         .setAmount(500L)
                                         .build()
                         )
-                        .setCurrency(cart.getItemsList().get(0).getCurrency())
+                        .setCurrency(cart.getCurrency())
                         .addAllLineItem(lineItems)
                         .setCustomerDetails(
                                 CalculationCreateParams.CustomerDetails
@@ -394,14 +357,10 @@ public class StripeService {
                         .addExpand("line_items.data.tax_breakdown")
                         .build();
 
-
-        Calculation calculation = Calculation.create(params);
-
-        return calculation;
+        return Calculation.create(params);
     }
 
     public Refund refund(String paymentIntentId)  {
-
         try {
             PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
             return Refund.create(RefundCreateParams.builder()
@@ -412,14 +371,20 @@ public class StripeService {
         }
     }
 
+    public Charge getCharge(String latestCharge) {
+        try {
+            return Charge.retrieve(latestCharge);
+        } catch (StripeException e) {
+            throw new StripeServiceException(e.getMessage(), e);
+        }
+    }
 
     public void setDefaultPaymentMethod(String userId, String paymentMethodId) {
         try {
             // Retrieve the user from your service
-            UserDTO user = firebaseService.getUser(userId);
+            Customer customer = getCustomer(userId);
 
             // Update the customer's default payment method
-            Customer customer = Customer.retrieve(user.getCustomerId());
             CustomerUpdateParams params = CustomerUpdateParams.builder()
                     .setInvoiceSettings(CustomerUpdateParams.InvoiceSettings.builder()
                             .setDefaultPaymentMethod(paymentMethodId)
@@ -429,7 +394,7 @@ public class StripeService {
             Customer updatedCustomer = customer.update(params);
 
             // Optionally, you might want to log or return the updated customer details
-            System.out.println("Updated customer: " + updatedCustomer);
+            LOGGER.info("Updated customer: " + updatedCustomer);
 
         } catch (StripeException e) {
             throw new StripeServiceException(e.getMessage(), e);
@@ -439,11 +404,11 @@ public class StripeService {
     public void addPaymentMethod(String userId, String paymentMethodId)  {
 
         try {
-            UserDTO user = firebaseService.getUser(userId);
+            Customer customer = getCustomer(userId);
 
             PaymentMethod paymentMethod = PaymentMethod.retrieve(paymentMethodId);
             paymentMethod.attach(PaymentMethodAttachParams.builder()
-                    .setCustomer(user.getCustomerId())
+                    .setCustomer(customer.getId())
                     .build());
         } catch (StripeException e) {
             throw new StripeServiceException(e.getMessage(), e);
@@ -452,14 +417,13 @@ public class StripeService {
 
     public void updatePaymentMethod(String userId, String paymentMethodId, Map<String, Object> updates) {
         try {
-            // Retrieve the user from your service
-            UserDTO user = firebaseService.getUser(userId);
+            Customer customer = getCustomer(userId);
 
             // Retrieve the payment method from Stripe
             PaymentMethod paymentMethod = PaymentMethod.retrieve(paymentMethodId);
 
             // Check if the payment method belongs to the user
-            if (!paymentMethod.getCustomer().equals(user.getCustomerId())) {
+            if (!paymentMethod.getCustomer().equals(customer.getId())) {
                 throw new IllegalArgumentException("Payment method does not belong to the user");
             }
 
@@ -467,7 +431,7 @@ public class StripeService {
             PaymentMethod updatedPaymentMethod = paymentMethod.update(updates);
 
             // Optionally, you might want to log or return the updated payment method details
-            System.out.println("Updated payment method: " + updatedPaymentMethod);
+            LOGGER.info("Updated payment method: " + updatedPaymentMethod);
 
         } catch (StripeException e) {
             throw new StripeServiceException(e.getMessage(), e);
@@ -476,7 +440,6 @@ public class StripeService {
 
 
     public void deletePaymentMethod(String paymentMethodId)  {
-
         try {
             PaymentMethod paymentMethod = PaymentMethod.retrieve(paymentMethodId);
             paymentMethod.detach();
@@ -491,20 +454,18 @@ public class StripeService {
     }
 
     public List<PaymentMethodDTO> getPaymentMethods(String userId) {
-
         List<PaymentMethodDTO> paymentMethods = new ArrayList<>();
-        try {
-            UserDTO user = firebaseService.getUser(userId);
 
-            String defaultPaymentMethodId = getDefaultPaymentMethodId(user.getCustomerId());
+        try {
+            Customer customer = getCustomer(userId);
+            String defaultPaymentMethodId = getDefaultPaymentMethodId(customer.getId());
 
             PaymentMethodCollection paymentMethodCollection = PaymentMethod.list(PaymentMethodListParams.builder()
-                    .setCustomer(user.getCustomerId())
+                    .setCustomer(customer.getId())
                     .setType(PaymentMethodListParams.Type.CARD)
                     .build());
 
             for (PaymentMethod paymentMethod : paymentMethodCollection.getData()) {
-
                 PaymentMethodDTO dto = new PaymentMethodDTO(paymentMethod);
                 boolean isDefault = paymentMethod.getId().equals(defaultPaymentMethodId);
                 dto.setDefault(isDefault);
@@ -532,14 +493,106 @@ public class StripeService {
         return PaymentIntent.retrieve(paymentIntentId);
     }
 
-    public Charge getCharge(String latestCharge) {
-        try {
-            return Charge.retrieve(latestCharge);
-        } catch (StripeException e) {
-            throw new StripeServiceException(e.getMessage(), e);
+    public Map<String, String> createCheckoutSession(String userId) throws StripeException {
+
+        Customer customer = getCustomer(userId);
+        CartResponse cart = cartService.getCart(userId);
+
+        SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()
+                .setMode(SessionCreateParams.Mode.PAYMENT) // Set the mode to payment - One time payment
+                .setSuccessUrl("http://localhost:3000/success")
+                .setCancelUrl("http://localhost:3000/cancel")
+                .setShippingAddressCollection(
+                        SessionCreateParams.ShippingAddressCollection.builder()
+                                .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.US)
+                                .build()
+                )
+                .setCurrency("usd")
+                .setCustomer(customer.getId())
+                .setCustomerEmail(customer.getEmail())
+                .putMetadata("uid", userId)
+                .setClientReferenceId(userId)
+                .setAutomaticTax(
+                        SessionCreateParams.AutomaticTax.builder()
+                                .setEnabled(true)
+                                .build()
+                )
+                .setCustomerUpdate(
+                        SessionCreateParams.CustomerUpdate.builder()
+                                .setName(
+                                        SessionCreateParams.CustomerUpdate.Name.AUTO // Automatically update the customer's name from the shipping address
+                                )
+                                .setShipping(
+                                        SessionCreateParams.CustomerUpdate.Shipping.AUTO // Automatically update the customer's shipping address from the shipping address provided during checkout
+                                )
+                                .build()
+
+                )
+                .addShippingOption(
+                        SessionCreateParams.ShippingOption.builder()
+                                .setShippingRateData(
+                                        SessionCreateParams.ShippingOption.ShippingRateData.builder()
+                                                .setDisplayName("Standard Shipping")
+                                                .setFixedAmount(SessionCreateParams.ShippingOption.ShippingRateData.FixedAmount.builder()
+                                                        .setAmount(500L) // Set shipping cost to $5.00
+                                                        .setCurrency("usd")
+                                                        .build())
+                                                .setType(SessionCreateParams.ShippingOption.ShippingRateData.Type.FIXED_AMOUNT)
+                                                .build()
+                                )
+                                .build()
+                )
+                .addShippingOption(
+                        SessionCreateParams.ShippingOption.builder()
+                                .setShippingRateData(
+                                        SessionCreateParams.ShippingOption.ShippingRateData.builder()
+                                                .setDisplayName("Express Shipping")
+                                                .setFixedAmount(SessionCreateParams.ShippingOption.ShippingRateData.FixedAmount.builder()
+                                                        .setAmount(1500L) // Set shipping cost to $15.00
+                                                        .setCurrency("usd")
+                                                        .build())
+                                                .setType(SessionCreateParams.ShippingOption.ShippingRateData.Type.FIXED_AMOUNT)
+                                                .build()
+                                )
+                                .build()
+                );
+        // Add line items to the session
+        for (CartItem item : cart.getItemsList()) {
+            sessionBuilder.addLineItem(
+                    SessionCreateParams.LineItem.builder()
+                            .setQuantity((long) item.getQuantity())
+                            .setPriceData(
+                                    SessionCreateParams.LineItem.PriceData.builder()
+                                            .setCurrency("usd")
+                                            .setUnitAmount((long) item.getPrice()) // Convert to cents
+                                            .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                    .setName(item.getName())
+                                                    .setDescription(item.getDescription())
+                                                    .addAllImage(List.of(item.getImage()))
+                                                    .build())
+                                            .build()
+                            )
+                            .build()
+            );
         }
+
+        SessionCreateParams sessionParams = sessionBuilder.build();
+        Session session = Session.create(sessionParams);
+        Map<String, String> response = new HashMap<>();
+        response.put("sessionId", session.getId());
+        response.put("publishableKey", publicKey);
+        response.put("clientSecret", session.getClientSecret());
+        response.put("customerId", customer.getId());
+        response.put("customerEmail", customer.getEmail());
+        response.put("amount_subtotal", session.getAmountSubtotal().toString());
+        response.put("amount_total", session.getAmountTotal().toString());
+        response.put("currency", session.getCurrency());
+        response.put("payment_status", session.getPaymentStatus());
+        response.put("status", session.getStatus());
+        response.put("url", session.getUrl());
+
+        LOGGER.info("Checkout session created: " + session);
+        return response;
     }
-
-
 
 }

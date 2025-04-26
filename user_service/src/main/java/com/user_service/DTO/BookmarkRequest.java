@@ -4,15 +4,13 @@ public class BookmarkRequest
 {
     private String userId;
     private String movieId;
-    private String created;
 
     public BookmarkRequest() {
     }
 
-    public BookmarkRequest(String userId, String movieId, String created) {
+    public BookmarkRequest(String userId, String movieId) {
         this.userId = userId;
         this.movieId = movieId;
-        this.created = created;
     }
 
     public String getUserId() {
@@ -31,11 +29,4 @@ public class BookmarkRequest
         this.movieId = movieId;
     }
 
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
 }

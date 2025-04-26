@@ -7,8 +7,8 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "item")
-public class Inventory {
+@Table(name = "product")
+public class Product {
     @Id
     @Column(name = "id")
     private String id;
@@ -33,7 +33,7 @@ public class Inventory {
 
     @ManyToOne
     @JoinColumn(name = "type")
-    private Type type; //Category
+    private Category category;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created")
@@ -43,13 +43,13 @@ public class Inventory {
     @Column(name = "updated")
     private Date updated;
 
-    public Inventory() {
+    public Product() {
         this.created = new Date();
         this.updated = new Date();
         this.status = Status.IN_STOCK;
     }
 
-    public Inventory(String id, Integer price, String currency, String SKU, int quantity, Status status, Date created, Date updated, Type type) {
+    public Product(String id, Integer price, String currency, String SKU, int quantity, Status status, Date created, Date updated, Category category) {
         this.id = id;
         this.price = price;
         this.currency = currency;
@@ -58,7 +58,7 @@ public class Inventory {
         this.status = status;
         this.created = created;
         this.updated = updated;
-        this.type = type;
+        this.category = category;
     }
 
     public String getId() {
@@ -93,12 +93,12 @@ public class Inventory {
         this.quantity = quantity;
     }
 
-    public Type getType() {
-        return type;
+    public Category getType() {
+        return category;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(Category category) {
+        this.category = category;
     }
 
     public String getSKU() {
@@ -143,7 +143,7 @@ public class Inventory {
                 ", status='" + status + '\'' +
                 ", created=" + created +
                 ", updated=" + updated +
-                ", type=" + type +
+                ", type=" + category +
                 '}';
     }
 

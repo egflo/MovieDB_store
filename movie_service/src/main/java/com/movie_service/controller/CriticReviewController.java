@@ -2,8 +2,6 @@ package com.movie_service.controller;
 
 import com.movie_service.models.CriticReview;
 import com.movie_service.service.CriticReviewService;
-import com.movie_service.service.ReviewService;
-import com.movie_service.service.SentimentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,7 +18,7 @@ public class CriticReviewController {
     private CriticReviewService service;
 
     @Autowired
-    public CriticReviewController(CriticReviewService service, SentimentService sentimentService) {
+    public CriticReviewController(CriticReviewService service) {
         this.service = service;
     }
 

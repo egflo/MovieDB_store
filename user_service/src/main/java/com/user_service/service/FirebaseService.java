@@ -4,58 +4,117 @@ package com.user_service.service;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserMetadata;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
+import com.stripe.model.tax.Registration;
 import com.user_service.DTO.AddressRequest;
-import com.user_service.DTO.UserResponse;
+import com.user_service.DTO.BookmarkDTO;
+import com.user_service.DTO.BookmarkRequest;
+import com.user_service.DTO.UserRequest;
 import com.user_service.exception.FirebaseServiceException;
+import com.user_service.grpc.MovieService;
 import com.user_service.models.Address;
+import com.user_service.models.Bookmark;
+import com.user_service.models.Movie;
 import com.user_service.models.User;
+import org.proto.grpc.MovieResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 @Service
 public class FirebaseService {
 
+    private static final Logger LOGGER = Logger.getLogger("FirebaseService");
+
     private final Firestore db;
 
+    @Autowired
+    private MovieService movieService;
+
     public FirebaseService() {
-        this.db = FirestoreClient.getFirestore();
-    }
-
-    public void addUser(String id, String customerId, String email) {
-
         try {
-            DocumentReference docRef = db.collection("users").document(id);
-            User user = new User(id, customerId, email);
-            ApiFuture<WriteResult> result = docRef.set(user);
+            this.db = FirestoreClient.getFirestore();
+            LOGGER.info("Firestore initialized successfully");
         } catch (Exception e) {
-            throw new FirebaseServiceException("Error adding user");
+            LOGGER.severe("Error initializing Firestore: " + e.getMessage());
+            throw new FirebaseServiceException("Error initializing Firestore", e);
         }
     }
 
-    public void addUser(String id, String customerId) {
+    public UserRecord getUserAuth(String id) {
         try {
-            DocumentReference docRef = db.collection("users").document(id);
-            User user = new User(id, customerId);
-            ApiFuture<WriteResult> result = docRef.set(user);
+            UserRecord userRecord = FirebaseAuth.getInstance().getUser(id);
+            UserMetadata userMeta = userRecord.getUserMetadata();
+
+            LOGGER.info("Successfully fetched user data: " + userRecord);
+
+            return userRecord;
         } catch (Exception e) {
-            throw new FirebaseServiceException("Error adding user");
+            throw new FirebaseServiceException("Error getting user: " + e.getMessage());
         }
     }
 
-    public String createUser(User user) {
+    public User getUser(String userId) {
+        UserRecord userRecord = getUserAuth(userId);
+
+        DocumentReference docRef = db.collection("users").document(userId);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = null;
+        try {
+            document = future.get();
+            if (document.exists()) {
+                // Convert document to User class
+                User user = document.toObject(User.class);
+                assert user != null;
+                user.setId(document.getId());
+                user.setEmail(userRecord.getEmail());
+                user.setDisplayName(userRecord.getDisplayName());
+                user.setPhotoUrl(userRecord.getPhotoUrl());
+                user.setPhoneNumber(userRecord.getPhoneNumber());
+                user.setEmailVerified(userRecord.isEmailVerified());
+                user.setDisabled(userRecord.isDisabled());
+                user.setCreated(userRecord.getUserMetadata().getCreationTimestamp());
+                user.setLastSignIn(userRecord.getUserMetadata().getLastSignInTimestamp());
+                user.setProviderId(userRecord.getProviderId());
+
+                List<Address> addresses = getUserAddresses(userId);
+                user.setAddresses(addresses);
+                LOGGER.info("User" + user);
+
+                return user;
+            } else {
+                System.out.println("No such document!");
+                //Create user if it does not exist
+                addUser(userId);
+                return getUser(userId);
+            }
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirebaseServiceException("Error getting user with id: " + userId);
+        }
+    }
+
+    public String createUser(UserRequest user) {
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(user.getEmail())
-                .setPassword(user.getPassword())
-                .setDisplayName(user.getDisplayName());
+                .setPassword(user.getPassword());
+
         try {
+            //Create a user in firebase auth
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
+            LOGGER.info("Successfully created new user: " + userRecord.getUid());
+
+            //Create a user in firestore
+            User newUser = addUser(userRecord.getUid());
+            LOGGER.info("Successfully created new user in firestore: " + newUser);
+
             return userRecord.getUid();
         } catch (Exception e) {
             throw new FirebaseServiceException("Error creating user: " + e.getMessage());
@@ -63,10 +122,80 @@ public class FirebaseService {
         }
     }
 
+    public UserRecord updateUser(String id, UserRequest user) {
+        //Only update user if it exists and fields are not null
+        if (userExists(id)) {
+            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(id);
+
+            if (user.getEmail() != null) {
+                request.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                request.setPassword(user.getPassword());
+            }
+            if (user.getDisplayName() != null) {
+                request.setDisplayName(user.getDisplayName());
+            }
+            if (user.getPhotoUrl() != null) {
+                request.setPhotoUrl(user.getPhotoUrl());
+            }
+
+            try {
+                UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
+                LOGGER.info("Successfully updated user: " + userRecord.getUid());
+                return userRecord;
+            } catch (Exception e) {
+                throw new FirebaseServiceException("Error updating user: " + e.getMessage());
+            }
+        }
+
+        throw new FirebaseServiceException("User does not exist");
+    }
+
+    private boolean userExists(String id) {
+        try {
+            //Firebase database
+            DocumentReference docRef = db.collection("users").document(id);
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot document = future.get();
+            User userRecord = document.toObject(User.class);
+
+            return userRecord != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public User addUser(String id) {
+        try {
+            UserRecord record = getUserAuth(id);
+            //Check if user already exists
+            if (userExists(id)) {
+                throw new FirebaseServiceException("User already exists");
+            }
+            DocumentReference docRef = db.collection("users").document(id);
+            User user = new User(record);
+            ApiFuture<WriteResult> result = docRef.set(user);
+
+            if(result.isDone()) {
+               Logger.getLogger("FirebaseService").info("User added successfully");
+            }
+
+            User resultUser = docRef.get().get().toObject(User.class);
+            //get result
+            LOGGER.info("User added: " + resultUser);
+
+            return resultUser;
+
+        } catch (Exception e) {
+            throw new FirebaseServiceException("Error adding user");
+        }
+    }
 
     public void deleteUser(String id) {
         try {
             ApiFuture<WriteResult> writeResult = db.collection("users").document(id).delete();
+
         } catch (Exception e) {
             throw new FirebaseServiceException("Error deleting user");
         }
@@ -85,56 +214,129 @@ public class FirebaseService {
         return users;
     }
 
-    public  boolean userExists(String id) {
-        DocumentReference docRef = db.collection("users").document(id);
+
+    public Bookmark addBookmark(BookmarkRequest request) {
+        //check if bookmark already exists
+        Bookmark bookmarkExists = getByMovieIdAndUserId(request.getMovieId(), request.getUserId());
+        if (bookmarkExists != null) {
+            LOGGER.info("Bookmark already exists :: " + bookmarkExists);
+            return bookmarkExists;
+        }
+
+        DocumentReference docRef = db.collection("users").document(request.getUserId());
+        CollectionReference bookmarksSubCollection = docRef.collection("bookmarks");
+
+        Map<String, Object> newBookmark = new HashMap<>();
+        newBookmark.put("userId", request.getUserId());
+        newBookmark.put("movieId", request.getMovieId());
+        newBookmark.put("created", new Date());
+        MovieResponse movie = movieService.getMovie(request.getMovieId());
+        Movie movieDTO = new Movie(movie);
+        newBookmark.put("movie", movieDTO);
+
+        ApiFuture<DocumentReference> addedDocRef = bookmarksSubCollection.add(newBookmark);
+        Bookmark bookmark= new Bookmark(request);
+
+        try {
+            String bookmarkId = addedDocRef.get().getId();
+
+            bookmark.setId(bookmarkId);
+            bookmark.setUserId(newBookmark.get("userId").toString());
+            bookmark.setCreated((Date) newBookmark.get("created"));
+            bookmark.setMovie(new Movie(movie));
+
+            LOGGER.info("Added document with ID: " + bookmarkId);
+            return bookmark;
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirebaseServiceException("Error adding bookmark");
+        }
+    }
+
+    public Bookmark getBookmark(String id, String userId) {
+        DocumentReference docRef = db.collection("users").document(userId).collection("bookmarks").document(id);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = null;
         try {
             document = future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirebaseServiceException("Error getting user with id: " + id);
-        }
-        return document.exists();
-    }
-
-    public boolean userExistsByCustomerId(String customerId) {
-        Query query = db.collection("users").whereEqualTo("customerId", customerId);
-        ApiFuture<QuerySnapshot> querySnapshot = query.get();
-        try {
-            return !querySnapshot.get().isEmpty();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new FirebaseServiceException("Error getting user with customerId: " + customerId);
-        }
-    }
-
-    public UserResponse getUser(String userId) {
-        DocumentReference docRef = db.collection("users").document(userId);
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = null;
-        try {
-            document = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new FirebaseServiceException("Error getting user with id: " + userId);
+            throw new FirebaseServiceException("Error getting bookmark with id: " + id);
         }
         if (document.exists()) {
-            // Convert document to User class
-            User user = document.toObject(User.class);
-            String id = document.getId();
+            // Convert document to Bookmark class
+            Bookmark bookmark = document.toObject(Bookmark.class);
+            assert bookmark != null;
+            bookmark.setId(document.getId());
 
-            UserResponse userDTO = new UserResponse(id, user.getCustomerId(), user.getEmail());
-            List<Address> addresses = getUserAddresses(userId);
-            userDTO.setAddresses(addresses);
+            LOGGER.info("Bookmark ID: " + bookmark.getId());
 
-            return userDTO;
+            return bookmark;
         } else {
-            System.out.println("No such document!");
-            return null;
+            throw new FirebaseServiceException("No such document!");
         }
     }
 
-    //Add address to user
-    public Address addAddress(String userId, AddressRequest request) {
+    public void deleteBookmark(String id, String userId) {
+        DocumentReference docRef = db.collection("users").document(userId).collection("bookmarks").document(id);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = null;
+        try {
+            document = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirebaseServiceException("Error getting bookmark with id: " + id);
+        }
+        if (document.exists()) {
+            Bookmark item = document.toObject(Bookmark.class);
+            assert item != null;
+            docRef.delete();
+        } else {
+            throw new FirebaseServiceException("No such document!");
+        }
+    }
 
+    public Bookmark getByMovieIdAndUserId(String movieId, String userId) {
+        Query docRef = db.collection("users").document(userId).collection("bookmarks").whereEqualTo("movieId", movieId);
+        ApiFuture<QuerySnapshot> future = docRef.get();
+        QuerySnapshot document = null;
+        try {
+            document = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirebaseServiceException("Error getting bookmark with id: " + movieId);
+        }
+
+        if (!document.isEmpty()) {
+            for (DocumentSnapshot doc : document.getDocuments()) {
+                Bookmark bookmark = doc.toObject(Bookmark.class);
+                assert bookmark != null; // Should not be null if null then throw exception
+                bookmark.setId(doc.getId());
+                return bookmark;
+            }
+        }
+        LOGGER.info("No such document for movieId: " + movieId + " and userId: " + userId);
+        return null;
+    }
+
+    public List<Bookmark> getAllBookmarks(String userId, Pageable pageable) {
+        DocumentReference docRef = db.collection("users").document(userId);
+        CollectionReference bookmarksSubCollection = docRef.collection("bookmarks");
+
+        Query query = bookmarksSubCollection.orderBy("created").limit(pageable.getPageSize());
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        List<Bookmark> bookmarks = new ArrayList<>();
+
+        try {
+            for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+                Bookmark bookmark = document.toObject(Bookmark.class);
+                assert bookmark != null;
+                bookmark.setId(document.getId());
+                bookmarks.add(bookmark);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirebaseServiceException("Error getting bookmarks");
+        }
+        return bookmarks;
+    }
+
+    public Address addAddress(String userId, AddressRequest request) {
         DocumentReference docRef = db.collection("users").document(userId);
         CollectionReference addressesSubCollection = docRef.collection("addresses");
 
@@ -164,7 +366,6 @@ public class FirebaseService {
         return addressDTO;
     }
 
-
     public List<Address> getUserAddresses(String userId)  {
         DocumentReference docRef = db.collection("users").document(userId);
         CollectionReference addressesSubCollection = docRef.collection("addresses");
@@ -182,16 +383,6 @@ public class FirebaseService {
             }
         });
         return addresses;
-    }
-
-    public List<String> getAddressIds(String userId) {
-        DocumentReference docRef = db.collection("users").document(userId);
-        CollectionReference addressesSubCollection = docRef.collection("addresses");
-        List<String> addressIds = new ArrayList<>();
-        addressesSubCollection.listDocuments().forEach(documentReference -> {
-            addressIds.add(documentReference.getId());
-        });
-        return addressIds;
     }
 
     public Address updateAddress(String userId, String addressId, AddressRequest request) {

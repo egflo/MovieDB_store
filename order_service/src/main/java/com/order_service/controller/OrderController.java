@@ -4,6 +4,8 @@ package com.order_service.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.order_service.exception.OrderException;
+import com.order_service.grpc.CartService;
+import com.order_service.grpc.UserService;
 import com.order_service.request.AddressRequest;
 import com.order_service.request.PaymentRequest;
 import com.order_service.request.OrderRequest;
@@ -22,78 +24,70 @@ import java.util.Optional;
 @RestController
 public class OrderController {
     OrderService orderService;
+    UserService userService;
+    CartService cartService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, UserService userService , CartService cartService) {
         this.orderService = orderService;
+        this.userService = userService;
+        this.cartService = cartService;
     }
 
 
     @GetMapping("/payment-sheet")
     public @ResponseBody ResponseEntity<?>
-    getPaymentSheet(@RequestHeader HttpHeaders headers) {
+    getPaymentSheet(@RequestHeader(value = "uid", required = true) String userId) {
 
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-        return new ResponseEntity<>(orderService.createPaymentSheet(subject), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.createPaymentSheet(userId), HttpStatus.OK);
 
     }
 
-
     @GetMapping("/invoice")
     public @ResponseBody ResponseEntity<?>
-    getInvoice(@RequestHeader HttpHeaders headers) {
+    getInvoice(@RequestHeader(value = "uid", required = true) String userId) {
 
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-        return new ResponseEntity<>(orderService.getInvoice(subject), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getInvoice(userId), HttpStatus.OK);
 
     }
 
     @PostMapping("/invoice")
     public @ResponseBody ResponseEntity<?>
-    getInvoiceAddress(@RequestHeader HttpHeaders headers, @RequestBody AddressRequest addressRequest) {
+    getInvoiceAddress(@RequestHeader(value = "uid", required = true) String userId,
+                      @RequestBody AddressRequest addressRequest) {
 
-            String token = headers.get("authorization").get(0).split(" ")[1].trim();
-            DecodedJWT jwt = JWT.decode(token);
-            String subject = jwt.getSubject();
-
-            System.out.println("Address Request: " + addressRequest);
-
-            return new ResponseEntity<>(orderService.getInvoice(subject,addressRequest), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.getInvoice(userId,addressRequest), HttpStatus.OK);
 
     }
 
     @GetMapping("/upcoming/invoice")
     public @ResponseBody ResponseEntity<?>
-    getInvoiceUpcoming(@RequestHeader HttpHeaders headers) {
+    getInvoiceUpcoming(@RequestHeader(value = "uid", required = true) String userId) {
 
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-        return new ResponseEntity<>(orderService.getInvoiceUpcoming(subject), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getInvoiceUpcoming(userId), HttpStatus.OK);
 
     }
 
+    @PostMapping("/checkout")
+    public @ResponseBody ResponseEntity<?> checkout(
+            @RequestHeader(value = "uid", required = true) String userId) throws StripeException {
 
-    @PostMapping("/")
-    public @ResponseBody ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) throws StripeException {
 
+        // Create the order
+        return new ResponseEntity<>(orderService.createCheckoutSession(userId), HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
+    public @ResponseBody ResponseEntity<?> createOrder(
+            @RequestHeader(value = "uid", required = true) String userId,
+            @RequestBody OrderRequest orderRequest) throws StripeException {
+
+        orderRequest.setUserId(userId);
         return new ResponseEntity<>(orderService.createOrder(orderRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public @ResponseBody ResponseEntity<?> getOrder(@PathVariable(value = "id") Integer id) {
-
-        if(id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
-        }
-
 
         return new ResponseEntity<>(orderService.getOrder(id), HttpStatus.OK);
     }
@@ -101,26 +95,17 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public @ResponseBody ResponseEntity<?> deleteOrder(@PathVariable(value = "id") Integer id) {
 
-        if(id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
-        }
-
         return new ResponseEntity<>(orderService.deleteOrder(id), HttpStatus.OK);
     }
 
     @GetMapping("/user/")
     public @ResponseBody ResponseEntity<?> getOrderByUserId(
-            @RequestHeader HttpHeaders headers,
+            @RequestHeader(value = "uid", required = true) String userId,
             @RequestParam Optional<String> term,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy,
             @RequestParam Optional<Integer> direction) {
-
-
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
 
 
         Sort.Direction sortDirection = Sort.Direction.DESC;
@@ -131,7 +116,7 @@ public class OrderController {
         }
 
         return new ResponseEntity<>(orderService.getOrdersByUserId(
-                subject,
+                userId,
                 term.orElse(null),
                 PageRequest.of(
                         page.orElse(0),
@@ -142,17 +127,12 @@ public class OrderController {
 
     @GetMapping("/user/{text}")
     public @ResponseBody ResponseEntity<?> searchByText(
-            @RequestHeader HttpHeaders headers,
+            @RequestHeader(value = "uid", required = true) String userId,
             @PathVariable(value = "text") String text,
-                                                        @RequestParam Optional<Integer> limit,
-                                                        @RequestParam Optional<Integer> page,
-                                                        @RequestParam Optional<String> sortBy,
-                                                        @RequestParam Optional<Integer> direction) {
-
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
+            @RequestParam Optional<Integer> limit,
+            @RequestParam Optional<Integer> page,
+            @RequestParam Optional<String> sortBy,
+            @RequestParam Optional<Integer> direction) {
 
         Sort.Direction sortDirection = Sort.Direction.DESC;
         if (direction.isPresent()) {
@@ -161,7 +141,7 @@ public class OrderController {
             }
         }
 
-        return new ResponseEntity<>(orderService.searchByText(text, subject,
+        return new ResponseEntity<>(orderService.searchByText(text, userId,
                 PageRequest.of(
                         page.orElse(0),
                         limit.orElse(10),

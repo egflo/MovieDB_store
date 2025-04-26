@@ -1,13 +1,19 @@
 package com.user_service.DTO;
 
 import com.user_service.models.Address;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+
+@Setter
+@Getter
 public class UserResponse {
     private String id;
     private String customerId;
     private String email;
+    private String displayName;
     private List<Address> addresses;
 
     // constructors, getters and setters
@@ -18,10 +24,11 @@ public class UserResponse {
         this.addresses = addresses;
     }
 
-    public UserResponse(String id, String customerId, String email) {
+    public UserResponse(String id, String customerId, String email, String displayName) {
         this.id = id;
         this.customerId = customerId;
         this.email = email;
+        this.displayName = displayName;
     }
 
     public UserResponse(String id, String customerId) {
@@ -30,37 +37,5 @@ public class UserResponse {
     }
 
     public UserResponse() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
     }
 }

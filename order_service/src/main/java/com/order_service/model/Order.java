@@ -31,7 +31,6 @@ public class Order {
 
     private Status status;
 
-
     private Long subTotal;
 
     private Long tax;
@@ -49,7 +48,6 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Set<OrderItem> items;
-
 
     public Order() {
         this.items = new HashSet<>();
@@ -89,7 +87,6 @@ public class Order {
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
-
 
     public Status getStatus() {
         return status;
@@ -174,7 +171,6 @@ public class Order {
         this.shipping = null;
         address.setOrder(null);
     }
-
 
     public String getPaymentType() {
         return paymentType;

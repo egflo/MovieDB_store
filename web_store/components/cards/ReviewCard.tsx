@@ -15,7 +15,7 @@ import useToastContext from "../../hooks/useToastContext";
 import {AxiosResponse} from "axios";
 import {SentimentState} from "../../models/SentimentState";
 import StarIcon from '@mui/icons-material/Star';
-import {ThumbDownAltOutlined, ThumbUpOffAltOutlined} from "@mui/icons-material";
+import {ThumbDownAltOutlined, ThumbUpOffAltOutlined, FavoriteOutlined} from "@mui/icons-material";
 import {Review} from "../../models/Review";
 
 
@@ -128,6 +128,10 @@ export default function ReviewCard({review}:{review: Review}) {
                                 <span style={{fontSize: '0.8rem'}} className="rating-tail"> / 10 </span>
                             </Box>
 
+                            <Box sx={{ flexGrow: 1 }} >
+                                {review.love && <FavoriteOutlined sx={{ color: 'red' }} fontSize={'small'}/>}
+                            </Box>
+
                         </Box>
 
                     </Box>
@@ -142,7 +146,7 @@ export default function ReviewCard({review}:{review: Review}) {
                             WebkitLineClamp: 5,
                             WebkitBoxOrient: 'vertical',
                         }}>
-                            {review.text}
+                            {review.content}
                         </Typography>
 
 

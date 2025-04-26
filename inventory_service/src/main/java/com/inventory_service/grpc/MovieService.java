@@ -1,7 +1,8 @@
-package com.inventory_service.service_grpc;
+package com.inventory_service.grpc;
 
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.proto.grpc.MovieRequest;
 import org.proto.grpc.MovieResponse;
 import org.proto.grpc.MovieServiceGrpc;

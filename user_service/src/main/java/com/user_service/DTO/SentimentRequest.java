@@ -4,8 +4,7 @@ public class SentimentRequest {
     private String userId;
     private String objectId;
     private String status;
-    private Long created;
-
+    private Long date;
 
     public SentimentRequest() {
     }
@@ -14,7 +13,7 @@ public class SentimentRequest {
         this.userId = userId;
         this.objectId = objectId;
         this.status = status;
-        this.created = created;
+        this.date = created;
     }
 
     public String getUserId() {
@@ -41,19 +40,19 @@ public class SentimentRequest {
         this.status = status;
     }
 
-    public Long getCreated() {
-        return created;
+    public Long getDate() {
+        return date;
     }
 
-    public void setCreated(Long created) {
-        this.created = created;
+    public void setDate(Long created) {
+        this.date = created;
     }
 
     // Overriding toString() method of String class
     @Override
     public String toString() {
 
-        return "SentimentRequest [userId=" + userId + ", objectId=" + objectId + ", status=" + status + ", created=" + created + "]";
+        return "SentimentRequest [userId=" + userId + ", objectId=" + objectId + ", status=" + status + ", created=" + date + "]";
     }
 
 }

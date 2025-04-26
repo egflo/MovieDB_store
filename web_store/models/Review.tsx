@@ -7,8 +7,9 @@ export interface Review {
     rating: number;
     sentiment: string;
     title: string;
-    text: string;
+    content: string;
     user: User;
     date: string;
+    love: boolean;
     status: SentimentState;
 }

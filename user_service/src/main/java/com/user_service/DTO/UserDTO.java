@@ -1,8 +1,10 @@
-package com.user_service.models;
+package com.user_service.DTO;
+
+import com.user_service.models.Address;
 
 import java.util.List;
 
-public class User {
+public class UserDTO {
     private String id;
     private String customerId;
     private String email;
@@ -12,18 +14,18 @@ public class User {
     List<Address> addresses;
 
 
-    public User(String id, String customerId) {
+    public UserDTO(String id, String customerId) {
         this.id = id;
         this.customerId = customerId;
     }
 
-    public User(String id, String customerId, String email) {
+    public UserDTO(String id, String customerId, String email) {
         this.id = id;
         this.customerId = customerId;
         this.email = email;
     }
 
-    public User(String id, String customerId, String email, String password, String displayName) {
+    public UserDTO(String id, String customerId, String email, String password, String displayName) {
         this.id = id;
         this.customerId = customerId;
         this.email = email;
@@ -32,7 +34,7 @@ public class User {
     }
 
 
-    public User() {
+    public UserDTO() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 

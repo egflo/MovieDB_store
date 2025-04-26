@@ -7,9 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.web.bind.annotation.RequestMapping;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
 
 @SpringBootApplication
 @EnableDiscoveryClient

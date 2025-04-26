@@ -1,10 +1,7 @@
-package com.movie_service.controller;
+package com.user_service.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.movie_service.DTO.SentimentRequest;
-import com.movie_service.service.ReviewService;
-import com.movie_service.service.SentimentService;
+import com.user_service.DTO.SentimentRequest;
+import com.user_service.service.SentimentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/sentiment")
-public class RateController {
+public class SentimentController {
     @Autowired
     private SentimentService service;
 
@@ -31,15 +28,8 @@ public class RateController {
         return new ResponseEntity<>(service.getAllSentiments(PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
-                Sort.by(sortBy.orElse("year"))
+                Sort.by(sortBy.orElse("date"))
         )), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(
-            @PathVariable String id
-    ) {
-        return new ResponseEntity<>(service.getSentiment(id), HttpStatus.OK);
     }
 
 
@@ -51,16 +41,28 @@ public class RateController {
         return new ResponseEntity<>(service.findByUserIdAndObjectId(id, userId), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(
+            @RequestHeader("uid") String subject,
+            @PathVariable String id
+    ) {
+        return new ResponseEntity<>(service.getSentiment(id), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/object/{id}")
+    public ResponseEntity<?> findByObjectId(
+            @RequestHeader("uid") String subject,
+            @PathVariable String id
+    ) {
+        return new ResponseEntity<>(service.findByObjectId(subject, id), HttpStatus.OK);
+    }
+
     @PostMapping("/rate")
     public ResponseEntity<?> like(
-            @RequestHeader("Authorization") String token,
+            @RequestHeader("uid") String subject,
             @RequestBody SentimentRequest request
     ) {
-        System.out.println("token: " + token);
-        System.out.println("request: " + request);
-
-        DecodedJWT jwt = JWT.decode(token.split(" ")[1].trim());
-        String subject = jwt.getSubject();
         request.setUserId(subject);
         return new ResponseEntity<>(service.createSentiment(request), HttpStatus.OK);
     }

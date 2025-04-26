@@ -1,27 +1,28 @@
 package com.user_service.service;
 
 
-import com.movie_service.DTO.ReviewRequest;
-import com.movie_service.models.UserReview;
+import com.user_service.DTO.ReviewDTO;
+import com.user_service.DTO.ReviewRequest;
+import com.user_service.models.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Optional;
+
 public interface ReviewServiceImp {
 
-    UserReview getReview(String id);
+    ReviewDTO getReview(String id, Optional<String> userId);
 
-    UserReview createReview(ReviewRequest reviewRequest);
+    ReviewDTO createReview(ReviewRequest reviewRequest);
 
     void deleteReview(String id);
 
-    UserReview updateReview(String id, ReviewRequest reviewRequest);
+    ReviewDTO updateReview(String id, ReviewRequest reviewRequest);
 
-    Page<UserReview> getAllReviews(PageRequest pageRequest);
+    Page<ReviewDTO> getAllReviews(Optional<String> userId, PageRequest pageRequest);
 
-    Page<UserReview> getReviewsByMovieId(String movieId, PageRequest pageRequest);
+    Page<ReviewDTO> findByTitleContainingIgnoreCase(String title, Optional<String> userId, PageRequest pageRequest);
 
-    Page<UserReview> findByTitleContainingIgnoreCase(String title, PageRequest pageRequest);
-
-    Page<UserReview> findByMovieId(String movieId, PageRequest pageRequest);
+    Page<ReviewDTO> findByMovieId(String movieId, Optional<String> userId, PageRequest pageRequest);
 
 }

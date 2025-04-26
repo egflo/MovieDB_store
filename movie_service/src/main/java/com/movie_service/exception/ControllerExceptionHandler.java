@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.concurrent.TimeoutException;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ControllerExceptionHandler {
     @ExceptionHandler(ConversionFailedException.class)
     public ResponseEntity<String> handleConflict(RuntimeException ex) {

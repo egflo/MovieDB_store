@@ -1,14 +1,15 @@
 server:
   port: 8760
 spring:
-  config:
-    import: file:env.properties
+  main:
+    allow-bean-definition-overriding: true
+
   security:
       oauth2:
         resourceserver:
           jwt:
-            jwk-set-uri: ${JWK_SET_URI}
-            issuer-uri: ${ISSUR_URI}
+            jwk-set-uri: ${JWK_SET_URI:https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com}
+            issuer-uri: ${ISSUR_URI:https://securetoken.google.com/}
 
   application:
     name: gateway
@@ -39,6 +40,10 @@ spring:
             uri: lb://${EUREKA_INSTANCE_HOSTNAME_INVENTORY_SERVICE:INVENTORY-SERVICE}
             predicates:
               - Path=/inventory/**
+          - id: ${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:user-service}
+            uri: lb://${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:USER-SERVICE}
+            predicates:
+              - Path=/user/**
 
 eureka:
   client:

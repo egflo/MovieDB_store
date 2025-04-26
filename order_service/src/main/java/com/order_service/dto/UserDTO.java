@@ -1,34 +1,28 @@
 package com.order_service.dto;
 
+import com.order_service.model.User;
+
 import java.util.List;
 
 public class UserDTO {
     private String id;
     private String customerId;
     private String email;
+    private String displayName;
+    private String photoUrl;
     private List<AddressDTO> addresses;
 
-    // constructors, getters and setters
-    public UserDTO(String id, String customerId, String email, List<AddressDTO> addresses) {
-        this.id = id;
-        this.customerId = customerId;
-        this.email = email;
-        this.addresses = addresses;
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.customerId = user.getCustomerId();
+        this.email = user.getEmail();
+        this.displayName = user.getDisplayName();
+        this.photoUrl = user.getPhotoUrl();
+
+        // Convert UserAddress to AddressDTO
+        List<AddressDTO> addressDTOs = user.getAddresses().stream().map(AddressDTO::new).toList();
     }
 
-    public UserDTO(String id, String customerId, String email) {
-        this.id = id;
-        this.customerId = customerId;
-        this.email = email;
-    }
-
-    public UserDTO(String id, String customerId) {
-        this.id = id;
-        this.customerId = customerId;
-    }
-
-    public UserDTO() {
-    }
 
     public String getId() {
         return id;
@@ -52,6 +46,22 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public List<AddressDTO> getAddresses() {

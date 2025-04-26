@@ -29,7 +29,7 @@ export interface QParams extends ParsedUrlQuery {
 
 const API_URL_ID: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/`;
 const API_URL_SUGGEST: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/suggest/`;
-const API_URL_REVIEWS: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/review/movie/`;
+const API_URL_REVIEWS: string = `/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/review/movie/`;
 const API_URL_CRITIC_REVIEWS: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/critic/movie/`;
 
 function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
@@ -266,7 +266,7 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
                                         }
 
                                         <Box className="description-container">
-                                            <Box className="description-item-container "
+                                            <Box className="description-product-container "
                                                  sx={{width: '100%'}}>
                                                 <Typography className="description-text text-white"
                                                             variant={"body2"}>{data.plot}</Typography>
@@ -362,7 +362,7 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
                                             style={CardStyle.VERTICAL} type={ContentType.CRITIC_REVIEW}
                                             view={ViewType.HORIZONTAL} title={"Critic Reviews"}/>
 
-                                        <ScrollPagination path={API_URL_REVIEWS + data.movieId + '?sortBy=created'}
+                                        <ScrollPagination path={API_URL_REVIEWS + data.id + '?sortBy=created'}
                                                           style={CardStyle.VERTICAL} type={ContentType.REVIEW}
                                                           view={ViewType.HORIZONTAL} title={"Reviews"} token={token}/>
 
@@ -404,37 +404,37 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
                                 </Box>
 
                                 <Box className="description-container">
-                                    <div className="description-item">
+                                    <div className="description-product">
                                         <Typography className="description-title">Director</Typography>
                                         <Typography className="description-text"
                                                     variant={"body2"}>{data.director}</Typography>
                                     </div>
 
-                                    <div className="description-item">
+                                    <div className="description-product">
                                         <Typography className="description-title">Writer(s)</Typography>
                                         <Typography className="description-text"
                                                     variant={"body2"}>{data.writer}</Typography>
                                     </div>
 
-                                    <div className="description-item">
+                                    <div className="description-product">
                                         <Typography className="description-title">Production</Typography>
                                         <Typography className="description-text"
                                                     variant={"body2"}>{data.production}</Typography>
                                     </div>
 
-                                    <div className="description-item">
+                                    <div className="description-product">
                                         <Typography className="description-title">Country</Typography>
                                         <Typography className="description-text"
                                                     variant={"body2"}>{data.country}</Typography>
                                     </div>
 
-                                    <div className="description-item">
+                                    <div className="description-product">
                                         <Typography className="description-title">Language(s)</Typography>
                                         <Typography className="description-text"
                                                     variant={"body2"}>{data.language}</Typography>
                                     </div>
 
-                                    <div className="description-item">
+                                    <div className="description-product">
                                         <Typography className="description-title">Box Office</Typography>
                                         <Typography className="description-text"
                                                     variant={"body2"}>{data.boxOffice}</Typography>
@@ -450,7 +450,7 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
             </Box>
 
 
-            {data.item &&
+            {data.product &&
                 <Box className="lg:hidden"
                      sx={{
                          display: 'flex',
@@ -462,7 +462,7 @@ function MoviePage({data, token}: {data: Movie, token: string | undefined}) {
                          width: '100%',
                          zIndex: 1000
                      }}>
-                    <CartButton item={data.item}/>
+                    <CartButton product={data.product}/>
                 </Box>
             }
 

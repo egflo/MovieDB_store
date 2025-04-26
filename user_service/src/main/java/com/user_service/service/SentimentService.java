@@ -1,20 +1,19 @@
 package com.user_service.service;
 
-import com.movie_service.DTO.SentimentRequest;
-import com.movie_service.exception.IdNotFoundException;
-import com.movie_service.models.Sentiment;
-import com.movie_service.models.Status;
-import com.movie_service.repository.SentimentRepository;
+import com.user_service.DTO.SentimentDTO;
+import com.user_service.DTO.SentimentRequest;
+import com.user_service.exception.IdNotFoundException;
+import com.user_service.models.Sentiment;
+import com.user_service.models.Status;
+import com.user_service.repository.SentimentRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.Optional;
-
 
 
 @Service
@@ -27,8 +26,9 @@ public class SentimentService implements SentimentServiceImp {
     ConversionService conversionService;
 
     @Override
-    public Page<Sentiment> findByCreatedAfter(String date, Pageable pageable) {
-        return repository.getSentimentByCreatedAfter(new Date(date), pageable);
+    public Page<SentimentDTO> findByCreatedAfter(String date, Pageable pageable) {
+        return repository.getSentimentByCreatedAfter(new Date(date), pageable)
+                .map(SentimentDTO::new);
     }
 
     @Override
@@ -36,50 +36,57 @@ public class SentimentService implements SentimentServiceImp {
         return repository.countSentimentByObjectIdAndStatus(id, status);
     }
 
-
     @Override
-    public Optional<Sentiment> findByUserIdAndObjectId(String userId, String objectId) {
-        return repository.getSentimentByUserIdAndObjectId(userId, new ObjectId(objectId));
+    public Optional<SentimentDTO> findByUserIdAndObjectId(String userId, String objectId) {
+        return repository.getSentimentByUserIdAndObjectId(userId, new ObjectId(objectId))
+                .map(SentimentDTO::new);
     }
 
-
     @Override
-    public Sentiment getSentiment(String id) {
-        if (repository.findById(new ObjectId(id)).isPresent()) {
-            return repository.findById(new ObjectId(id)).get();
+    public SentimentDTO findByObjectId(String subject, String id) {
+        Optional<Sentiment> item = repository.getSentimentByUserIdAndObjectId(subject, new ObjectId(id));
+
+        if(item.isPresent()) {
+            return new SentimentDTO(item.get());
         }
 
         throw new IdNotFoundException("Sentiment not found with id: " + id);
     }
 
     @Override
-    public Sentiment createSentiment(SentimentRequest request) {
+    public SentimentDTO getSentiment(String id) {
+        if (repository.findById(new ObjectId(id)).isPresent()) {
+            return repository.findById(new ObjectId(id))
+                    .map(SentimentDTO::new)
+                    .get();
+        }
+        throw new IdNotFoundException("Sentiment not found with id: " + id);
+    }
 
-        Optional<Sentiment> sentiment = findByUserIdAndObjectId(request.getUserId(), request.getObjectId());
-        if (sentiment.isPresent()) {
-            Sentiment sentiment1 = sentiment.get();
+
+    @Override
+    public SentimentDTO createSentiment(SentimentRequest request) {
+        Optional<Sentiment> present = repository.getSentimentByUserIdAndObjectId(request.getUserId(), new ObjectId(request.getObjectId()));
+        if (present.isPresent()) {
+            Sentiment sentiment = present.get();
             //String to Enum
             Status status = conversionService.convert(request.getStatus(), Status.class);
-            sentiment1.setStatus(status);
-
-
-            return repository.save(sentiment1);
+            sentiment.setStatus(status);
+            return new SentimentDTO(repository.save(sentiment));
         }
 
-        Sentiment sentiment1 = new Sentiment();
-        sentiment1.setObjectId(new ObjectId(request.getObjectId()));
-        sentiment1.setUserId(request.getUserId());
-        Status status = conversionService.convert(request.getStatus(), Status.class);
-        sentiment1.setStatus(status);
+        Sentiment sentiment = new Sentiment();
+        sentiment.setUserId(request.getUserId());
+        sentiment.setObjectId(new ObjectId(request.getObjectId()));
+        //String to Enum
+        sentiment.setStatus(conversionService.convert(request.getStatus(), Status.class));
+        sentiment.setCreated(new Date());
 
-        if (request.getCreated() != null) {
-            sentiment1.setCreated(new Date(request.getCreated()));
-        }
-        else {
-            sentiment1.setCreated(new Date());
+        if (request.getDate() != null) {
+            sentiment.setCreated(new Date(request.getDate()));
         }
 
-        return repository.save(sentiment1);
+        return new SentimentDTO(repository.save(sentiment));
     }
 
     @Override
@@ -88,29 +95,29 @@ public class SentimentService implements SentimentServiceImp {
             repository.deleteById(new ObjectId(id));
             return;
         }
-
         throw new IdNotFoundException("Sentiment not found with id: " + id);
-
     }
 
     @Override
-    public Sentiment updateSentiment(String id, SentimentRequest sentiment) {
+    public SentimentDTO updateSentiment(String id, SentimentRequest sentiment) {
         return createSentiment(sentiment);
     }
 
     @Override
-    public Page<Sentiment> getSentimentByObjectId(String objectId, Pageable pageRequest) {
-        return repository.getSentimentByObjectId(new ObjectId(objectId), pageRequest);
+    public Page<SentimentDTO> getSentimentByObjectId(String objectId, Pageable pageRequest) {
+        return repository.getSentimentByObjectId(new ObjectId(objectId), pageRequest)
+                .map(SentimentDTO::new);
     }
 
     @Override
-    public Page<Sentiment> getSentimentByUserId(String userId, Pageable pageRequest) {
-        return repository.getSentimentByUserId(userId, pageRequest);
+    public Page<SentimentDTO> getSentimentByUserId(String userId, Pageable pageRequest) {
+        return repository.getSentimentByUserId(userId, pageRequest)
+                .map(SentimentDTO::new);
     }
-
     @Override
-    public Page<Sentiment> getAllSentiments(Pageable pageRequest) {
-        return repository.findAll(pageRequest);
+    public Page<SentimentDTO> getAllSentiments(Pageable pageRequest) {
+        return repository.findAll(pageRequest)
+                .map(SentimentDTO::new);
     }
 
 

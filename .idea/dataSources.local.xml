@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-241.18034.62">
+  <component name="dataSourceStorageLocal" created-in="IU-251.23774.435">
     <data-source name="@mongodb" uuid="78397c7c-065a-4fc3-93c4-c693abf6c007">
-      <database-info product="Mongo DB" version="6.0.1" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.18" dbms="MONGO" exact-version="6.0.1" exact-driver-version="1.18" />
+      <database-info product="Mongo DB" version="8.0.1" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.20" dbms="MONGO" exact-version="8.0.1" exact-driver-version="1.20" />
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
       <secret-storage>master_key</secret-storage>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="moviedb" />
+          <node kind="schema">
+            <name qname="autodb" />
+            <name qname="moviedb" />
+            <name qname="userdb" />
+            <name qname="reviewdb" />
+          </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>
     <data-source name="@mysql" uuid="d654d71e-60ea-4cf6-86e1-7d86068e8d57">
-      <database-info product="MySQL" version="8.3.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-java-8.0.25 (Revision: 08be9e9b4cba6aa115f9b27b215887af40b159e0)" dbms="MYSQL" exact-version="8.3.0" exact-driver-version="8.0">
+      <database-info product="MySQL" version="8.4.3" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="8.4.3" exact-driver-version="8.2">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
@@ -24,6 +29,8 @@
           <node kind="schema">
             <name qname="@" />
             <name qname="InventoryDB" />
+            <name qname="mgmtdb" />
+            <name qname="moviedb" />
             <name qname="reviewdb" />
             <name qname="inventorydb" />
           </node>
@@ -31,7 +38,7 @@
       </schema-mapping>
     </data-source>
     <data-source name="@localhost" uuid="ee24ba39-7a05-4d72-94d0-b9fc165f87cf">
-      <database-info product="PostgreSQL" version="14.6 (Homebrew)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.6.0" dbms="POSTGRES" exact-version="14.6" exact-driver-version="42.6">
+      <database-info product="PostgreSQL" version="14.13 (Homebrew)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="14.13" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
@@ -43,12 +50,16 @@
             <node kind="database" qname="@">
               <node kind="schema" qname="@" />
             </node>
-            <node kind="database" qname="OrderDB">
-              <node kind="schema" qname="public" />
-            </node>
-            <node kind="database" qname="TaxDB">
+            <node kind="database">
+              <name qname="inventorydb" />
+              <name qname="postgres" />
+              <name qname="TaxDB" />
               <node kind="schema" negative="1" />
             </node>
+            <node kind="database" qname="orderdb">
+              <node kind="schema" qname="public" />
+            </node>
+            <node kind="database" qname="OrderDB" />
           </node>
         </introspection-scope>
       </schema-mapping>
@@ -67,9 +78,67 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="moviedb@localhost" uuid="838619ca-60b0-48c9-bf5a-8454c214d1de">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MONGO" />
-      <schema-mapping />
+    <data-source name="@n1.local" uuid="985ad38e-2383-41bf-93d6-f0a667741d8f">
+      <database-info product="Mongo DB" version="8.0.6" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.20" dbms="MONGO" exact-version="8.0.6" exact-driver-version="1.20" />
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="moviedb" />
+            <name qname="userdb" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="mysql@n1.local" uuid="41db4f31-62d0-4936-b2d2-e1ca8f4893d7">
+      <database-info product="MySQL" version="9.1.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="9.1.0" exact-driver-version="8.2">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="InventoryDB" />
+            <name qname="moviedb" />
+            <name qname="reviewdb" />
+            <name qname="inventoryDB" />
+            <name qname="inventorydb" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="postgres@n1.local" uuid="1dcd1e69-7715-4149-9764-a0f65cccfb83">
+      <database-info product="PostgreSQL" version="17.4 (Debian 17.4-1.pgdg110+2)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="17.4" exact-driver-version="42.7">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>postgres</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node negative="1">
+            <node kind="database" qname="@">
+              <node kind="schema" qname="@" />
+            </node>
+            <node kind="database" qname="autodb">
+              <node kind="schema" negative="1" />
+            </node>
+            <node kind="database">
+              <name qname="inventorydb" />
+              <name qname="moviedb" />
+              <name qname="orderdb" />
+              <node kind="schema" qname="public" />
+            </node>
+            <node kind="database" qname="taxdb" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
     </data-source>
   </component>
 </project>

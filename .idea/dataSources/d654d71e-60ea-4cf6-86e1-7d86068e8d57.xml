@@ -1,212 +1,329 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="@mysql">
-  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.52">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.53">
     <root id="1">
       <DefaultCasing>mixed/mixed</DefaultCasing>
       <DefaultEngine>InnoDB</DefaultEngine>
       <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
-      <Grants>|root||admin||ALTER|G
+      <Grants>|root||egflo||ALLOW_NONEXISTENT_DEFINER|G
+|root||mysql|localhost|ALLOW_NONEXISTENT_DEFINER|G
+|root||root|localhost|ALLOW_NONEXISTENT_DEFINER|G
+|root||username|localhost|ALLOW_NONEXISTENT_DEFINER|G
+|root||admin||ALTER|G
 |root||egflo||ALTER|G
+|root||mysql|localhost|ALTER|G
 |root||root|localhost|ALTER|G
+|root||username|localhost|ALTER|G
 |root||egflo||ALTER ROUTINE|G
+|root||mysql|localhost|ALTER ROUTINE|G
 |root||root|localhost|ALTER ROUTINE|G
+|root||username|localhost|ALTER ROUTINE|G
 |root||egflo||APPLICATION_PASSWORD_ADMIN|G
+|root||mysql|localhost|APPLICATION_PASSWORD_ADMIN|G
 |root||root|localhost|APPLICATION_PASSWORD_ADMIN|G
+|root||username|localhost|APPLICATION_PASSWORD_ADMIN|G
 |root||egflo||AUDIT_ABORT_EXEMPT|G
+|root||mysql|localhost|AUDIT_ABORT_EXEMPT|G
 |root||mysql.infoschema|localhost|AUDIT_ABORT_EXEMPT|G
 |root||mysql.session|localhost|AUDIT_ABORT_EXEMPT|G
 |root||mysql.sys|localhost|AUDIT_ABORT_EXEMPT|G
 |root||root|localhost|AUDIT_ABORT_EXEMPT|G
+|root||username|localhost|AUDIT_ABORT_EXEMPT|G
 |root||egflo||AUDIT_ADMIN|G
+|root||mysql|localhost|AUDIT_ADMIN|G
 |root||root|localhost|AUDIT_ADMIN|G
+|root||username|localhost|AUDIT_ADMIN|G
 |root||egflo||AUTHENTICATION_POLICY_ADMIN|G
+|root||mysql|localhost|AUTHENTICATION_POLICY_ADMIN|G
 |root||root|localhost|AUTHENTICATION_POLICY_ADMIN|G
+|root||username|localhost|AUTHENTICATION_POLICY_ADMIN|G
 |root||egflo||BACKUP_ADMIN|G
+|root||mysql|localhost|BACKUP_ADMIN|G
 |root||mysql.session|localhost|BACKUP_ADMIN|G
 |root||root|localhost|BACKUP_ADMIN|G
+|root||username|localhost|BACKUP_ADMIN|G
 |root||egflo||BINLOG_ADMIN|G
+|root||mysql|localhost|BINLOG_ADMIN|G
 |root||root|localhost|BINLOG_ADMIN|G
+|root||username|localhost|BINLOG_ADMIN|G
 |root||egflo||BINLOG_ENCRYPTION_ADMIN|G
+|root||mysql|localhost|BINLOG_ENCRYPTION_ADMIN|G
 |root||root|localhost|BINLOG_ENCRYPTION_ADMIN|G
+|root||username|localhost|BINLOG_ENCRYPTION_ADMIN|G
 |root||egflo||CLONE_ADMIN|G
+|root||mysql|localhost|CLONE_ADMIN|G
 |root||mysql.session|localhost|CLONE_ADMIN|G
 |root||root|localhost|CLONE_ADMIN|G
+|root||username|localhost|CLONE_ADMIN|G
 |root||egflo||CONNECTION_ADMIN|G
+|root||mysql|localhost|CONNECTION_ADMIN|G
 |root||mysql.session|localhost|CONNECTION_ADMIN|G
 |root||root|localhost|CONNECTION_ADMIN|G
+|root||username|localhost|CONNECTION_ADMIN|G
 |root||admin||CREATE|G
 |root||egflo||CREATE|G
+|root||mysql|localhost|CREATE|G
 |root||root|localhost|CREATE|G
+|root||username|localhost|CREATE|G
 |root||egflo||CREATE ROLE|G
+|root||mysql|localhost|CREATE ROLE|G
 |root||root|localhost|CREATE ROLE|G
+|root||username|localhost|CREATE ROLE|G
 |root||egflo||CREATE ROUTINE|G
+|root||mysql|localhost|CREATE ROUTINE|G
 |root||root|localhost|CREATE ROUTINE|G
+|root||username|localhost|CREATE ROUTINE|G
 |root||egflo||CREATE TABLESPACE|G
+|root||mysql|localhost|CREATE TABLESPACE|G
 |root||root|localhost|CREATE TABLESPACE|G
+|root||username|localhost|CREATE TABLESPACE|G
 |root||egflo||CREATE TEMPORARY TABLES|G
+|root||mysql|localhost|CREATE TEMPORARY TABLES|G
 |root||root|localhost|CREATE TEMPORARY TABLES|G
+|root||username|localhost|CREATE TEMPORARY TABLES|G
 |root||egflo||CREATE USER|G
+|root||mysql|localhost|CREATE USER|G
 |root||root|localhost|CREATE USER|G
+|root||username|localhost|CREATE USER|G
 |root||egflo||CREATE VIEW|G
+|root||mysql|localhost|CREATE VIEW|G
 |root||root|localhost|CREATE VIEW|G
+|root||username|localhost|CREATE VIEW|G
 |root||admin||DELETE|G
 |root||egflo||DELETE|G
+|root||mysql|localhost|DELETE|G
 |root||root|localhost|DELETE|G
+|root||username|localhost|DELETE|G
 |root||admin||DROP|G
 |root||egflo||DROP|G
+|root||mysql|localhost|DROP|G
 |root||root|localhost|DROP|G
+|root||username|localhost|DROP|G
 |root||egflo||DROP ROLE|G
+|root||mysql|localhost|DROP ROLE|G
 |root||root|localhost|DROP ROLE|G
+|root||username|localhost|DROP ROLE|G
 |root||egflo||ENCRYPTION_KEY_ADMIN|G
+|root||mysql|localhost|ENCRYPTION_KEY_ADMIN|G
 |root||root|localhost|ENCRYPTION_KEY_ADMIN|G
+|root||username|localhost|ENCRYPTION_KEY_ADMIN|G
 |root||egflo||EVENT|G
+|root||mysql|localhost|EVENT|G
 |root||root|localhost|EVENT|G
+|root||username|localhost|EVENT|G
 |root||egflo||EXECUTE|G
+|root||mysql|localhost|EXECUTE|G
 |root||root|localhost|EXECUTE|G
+|root||username|localhost|EXECUTE|G
 |root||egflo||FILE|G
+|root||mysql|localhost|FILE|G
 |root||root|localhost|FILE|G
+|root||username|localhost|FILE|G
 |root||egflo||FIREWALL_EXEMPT|G
+|root||mysql|localhost|FIREWALL_EXEMPT|G
 |root||mysql.infoschema|localhost|FIREWALL_EXEMPT|G
 |root||mysql.session|localhost|FIREWALL_EXEMPT|G
 |root||mysql.sys|localhost|FIREWALL_EXEMPT|G
 |root||root|localhost|FIREWALL_EXEMPT|G
+|root||username|localhost|FIREWALL_EXEMPT|G
 |root||egflo||FLUSH_OPTIMIZER_COSTS|G
+|root||mysql|localhost|FLUSH_OPTIMIZER_COSTS|G
 |root||root|localhost|FLUSH_OPTIMIZER_COSTS|G
+|root||username|localhost|FLUSH_OPTIMIZER_COSTS|G
+|root||egflo||FLUSH_PRIVILEGES|G
+|root||mysql|localhost|FLUSH_PRIVILEGES|G
+|root||root|localhost|FLUSH_PRIVILEGES|G
+|root||username|localhost|FLUSH_PRIVILEGES|G
 |root||egflo||FLUSH_STATUS|G
+|root||mysql|localhost|FLUSH_STATUS|G
 |root||root|localhost|FLUSH_STATUS|G
+|root||username|localhost|FLUSH_STATUS|G
 |root||egflo||FLUSH_TABLES|G
+|root||mysql|localhost|FLUSH_TABLES|G
 |root||root|localhost|FLUSH_TABLES|G
+|root||username|localhost|FLUSH_TABLES|G
 |root||egflo||FLUSH_USER_RESOURCES|G
+|root||mysql|localhost|FLUSH_USER_RESOURCES|G
 |root||root|localhost|FLUSH_USER_RESOURCES|G
+|root||username|localhost|FLUSH_USER_RESOURCES|G
 |root||egflo||GROUP_REPLICATION_ADMIN|G
+|root||mysql|localhost|GROUP_REPLICATION_ADMIN|G
 |root||root|localhost|GROUP_REPLICATION_ADMIN|G
+|root||username|localhost|GROUP_REPLICATION_ADMIN|G
 |root||egflo||GROUP_REPLICATION_STREAM|G
+|root||mysql|localhost|GROUP_REPLICATION_STREAM|G
 |root||root|localhost|GROUP_REPLICATION_STREAM|G
+|root||username|localhost|GROUP_REPLICATION_STREAM|G
 |root||egflo||INDEX|G
+|root||mysql|localhost|INDEX|G
 |root||root|localhost|INDEX|G
+|root||username|localhost|INDEX|G
 |root||egflo||INNODB_REDO_LOG_ARCHIVE|G
+|root||mysql|localhost|INNODB_REDO_LOG_ARCHIVE|G
 |root||root|localhost|INNODB_REDO_LOG_ARCHIVE|G
+|root||username|localhost|INNODB_REDO_LOG_ARCHIVE|G
 |root||egflo||INNODB_REDO_LOG_ENABLE|G
+|root||mysql|localhost|INNODB_REDO_LOG_ENABLE|G
 |root||root|localhost|INNODB_REDO_LOG_ENABLE|G
+|root||username|localhost|INNODB_REDO_LOG_ENABLE|G
 |root||admin||INSERT|G
 |root||egflo||INSERT|G
+|root||mysql|localhost|INSERT|G
 |root||root|localhost|INSERT|G
+|root||username|localhost|INSERT|G
 |root||egflo||LOCK TABLES|G
+|root||mysql|localhost|LOCK TABLES|G
 |root||root|localhost|LOCK TABLES|G
+|root||username|localhost|LOCK TABLES|G
+|root||egflo||OPTIMIZE_LOCAL_TABLE|G
+|root||mysql|localhost|OPTIMIZE_LOCAL_TABLE|G
+|root||mysql.infoschema|localhost|OPTIMIZE_LOCAL_TABLE|G
+|root||mysql.session|localhost|OPTIMIZE_LOCAL_TABLE|G
+|root||mysql.sys|localhost|OPTIMIZE_LOCAL_TABLE|G
+|root||root|localhost|OPTIMIZE_LOCAL_TABLE|G
+|root||username|localhost|OPTIMIZE_LOCAL_TABLE|G
 |root||egflo||PASSWORDLESS_USER_ADMIN|G
+|root||mysql|localhost|PASSWORDLESS_USER_ADMIN|G
 |root||root|localhost|PASSWORDLESS_USER_ADMIN|G
+|root||username|localhost|PASSWORDLESS_USER_ADMIN|G
 |root||egflo||PERSIST_RO_VARIABLES_ADMIN|G
+|root||mysql|localhost|PERSIST_RO_VARIABLES_ADMIN|G
 |root||mysql.session|localhost|PERSIST_RO_VARIABLES_ADMIN|G
 |root||root|localhost|PERSIST_RO_VARIABLES_ADMIN|G
+|root||username|localhost|PERSIST_RO_VARIABLES_ADMIN|G
 |root||egflo||PROCESS|G
+|root||mysql|localhost|PROCESS|G
 |root||root|localhost|PROCESS|G
+|root||username|localhost|PROCESS|G
 |root||admin||REFERENCES|G
 |root||egflo||REFERENCES|G
+|root||mysql|localhost|REFERENCES|G
 |root||root|localhost|REFERENCES|G
+|root||username|localhost|REFERENCES|G
 |root||egflo||RELOAD|G
+|root||mysql|localhost|RELOAD|G
 |root||root|localhost|RELOAD|G
+|root||username|localhost|RELOAD|G
 |root||admin||REPLICATION CLIENT|G
 |root||egflo||REPLICATION CLIENT|G
+|root||mysql|localhost|REPLICATION CLIENT|G
 |root||root|localhost|REPLICATION CLIENT|G
+|root||username|localhost|REPLICATION CLIENT|G
 |root||egflo||REPLICATION SLAVE|G
+|root||mysql|localhost|REPLICATION SLAVE|G
 |root||root|localhost|REPLICATION SLAVE|G
+|root||username|localhost|REPLICATION SLAVE|G
 |root||egflo||REPLICATION_APPLIER|G
+|root||mysql|localhost|REPLICATION_APPLIER|G
 |root||root|localhost|REPLICATION_APPLIER|G
+|root||username|localhost|REPLICATION_APPLIER|G
 |root||egflo||REPLICATION_SLAVE_ADMIN|G
+|root||mysql|localhost|REPLICATION_SLAVE_ADMIN|G
 |root||root|localhost|REPLICATION_SLAVE_ADMIN|G
+|root||username|localhost|REPLICATION_SLAVE_ADMIN|G
 |root||egflo||RESOURCE_GROUP_ADMIN|G
+|root||mysql|localhost|RESOURCE_GROUP_ADMIN|G
 |root||root|localhost|RESOURCE_GROUP_ADMIN|G
+|root||username|localhost|RESOURCE_GROUP_ADMIN|G
 |root||egflo||RESOURCE_GROUP_USER|G
+|root||mysql|localhost|RESOURCE_GROUP_USER|G
 |root||root|localhost|RESOURCE_GROUP_USER|G
+|root||username|localhost|RESOURCE_GROUP_USER|G
 |root||admin||ROLE_ADMIN|G
 |root||egflo||ROLE_ADMIN|G
+|root||mysql|localhost|ROLE_ADMIN|G
 |root||root|localhost|ROLE_ADMIN|G
+|root||username|localhost|ROLE_ADMIN|G
 |root||admin||SELECT|G
 |root||egflo||SELECT|G
+|root||mysql|localhost|SELECT|G
 |root||mysql.infoschema|localhost|SELECT|G
 |root||root|localhost|SELECT|G
+|root||username|localhost|SELECT|G
 |root||egflo||SENSITIVE_VARIABLES_OBSERVER|G
+|root||mysql|localhost|SENSITIVE_VARIABLES_OBSERVER|G
 |root||root|localhost|SENSITIVE_VARIABLES_OBSERVER|G
+|root||username|localhost|SENSITIVE_VARIABLES_OBSERVER|G
 |root||egflo||SERVICE_CONNECTION_ADMIN|G
+|root||mysql|localhost|SERVICE_CONNECTION_ADMIN|G
 |root||root|localhost|SERVICE_CONNECTION_ADMIN|G
+|root||username|localhost|SERVICE_CONNECTION_ADMIN|G
 |root||egflo||SESSION_VARIABLES_ADMIN|G
+|root||mysql|localhost|SESSION_VARIABLES_ADMIN|G
 |root||mysql.session|localhost|SESSION_VARIABLES_ADMIN|G
 |root||root|localhost|SESSION_VARIABLES_ADMIN|G
-|root||egflo||SET_USER_ID|G
-|root||root|localhost|SET_USER_ID|G
+|root||username|localhost|SESSION_VARIABLES_ADMIN|G
+|root||egflo||SET_ANY_DEFINER|G
+|root||mysql|localhost|SET_ANY_DEFINER|G
+|root||root|localhost|SET_ANY_DEFINER|G
+|root||username|localhost|SET_ANY_DEFINER|G
 |root||admin||SHOW DATABASES|G
 |root||egflo||SHOW DATABASES|G
+|root||mysql|localhost|SHOW DATABASES|G
 |root||root|localhost|SHOW DATABASES|G
+|root||username|localhost|SHOW DATABASES|G
 |root||admin||SHOW VIEW|G
 |root||egflo||SHOW VIEW|G
+|root||mysql|localhost|SHOW VIEW|G
 |root||root|localhost|SHOW VIEW|G
+|root||username|localhost|SHOW VIEW|G
 |root||egflo||SHOW_ROUTINE|G
+|root||mysql|localhost|SHOW_ROUTINE|G
 |root||root|localhost|SHOW_ROUTINE|G
+|root||username|localhost|SHOW_ROUTINE|G
 |root||egflo||SHUTDOWN|G
+|root||mysql|localhost|SHUTDOWN|G
 |root||mysql.session|localhost|SHUTDOWN|G
 |root||root|localhost|SHUTDOWN|G
+|root||username|localhost|SHUTDOWN|G
 |root||egflo||SUPER|G
+|root||mysql|localhost|SUPER|G
 |root||mysql.session|localhost|SUPER|G
 |root||root|localhost|SUPER|G
+|root||username|localhost|SUPER|G
 |root||egflo||SYSTEM_USER|G
+|root||mysql|localhost|SYSTEM_USER|G
 |root||mysql.infoschema|localhost|SYSTEM_USER|G
 |root||mysql.session|localhost|SYSTEM_USER|G
 |root||mysql.sys|localhost|SYSTEM_USER|G
 |root||root|localhost|SYSTEM_USER|G
+|root||username|localhost|SYSTEM_USER|G
 |root||egflo||SYSTEM_VARIABLES_ADMIN|G
+|root||mysql|localhost|SYSTEM_VARIABLES_ADMIN|G
 |root||mysql.session|localhost|SYSTEM_VARIABLES_ADMIN|G
 |root||root|localhost|SYSTEM_VARIABLES_ADMIN|G
+|root||username|localhost|SYSTEM_VARIABLES_ADMIN|G
 |root||egflo||TABLE_ENCRYPTION_ADMIN|G
+|root||mysql|localhost|TABLE_ENCRYPTION_ADMIN|G
 |root||root|localhost|TABLE_ENCRYPTION_ADMIN|G
+|root||username|localhost|TABLE_ENCRYPTION_ADMIN|G
+|root||egflo||TELEMETRY_LOG_ADMIN|G
+|root||mysql|localhost|TELEMETRY_LOG_ADMIN|G
+|root||mysql.session|localhost|TELEMETRY_LOG_ADMIN|G
+|root||root|localhost|TELEMETRY_LOG_ADMIN|G
+|root||username|localhost|TELEMETRY_LOG_ADMIN|G
+|root||egflo||TRANSACTION_GTID_TAG|G
+|root||mysql|localhost|TRANSACTION_GTID_TAG|G
+|root||root|localhost|TRANSACTION_GTID_TAG|G
+|root||username|localhost|TRANSACTION_GTID_TAG|G
 |root||egflo||TRIGGER|G
+|root||mysql|localhost|TRIGGER|G
 |root||root|localhost|TRIGGER|G
+|root||username|localhost|TRIGGER|G
 |root||admin||UPDATE|G
 |root||egflo||UPDATE|G
+|root||mysql|localhost|UPDATE|G
 |root||root|localhost|UPDATE|G
+|root||username|localhost|UPDATE|G
 |root||egflo||XA_RECOVER_ADMIN|G
+|root||mysql|localhost|XA_RECOVER_ADMIN|G
 |root||root|localhost|XA_RECOVER_ADMIN|G
+|root||username|localhost|XA_RECOVER_ADMIN|G
 |root||egflo||grant option|G
 |root||root|localhost|grant option|G
-%|schema||mysql||ALTER|G
-%|schema||mysql||ALTER ROUTINE|G
-%|schema||mysql||CREATE|G
-%|schema||mysql||CREATE ROUTINE|G
-%|schema||mysql||CREATE TEMPORARY TABLES|G
-%|schema||mysql||CREATE VIEW|G
-%|schema||mysql||DELETE|G
-%|schema||mysql||DROP|G
-%|schema||mysql||EVENT|G
-%|schema||mysql||EXECUTE|G
-%|schema||mysql||INDEX|G
-%|schema||mysql||INSERT|G
-%|schema||mysql||LOCK TABLES|G
-%|schema||mysql||REFERENCES|G
-%|schema||mysql||SELECT|G
-%|schema||mysql||SHOW VIEW|G
-%|schema||mysql||TRIGGER|G
-%|schema||mysql||UPDATE|G
-%|schema||mysql||grant option|G
-inventorydb|schema||mysql||ALTER|G
-inventorydb|schema||mysql||ALTER ROUTINE|G
-inventorydb|schema||mysql||CREATE|G
-inventorydb|schema||mysql||CREATE ROUTINE|G
-inventorydb|schema||mysql||CREATE TEMPORARY TABLES|G
-inventorydb|schema||mysql||CREATE VIEW|G
-inventorydb|schema||mysql||DELETE|G
-inventorydb|schema||mysql||DROP|G
-inventorydb|schema||mysql||EVENT|G
-inventorydb|schema||mysql||EXECUTE|G
-inventorydb|schema||mysql||INDEX|G
-inventorydb|schema||mysql||INSERT|G
-inventorydb|schema||mysql||LOCK TABLES|G
-inventorydb|schema||mysql||REFERENCES|G
-inventorydb|schema||mysql||SELECT|G
-inventorydb|schema||mysql||SHOW VIEW|G
-inventorydb|schema||mysql||TRIGGER|G
-inventorydb|schema||mysql||UPDATE|G
 performance_schema|schema||mysql.session|localhost|SELECT|G
 sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
-      <ServerVersion>8.0.32</ServerVersion>
+      <ServerVersion>8.4.3</ServerVersion>
     </root>
     <collation id="2" parent="1" name="armscii8_bin">
       <Charset>armscii8</Charset>
@@ -1107,32 +1224,34 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <collation id="287" parent="1" name="utf8mb4_zh_0900_as_cs">
       <Charset>utf8mb4</Charset>
     </collation>
-    <schema id="288" parent="1" name="information_schema">
+    <schema id="288" parent="1" name="InventoryDB">
+      <LastIntrospectionLocalTimestamp>2025-03-05.04:55:23</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="289" parent="1" name="information_schema">
       <LastIntrospectionLocalTimestamp>2024-02-14.06:50:14</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
-    <schema id="289" parent="1" name="performance_schema">
+    <schema id="290" parent="1" name="mgmtdb">
+      <LastIntrospectionLocalTimestamp>2025-03-01.17:23:31</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="291" parent="1" name="moviedb">
+      <LastIntrospectionLocalTimestamp>2025-03-01.17:23:31</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="292" parent="1" name="mysql">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="293" parent="1" name="performance_schema">
       <LastIntrospectionLocalTimestamp>2024-02-14.06:50:38</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="290" parent="1" name="mysql">
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </schema>
-    <schema id="291" parent="1" name="sys">
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </schema>
-    <schema id="292" parent="1" name="moviedb">
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </schema>
-    <schema id="293" parent="1" name="mgmtdb">
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </schema>
     <schema id="294" parent="1" name="reviewdb">
-      <LastIntrospectionLocalTimestamp>2024-04-13.14:37:14</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-03-01.17:23:31</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="295" parent="1" name="InventoryDB">
-      <LastIntrospectionLocalTimestamp>2024-04-13.14:37:13</LastIntrospectionLocalTimestamp>
+    <schema id="295" parent="1" name="sys">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <user id="296" parent="1" name="admin">
@@ -1160,251 +1279,253 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Host>localhost</Host>
       <Plugin>caching_sha2_password</Plugin>
     </user>
-    <user id="302" parent="1" name="mysql"/>
-    <table id="303" parent="294" name="movies">
+    <user id="302" parent="1" name="mysql">
+      <Host>localhost</Host>
+      <Plugin>caching_sha2_password</Plugin>
+    </user>
+    <user id="303" parent="1" name="username">
+      <Host>localhost</Host>
+      <Plugin>caching_sha2_password</Plugin>
+    </user>
+    <table id="304" parent="288" name="cart">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="304" parent="294" name="reviews">
+    <table id="305" parent="288" name="cart_item">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="305" parent="295" name="cart">
+    <table id="306" parent="288" name="category">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="306" parent="295" name="item">
+    <table id="307" parent="288" name="product">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="307" parent="295" name="type">
+    <table id="308" parent="288" name="transaction">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <column id="308" parent="303" name="id">
-      <DasType>varchar(500)|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="309" parent="303" name="title">
-      <DasType>varchar(500)|0s</DasType>
-      <Position>2</Position>
-    </column>
-    <column id="310" parent="303" name="audience_score">
-      <DasType>int|0s</DasType>
-      <Position>3</Position>
-    </column>
-    <column id="311" parent="303" name="tomato_meter">
-      <Comment>The percentage of positive reviews from professional critics</Comment>
-      <DasType>int|0s</DasType>
-      <Position>4</Position>
-    </column>
-    <column id="312" parent="303" name="rating">
-      <DasType>varchar(50)|0s</DasType>
-      <Position>5</Position>
-    </column>
-    <column id="313" parent="303" name="release_date">
-      <DasType>date|0s</DasType>
-      <Position>6</Position>
-    </column>
-    <column id="314" parent="303" name="release_date_streaming">
-      <DasType>date|0s</DasType>
-      <Position>7</Position>
-    </column>
-    <column id="315" parent="303" name="runtime">
-      <DasType>int|0s</DasType>
-      <Position>8</Position>
-    </column>
-    <column id="316" parent="303" name="genres">
-      <DasType>varchar(1000)|0s</DasType>
-      <Position>9</Position>
-    </column>
-    <column id="317" parent="303" name="language">
-      <DasType>varchar(50)|0s</DasType>
-      <Position>10</Position>
-    </column>
-    <column id="318" parent="303" name="director">
-      <DasType>varchar(1000)|0s</DasType>
-      <Position>11</Position>
-    </column>
-    <column id="319" parent="303" name="writer">
-      <DasType>varchar(1000)|0s</DasType>
-      <Position>12</Position>
-    </column>
-    <column id="320" parent="303" name="box_office">
-      <DasType>varchar(500)|0s</DasType>
-      <Position>13</Position>
-    </column>
-    <column id="321" parent="303" name="distributor">
-      <DasType>varchar(500)|0s</DasType>
-      <Position>14</Position>
-    </column>
-    <column id="322" parent="303" name="sound_mix">
-      <Comment>The audio format(s) used in the movie</Comment>
-      <DasType>varchar(500)|0s</DasType>
-      <Position>15</Position>
-    </column>
-    <column id="323" parent="303" name="year">
-      <DasType>int|0s</DasType>
-      <Position>16</Position>
-    </column>
-    <column id="324" parent="303" name="imdbId">
-      <DasType>varchar(100)|0s</DasType>
-      <Position>17</Position>
-    </column>
-    <index id="325" parent="303" name="movies_id_index">
-      <ColNames>id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="326" parent="303" name="movies_title_year_index">
-      <ColNames>title
-year</ColNames>
-      <Type>btree</Type>
-    </index>
-    <column id="327" parent="304" name="id">
-      <DasType>varchar(250)|0s</DasType>
+    <table id="309" parent="290" name="address">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="310" parent="290" name="item">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="311" parent="290" name="order_item">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="312" parent="290" name="type">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="313" parent="291" name="addresses">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="314" parent="291" name="bookmark">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="315" parent="291" name="cart">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="316" parent="291" name="customers">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="317" parent="291" name="customers_authorities">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="318" parent="291" name="employee">
+      <Engine>InnoDB</Engine>
+      <CollationName>latin1_swedish_ci</CollationName>
+    </table>
+    <table id="319" parent="291" name="genres">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="320" parent="291" name="genres_in_movies">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="321" parent="291" name="hibernate_sequence">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="322" parent="291" name="inventory">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="323" parent="291" name="movie_price">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="324" parent="291" name="movies">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="325" parent="291" name="orders">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="326" parent="291" name="ratings">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="327" parent="291" name="reviews">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="328" parent="291" name="roles">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="329" parent="291" name="sales">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="330" parent="291" name="shipping">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="331" parent="291" name="stars">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="332" parent="291" name="stars_in_movies">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="333" parent="291" name="taxrate">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="334" parent="291" name="token">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="335" parent="291" name="users_addresses">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="336" parent="291" name="users_roles">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="337" parent="294" name="movies">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="338" parent="294" name="reviews">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <column id="339" parent="304" name="id">
+      <AutoIncrement>138</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>int|0s</StoredType>
     </column>
-    <column id="328" parent="304" name="review_id">
-      <Comment>reviewId</Comment>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
+    <column id="340" parent="304" name="created">
       <Position>2</Position>
+      <StoredType>datetime(6)|0s</StoredType>
     </column>
-    <column id="329" parent="304" name="creation_date">
-      <DasType>date|0s</DasType>
+    <column id="341" parent="304" name="updated">
       <Position>3</Position>
+      <StoredType>datetime(6)|0s</StoredType>
     </column>
-    <column id="330" parent="304" name="critic_name">
-      <DasType>varchar(1000)|0s</DasType>
+    <column id="342" parent="304" name="user_id">
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <column id="331" parent="304" name="isTopCritic">
-      <DasType>tinyint(1)|0s</DasType>
-      <Position>5</Position>
-    </column>
-    <column id="332" parent="304" name="score">
-      <DasType>varchar(50)|0s</DasType>
-      <Position>6</Position>
-    </column>
-    <column id="333" parent="304" name="review_state">
-      <DasType>varchar(50)|0s</DasType>
-      <Position>7</Position>
-    </column>
-    <column id="334" parent="304" name="publication_name">
-      <DasType>varchar(1000)|0s</DasType>
-      <Position>8</Position>
-    </column>
-    <column id="335" parent="304" name="text">
-      <DasType>varchar(2000)|0s</DasType>
-      <Position>9</Position>
-    </column>
-    <column id="336" parent="304" name="sentiment">
-      <DasType>varchar(50)|0s</DasType>
-      <Position>10</Position>
-    </column>
-    <column id="337" parent="304" name="review_url">
-      <Comment>The URL of the original review on Rotten Tomatoes</Comment>
-      <DasType>varchar(500)|0s</DasType>
-      <Position>11</Position>
-    </column>
-    <column id="338" parent="304" name="imdbId">
-      <DasType>varchar(100)|0s</DasType>
-      <Position>12</Position>
-    </column>
-    <index id="339" parent="304" name="reviews_id_index">
-      <ColNames>id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <column id="340" parent="305" name="id">
-      <AutoIncrement>84</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="341" parent="305" name="created">
-      <DasType>datetime(6)|0s</DasType>
-      <Position>2</Position>
-    </column>
-    <column id="342" parent="305" name="item_id">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>3</Position>
-    </column>
-    <column id="343" parent="305" name="quantity">
-      <DasType>int|0s</DasType>
-      <Position>4</Position>
-    </column>
-    <column id="344" parent="305" name="updated">
-      <DasType>datetime(6)|0s</DasType>
-      <Position>5</Position>
-    </column>
-    <column id="345" parent="305" name="user_id">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>6</Position>
-    </column>
-    <index id="346" parent="305" name="PRIMARY">
+    <index id="343" parent="304" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="347" parent="305" name="PRIMARY">
+    <key id="344" parent="304" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="348" parent="306" name="id">
-      <DasType>varchar(255)|0s</DasType>
+    <column id="345" parent="305" name="id">
+      <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>int|0s</StoredType>
     </column>
-    <column id="349" parent="306" name="sku">
-      <DasType>varchar(255)|0s</DasType>
+    <column id="346" parent="305" name="item_description">
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <column id="350" parent="306" name="created">
-      <DasType>datetime(6)|0s</DasType>
+    <column id="347" parent="305" name="item_id">
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <column id="351" parent="306" name="price">
-      <DasType>int|0s</DasType>
+    <column id="348" parent="305" name="item_image_url">
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <column id="352" parent="306" name="quantity">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
+    <column id="349" parent="305" name="item_name">
       <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <column id="353" parent="306" name="status">
-      <DasType>varchar(255)|0s</DasType>
+    <column id="350" parent="305" name="price">
+      <NotNull>1</NotNull>
       <Position>6</Position>
+      <StoredType>bigint|0s</StoredType>
     </column>
-    <column id="354" parent="306" name="updated">
-      <DasType>datetime(6)|0s</DasType>
+    <column id="351" parent="305" name="quantity">
+      <NotNull>1</NotNull>
       <Position>7</Position>
+      <StoredType>int|0s</StoredType>
     </column>
-    <column id="355" parent="306" name="type">
-      <DasType>bigint|0s</DasType>
+    <column id="352" parent="305" name="cart_id">
+      <NotNull>1</NotNull>
       <Position>8</Position>
+      <StoredType>int|0s</StoredType>
     </column>
-    <column id="356" parent="306" name="currency">
-      <DasType>varchar(10)|0s</DasType>
-      <DefaultExpression>&apos;usd&apos;</DefaultExpression>
-      <Position>9</Position>
-    </column>
-    <foreign-key id="357" parent="306" name="FKdot8lwuet7113d7f75eew7y5p">
-      <ColNames>type</ColNames>
+    <foreign-key id="353" parent="305" name="FK1uobyhgl1wvgt1jpccia8xxs3">
+      <ColNames>cart_id</ColNames>
       <RefColNames>id</RefColNames>
-      <RefTableName>type</RefTableName>
+      <RefTableName>cart</RefTableName>
       <RefTableParentName>inventorydb</RefTableParentName>
     </foreign-key>
-    <index id="358" parent="306" name="PRIMARY">
+    <index id="354" parent="305" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="359" parent="306" name="FKdot8lwuet7113d7f75eew7y5p">
-      <ColNames>type</ColNames>
+    <index id="355" parent="305" name="FK1uobyhgl1wvgt1jpccia8xxs3">
+      <ColNames>cart_id</ColNames>
       <Type>btree</Type>
+    </index>
+    <key id="356" parent="305" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="357" parent="306" name="id">
+      <AutoIncrement>3</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="358" parent="306" name="name">
+      <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <index id="359" parent="306" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
     </index>
     <key id="360" parent="306" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
@@ -1412,24 +1533,1509 @@ year</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="361" parent="307" name="id">
-      <AutoIncrement>2</AutoIncrement>
-      <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <column id="362" parent="307" name="name">
-      <DasType>varchar(255)|0s</DasType>
+    <column id="362" parent="307" name="sku">
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
-    <index id="363" parent="307" name="PRIMARY">
+    <column id="363" parent="307" name="created">
+      <Position>3</Position>
+      <StoredType>datetime(6)|0s</StoredType>
+    </column>
+    <column id="364" parent="307" name="price">
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="365" parent="307" name="quantity">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="366" parent="307" name="status">
+      <Position>6</Position>
+      <StoredType>enum(&apos;IN_STOCK&apos;, &apos;OUT_OF_STOCK&apos;, &apos;LIMITED&apos;)|0e</StoredType>
+    </column>
+    <column id="367" parent="307" name="updated">
+      <Position>7</Position>
+      <StoredType>datetime(6)|0s</StoredType>
+    </column>
+    <column id="368" parent="307" name="type">
+      <Position>8</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="369" parent="307" name="currency">
+      <DefaultExpression>&apos;usd&apos;</DefaultExpression>
+      <Position>9</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="370" parent="307" name="name">
+      <Position>10</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <foreign-key id="371" parent="307" name="FKdot8lwuet7113d7f75eew7y5p">
+      <ColNames>type</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>category</RefTableName>
+      <RefTableParentName>inventorydb</RefTableParentName>
+    </foreign-key>
+    <index id="372" parent="307" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="364" parent="307" name="PRIMARY">
+    <index id="373" parent="307" name="FKdot8lwuet7113d7f75eew7y5p">
+      <ColNames>type</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="374" parent="307" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
+    <check id="375" parent="308" name="transaction_chk_1">
+      <NameSurrogate>1</NameSurrogate>
+      <Predicate>`type` between 0 and 2</Predicate>
+    </check>
+    <column id="376" parent="308" name="id">
+      <AutoIncrement>3</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="377" parent="308" name="created">
+      <Position>2</Position>
+      <StoredType>datetime(6)|0s</StoredType>
+    </column>
+    <column id="378" parent="308" name="product_id">
+      <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="379" parent="308" name="quantity">
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="380" parent="308" name="reason">
+      <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="381" parent="308" name="type">
+      <Position>6</Position>
+      <StoredType>tinyint|0s</StoredType>
+    </column>
+    <column id="382" parent="308" name="updated">
+      <Position>7</Position>
+      <StoredType>datetime(6)|0s</StoredType>
+    </column>
+    <index id="383" parent="308" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="384" parent="308" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="385" parent="309" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="386" parent="309" name="city">
+      <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="387" parent="309" name="first_name">
+      <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="388" parent="309" name="last_name">
+      <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="389" parent="309" name="postcode">
+      <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="390" parent="309" name="state">
+      <Position>6</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="391" parent="309" name="street">
+      <Position>7</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="392" parent="309" name="order_id">
+      <Position>8</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="393" parent="309" name="user_id">
+      <Position>9</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <index id="394" parent="309" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="395" parent="309" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="396" parent="310" name="id">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="397" parent="310" name="sku">
+      <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="398" parent="310" name="price">
+      <Position>3</Position>
+      <StoredType>double|0s</StoredType>
+    </column>
+    <column id="399" parent="310" name="quantity">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="400" parent="310" name="status">
+      <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="401" parent="310" name="type">
+      <Position>6</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <index id="402" parent="310" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="403" parent="310" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="404" parent="311" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="405" parent="311" name="created_at">
+      <Position>2</Position>
+      <StoredType>datetime(6)|0s</StoredType>
+    </column>
+    <column id="406" parent="311" name="item_id">
+      <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="407" parent="311" name="price">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>double|0s</StoredType>
+    </column>
+    <column id="408" parent="311" name="quantity">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="409" parent="311" name="updated_at">
+      <Position>6</Position>
+      <StoredType>datetime(6)|0s</StoredType>
+    </column>
+    <column id="410" parent="311" name="order_id">
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <index id="411" parent="311" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="412" parent="311" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="413" parent="312" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="414" parent="312" name="name">
+      <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <index id="415" parent="312" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="416" parent="312" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="417" parent="313" name="id">
+      <AutoIncrement>2211320</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="418" parent="313" name="firstname">
+      <Position>2</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="419" parent="313" name="lastname">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="420" parent="313" name="street">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="421" parent="313" name="unit">
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
+      <Position>5</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="422" parent="313" name="city">
+      <Position>6</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="423" parent="313" name="postcode">
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="424" parent="313" name="state">
+      <Position>8</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <index id="425" parent="313" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="426" parent="313" name="addresses_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="427" parent="313" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="428" parent="313" name="addresses_id_uindex">
+      <UnderlyingIndexName>addresses_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="429" parent="314" name="id">
+      <AutoIncrement>166</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="430" parent="314" name="customerId">
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="431" parent="314" name="movieId">
+      <Position>3</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="432" parent="314" name="created">
+      <Position>4</Position>
+      <StoredType>datetime|0s</StoredType>
+    </column>
+    <foreign-key id="433" parent="314" name="watchlist_customers_id_fk">
+      <ColNames>customerId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <foreign-key id="434" parent="314" name="watchlist_movies_id_fk">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="435" parent="314" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="436" parent="314" name="watchlist_customers_id_fk">
+      <ColNames>customerId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="437" parent="314" name="watchlist_movies_id_fk">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="438" parent="314" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="439" parent="315" name="id">
+      <AutoIncrement>49417</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="440" parent="315" name="userId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="441" parent="315" name="movieId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="442" parent="315" name="qty">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="443" parent="315" name="created">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>datetime|0s</StoredType>
+    </column>
+    <foreign-key id="444" parent="315" name="cart_movies_id_fk">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="445" parent="315" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="446" parent="315" name="cart_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="447" parent="315" name="cart_movies_id_fk">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="448" parent="315" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="449" parent="315" name="cart_id_uindex">
+      <UnderlyingIndexName>cart_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="450" parent="316" name="id">
+      <AutoIncrement>973020</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="451" parent="316" name="firstname">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="452" parent="316" name="lastname">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="453" parent="316" name="email">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="454" parent="316" name="password">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="455" parent="316" name="primaryAddress">
+      <Position>6</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="456" parent="316" name="created">
+      <Position>7</Position>
+      <StoredType>datetime|0s</StoredType>
+    </column>
+    <index id="457" parent="316" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="458" parent="316" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="459" parent="317" name="customers_id">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="460" parent="317" name="authorities">
+      <Position>2</Position>
+      <StoredType>tinyblob|0s</StoredType>
+    </column>
+    <foreign-key id="461" parent="317" name="FKk253ieipmyrsuprhegddrxru0">
+      <ColNames>customers_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <index id="462" parent="317" name="FKk253ieipmyrsuprhegddrxru0">
+      <ColNames>customers_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="463" parent="318" name="EmpID">
+      <AutoIncrement>9</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="464" parent="318" name="Name">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="465" parent="318" name="UName">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="466" parent="318" name="Password">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="467" parent="318" name="UserLevel">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <index id="468" parent="318" name="PRIMARY">
+      <ColNames>EmpID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="469" parent="318" name="UNQ">
+      <ColNames>EmpID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="470" parent="318" name="UName">
+      <ColNames>UName</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="471" parent="318" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="472" parent="318" name="UNQ">
+      <UnderlyingIndexName>UNQ</UnderlyingIndexName>
+    </key>
+    <key id="473" parent="318" name="UName">
+      <UnderlyingIndexName>UName</UnderlyingIndexName>
+    </key>
+    <column id="474" parent="319" name="id">
+      <AutoIncrement>25</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="475" parent="319" name="name">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(32)|0s</StoredType>
+    </column>
+    <index id="476" parent="319" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="477" parent="319" name="name">
+      <ColNames>name</ColNames>
+      <Type>fulltext</Type>
+    </index>
+    <key id="478" parent="319" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="479" parent="320" name="id">
+      <AutoIncrement>1046680</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="480" parent="320" name="genreId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="481" parent="320" name="movieId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <foreign-key id="482" parent="320" name="genre_to_genre">
+      <ColNames>genreId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>genres</RefTableName>
+    </foreign-key>
+    <foreign-key id="483" parent="320" name="genre_to_movie">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="484" parent="320" name="id">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="485" parent="320" name="genre_to_genre_idx">
+      <ColNames>genreId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="486" parent="320" name="movies.id_idx">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="487" parent="320" name="id">
+      <UnderlyingIndexName>id</UnderlyingIndexName>
+    </key>
+    <column id="488" parent="321" name="next_val">
+      <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
+    </column>
+    <column id="489" parent="322" name="productId">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="490" parent="322" name="status">
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="491" parent="322" name="qty">
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <foreign-key id="492" parent="322" name="inventory_movies_id_fk">
+      <ColNames>productId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="493" parent="322" name="PRIMARY">
+      <ColNames>productId</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="494" parent="322" name="inventory_productId_uindex">
+      <ColNames>productId</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="495" parent="322" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="496" parent="322" name="inventory_productId_uindex">
+      <UnderlyingIndexName>inventory_productId_uindex</UnderlyingIndexName>
+    </key>
+    <column id="497" parent="323" name="movieId">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <column id="498" parent="323" name="price">
+      <Position>2</Position>
+      <StoredType>float|0s</StoredType>
+    </column>
+    <foreign-key id="499" parent="323" name="price_to_movie">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="500" parent="323" name="price_to_movie">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="501" parent="324" name="id">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="502" parent="324" name="title">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="503" parent="324" name="year">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="504" parent="324" name="director">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="505" parent="324" name="poster">
+      <Position>5</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="506" parent="324" name="plot">
+      <Position>6</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="507" parent="324" name="rated">
+      <Position>7</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="508" parent="324" name="runtime">
+      <Position>8</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="509" parent="324" name="language">
+      <Position>9</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="510" parent="324" name="cached">
+      <DefaultExpression>0</DefaultExpression>
+      <Position>10</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="511" parent="324" name="writer">
+      <Position>11</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="512" parent="324" name="awards">
+      <Position>12</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="513" parent="324" name="boxOffice">
+      <Position>13</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="514" parent="324" name="production">
+      <Position>14</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="515" parent="324" name="country">
+      <Position>15</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="516" parent="324" name="movieId">
+      <Position>16</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="517" parent="324" name="background">
+      <Position>17</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="518" parent="324" name="updated">
+      <Position>18</Position>
+      <StoredType>datetime|0s</StoredType>
+    </column>
+    <index id="519" parent="324" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="520" parent="324" name="movies_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="521" parent="324" name="title">
+      <ColNames>title</ColNames>
+      <Type>fulltext</Type>
+    </index>
+    <index id="522" parent="324" name="FKmaxbk5g27749usgkkehe30lo">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="523" parent="324" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="524" parent="324" name="movies_id_uindex">
+      <UnderlyingIndexName>movies_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="525" parent="325" name="id">
+      <AutoIncrement>123177</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="526" parent="325" name="movieId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="527" parent="325" name="quantity">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="528" parent="325" name="listPrice">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>float|0s</StoredType>
+    </column>
+    <column id="529" parent="325" name="orderId">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <foreign-key id="530" parent="325" name="FKcnhegwx89wkm18i95i387ebv2">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <foreign-key id="531" parent="325" name="order_to_sale">
+      <ColNames>orderId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>sales</RefTableName>
+    </foreign-key>
+    <index id="532" parent="325" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="533" parent="325" name="orders_new_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="534" parent="325" name="FKcnhegwx89wkm18i95i387ebv2">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="535" parent="325" name="order_to_sale">
+      <ColNames>orderId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="536" parent="325" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="537" parent="325" name="orders_new_id_uindex">
+      <UnderlyingIndexName>orders_new_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="538" parent="326" name="movieId">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(20)|0s</StoredType>
+    </column>
+    <column id="539" parent="326" name="rating">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>float|0s</StoredType>
+    </column>
+    <column id="540" parent="326" name="numVotes">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="541" parent="326" name="imdb">
+      <Position>4</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="542" parent="326" name="metacritic">
+      <Position>5</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="543" parent="326" name="rottenTomatoes">
+      <Position>6</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="544" parent="326" name="rottenTomatoesAudience">
+      <Position>7</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="545" parent="326" name="rottenTomatoesStatus">
+      <Position>8</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="546" parent="326" name="rottenTomatoesAudienceStatus">
+      <Position>9</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <foreign-key id="547" parent="326" name="rating_to_movie">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="548" parent="326" name="rating_to_movie_idx">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="549" parent="327" name="id">
+      <AutoIncrement>158272</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="550" parent="327" name="movieId">
+      <Position>2</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="551" parent="327" name="customerId">
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="552" parent="327" name="text">
+      <Position>4</Position>
+      <StoredType>text|0s</StoredType>
+    </column>
+    <column id="553" parent="327" name="rating">
+      <Position>5</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="554" parent="327" name="sentiment">
+      <Position>6</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="555" parent="327" name="title">
+      <Position>7</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="556" parent="327" name="created">
+      <Position>8</Position>
+      <StoredType>datetime|0s</StoredType>
+    </column>
+    <foreign-key id="557" parent="327" name="FKmqigguvwryyfhipi12jfpwjwy">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <foreign-key id="558" parent="327" name="FKh94h3agjpvqqekiqoew8y1lkx">
+      <ColNames>customerId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <index id="559" parent="327" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="560" parent="327" name="reviews_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="561" parent="327" name="reviews_movies_id_fk">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="562" parent="327" name="FKh94h3agjpvqqekiqoew8y1lkx">
+      <ColNames>customerId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="563" parent="327" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="564" parent="327" name="reviews_id_uindex">
+      <UnderlyingIndexName>reviews_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="565" parent="328" name="id">
+      <AutoIncrement>2</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="566" parent="328" name="name">
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="567" parent="328" name="description">
+      <Position>3</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <index id="568" parent="328" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="569" parent="328" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="570" parent="329" name="id">
+      <AutoIncrement>46998</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="571" parent="329" name="customerId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="572" parent="329" name="saleDate">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>datetime|0s</StoredType>
+    </column>
+    <column id="573" parent="329" name="total">
+      <Position>4</Position>
+      <StoredType>double|0s</StoredType>
+    </column>
+    <column id="574" parent="329" name="salesTax">
+      <Position>5</Position>
+      <StoredType>double|0s</StoredType>
+    </column>
+    <column id="575" parent="329" name="subTotal">
+      <Position>6</Position>
+      <StoredType>double|0s</StoredType>
+    </column>
+    <column id="576" parent="329" name="stripeId">
+      <Position>7</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="577" parent="329" name="status">
+      <NotNull>1</NotNull>
+      <Position>8</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="578" parent="329" name="device">
+      <Position>9</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <foreign-key id="579" parent="329" name="FKbnkuv6n5yo7kw6gkfaxuob3i6">
+      <ColNames>customerId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <foreign-key id="580" parent="329" name="sale_to_customer">
+      <ColNames>customerId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <index id="581" parent="329" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="582" parent="329" name="sale_to_customer_idx">
+      <ColNames>customerId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="583" parent="329" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="584" parent="330" name="id">
+      <AutoIncrement>46980</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="585" parent="330" name="customerId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="586" parent="330" name="orderId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="587" parent="330" name="firstname">
+      <Position>4</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="588" parent="330" name="lastname">
+      <Position>5</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="589" parent="330" name="street">
+      <Position>6</Position>
+      <StoredType>varchar(200)|0s</StoredType>
+    </column>
+    <column id="590" parent="330" name="unit">
+      <Position>7</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="591" parent="330" name="city">
+      <Position>8</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="592" parent="330" name="state">
+      <Position>9</Position>
+      <StoredType>varchar(5)|0s</StoredType>
+    </column>
+    <column id="593" parent="330" name="postcode">
+      <Position>10</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <foreign-key id="594" parent="330" name="shipping_sales_id_fk">
+      <ColNames>orderId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>sales</RefTableName>
+    </foreign-key>
+    <index id="595" parent="330" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="596" parent="330" name="shipping_information_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="597" parent="330" name="shipping_sales_customerId_fk">
+      <ColNames>customerId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="598" parent="330" name="shipping_sales_id_fk">
+      <ColNames>orderId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="599" parent="330" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="600" parent="330" name="shipping_information_id_uindex">
+      <UnderlyingIndexName>shipping_information_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="601" parent="331" name="id">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="602" parent="331" name="name">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="603" parent="331" name="birthYear">
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="604" parent="331" name="photo">
+      <Position>4</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="605" parent="331" name="bio">
+      <Position>5</Position>
+      <StoredType>mediumtext|0s</StoredType>
+    </column>
+    <column id="606" parent="331" name="birthName">
+      <Position>6</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="607" parent="331" name="birthDetails">
+      <Position>7</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="608" parent="331" name="dob">
+      <Position>8</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="609" parent="331" name="place_of_birth">
+      <Position>9</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="610" parent="331" name="dod">
+      <Position>10</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <index id="611" parent="331" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="612" parent="331" name="stars_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="613" parent="331" name="name">
+      <ColNames>name</ColNames>
+      <Type>fulltext</Type>
+    </index>
+    <key id="614" parent="331" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="615" parent="331" name="stars_id_uindex">
+      <UnderlyingIndexName>stars_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="616" parent="332" name="id">
+      <AutoIncrement>1108929</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="617" parent="332" name="starId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="618" parent="332" name="movieId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(10)|0s</StoredType>
+    </column>
+    <column id="619" parent="332" name="category">
+      <Position>4</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="620" parent="332" name="characters">
+      <Position>5</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <foreign-key id="621" parent="332" name="stars_to_movies">
+      <ColNames>starId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>stars</RefTableName>
+    </foreign-key>
+    <foreign-key id="622" parent="332" name="movies_to_stars">
+      <ColNames>movieId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>movies</RefTableName>
+    </foreign-key>
+    <index id="623" parent="332" name="id">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="624" parent="332" name="stars.id_idx">
+      <ColNames>starId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="625" parent="332" name="movies.id_idx">
+      <ColNames>movieId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="626" parent="332" name="id">
+      <UnderlyingIndexName>id</UnderlyingIndexName>
+    </key>
+    <column id="627" parent="333" name="id">
+      <AutoIncrement>3572</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="628" parent="333" name="city">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="629" parent="333" name="county">
+      <Position>3</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="630" parent="333" name="rate">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>float|0s</StoredType>
+    </column>
+    <column id="631" parent="333" name="zipcode">
+      <Position>5</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <index id="632" parent="333" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="633" parent="333" name="tax_rate_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="634" parent="333" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="635" parent="333" name="tax_rate_id_uindex">
+      <UnderlyingIndexName>tax_rate_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="636" parent="334" name="id">
+      <AutoIncrement>317</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="637" parent="334" name="token">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="638" parent="334" name="expiration">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>mediumtext|0s</StoredType>
+    </column>
+    <column id="639" parent="334" name="user_id">
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <foreign-key id="640" parent="334" name="FKdn9qjxkthev9ten6uyce4pxm8">
+      <ColNames>user_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <index id="641" parent="334" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="642" parent="334" name="FKdn9qjxkthev9ten6uyce4pxm8">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="643" parent="334" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="644" parent="335" name="id">
+      <AutoIncrement>1179</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="645" parent="335" name="userId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="646" parent="335" name="addressId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <foreign-key id="647" parent="335" name="FKmsoxgj670xxdet1booal8sqls">
+      <ColNames>userId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <foreign-key id="648" parent="335" name="FKhhdols2t7j23ddp0ffi5cv4ve">
+      <ColNames>addressId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>addresses</RefTableName>
+    </foreign-key>
+    <index id="649" parent="335" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="650" parent="335" name="users_addresses_id_uindex">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="651" parent="335" name="FKmsoxgj670xxdet1booal8sqls">
+      <ColNames>userId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="652" parent="335" name="FKhhdols2t7j23ddp0ffi5cv4ve">
+      <ColNames>addressId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="653" parent="335" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="654" parent="335" name="users_addresses_id_uindex">
+      <UnderlyingIndexName>users_addresses_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="655" parent="336" name="userId">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="656" parent="336" name="roleId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <foreign-key id="657" parent="336" name="users_roles_customers_id_fk">
+      <ColNames>userId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>customers</RefTableName>
+    </foreign-key>
+    <foreign-key id="658" parent="336" name="users_roles_roles_id_fk">
+      <ColNames>roleId</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>roles</RefTableName>
+    </foreign-key>
+    <index id="659" parent="336" name="users_roles_customers_id_fk">
+      <ColNames>userId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="660" parent="336" name="users_roles_roles_id_fk">
+      <ColNames>roleId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="661" parent="337" name="id">
+      <Position>1</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="662" parent="337" name="title">
+      <Position>2</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="663" parent="337" name="audience_score">
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="664" parent="337" name="tomato_meter">
+      <Comment>The percentage of positive reviews from professional critics</Comment>
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="665" parent="337" name="rating">
+      <Position>5</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="666" parent="337" name="release_date">
+      <Position>6</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="667" parent="337" name="release_date_streaming">
+      <Position>7</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="668" parent="337" name="runtime">
+      <Position>8</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="669" parent="337" name="genres">
+      <Position>9</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="670" parent="337" name="language">
+      <Position>10</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="671" parent="337" name="director">
+      <Position>11</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="672" parent="337" name="writer">
+      <Position>12</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="673" parent="337" name="box_office">
+      <Position>13</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="674" parent="337" name="distributor">
+      <Position>14</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="675" parent="337" name="sound_mix">
+      <Comment>The audio format(s) used in the movie</Comment>
+      <Position>15</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="676" parent="337" name="year">
+      <Position>16</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="677" parent="337" name="imdbId">
+      <Position>17</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <index id="678" parent="337" name="movies_id_index">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="679" parent="337" name="movies_title_year_index">
+      <ColNames>title
+year</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="680" parent="338" name="id">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>varchar(250)|0s</StoredType>
+    </column>
+    <column id="681" parent="338" name="review_id">
+      <Comment>reviewId</Comment>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="682" parent="338" name="creation_date">
+      <Position>3</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="683" parent="338" name="critic_name">
+      <Position>4</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="684" parent="338" name="isTopCritic">
+      <Position>5</Position>
+      <StoredType>tinyint(1)|0s</StoredType>
+    </column>
+    <column id="685" parent="338" name="score">
+      <Position>6</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="686" parent="338" name="review_state">
+      <Position>7</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="687" parent="338" name="publication_name">
+      <Position>8</Position>
+      <StoredType>varchar(1000)|0s</StoredType>
+    </column>
+    <column id="688" parent="338" name="text">
+      <Position>9</Position>
+      <StoredType>varchar(2000)|0s</StoredType>
+    </column>
+    <column id="689" parent="338" name="sentiment">
+      <Position>10</Position>
+      <StoredType>varchar(50)|0s</StoredType>
+    </column>
+    <column id="690" parent="338" name="review_url">
+      <Comment>The URL of the original review on Rotten Tomatoes</Comment>
+      <Position>11</Position>
+      <StoredType>varchar(500)|0s</StoredType>
+    </column>
+    <column id="691" parent="338" name="imdbId">
+      <Position>12</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <index id="692" parent="338" name="reviews_id_index">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+    </index>
   </database-model>
 </dataSource>

@@ -1,28 +1,28 @@
 package com.user_service.service;
 
-import com.movie_service.DTO.BookmarkRequest;
-import com.movie_service.DTO.Response;
-import com.movie_service.models.Bookmark;
+import com.user_service.DTO.BookmarkDTO;
+import com.user_service.DTO.BookmarkRequest;
+import com.user_service.models.Bookmark;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookmarkServiceImp {
 
-    Bookmark getBookmark(String id);
+    BookmarkDTO getBookmark(String id);
 
-    Page<Bookmark> getBookmarksByUserId(String userId, Pageable pageable);
+    Page<BookmarkDTO> getBookmarksByUserId(String userId, Pageable pageable);
 
-    Bookmark addBookmark(BookmarkRequest bookmark);
+    BookmarkDTO addBookmark(BookmarkRequest bookmark);
 
-    Response deleteBookmark(String id);
+    void deleteBookmark(String id);
 
-    Page<Bookmark> getBookmarksByMovieId(String movieId, Pageable pageable);
+    Page<BookmarkDTO> getBookmarksByMovieId(String movieId, Pageable pageable);
 
-    Page<Bookmark> getBookmarksByCreatedAfter(String date, Pageable pageable);
+    Page<BookmarkDTO> getBookmarksByCreatedAfter(String date, Pageable pageable);
 
-    Page<Bookmark> getBookmarks(Pageable pageable);
+    Page<BookmarkDTO> getBookmarks(Pageable pageable);
 
-    Bookmark updateBookmark(String id, BookmarkRequest bookmark);
+    BookmarkDTO updateBookmark(String id, BookmarkRequest bookmark);
 
-    Bookmark getByMovieIdAndUserId(String movieId, String userId);
+    BookmarkDTO getByMovieIdAndUserId(String movieId, String userId);
 }

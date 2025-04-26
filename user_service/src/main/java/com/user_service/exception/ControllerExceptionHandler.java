@@ -1,6 +1,7 @@
 package com.user_service.exception;
 
 
+import com.stripe.exception.*;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -52,18 +53,12 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({OrderException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handleOrderException(OrderException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
 
     @ExceptionHandler({EntityNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
-
 
     @ExceptionHandler({CallNotPermittedException.class})
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
@@ -99,6 +94,12 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<?> handleException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {FirebaseServiceException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleFirebaseServiceException(FirebaseServiceException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 

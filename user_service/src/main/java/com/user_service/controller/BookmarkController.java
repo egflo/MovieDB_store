@@ -1,10 +1,9 @@
-package com.movie_service.controller;
+package com.user_service.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.movie_service.DTO.BookmarkRequest;
-import com.movie_service.DTO.Response;
-import com.movie_service.service.BookmarkService;
+import com.user_service.DTO.BookmarkRequest;
+import com.user_service.DTO.Response;
+import com.user_service.service.BookmarkService;
+import com.user_service.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,28 +12,82 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookmark")
 public class BookmarkController {
     @Autowired
-    private BookmarkService service;
+    private FirebaseService service;
 
-    @DeleteMapping("/movie/{id}/user/{userId}")
-    public ResponseEntity<?> deleteBookmark(@PathVariable String id, @PathVariable String userId) {
-        service.deleteBookmarkByMovieIdAndUserId(id, userId);
+    @GetMapping("/movie/{id}")
+    public ResponseEntity<?> getBookmarkByMovieId(
+            @RequestHeader("uid") String subject,
+            @PathVariable String id
+    ) {
+        return new ResponseEntity<>(service.getByMovieIdAndUserId(id, subject), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(
+            @RequestHeader("uid") String subject,
+            @PathVariable String id
+    ) {
+
+        return new ResponseEntity<>(service.getBookmark(id, subject), HttpStatus.OK);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<?> create(
+            @RequestHeader("uid") String subject,
+            @RequestBody BookmarkRequest request
+    ) {
+        request.setUserId(subject);
+        return new ResponseEntity<>(service.addBookmark(request), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(
+            @RequestHeader("uid") String subject,
+            @PathVariable String id
+    ) {
+        service.deleteBookmark(id, subject);
+        return new ResponseEntity<>("Bookmark Deleted", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/movie/{id}")
+    public ResponseEntity<?> deleteBookmark(
+            @RequestHeader("uid") String subject,
+            @PathVariable String id) {
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll(
+            @RequestHeader("uid") String subject,
+            @RequestParam Optional<Integer> limit,
+            @RequestParam Optional<Integer> page,
+            @RequestParam Optional<String> sortBy
+    ) {
+
+        return new ResponseEntity<>(service.getAllBookmarks(
+                subject,
+                PageRequest.of(
+                page.orElse(0),
+                limit.orElse(10),
+                Sort.by(sortBy.orElse("year"))
+        )), HttpStatus.OK);
+    }
+
+    //TODO: Firestore pagination
+    /*
     @GetMapping("/all")
     public ResponseEntity<?> getAll(
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy
     ) {
-
 
         return new ResponseEntity<>(service.getBookmarks(PageRequest.of(
                 page.orElse(0),
@@ -45,18 +98,12 @@ public class BookmarkController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllByUserId(
-            @RequestHeader HttpHeaders headers,
+            @RequestHeader("uid") String subject,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy,
             @RequestParam Optional<Integer> direction
     ) {
-
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-
         Sort.Direction sortDirection = Sort.Direction.DESC;
         if (direction.isPresent()) {
             if (direction.get() == 1) {
@@ -71,60 +118,6 @@ public class BookmarkController {
         )), HttpStatus.OK);
     }
 
+     */
 
-
-    @GetMapping("/movie/{id}")
-    public ResponseEntity<?> getBookmarkByMovieId(
-            @RequestHeader HttpHeaders headers,
-            @PathVariable String id
-    ) {
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        System.out.println("token: " + token);
-
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-        return new ResponseEntity<>(service.getByMovieIdAndUserId(id, subject), HttpStatus.OK);
-    }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(
-            @RequestHeader HttpHeaders headers,
-            @PathVariable String id
-    ) {
-
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        System.out.println("token: " + token);
-
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-        return new ResponseEntity<>(service.getBookmark(id), HttpStatus.OK);
-    }
-
-    @PostMapping("/")
-    public ResponseEntity<?> create(
-            @RequestHeader HttpHeaders headers,
-            @RequestBody BookmarkRequest request
-            ) {
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
-        request.setUserId(subject);
-
-        return new ResponseEntity<>(service.addBookmark(request), HttpStatus.OK);
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(
-            @PathVariable String id
-    ) {
-
-
-        Response response = service.deleteBookmark(id);
-        return new ResponseEntity<>(response, response.getStatus());
-    }
 }

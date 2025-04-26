@@ -19,50 +19,39 @@ import java.util.Optional;
 
 //https://www.amitph.com/spring-rest-http-header/
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/product")
 public class ItemController {
 
     @Autowired
     private ItemService service;
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@RequestHeader HttpHeaders headers,
-                                 @PathVariable String id) throws Exception {
+                                 @PathVariable String id) {
 
         return ResponseEntity.ok(service.getItemById(id));
     }
 
-
     @PostMapping("/")
     public ResponseEntity<?> add(@RequestHeader HttpHeaders headers, @RequestBody ItemDTO request) {
-
-
-        return new ResponseEntity<>(service.addItem(request), null, HttpStatus.CREATED);
+        return new ResponseEntity(service.add(request), HttpStatus.CREATED);
     }
-
 
     @PutMapping("/")
-    public ResponseEntity<?> updateCart(@RequestHeader HttpHeaders headers,
+    public ResponseEntity<?> update(@RequestHeader HttpHeaders headers,
                                         @RequestBody ItemDTO request) {
 
-
-        return ResponseEntity.ok(service.updateItem(request));
+        return new ResponseEntity<>(service.update(request), HttpStatus.OK);
     }
 
-
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCart(@RequestHeader HttpHeaders headers,
+    public ResponseEntity<?> delete(@RequestHeader HttpHeaders headers,
                                                      @PathVariable String id) {
 
         service.delete(id);
         String message = "Item with id: " + id + " deleted successfully";
         return ResponseEntity.ok(message);
     }
-
-
 
     /**
      *

@@ -26,6 +26,4 @@ public interface MovieServiceImp {
 
     Page<Movie> findMovieByCastId(String castId, Pageable pageable);
 
-
-    Page<Movie> getBookmarks(String userId, Pageable pageable);
 }

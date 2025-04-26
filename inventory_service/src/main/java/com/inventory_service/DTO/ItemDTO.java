@@ -4,24 +4,28 @@ import java.util.Date;
 
 public class ItemDTO {
     String id;
+    String name;
     String SKU;
     Integer price;
     Integer quantity;
     String status;
     Date updated;
+    Date created;
     String currency;
 
 
     public ItemDTO() {
     }
 
-    public ItemDTO(String id, String SKU, Integer price, Integer quantity, String status, Date updated, String currency) {
+    public ItemDTO(String id, String name, String SKU, Integer price, Integer quantity, String status, Date updated, Date created, String currency) {
         this.id = id;
+        this.name = name;
         this.SKU = SKU;
         this.price = price;
         this.quantity = quantity;
         this.status = status;
         this.updated = updated;
+        this.created = created;
         this.currency = currency;
     }
 
@@ -71,6 +75,14 @@ public class ItemDTO {
 
     public void setUpdate(Date created) {
         this.updated = created;
+    }
+
+    public String getCreated() {
+        return created.toString();
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public String getCurrency() {

@@ -23,9 +23,7 @@ public class FirebaseConfiguration {
         var options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                 .build();
-
         var firebaseApp = FirebaseApp.initializeApp(options);
-
         return FirebaseAuth.getInstance(firebaseApp);
     }
 }

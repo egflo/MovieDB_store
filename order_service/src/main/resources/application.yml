@@ -1,16 +1,9 @@
 app:
-  firebase:
-    path: ${FIREBASE_PATH}
-    db_url: ${FIREBASE_DB_URL}
-    project_id: ${FIREBASE_PROJECT_ID}
-
 spring:
-  config:
-    import: file:env.properties
   application:
     name: ${EUREKA_INSTANCE_HOSTNAME:order-service}
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${POSTGRES_DB:OrderDB}
+    url: jdbc:postgresql://${POSTGRES_HOST:n1.local}:5432/${POSTGRES_DB:orderdb}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
   jpa:
@@ -20,17 +13,19 @@ spring:
     database: postgresql
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:0}
+
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    preferIpAddress: ${PREFER_IP_ADDRESS:true}
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
+    preferIpAddress: ${PREFER_IP_ADDRESS:false}
 
 grpc:
   server:
-    port: ${GRPC_PORT:9091}
+    port: ${GRPC_PORT:0}
   client:
     inventory-grpc-server:
       address: ${GRPC_INVENTORY_ADDRESS:discovery:///inventory-service}
@@ -42,18 +37,17 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
-    tax-grpc-server:
-      address: ${GRPC_TAX_ADDRESS:discovery:///tax-service}
+    user-grpc-server:
+      address: ${GRPC_USER_ADDRESS:discovery:///user-service}
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
 stripe:
   secret:
-    key: ${STRIPE_SECRET}
+    key: ${STRIPE_SECRET:}
   public:
-    key: ${STRIPE_PUBLIC}
-
+    key: ${STRIPE_PUBLIC:}
 
 management:
   endpoint:

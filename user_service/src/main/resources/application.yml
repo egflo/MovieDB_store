@@ -1,14 +1,15 @@
+app:
+  firebase:
+    path: ${FIREBASE_PATH:service-account.json}
+
 spring:
   application:
-    name: ${EUREKA_INSTANCE_HOSTNAME:movie-service}
+    name: ${EUREKA_INSTANCE_HOSTNAME:user-service}
 
   data:
     mongodb:
-      database: ${MONGO_DB:moviedb}
+      database: ${MONGO_DB:userdb}
       uri: ${MONGO_URI:mongodb://localhost:27017}
-
-server:
-  port: ${SERVER_PORT:0}
 
 eureka:
   client:
@@ -20,22 +21,13 @@ eureka:
 
 grpc:
   server:
-      port: ${GRPC_PORT:0}
+    port: ${GRPC_PORT:0}
   client:
-    inventory-grpc-server:
-      address: ${GRPC_INVENTORY_ADDRESS:discovery:///inventory-service}
+    movie-grpc-server:
+      address: ${GRPC_MOVIE_ADDRESS:discovery:///movie-service}
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
-
-background_api:
-  key: ${BACKGROUND_API_KEY}
-
-dgs:
-  graphql:
-    graphiql:
-      enabled: true
-
 
 management:
   endpoint:

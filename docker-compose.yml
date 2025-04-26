@@ -1,6 +1,9 @@
+x-image-prefix: &image_prefix 472315148525.dkr.ecr.us-west-2.amazonaws.com/movie_store
+
+
 services:
   gateway:
-    image: gateway:latest
+    image: &image_prefix/gateway:latest
     container_name: gateway
     ports:
       - "8760:8760"
@@ -10,7 +13,7 @@ services:
     environment:
       EUREKA_URI: http://eureka-server:8761/eureka
   eureka-server:
-    image: eureka-server:latest
+    image: &image_prefix/movie_store/eureka:latest
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -18,7 +21,7 @@ services:
       - eureka-net
     restart: always
   movie-service:
-    image: movie-service:latest
+    image: &image_prefix/movie-service:latest
     container_name: movie-service
     ports:
       - "9090:9090"
@@ -30,8 +33,9 @@ services:
       MONGO_DB: moviedb
       MONGO_URI: mongodb://localhost:27017
       EUREKA_URI: http://eureka-server:8761/eureka
+      GRPC_PORT: 9090
   inventory-service:
-    image: inventory-service:latest
+    image: &image_prefix/inventory-service:latest
     container_name: inventory-service
     ports:
       - "9091:9090"
@@ -40,13 +44,14 @@ services:
       - eureka-net
     restart: always
     environment:
-      MYSQL_HOST: localhost
-      MYSQL_DATABASE: InventoryDB
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: mysql
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: inventorydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       EUREKA_URI: http://eureka-server:8761/eureka
+      GRPC_PORT: 9090
   order-service:
-    image: order-service:latest
+    image: &image_prefix/order-service:latest
     container_name: order-service
     ports:
       - "9092:9090"
@@ -56,13 +61,14 @@ services:
     restart: always
     environment:
       POSTGRES_HOST: localhost
-      POSTGRES_DB: OrderDB
+      POSTGRES_DB: orderdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       EUREKA_URI: http://eureka-server:8761/eureka
-  tax-service:
-    image: tax-service:latest
-    container_name: tax-service
+      GRPC_PORT: 9090
+  user-service:
+    image: &image_prefix/user-service:latest
+    container_name: user-service
     ports:
       - "9093:9090"
       - "8083:8080"
@@ -70,11 +76,16 @@ services:
       - eureka-net
     restart: always
     environment:
-      POSTGRES_HOST: localhost
-      POSTGRES_DB: TaxDB
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MONGO_DB: userdb
+      MONGO_URI: mongodb://localhost:27017
       EUREKA_URI: http://eureka-server:8761/eureka
+      GRPC_PORT: 9090
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
 networks:
   eureka-net:
     driver: bridge

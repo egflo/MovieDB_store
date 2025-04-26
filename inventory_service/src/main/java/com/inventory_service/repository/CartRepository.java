@@ -13,18 +13,8 @@ import java.util.Optional;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
 
-
-    List<Cart> findAllByUserId(String userId);
-
-    Page<Cart> findAllByItemId(String itemId, Pageable pageable);
-
-    Page<Cart> findAllByUserId(Integer userId, Pageable pageable);
-
-    Optional<Cart> findCartById(Integer id);
-
-    //Delete all by user id
-    void deleteAllByUserId(String userId);
-
-
-    Optional<Cart> findByItemIdAndUserId(String itemId, String userId);
+    Optional<Cart> findById(Integer id);
+    Optional<Cart> findByUserId(String userId);
+    // Find all Cart by CartItems that contain the given Item ID
+    Page<Cart> findAllByCartItems_ItemId(String itemId, Pageable pageable);
 }

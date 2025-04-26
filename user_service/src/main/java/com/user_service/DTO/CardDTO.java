@@ -1,5 +1,6 @@
-package com.order_service.dto;
-import com.stripe.model.PaymentMethod.Card ;
+package com.user_service.DTO;
+
+import com.stripe.model.PaymentMethod.Card;
 
 import java.util.List;
 

@@ -24,7 +24,6 @@ public class ShippingRequest {
         this.country = country;
     }
 
-
     public String getFirstName() {
         return firstName;
     }

@@ -1,30 +1,33 @@
 package com.user_service.service;
 
-import com.movie_service.DTO.SentimentRequest;
-import com.movie_service.models.Sentiment;
+import com.user_service.DTO.SentimentDTO;
+import com.user_service.DTO.SentimentRequest;
+import com.user_service.models.Sentiment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 public interface SentimentServiceImp {
-    Sentiment getSentiment(String id);
+    SentimentDTO getSentiment(String id);
 
-    Sentiment createSentiment(SentimentRequest sentiment);
+    SentimentDTO createSentiment(SentimentRequest sentiment);
 
     void deleteSentiment(String id);
 
-    Sentiment updateSentiment(String id, SentimentRequest sentiment);
+    SentimentDTO updateSentiment(String id, SentimentRequest sentiment);
 
-    Optional<Sentiment> findByUserIdAndObjectId(String userId, String objectId);
+    Optional<SentimentDTO> findByUserIdAndObjectId(String userId, String objectId);
 
-    Page<Sentiment> getSentimentByObjectId(String objectId, Pageable pageRequest);
+    Page<SentimentDTO> getSentimentByObjectId(String objectId, Pageable pageRequest);
 
-    Page<Sentiment> getSentimentByUserId(String userId, Pageable pageRequest);
+    Page<SentimentDTO> getSentimentByUserId(String userId, Pageable pageRequest);
 
-    Page<Sentiment> getAllSentiments(Pageable pageRequest);
+    Page<SentimentDTO> getAllSentiments(Pageable pageRequest);
 
-    Page<Sentiment> findByCreatedAfter(String date, Pageable pageable);
+    Page<SentimentDTO> findByCreatedAfter(String date, Pageable pageable);
 
     Integer countSentimentByObjectIdAndStatus(String id, String status);
+
+    SentimentDTO findByObjectId(String subject, String id);
 }

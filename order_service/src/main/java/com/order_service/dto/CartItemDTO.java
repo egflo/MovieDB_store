@@ -17,13 +17,12 @@ public class CartItemDTO {
     public CartItemDTO(CartItem cartItem) {
         this.id = cartItem.getId();
         this.itemId = cartItem.getItemId();
-        this.userId = cartItem.getUserId();
         this.quantity = cartItem.getQuantity();
         this.price = cartItem.getPrice();
         this.name = cartItem.getName();
         this.description = cartItem.getDescription();
         this.image = cartItem.getImage();
-        this.sku = cartItem.getSku();
+        this.sku = cartItem.getDescription();
     }
 
     public Long getId() {

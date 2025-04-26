@@ -2,7 +2,6 @@ package com.movie_service.service;
 
 
 import com.movie_service.models.CriticReview;
-import com.movie_service.models.Review;
 import com.movie_service.repository.CriticReviewRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

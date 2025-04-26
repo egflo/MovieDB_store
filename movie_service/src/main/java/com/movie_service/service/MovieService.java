@@ -1,26 +1,19 @@
 package com.movie_service.service;
 
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 import com.movie_service.DAO.MovieDAO;
-import com.movie_service.DTO.ItemDTO;
-import com.movie_service.DTO.MovieDTO;
-import com.movie_service.DTO.Response;
-import com.movie_service.DTO.SentimentRequest;
 import com.movie_service.exception.IdNotFoundException;
 import com.movie_service.grpc.ItemService;
-import com.movie_service.models.Bookmark;
 import com.movie_service.models.Movie;
 import com.movie_service.models.Suggestion;
-import com.movie_service.repository.BookmarkRepository;
 import com.movie_service.repository.MovieRepository;
 import com.movie_service.repository.SuggestionRepository;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.proto.grpc.ItemResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,16 +21,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 @Service
 public class MovieService implements MovieServiceImp {
+
+    static final Logger LOGGER = LoggerFactory.getLogger(MovieService.class);
 
     @Autowired
     MovieDAO movieDAO;
@@ -46,10 +35,8 @@ public class MovieService implements MovieServiceImp {
     private MovieRepository repository;
 
     @Autowired
-    private BookmarkRepository bookmarkRepository;
-
-    @Autowired
     private SuggestionRepository suggestionRepository;
+
 
     @Autowired
     private ItemService itemService;
@@ -64,13 +51,24 @@ public class MovieService implements MovieServiceImp {
 
     @Override
     public Movie findByMovieId(String id) {
+
+        LOGGER.info("findByMovieId id: {}", id);
+
         API api = new API(repository);
-        api.background(id);
-        Optional<Movie> movie = repository.getMovieByMovieId(id);
-        if (movie.isPresent()) {
-            return movie.get();
+        //api.background(id);
+        Optional<Movie> present = repository.getMovieByMovieId(id);
+        if (present.isPresent()) {
+            ItemResponse Response = itemService.getItemBySku(id);
+            Movie movie = present.get();
+            return movie;
         }
 
+       present = repository.getMovieById(new ObjectId(id));
+        if (present.isPresent()) {
+            ItemResponse Response = itemService.getItem(id);
+            Movie movie = present.get();
+            return movie;
+        }
         throw new IdNotFoundException("Movie with id " + id + " not found");
     }
 
@@ -83,16 +81,6 @@ public class MovieService implements MovieServiceImp {
     public Page<Movie> findMovieByCastId(String castId, Pageable pageable) {
         return repository.findMovieByCastId(castId, pageable);
     }
-
-    @Override
-    public Page<Movie> getBookmarks(String userId, Pageable pageable) {
-        Page<Bookmark> bookmarks = bookmarkRepository.getBookmarkByUserId(userId, pageable);
-
-        List<Movie> movies = new ArrayList<>(bookmarks.map(Bookmark::getMovie).getContent());
-        return new PageImpl<>(movies, pageable, bookmarks.getTotalElements());
-
-    }
-
 
     @Override
     public Page<Movie> recommendMovies(String movieId, Pageable pageable) {

@@ -1,81 +1,59 @@
 package com.inventory_service.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.inventory_service.DTO.CartDTO;
+import com.inventory_service.DTO.CartRequest;
 import com.inventory_service.service.CartService;
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import io.github.resilience4j.bulkhead.annotation.Bulkhead;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
-
-//https://www.amitph.com/spring-rest-http-header/
 @RestController
 @RequestMapping("/cart")
 public class CartController {
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private CartService cartService;
 
     @GetMapping("/")
-    public ResponseEntity<?> getCart(@RequestHeader HttpHeaders headers) {
-        String token = headers.get("authorization").get(0).split(" ")[1].trim();
-
-        DecodedJWT jwt = JWT.decode(token);
-        String subject = jwt.getSubject();
-
+    public ResponseEntity<?> getCart(@RequestHeader(value = "uid", required = true) String subject) {
+        //String token = headers.get("authorization").get(0).split(" ")[1].trim();
+        //DecodedJWT jwt = JWT.decode(token);
+        //String subject = jwt.getSubject();
         return ResponseEntity.ok(cartService.findAllByUserId(subject));
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addCart(@RequestHeader HttpHeaders headers, @RequestBody CartDTO request) {
-
+    public ResponseEntity<?> addCart(@RequestHeader(value = "uid", required = true) String subject, @RequestBody CartRequest request) {
+        request.setUserId(subject);
         return ResponseEntity.ok(cartService.add(request));
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> addCart(@RequestHeader HttpHeaders headers, @PathVariable Integer id, @RequestBody CartDTO request) {
-
+    public ResponseEntity<?> updateCart(@RequestHeader(value = "uid", required = true)
+                                            String subject, @PathVariable Integer id,
+                                        @RequestBody CartRequest request) {
         request.setId(id);
-        return ResponseEntity.ok(cartService.add(request));
-    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCart(@RequestHeader HttpHeaders headers,
-                                        @PathVariable Integer id,
-                                        @RequestBody CartDTO request) {
-
-        request.setId(id);
+        request.setUserId(subject);
         return ResponseEntity.ok(cartService.update(request));
     }
 
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCart(@RequestHeader HttpHeaders headers,
-                                                     @PathVariable Integer id) {
-
-        return ResponseEntity.ok(cartService.delete(id));
+    public ResponseEntity<?> deleteCart(@RequestHeader(value = "uid", required = true) String subject,
+                                        @PathVariable Integer id) {
+        cartService.delete(subject, id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 
     /**
      *
@@ -123,5 +101,4 @@ public class CartController {
                 )
         ));
     }
-
 }

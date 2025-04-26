@@ -1,7 +1,4 @@
-package com.inventory_service.service_grpc;
-
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
+package com.inventory_service.grpc;
 
 /**
 //https://github.com/yidongnan/grpc-spring-boot-starter/pull/775

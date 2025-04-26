@@ -1,5 +1,6 @@
 package com.user_service.repository;
-import com.movie_service.models.Sentiment;
+
+import com.user_service.models.Sentiment;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +20,7 @@ public interface SentimentRepository extends MongoRepository<Sentiment, ObjectId
 
     Page<Sentiment> getSentimentByCreatedAfter(Date date, Pageable pageable);
 
-
     Optional<Sentiment> getSentimentByUserIdAndObjectId(String userId, ObjectId objectId);
-
 
     @Query("{'$and': [{'objectId': ?0}, {'$eq': {'isLiked': true}}]}")
     Page<Sentiment> getSentimentByObjectIdIdAndIsLiked(ObjectId id, Pageable pageable);
@@ -30,5 +29,4 @@ public interface SentimentRepository extends MongoRepository<Sentiment, ObjectId
     Page<Sentiment> getSentimentByObjectIdIdAndIsDisliked(ObjectId id, Pageable pageable);
 
     Integer countSentimentByObjectIdAndStatus(String id, String status);
-
 }

@@ -2,29 +2,30 @@ spring:
   application:
     name: ${EUREKA_INSTANCE_HOSTNAME:inventory-service}
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/${MYSQL_DATABASE:InventoryDB}
-    username: ${MYSQL_USER:admin}
-    password: ${MYSQL_PASSWORD:admin}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${POSTGRES_DB:inventorydb}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    database: mysql
+    database: postgresql
+    generate-ddl: true
 
 server:
-  port: ${SERVER_PORT:8082}
+  port: ${SERVER_PORT:0}
 
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    preferIpAddress: ${PREFER_IP_ADDRESS:true}
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
+    preferIpAddress: ${PREFER_IP_ADDRESS:false}
 
 grpc:
     server:
-        port: ${GRPC_PORT:9092}
+        port: ${GRPC_PORT:0}
     client:
         movie-grpc-server:
           address: ${GRPC_MOVIE_ADDRESS:discovery:///movie-service}

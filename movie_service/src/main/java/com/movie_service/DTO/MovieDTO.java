@@ -35,12 +35,7 @@ public class MovieDTO {
     Double popularity;
     Long revenue;
     List<Tag> tags;
-
     ItemDTO item;
-
-    BookmarkDTO bookmark;
-
-    SentimentDTO sentiment;
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId().toString();

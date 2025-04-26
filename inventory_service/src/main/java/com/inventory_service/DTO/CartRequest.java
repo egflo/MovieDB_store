@@ -1,24 +1,18 @@
 package com.inventory_service.DTO;
 
-import com.inventory_service.model.Cart;
 
-public class CartDTO {
+public class CartRequest {
     Integer id;
     String userId;
     String itemId;
     Integer quantity;
 
-    public CartDTO(Cart cart) {
-        this.id = cart.getId();
-        this.userId = cart.getUserId();
-        this.itemId = cart.getItemId();
-        this.quantity = cart.getQuantity();
+    public CartRequest() {
     }
 
-    public CartDTO(Integer id, String userId, String itemId, Integer quantity, String created) {
+    public CartRequest(Integer id, String userId, Integer quantity) {
         this.id = id;
         this.userId = userId;
-        this.itemId = itemId;
         this.quantity = quantity;
     }
 
@@ -57,6 +51,8 @@ public class CartDTO {
     @Override
     public String toString() {
         return "CartDTO{" +
-                "id=" + id + ", userId='" + userId + '\'' + ", itemId='" + itemId + '\'' + ", quantity='" + quantity + '\'' + '}';
+                "id=" + id + ", userId='" + userId + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", quantity='" + quantity + '\'' + '}';
     }
 }

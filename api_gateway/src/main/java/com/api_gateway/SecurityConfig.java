@@ -25,39 +25,25 @@ import java.util.List;
 
 @Configuration
 @EnableWebFluxSecurity
-//@EnableReactiveMethodSecurity
+@EnableReactiveMethodSecurity
 @Slf4j
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        // @formatter:off
-        http
-                .csrf().disable()  // Disable CSRF for stateless APIs
-                .authorizeHttpRequests(auth -> auth
-                        // Allow all GET requests without authentication
-                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
-
-                        // Restrict POST, PUT, DELETE to authenticated users
-                        .requestMatchers(HttpMethod.POST, "/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/**").authenticated()
-
-                        // Any other request must be authenticated
-                        .anyRequest().authenticated()
+    public SecurityWebFilterChain SecurityWebFilterChain(ServerHttpSecurity http) {
+        return http
+                .csrf(csrf -> csrf.disable())  // Disable CSRF for API
+                .authorizeExchange(auth -> auth
+                        .pathMatchers("/public/**").permitAll()  // Open paths
+                        .pathMatchers(HttpMethod.GET, "/**").permitAll() // Allow all GET requests
+                        .pathMatchers(HttpMethod.PUT).authenticated() // Secure PUT, POST, DELETE
+                        .anyExchange().authenticated() // Secure other paths
                 )
-                // Set stateless session management to work with JWT
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)  // Enable JWT for authentication
-                .build();
 
-        return http.build();
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt())  // Use JWT for OAuth2
+                .build();
     }
+
     // This method provides the AuthenticationManager required by Spring Security
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

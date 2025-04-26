@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Optional;
 
 
 public class API { ;
@@ -34,7 +35,13 @@ public class API { ;
 
         try {
 
-            Movie movie = repository.getMovieByMovieId(movie_id).get();
+            Optional<Movie> m = repository.getMovieByMovieId(movie_id);
+
+            if (!m.isPresent()) {
+                m = repository.getMovieByMovieId(movie_id);
+            }
+
+            Movie movie = m.get();
 
             String movie_background = movie.getBackground();
             String logo_type = movie.getLogo();

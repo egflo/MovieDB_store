@@ -1,21 +1,19 @@
-package com.user_service.models;
+package com.user_service.DTO;
 
-import com.user_service.DTO.BookmarkRequest;
+import com.user_service.models.Bookmark;
+import com.user_service.models.Movie;
+import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.proto.grpc.MovieResponse;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@Setter
+public class BookmarkDTO {
 
-//Entity class for the bookmark collection in the database
-//This class is used to store the bookmarked movies of a user
-@Document(collection = "bookmarks")
-public class Bookmark {
-
-        @Id
-        private ObjectId id;
+        private String id;
 
         private String userId;
 
@@ -23,26 +21,22 @@ public class Bookmark {
 
         private Date created;
 
-        public Bookmark() {
+        public BookmarkDTO() {
 
         }
 
-        public Bookmark(BookmarkRequest request) {
-            this.userId = request.getUserId();
-            this.created = new Date();
+        public BookmarkDTO(Bookmark bookmark) {
+            this.id = bookmark.getId();
+            this.userId = bookmark.getUserId();
+            this.movie = bookmark.getMovie();
+            this.created = bookmark.getCreated();
         }
 
-        public Bookmark(String userId,  Movie movie, Date created) {
-            this.userId = userId;
-            this.movie = movie;
-            this.created = created;
-        }
-
-        public ObjectId getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(ObjectId id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -58,8 +52,9 @@ public class Bookmark {
             return movie;
         }
 
-        public void setMovie(Movie movie) {
-            this.movie = movie;
+        public void setMovie(MovieResponse movie) {
+
+            this.movie = new Movie(movie);
         }
 
         public Date getCreated() {
@@ -70,4 +65,24 @@ public class Bookmark {
             this.created = created;
         }
 
+
+        public Bookmark toBookmark() {
+            Bookmark bookmark = new Bookmark();
+            bookmark.setId(id);
+            bookmark.setUserId(this.userId);
+            bookmark.setMovie(this.movie);
+            bookmark.setCreated(this.created);
+            return bookmark;
+        }
+
+    @Override
+    public String toString() {
+
+        return "BookmarkDTO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", movie=" + movie +
+                ", created=" + created +
+                '}';
+    }
 }

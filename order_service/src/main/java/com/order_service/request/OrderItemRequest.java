@@ -9,7 +9,6 @@ public class OrderItemRequest {
     private String description;
     private String sku;
 
-
     public OrderItemRequest() {
     }
 
@@ -24,8 +23,6 @@ public class OrderItemRequest {
         this.sku = SKU;
         this.itemId = itemId;
     }
-
-
 
     public String getItemId() {
         return itemId;

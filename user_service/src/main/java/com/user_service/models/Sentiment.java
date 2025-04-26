@@ -1,5 +1,6 @@
 package com.user_service.models;
 
+import lombok.Builder;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,8 +30,8 @@ public class Sentiment {
         this.status = status;
     }
 
-    public String getId() {
-        return id.toHexString();
+    public ObjectId getId() {
+        return id;
     }
 
     public void setId(ObjectId id) {
@@ -45,8 +46,8 @@ public class Sentiment {
         this.userId = userId;
     }
 
-    public String getObjectId() {
-        return objectId.toHexString();
+    public ObjectId getObjectId() {
+        return objectId;
     }
 
     public void setObjectId(ObjectId objectId) {
@@ -67,6 +68,10 @@ public class Sentiment {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Sentiment builder() {
+        return this;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.user_service.DTO;
 
+
 public class AddressRequest {
     String id;
     private String userId;
@@ -27,6 +28,19 @@ public class AddressRequest {
         this.postcode = postcode;
         this.country = country;
         this.isDefault = isDefault;
+    }
+
+    public AddressRequest(AddressRequest request) {
+        this.id = request.getId();
+        this.userId = request.getUserId();
+        this.firstName = request.getFirstName();
+        this.lastName = request.getLastName();
+        this.street = request.getStreet();
+        this.city = request.getCity();
+        this.state = request.getState();
+        this.postcode = request.getPostcode();
+        this.country = request.getCountry();
+        this.isDefault = request.getIsDefault();
     }
 
     public String getId() {

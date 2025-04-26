@@ -1,8 +1,11 @@
 package com.order_service.dto;
 
 
-import com.order_service.model.UserAddress;
+import com.order_service.model.Address;
 import com.order_service.request.AddressRequest;
+import lombok.Getter;
+import lombok.Setter;
+import org.proto.grpc.AddressResponse;
 
 public class AddressDTO {
     private String id;
@@ -12,22 +15,15 @@ public class AddressDTO {
     private String city;
     private String state;
     private String postcode;
+    @Getter
+    @Setter
     private String country;
+
+    @Getter
+    @Setter
     private boolean isDefault;
 
-
     public AddressDTO() {
-    }
-
-    public AddressDTO(UserAddress address) {
-        this.firstName = address.getFirstName();
-        this.lastName = address.getLastName();
-        this.street = address.getStreet();
-        this.city = address.getCity();
-        this.state = address.getState();
-        this.postcode = address.getPostcode();
-        this.country = address.getCountry();
-        this.isDefault = address.getIsDefault();
     }
 
     public AddressDTO(AddressRequest request) {
@@ -52,6 +48,29 @@ public class AddressDTO {
         this.postcode = postcode;
         this.country = country;
         this.isDefault = isDefault;
+    }
+
+    public AddressDTO(Address address) {
+        this.firstName = address.getFirstName();
+        this.lastName = address.getLastName();
+        this.street = address.getStreet();
+        this.city = address.getCity();
+        this.state = address.getState();
+        this.postcode = address.getPostcode();
+        this.country = address.getCountry();
+        this.isDefault = address.getIsDefault();
+    }
+
+    public AddressDTO(AddressResponse addressResponse) {
+        this.id = addressResponse.getId();
+        this.firstName = addressResponse.getFirstName();
+        this.lastName = addressResponse.getLastName();
+        this.street = addressResponse.getAddressLine1();
+        this.city = addressResponse.getCity();
+        this.state = addressResponse.getState();
+        this.postcode = addressResponse.getPostalCode();
+        this.country = addressResponse.getCountry();
+        this.isDefault = addressResponse.getIsDefault();
     }
 
     public String getId() {
@@ -102,29 +121,12 @@ public class AddressDTO {
         this.state = state;
     }
 
-    public String getPostalCode() {
+    public String getPostcode() {
         return postcode;
     }
 
-    public void setPostalCode(String zip) {
+    public void setPostcode(String zip) {
         this.postcode = zip;
     }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public boolean getisDefault() {
-        return isDefault;
-    }
-
-    public void setisDefault(boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
 
 }

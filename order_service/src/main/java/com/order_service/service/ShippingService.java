@@ -31,7 +31,6 @@ public class ShippingService implements ShippingServiceImp {
                 .orElseThrow(() -> new AddressException("Address not found for this id :: " + id));
     }
 
-
     public Shipping createAddress(AddressDTO addressDTO) {
 
         Shipping address = new Shipping();
@@ -40,7 +39,7 @@ public class ShippingService implements ShippingServiceImp {
         address.setStreet(addressDTO.getStreet());
         address.setCity(addressDTO.getCity());
         address.setState(addressDTO.getState());
-        address.setPostalCode(addressDTO.getPostalCode());
+        address.setPostalCode(addressDTO.getPostcode());
 
         Shipping save = addressRepository.save(address);
         return save;
@@ -57,7 +56,7 @@ public class ShippingService implements ShippingServiceImp {
             address1.setStreet(addressDTO.getStreet());
             address1.setCity(addressDTO.getCity());
             address1.setState(addressDTO.getState());
-            address1.setPostalCode(addressDTO.getPostalCode());
+            address1.setPostalCode(addressDTO.getPostcode());
             addressRepository.save(address1);
             return address1;
         } else {

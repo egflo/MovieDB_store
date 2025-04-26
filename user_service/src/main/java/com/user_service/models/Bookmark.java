@@ -1,6 +1,8 @@
 package com.user_service.models;
 
+import com.user_service.DTO.BookmarkRequest;
 import org.bson.types.ObjectId;
+import org.proto.grpc.MovieResponse;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,38 +10,41 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 
-//Entity class for the bookmark collection in the database
-//This class is used to store the bookmarked movies of a user
-@Document(collection = "bookmarks")
+//@Document(collection = "bookmarks")
 public class Bookmark {
 
-        @Id
-        private ObjectId id;
-
+        private String id;
 
         private String userId;
 
-        @DBRef
+        private String movieId;
+
         private Movie movie;
 
         private Date created;
 
         public Bookmark() {
+
         }
 
-        public Bookmark(String userId,  Movie movie, Date created) {
+        public Bookmark(BookmarkRequest request) {
+            this.userId = request.getUserId();
+            this.movieId = request.getMovieId();
+            this.created = new Date();
+        }
+
+        public Bookmark(String userId, MovieResponse movie) {
             this.userId = userId;
-            this.movie = movie;
-            this.created = created;
+            this.movieId = movie.getId();
+            this.movie = new Movie(movie);
+            this.created = new Date();
         }
 
         public String getId() {
-            return id.toHexString();
+            return id;
         }
 
-        public void setId(String id) {
-            this.id = new ObjectId(id);
-        }
+        public void setId(String id) {this.id = id;}
 
         public String getUserId() {
             return userId;
@@ -47,6 +52,14 @@ public class Bookmark {
 
         public void setUserId(String userId) {
             this.userId = userId;
+        }
+
+        public String getMovieId() {
+            return movieId;
+        }
+
+        public void setMovieId(String movieId) {
+            this.movieId = movieId;
         }
 
         public Movie getMovie() {

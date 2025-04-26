@@ -1,10 +1,9 @@
-package com.movie_service.controller;
+package com.user_service.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.movie_service.DTO.SentimentRequest;
-import com.movie_service.service.ReviewService;
-import com.movie_service.service.SentimentService;
+import com.user_service.DTO.ReviewRequest;
+import com.user_service.models.Review;
+import com.user_service.service.ReviewService;
+import com.user_service.service.SentimentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,45 +18,75 @@ import java.util.Optional;
 public class ReviewController {
 
     private ReviewService service;
-    private SentimentService sentimentService;
 
     @Autowired
-    public ReviewController(ReviewService service, SentimentService sentimentService) {
+    public ReviewController(ReviewService service) {
         this.service = service;
-        this.sentimentService = sentimentService;
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<?> addReview(
+            @RequestHeader("uid") String subject,
+            @RequestBody ReviewRequest request
+    ) {
+        return new ResponseEntity<>(service.createReview(request), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(
+            @RequestHeader(value = "uid", required = false) Optional<String> userId,
+            @PathVariable String id
+    ) {
+        return new ResponseEntity<>(service.getReview(id, userId), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<?> updateReview(
+            @RequestHeader("uid") String userId,
+            @PathVariable String id,
+            @RequestBody ReviewRequest request
+    ) {
+        return new ResponseEntity<>(service.updateReview(id, request), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(
+            @RequestHeader("uid") String userId,
+            @PathVariable String id
+    ) {
+        service.deleteReview(id);
+        return new ResponseEntity<>("Review deleted", HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAll(
+            @RequestHeader(value = "uid", required = false) Optional<String> userId,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy
     ) {
 
-        System.out.println("limit: " + limit);
-
-        return new ResponseEntity<>(service.getAllReviews(PageRequest.of(
+        return new ResponseEntity<>(service.getAllReviews(
+                userId,
+                PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
                 Sort.by(sortBy.orElse("year"))
         )), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(
-            @PathVariable String id
-    ) {
-        return new ResponseEntity<>(service.getReview(id), HttpStatus.OK);
-    }
-
     @GetMapping("/search/{title}")
     public ResponseEntity<?> search(
+            @RequestHeader(value = "uid", required = false) Optional<String> userId,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy,
             @PathVariable String title
     ) {
-        return new ResponseEntity<>(service.findByTitleContainingIgnoreCase(title, PageRequest.of(
+        return new ResponseEntity<>(service.findByTitleContainingIgnoreCase(
+                title,
+                userId,
+                PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
                 Sort.by(sortBy.orElse("year"))
@@ -66,15 +95,24 @@ public class ReviewController {
 
     @GetMapping("/movie/{id}")
     public ResponseEntity<?> getByMovieId(
+            @RequestHeader(value = "uid", required = false) Optional<String> userId,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy,
+            @RequestParam Optional<Integer> direction,
             @PathVariable String id
     ) {
-        return new ResponseEntity<>(service.findByMovieId(id, PageRequest.of(
+
+        Sort.Direction dir = direction.orElse(1) == 1 ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return new ResponseEntity<>(service.findByMovieId(
+                id,
+                userId,
+                PageRequest.of(
                 page.orElse(0),
                 limit.orElse(10),
-                Sort.by(sortBy.orElse("year"))
+                Sort.by(dir, sortBy.orElse("date"))
+
         )), HttpStatus.OK);
     }
 

@@ -2,6 +2,9 @@ package com.order_service.service;
 
 import com.order_service.dto.*;
 import com.order_service.exception.OrderException;
+import com.order_service.grpc.CartService;
+import com.order_service.grpc.MovieService;
+import com.order_service.grpc.UserService;
 import com.order_service.model.Shipping;
 import com.order_service.model.Order;
 import com.order_service.model.OrderItem;
@@ -24,53 +27,56 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 @Transactional
 public class OrderService implements OrderServiceImp {
 
+    final static Logger LOGGER = Logger.getLogger(OrderService.class.getName());
+
     OrderRepository orderRepository;
     ShippingRepository addressRepository;
     OrderItemRepository orderItemRepository;
 
+    MovieService movieService;
+    StripeService stripeService;
+    UserService userService;
     CartService cartService;
 
-    MovieService movieService;
-
-    RateService rateService;
-
-    StripeService stripeService;
-
-    FirebaseService firebaseService;
 
     @Autowired
     public OrderService(OrderRepository orderRepository, ShippingRepository
             addressRepository, OrderItemRepository orderItemRepository
-            , CartService cartService, StripeService stripeService, MovieService movieService,
-                        RateService rateService, FirebaseService firebaseService) {
+            , CartService cartService, StripeService stripeService, MovieService movieService, UserService userService)
+    {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
         this.stripeService = stripeService;
         this.movieService = movieService;
-        this.rateService = rateService;
-        this.firebaseService = firebaseService;
+        this.userService = userService;
     }
+
+    public Object createCheckoutSession(String userId) {
+        try {
+            return stripeService.createCheckoutSession(userId);
+        } catch (StripeException e) {
+            throw new OrderException(e.getUserMessage());
+        }
+    }
+
 
     public Object getInvoiceUpcoming(String userId) {
 
         Map<String, Object> response = new HashMap<>();
-
         Invoice upcomingInvoice = stripeService.upcomingInvoice(userId);
         response.put("amount_total", upcomingInvoice.getAmountDue());
         response.put("tax_breakdown", upcomingInvoice.getTax());
         response.put("tax_inclusive", upcomingInvoice.getShippingCost());
         response.put("tax_exclusive", upcomingInvoice.getSubtotal());
-
-
         return response;
-
     }
 
     public Object createPaymentSheet(String userId)  {
@@ -88,20 +94,19 @@ public class OrderService implements OrderServiceImp {
 
         InvoiceDTO invoice = new InvoiceDTO();
         try {
-
-            System.out.println("User ID: " + userId);
-
+            LOGGER.info("Getting invoice for user: " + userId);
             Customer customer = stripeService.getCustomer(userId);
-            System.out.println("Customer: " + customer);
 
+            LOGGER.info("Getting addresses for user: " + userId);
             //Get addresses
-            List<AddressDTO> addresses = firebaseService.getUserAddresses(userId);
+            List<AddressDTO> addresses = userService.getAddresses(userId);
             //Find default address else use first address return null if no address
             AddressDTO address = addresses.stream()
-                    .filter(AddressDTO::getisDefault)
+                    .filter(AddressDTO::isDefault)
                     .findFirst()
                     .orElse(addresses.get(0));
 
+            LOGGER.info("Getting cart for user: " + userId);
             CartResponse cart = cartService.getCart(userId);
 
             long subTotal = 0L;
@@ -115,12 +120,13 @@ public class OrderService implements OrderServiceImp {
             invoice.setAddress(address);
             invoice.setItems(items);
             //RateResponse rate = rateService.getRate(addressRequest.getPostcode());
-            Calculation calculation = stripeService.calculation(userId, address);
+            Calculation calculation = stripeService.calculation(userId, address, cart);
 
+            LOGGER.info("Calculation: " + calculation);
             //Get Payment Sheet
             PaymentSheetDTO paymentSheet = stripeService.createPaymentSheet(customer, calculation);
-            invoice.setPaymentSheet(paymentSheet);
 
+            invoice.setPaymentSheet(paymentSheet);
             invoice.setTotal(calculation.getAmountTotal());
             invoice.setSubTotal(subTotal);
             invoice.setTax(calculation.getTaxAmountExclusive());
@@ -140,11 +146,7 @@ public class OrderService implements OrderServiceImp {
 
         InvoiceDTO invoice = new InvoiceDTO();
         try {
-            System.out.println("User ID: " + userId);
-
             Customer customer = stripeService.getCustomer(userId);
-            System.out.println("Customer: " + customer);
-
             CartResponse cart = cartService.getCart(userId);
             AddressDTO address = new AddressDTO(addressRequest);
 
@@ -158,18 +160,15 @@ public class OrderService implements OrderServiceImp {
 
             invoice.setAddress(address);
             invoice.setItems(items);
-            //RateResponse rate = rateService.getRate(addressRequest.getPostcode());
-            Calculation calculation = stripeService.calculation(userId, address);
+            Calculation calculation = stripeService.calculation(userId, address, cart);
 
             //Get Payment Sheet
             PaymentSheetDTO paymentSheet = stripeService.createPaymentSheet(customer, calculation);
             invoice.setPaymentSheet(paymentSheet);
-
             invoice.setTotal(calculation.getAmountTotal());
             invoice.setSubTotal(subTotal);
             invoice.setTax(calculation.getTaxAmountExclusive());
             invoice.setShipping(calculation.getShippingCost().getAmount());
-
 
         } catch (StripeException e) {
 
@@ -178,7 +177,6 @@ public class OrderService implements OrderServiceImp {
 
         return invoice;
     }
-
 
     @Override
     public Page<Order> searchByText(String text, String userId, PageRequest pageRequest) {
@@ -194,8 +192,6 @@ public class OrderService implements OrderServiceImp {
 
     @Override
     public Order createOrder(OrderRequest orderRequest) throws StripeException {
-
-        System.out.println(orderRequest);
 
         PaymentIntent intent = stripeService.getPaymentIntent(orderRequest.getPaymentId());
         Charge charge = stripeService.getCharge(intent.getLatestCharge());
@@ -261,7 +257,6 @@ public class OrderService implements OrderServiceImp {
         if(term != null) {
             return orderRepository.findByUserIdAndTerm(term, userId, pageRequest);
         }
-
         return orderRepository.findByUserId(userId, pageRequest);
     }
 
@@ -295,15 +290,15 @@ public class OrderService implements OrderServiceImp {
 
     @Override
     public RefundDTO deleteOrder(Integer id) {
+
         Optional<Order> order = orderRepository.findById(id);
         if(order.isPresent()) {
             Order orderToDelete = order.get();
             //Set status to cancelled
             orderToDelete.setStatus(Status.CANCELLED);
             orderRepository.save(orderToDelete);
-
+            //Refund payment
             Refund refund = stripeService.refund(orderToDelete.getPaymentId());
-
             RefundDTO refundDTO = new RefundDTO(refund.getId(), refund.getCreated(), refund.getCurrency(), refund.getPaymentIntent(), refund.getAmount(), refund.getStatus());
             orderRepository.delete(order.get());
             return refundDTO;

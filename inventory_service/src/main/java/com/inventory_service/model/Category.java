@@ -5,20 +5,20 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "type")
-public class Type {
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Product> inventories;
 
-    public Type() {
+    public Category() {
     }
 
-    public Type(String name) {
+    public Category(String name) {
         this.name = name;
     }
 

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com</groupId>
@@ -32,14 +32,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.egflo</groupId>
+            <groupId>org.example</groupId>
             <artifactId>interface_grpc</artifactId>
-            <version>1.2.14</version>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>net.devh</groupId>
-            <artifactId>grpc-spring-boot-starter</artifactId>
-            <version>2.14.0.RELEASE</version>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,7 +76,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.0.0</version>
+            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
@@ -85,10 +90,6 @@
             <version>1.8.1</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-spring-boot2</artifactId>
             <version>2.0.2</version>
@@ -99,11 +100,32 @@
             <version>9.1.1</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>18</source>
+                    <target>18</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.34</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

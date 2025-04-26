@@ -5,51 +5,73 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+@Getter
 @Setter
-@NoArgsConstructor
-@Document(collection = "user_review_comments")
+@Document(collection = "comments")
 public class Comment {
     @Id
     ObjectId id;
-    String comment;
+
+    String text;
 
     @Field("user_id")
-    String user_id;
+    String userId;
 
     @Field("movie_id")
     ObjectId movieId;
 
-    @Field("review_id")
+    @Field("review")
     ObjectId reviewId;
+
+    @Field("parent")
+    ObjectId parent; // parent comment id
 
     Date date;
 
     Integer likes;
 
     @Getter
-    ReviewUser user;
+    UserMeta user;
 
     @Getter
-    ReviewMovie movie;
+    Movie movie;
 
-    public String getId() {
-        return this.id.toString();
+    public Comment() {
+        this.likes = 0;
+        this.date = new Date();
     }
 
-    public String getMovieId() {
-        return this.movieId.toString();
+    public Comment(ObjectId id, String text, String userId, ObjectId movieId, ObjectId reviewId, Date date, Integer likes, UserMeta user, Movie movie) {
+        this.id = id;
+        this.text = text;
+        this.userId = userId;
+        this.movieId = movieId;
+        this.reviewId = reviewId;
+        this.date = date;
+        this.likes = likes;
+        this.user = user;
+        this.movie = movie;
     }
 
-    public String getReviewId() {
-        return this.reviewId.toString();
+    public ObjectId getId() {
+        return this.id;
     }
 
-    public String getComment() {
-        return  this.comment;
+    public ObjectId getMovieId() {
+        return this.movieId;
+    }
+
+    public ObjectId getReviewId() {
+        return this.reviewId;
+    }
+
+    public String getText() {
+        return  this.text;
     }
 
     public Integer getLikes () {
@@ -60,5 +82,19 @@ public class Comment {
         return this.date;
     }
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", userId='" + userId + '\'' +
+                ", movieId=" + movieId +
+                ", reviewId=" + reviewId +
+                ", date=" + date +
+                ", likes=" + likes +
+                ", user=" + user +
+                ", movie=" + movie +
+                '}';
+    }
 
 }

@@ -5,11 +5,8 @@ import org.proto.grpc.MovieResponse;
 public class MovieDTO {
     String id;
     String title;
-
     String poster;
-
     Integer year;
-
 
     public MovieDTO(MovieResponse movieResponse) {
         this.id = movieResponse.getId();
@@ -24,7 +21,6 @@ public class MovieDTO {
         this.poster = poster;
         this.year = year;
     }
-
 
     public String getId() {
         return id;

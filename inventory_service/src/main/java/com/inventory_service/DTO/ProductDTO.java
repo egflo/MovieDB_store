@@ -12,9 +12,7 @@ import org.proto.grpc.MovieResponse;
 public class ProductDTO {
     String id;
     String image;
-
     String name;
-
     String description;
 
     ProductDTO(String id, String image, String name, String description) {

@@ -7,6 +7,7 @@ import org.proto.grpc.RateResponseItems;
 import org.proto.grpc.RateServiceGrpc;
 import org.springframework.stereotype.Service;
 
+/**
 @Service
 public class RateService {
 
@@ -31,3 +32,5 @@ public class RateService {
 
 
 }
+
+    */

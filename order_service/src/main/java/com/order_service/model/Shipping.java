@@ -1,5 +1,6 @@
 package com.order_service.model;
 
+import com.order_service.dto.AddressDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -35,6 +36,16 @@ public class Shipping {
         this.state = state;
         this.postcode = postcode;
         this.country = country;
+    }
+
+    public Shipping(AddressDTO addressDTO) {
+        this.firstName = addressDTO.getFirstName();
+        this.lastName = addressDTO.getLastName();
+        this.street = addressDTO.getStreet();
+        this.city = addressDTO.getCity();
+        this.state = addressDTO.getState();
+        this.postcode = addressDTO.getPostcode();
+        this.country = addressDTO.getCountry();
     }
 
     public long getId() {
