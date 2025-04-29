@@ -1,5 +1,4 @@
-x-image-prefix: &image_prefix 472315148525.dkr.ecr.us-west-2.amazonaws.com/movie_store
-
+x-image-prefix: &image_prefix /movie_store
 
 services:
   gateway:

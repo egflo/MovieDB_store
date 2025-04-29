@@ -9,4 +9,4 @@ EXPOSE 8080
 EXPOSE 9090
 
 # Run the JAR file
-CMD ["java", "-jar", "inventory_service-0.0.1-SNAPSHOT.jar"]
+# CMD ["java", "-jar", "inventory_service-0.0.1-SNAPSHOT.jar"]≥
