@@ -1,4 +1,4 @@
-x-image-prefix: &image_prefix /movie_store
+x-image-prefix: &image_prefix
 
 services:
   gateway:

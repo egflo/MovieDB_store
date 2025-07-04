@@ -27,9 +27,11 @@ public class MovieController {
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy,
-            @RequestParam Optional<Integer> direction
+            @RequestParam Optional<Integer> direction,
+            @RequestParam Optional<String> query,
+            @RequestParam Optional<String> genres,
+            @RequestParam Optional<String> tags
     ) {
-
 
         Sort.Direction sortDirection = Sort.Direction.DESC;
         if (direction.isPresent()) {
@@ -38,20 +40,31 @@ public class MovieController {
             }
         }
 
-        return new ResponseEntity<>(service.findAll(PageRequest.of(
-                page.orElse(0),
-                limit.orElse(10),
-                Sort.by(sortDirection, sortBy.orElse("year"))
-        )), HttpStatus.OK);
+        HashMap<String,String[]> filters = new HashMap<>();
+        query.ifPresent(s -> filters.put("query", s.split("_")));
+        genres.ifPresent(s -> filters.put("genres", s.split("_")));
+        tags.ifPresent(s -> filters.put("tags", s.split("_")));
+        System.out.println("filters: " + filters);
+            return new ResponseEntity<>(service.findMoviesByCriteria(
+                    query,
+                    filters,
+                    PageRequest.of(
+                            page.orElse(0),
+                            limit.orElse(10),
+                            Sort.by(sortDirection, sortBy.orElse("year"))
+                    )
+            ), HttpStatus.OK);
+
     }
 
-    @GetMapping("/search/{title}")
+    @GetMapping({"/search/{title}", "/search"})
     public ResponseEntity<?> search(
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page,
             @RequestParam Optional<String> sortBy,
             @RequestParam Optional<Integer> direction,
-            @PathVariable String title,
+            @PathVariable Optional<String> title,
+            @RequestParam Optional<String> query,
             @RequestParam Optional<String> genres,
             @RequestParam Optional<String> tags
     ) {
@@ -63,17 +76,15 @@ public class MovieController {
         }
 
         HashMap<String,String[]> filters = new HashMap<>();
-        if (genres.isPresent()) {
-            filters.put("genres", genres.get().split("_"));
-        }
-        if (tags.isPresent()) {
-            filters.put("tags", tags.get().split("_"));
-        }
+        query.ifPresent(s -> filters.put("query", s.split("_")));
+        genres.ifPresent(s -> filters.put("genres", s.split("_")));
+        tags.ifPresent(s -> filters.put("tags", s.split("_")));
 
         System.out.println("title: " + title);
         System.out.println("filters: " + filters);
 
-        if (genres.isPresent() || tags.isPresent()) {
+        if (genres.isPresent() || tags.isPresent() ||
+                query.isPresent()) {
             return new ResponseEntity<>(service.findMoviesByCriteria(
                     title,
                     filters,
@@ -85,12 +96,20 @@ public class MovieController {
             ), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(service.findByTitle(title, PageRequest.of(
-                page.orElse(0),
-                limit.orElse(25),
-                Sort.by(sortDirection, sortBy.orElse("id"))
+        if (title.isPresent()) {
+            return new ResponseEntity<>(service.findByTitle(title.get(), PageRequest.of(
+                    page.orElse(0),
+                    limit.orElse(10),
+                    Sort.by(sortDirection, sortBy.orElse("year"))
+            )), HttpStatus.OK);
+        }
 
+        return new ResponseEntity<>(service.findAll(PageRequest.of(
+                page.orElse(0),
+                limit.orElse(10),
+                Sort.by(sortDirection, sortBy.orElse("year"))
         )), HttpStatus.OK);
+
     }
 
 
@@ -164,6 +183,11 @@ public class MovieController {
         )), HttpStatus.OK);
     }
 
+
+    @GetMapping("/tag/all")
+    public ResponseEntity<?> getAllTags() {
+        return new ResponseEntity<>(service.getAllTags(), HttpStatus.OK);
+    }
 
     @GetMapping("/tag/{id}")
     public ResponseEntity<?> findByTag(

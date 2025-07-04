@@ -7,8 +7,10 @@ import com.movie_service.exception.IdNotFoundException;
 import com.movie_service.grpc.ItemService;
 import com.movie_service.models.Movie;
 import com.movie_service.models.Suggestion;
+import com.movie_service.models.Tag;
 import com.movie_service.repository.MovieRepository;
 import com.movie_service.repository.SuggestionRepository;
+import com.movie_service.repository.TagRepository;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.proto.grpc.ItemResponse;
@@ -37,6 +39,8 @@ public class MovieService implements MovieServiceImp {
     @Autowired
     private SuggestionRepository suggestionRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
 
     @Autowired
     private ItemService itemService;
@@ -99,7 +103,7 @@ public class MovieService implements MovieServiceImp {
     }
 
     @Override
-    public Page<Movie> findMoviesByCriteria(String title, HashMap<String, String[]> criteria, Pageable pageable) {
+    public Page<Movie> findMoviesByCriteria(Optional<String> title, HashMap<String, String[]> criteria, Pageable pageable) {
         return movieDAO.findMovieByParams(title, criteria, pageable);
     }
 
@@ -130,6 +134,12 @@ public class MovieService implements MovieServiceImp {
         }
 
         return new PageImpl<>(movies, pageable, suggestions.getTotalElements());
+    }
+
+    public List<Tag> getAllTags() {
+        List<Tag> tags = tagRepository.findAll();
+        LOGGER.info("getAllTags size: {}", tags.size());
+        return tags;
     }
 }
 

@@ -9,7 +9,7 @@ spring:
         resourceserver:
           jwt:
             jwk-set-uri: ${JWK_SET_URI:https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com}
-            issuer-uri: ${ISSUR_URI:https://securetoken.google.com/}
+            issuer-uri: ${ISSUR_URI:https://securetoken.google.com/moviedb-a71b2}
 
   application:
     name: gateway

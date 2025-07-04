@@ -4,33 +4,19 @@ import { useRouter } from "next/navigation";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "@/lib/firebase/firebase";
 import {useAuth} from "@/lib/firebase/AuthContext";
+import Carousel from "@/app/components/Carousel";
 
-interface HomePageProps {
-    email?: string;
-}
 
-export default function HomePage({ email }: HomePageProps) {
+const API_URL_BOOKMARK: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/bookmarks/?sortBy=created&limit=27`;
+const API_URL_VOTES: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=ratings.numOfVotes&limit=27`;
+const API_URL_POPULAR: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity&limit=27`;
+const API_URL_BOXOFFICE: string = `/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=revenue&limit=27`;
+
+export default function HomePage() {
     const router = useRouter();
-    const {user} = useAuth();
-
-    async function handleLogout() {
-        await signOut(getAuth(app));
-        await fetch("/api/logout");
-        router.push("/login");
-    }
-
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center p-24">
-            <h1 className="text-xl mb-4">Super secure home page</h1>
-            <p className="mb-8">
-                Only <strong>{user?.email}</strong> holds the magic key to this kingdom!
-            </p>
-            <button
-                onClick={handleLogout}
-                className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-primary-800"
-            >
-                Logout
-            </button>
+        <main className="flex min-h-screen flex-col  justify-start ">
+            <Carousel url={API_URL_VOTES} />
         </main>
     );
 }

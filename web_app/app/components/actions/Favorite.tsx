@@ -3,8 +3,10 @@ import Box from "@mui/material/Box";
 import FavoriteBorderOutlined from '@mui/icons-material/FavoriteBorderOutlined';
 import {useEffect, useState} from "react";
 import {useAuth} from "@/lib/firebase/AuthContext";
+import ky, {HTTPError} from "ky";
+import {Bookmark} from "@/lib/models/Bookmark";
 
-const BOOKMARK_API : string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/sentiment/rate`;
+const BOOKMARK_API : string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/bookmark/`;
 
 type FavoriteProps = {
     id: string
@@ -15,8 +17,27 @@ type FavoriteProps = {
 
 export default function Favorite({id, onBookmarkAdded, onBookmarkRemoved}: FavoriteProps) {
     const auth = useAuth();
-    const [bookmark, setBookmark] = useState(false);
+    const [bookmark, setBookmark] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchBookmark = async () => {
+            if (!auth.user) return;
+            const response = await ky(`${BOOKMARK_API}${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${auth.user.idToken}`
+                }
+            }).json()
+
+            if (response) {
+                setBookmark(response);
+            } else {
+                console.error('Failed to fetch bookmark');
+            }
+        };
+
+        fetchBookmark();
+    }, [id, auth.user]);
 
     const handleSelected = async () => {
         setLoading(true);
@@ -36,6 +57,7 @@ export default function Favorite({id, onBookmarkAdded, onBookmarkRemoved}: Favor
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.user.idToken}`,
                 },
                 body: JSON.stringify(body),
             });

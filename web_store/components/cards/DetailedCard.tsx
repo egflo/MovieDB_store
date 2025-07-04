@@ -15,8 +15,6 @@ interface SearchItemProps {
     movie: Movie
 }
 
-
-
 export const DetailedCard = ({movie}: SearchItemProps) => {
     const router = useRouter();
     const ref = useRef<HTMLDivElement | null>(null)

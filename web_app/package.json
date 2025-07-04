@@ -14,12 +14,15 @@
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "@types/lodash": "^4.17.16",
+    "auto-palette": "^1.4.0",
     "firebase": "^11.6.0",
+    "ky": "^1.8.1",
     "lodash": "^4.17.21",
     "next": "15.2.4",
     "next-firebase-auth-edge": "^1.9.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-window": "^1.8.11",
     "swr": "^2.3.3"
   },
   "devDependencies": {
@@ -29,5 +32,6 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.12.2+sha512.a32540185b964ee30bb4e979e405adc6af59226b438ee4cc19f9e8773667a66d302f5bfee60a39d3cac69e35e4b96e708a71dd002b7e9359c4112a1722ac323f"
 }

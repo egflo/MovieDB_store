@@ -3,7 +3,7 @@ spring:
   application:
     name: ${EUREKA_INSTANCE_HOSTNAME:order-service}
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:n1.local}:5432/${POSTGRES_DB:orderdb}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${POSTGRES_DB:orderdb}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
   jpa:
@@ -45,9 +45,9 @@ grpc:
 
 stripe:
   secret:
-    key: ${STRIPE_SECRET:}
+    key: ${STRIPE_SECRET:your_stripe_secret_key}
   public:
-    key: ${STRIPE_PUBLIC:}
+    key: ${STRIPE_PUBLIC:your_stripe_public_key}
 
 management:
   endpoint:

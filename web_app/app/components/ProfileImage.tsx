@@ -1,3 +1,4 @@
+import { Person } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
 
 interface ProfileImageProps {
@@ -43,12 +44,14 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
         };
     }, [imageUrl]);
 
-    const initials = getInitials(name);
     const sizeClass = `w-[${size}px] h-[${size}px]`;
+    //const initials = getInitials(name);
 
     return (
         <div
-            className={`flex items-center justify-center rounded-full bg-gray-700 text-white font-bold text-xl overflow-hidden ${sizeClass} ${className}`}
+            className={`flex items-center justify-center rounded-full 
+            isolate aspect-video  bg-gray-400/20 shadow-lg ring-1 ring-black/5
+             text-white font-bold text-xl overflow-hidden ${sizeClass} ${className}`}
             style={{ width: size, height: size }}
         >
             {isImageValid && imageUrl ? (
@@ -62,7 +65,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
                 <p className={`flex items-center justify-center`}
                      style={{ fontSize: size / 3, lineHeight: `${size}px` }} // Center the initials vertically
                 >
-                    {initials}
+                    {name ? getInitials(name) : <Person></Person>}
                 </p>
             )}
         </div>

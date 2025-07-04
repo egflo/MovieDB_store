@@ -1,7 +1,7 @@
 
 'use client';
 import React, { useState } from 'react';
-import {SentimentState} from "@/app/models/SentimentState";
+import {SentimentState} from "@/lib/models/SentimentState";
 
 interface SentimentProps {
     id: string;

@@ -4,7 +4,7 @@ import {
     Favorite, ThumbDownAltOutlined, ThumbUpOffAltOutlined,
 } from "@mui/icons-material";
 import {useRef} from "react";
-import {SentimentState} from "../../models/SentimentState";
+import {SentimentState} from "@/lib/models/SentimentState";
 import FavoriteBorderOutlined from "@mui/icons-material/FavoriteBorderOutlined";
 import {useAuth} from "@/lib/firebase/AuthContext";
 import {debounce} from "lodash";

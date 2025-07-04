@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class MovieDAO {
@@ -27,31 +28,45 @@ public class MovieDAO {
     public MovieDAO() {
     }
 
-    public Page<Movie> findMovieByParams(String title, HashMap<String, String[]> filters, Pageable pageable) {
-
-        System.out.println("title: " + title);
+    public Page<Movie> findMovieByParams(Optional<String> title, HashMap<String, String[]> filters, Pageable pageable) {
 
         Query query = new Query().with(pageable);
-        if (title != null && title.length() > 0 && !title.equals("all")) {
+        List<Criteria> allCriteria = new ArrayList<>();
+
+        if (title.isPresent()) {
             System.out.println("title: " + title);
-            query.addCriteria(Criteria.where("title").regex(title, "i"));
+            allCriteria.add(Criteria.where("title").regex(title.get(), "i"));
+
+            //query.addCriteria(Criteria.where("title").regex(title.get(), "i"));
+        }
+
+        if (filters.containsKey("query")) {
+            System.out.println("query: " + filters.get("query"));
+            allCriteria.add(Criteria.where("title").regex(filters.get("query")[0], "i"));
+            //uery.addCriteria(Criteria.where("title").regex(filters.get("query")[0], "i"));
         }
 
         if (filters.containsKey("genres")) {
             List<Criteria> genreCriteria = new ArrayList<>();
             for (String genre : filters.get("genres")) {
-                genreCriteria.add(Criteria.where("genres").in(genre));
+                System.out.println("genre: " + genre);
+                allCriteria.add(Criteria.where("genres").in(genre));
             }
-            query.addCriteria(new Criteria().orOperator(genreCriteria.toArray(new Criteria[genreCriteria.size()])));
-
+            // query.addCriteria(new Criteria().andOperator(genreCriteria.toArray(new Criteria[genreCriteria.size()])));
         }
+        if (filters.containsKey("year")) {
+            System.out.println("year: " + filters.get("year"));
+            allCriteria.add(Criteria.where("year").is(Integer.parseInt(filters.get("year")[0])));
+        }
+
         if (filters.containsKey("tags")) {
             List<Criteria> tagCriteria = new ArrayList<>();
             for (String tag : filters.get("tags")) {
                 System.out.println("tag: " + tag);
-                tagCriteria.add(Criteria.where("keywords.tag_id").is(Integer.parseInt(tag)));
+                allCriteria.add(Criteria.where("keywords.tag_id").is(Integer.parseInt(tag)));
+                //tagCriteria.add(Criteria.where("keywords.tag_id").is(Integer.parseInt(tag)));
             }
-            query.addCriteria(new Criteria().orOperator(tagCriteria.toArray(new Criteria[tagCriteria.size()])));
+            //query.addCriteria(new Criteria().andOperator(tagCriteria.toArray(new Criteria[tagCriteria.size()])));
         }
 
         if (filters.containsKey("cast")) {
@@ -59,9 +74,13 @@ public class MovieDAO {
             for (String cast : filters.get("cast")) {
                 castCriteria.add(Criteria.where("cast.castId").in(cast));
             }
-            query.addCriteria(new Criteria().orOperator(castCriteria.toArray(new Criteria[castCriteria.size()])));
+            query.addCriteria(new Criteria().andOperator(castCriteria.toArray(new Criteria[castCriteria.size()])));
         }
 
+        // Apply all criteria together if any exist
+        if (!allCriteria.isEmpty()) {
+            query.addCriteria(new Criteria().andOperator(allCriteria.toArray(new Criteria[0])));
+        }
 
         Sort sort = pageable.getSort();
         mongoTemplate.useEstimatedCount(true);

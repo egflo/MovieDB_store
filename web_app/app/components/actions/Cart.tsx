@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { ShoppingBagOutlined} from "@mui/icons-material";
-import {Movie} from "../../models/Movie";
+import {Movie} from "@/lib/models/Movie";
 import {useAuth} from "@/lib/firebase/AuthContext";
 import useSWR from "swr";
 

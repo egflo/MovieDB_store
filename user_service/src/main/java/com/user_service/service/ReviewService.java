@@ -143,6 +143,19 @@ public class ReviewService implements ReviewServiceImp {
                                          Optional<String> userId,
                                          PageRequest pageRequest) {
 
+        //If objectId is not valid then search by movieId
+        if (!ObjectId.isValid(movieId)) {
+            logger.info("MovieId is not valid, searching by movieId");
+            return userId.map(s -> repository.findByMovie_MovieId(movieId, pageRequest)
+                    .map(review -> {
+                        ReviewDTO reviewDTO = new ReviewDTO(review);
+                        Optional<Sentiment> sentiment = sentimentService.getSentimentByUserIdAndObjectId(s, review.getId());
+                        sentiment.ifPresent(value -> reviewDTO.setSentiment(sentiment.get()));
+                        return reviewDTO;
+                    })).orElseGet(() -> repository.findByMovie_MovieId(movieId, pageRequest)
+                    .map(ReviewDTO::new));
+        }
+
         return userId.map(s -> repository.findAllByMovieId(new ObjectId(movieId), pageRequest)
                 .map(review -> {
                     ReviewDTO reviewDTO = new ReviewDTO(review);

@@ -8,6 +8,7 @@ export async function middleware(request: NextRequest) {
     return authMiddleware(request, {
         loginPath: "/api/login",
         logoutPath: "/api/logout",
+        refreshTokenPath: "/api/refresh-token",
         apiKey: clientConfig.apiKey,
         cookieName: serverConfig.cookieName,
         cookieSignatureKeys: serverConfig.cookieSignatureKeys,
@@ -44,10 +45,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+    // Make sure to include the path in `matcher`
     matcher: [
-        "/",
-        "/((?!_next|api|.*\\.).*)",
-        "/api/login",
-        "/api/logout",
-    ],
+        '/api/login',
+        '/api/logout',
+        '/api/refresh-token',
+        '/',
+        '/((?!_next|favicon.ico|api|.*\\.).*)'
+    ]
 };

@@ -60,9 +60,9 @@ export default function Share(props: ShareProps) {
                     open={selected}
                 >
                             <Card ref={ref} >
-                                <CardContent>
-                                    <div className="targets">
-                                        <a className="share-button">
+                                <div className={"flex flex-col gap-4 p-4 isolate aspect-video  rounded-xl bg-gray-400/20 shadow-lg ring-1 ring-black/5 "}>
+                                    <div className="flex justify-between items-center gap-4 mb-4  rounded-lg p-4">
+                                        <div className="share-button">
                                             <img
                                                 src="https://img.icons8.com/color/48/000000/facebook-new.png"
                                                 alt="Facebook"
@@ -70,9 +70,9 @@ export default function Share(props: ShareProps) {
                                             <Typography variant="body2" color="text.secondary">
                                                 Facebook
                                             </Typography>
-                                        </a>
+                                        </div>
 
-                                        <a className="share-button">
+                                        <div className="share-button">
                                             <img
                                                 src="https://img.icons8.com/color/48/000000/instagram-new.png"
                                                 alt="Instagram"
@@ -80,17 +80,17 @@ export default function Share(props: ShareProps) {
                                             <Typography variant="body2" color="text.secondary">
                                                 Instagram
                                             </Typography>
-                                        </a>
-                                        <a className="share-button">
+                                        </div>
+                                        <div className="share-button">
                                             <img
                                                 src="https://img.icons8.com/color/48/000000/twitter.png"
                                                 alt="Twitter"
                                             />
-                                            <Typography variant="body2" color="text.secondary">
+                                            <Typography variant="body2" color="text.primary">
                                                 Twitter
                                             </Typography>
-                                        </a>
-                                        <a className="share-button">
+                                        </div>
+                                        <div className="share-button">
                                             <img
                                                 src="https://img.icons8.com/color/48/000000/email.png"
                                                 alt="Email"
@@ -98,16 +98,18 @@ export default function Share(props: ShareProps) {
                                             <Typography variant="body2" color="text.secondary">
                                                 Email
                                             </Typography>
-                                        </a>
+                                        </div>
                                     </div>
-                                    <div className="link">
-                                        <div className="pen-url">https://moviedb.com/movie/</div>
-                                        <button className="btn">Copy Link</button>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="border-2 bg-gray-500 rounded-lg p-2 ">
+                                        https://moviedb.com/movie/</div>
+                                        <button className="bg-gray-800 text-white rounded-lg px-4 py-2">
+                                            Copy Link
+                                        </button>
                                     </div>
-                                </CardContent>
+                                </div>
                             </Card>
                 </Backdrop>
-
 
         </>
 
