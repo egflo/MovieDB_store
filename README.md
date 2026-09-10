@@ -12,14 +12,27 @@ Mock webstore using microservices.
 | `inventory_service` | 8081 / 9091 | Postgres `inventorydb` | `/cart`, `/product` |
 | `order_service` | 8082 / 9092 | Postgres `orderdb` | `/order`, `/payment-methods`, `/address` |
 | `user_service` | 8083 / 9093 | Mongo `userdb` | `/user`, `/review`, `/comment`, `/bookmark`, `/sentiment` |
-| `tax_service` | — | — | **retired** — see [tax_service/README.md](tax_service/README.md) |
 
-`tax_service` was retired in August 2026; Stripe Tax handles tax calculation in
-`order_service` now. The code is kept for reference but is not deployed, routed,
-or called.
+All services target **Java 25** and **Spring Boot 3.5.16**. gRPC service
+definitions come from the external `com.github.egflo:interface_grpc` artifact
+(via JitPack), not from this repo.
 
-gRPC service definitions come from the external `com.github.egflo:interface_grpc`
-artifact (via JitPack), not from this repo.
+### Removed: tax_service
+
+`tax_service` was removed in September 2026 — Stripe Tax handles tax calculation
+in `order_service`'s checkout flow. It had already been disconnected for some
+time: no gateway route, no gRPC client configured, and absent from
+`docker-compose.yml`.
+
+The code remains in git history, tagged `tax-service-last`:
+
+```
+git checkout tax-service-last -- tax_service
+```
+
+A commented-out gRPC client for it still sits in
+`order_service/src/main/java/com/order_service/service/RateService.java`, along
+with a dead call site in `OrderService.java`.
 
 ## Frontends
 
