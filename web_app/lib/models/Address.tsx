@@ -9,6 +9,8 @@ export interface Address {
     city: string;
     state: string;
     country: string;
-    postalCode: string;
+    // The API field is `postcode`. web_store declared this as `postalCode`,
+    // so it silently never bound in either direction.
+    postcode: string;
     isDefault: boolean;
 }
