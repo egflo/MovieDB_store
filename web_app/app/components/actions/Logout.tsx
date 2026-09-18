@@ -1,89 +1,62 @@
-import {useSignOut} from 'react-firebase-hooks/auth';
-import {auth} from "../../utils/firebase";
-import React, {useEffect} from "react";
-import {CircularProgress} from "@mui/material";
+'use client';
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { getAuth, signOut } from "firebase/auth";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import useToastContext from "../../hooks/useToastContext";
+import CircularProgress from "@mui/material/CircularProgress";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {useRouter} from "next/router";
-import {ToastType} from "../Toast";
-import {ShoppingBagOutlined} from "@mui/icons-material";
+import { app } from "@/lib/firebase/firebase";
 
 /**
- * Hook that alerts clicks outside of the passed ref
+ * Signs out of Firebase, then clears the session cookie via the
+ * next-firebase-auth-edge logout route so the server layout stops
+ * resolving a user.
  */
-function useOutsideAlerter(ref: any, setOpen: any) {
-    useEffect(() => {
-        /**
-         * Alert if clicked on outside of element
-         */
-        function handleClickOutside(event: { target: any; }) {
-            if (ref.current && !ref.current.contains(event.target)) {
-                setOpen(false);
-            }
-        }
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [ref]);
-}
-
 export function Logout() {
-    const ref = React.useRef(null);
-    const [open, setOpen] = React.useState(false);
-    useOutsideAlerter(ref, setOpen);
-    const toast = useToastContext();
     const router = useRouter();
+    const [pending, setPending] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleToggle = () => {
-        setOpen(!open);
-    };
+    async function handleLogout() {
+        if (pending) return;
+        setPending(true);
+        setError(null);
 
-    const [signOut, loading, error] = useSignOut(auth);
-
-    if (error) {
-        return (
-            <Typography variant="subtitle1" noWrap component="div" sx={{ display: { color:'inherit' } }}>
-                {error.message}
-            </Typography>
-        );
+        try {
+            await signOut(getAuth(app));
+            await fetch("/api/logout");
+            router.push("/");
+            router.refresh();
+        } catch (e) {
+            setError((e as Error).message);
+        } finally {
+            setPending(false);
+        }
     }
-    if (loading) {
-        return <CircularProgress/>;
+
+    if (pending) {
+        return <CircularProgress size={24} />;
     }
 
     return (
-        <>
+        <div className="flex flex-col items-center">
             <IconButton
-                onClick={() => {
-                    signOut().then(() => {
-                        toast.show("Logged out successfully", ToastType.SUCCESS);
-                        router.push("/");
-                    }).catch((error) => {
-                        toast.show(error.message, ToastType.ERROR);
-                    });
-                }}
-
+                onClick={handleLogout}
                 size="large"
                 edge="end"
                 color="inherit"
-                aria-label="Favorites"
-                sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
+                aria-label="Log out"
             >
-                <div className={'flex flex-row align-middle gap-2'}>
-                    <LogoutIcon fontSize={'medium'}/>
-
-                    <div className={'block md:hidden'}>
-                        <Typography variant="subtitle1">
-                            Logout
-                        </Typography>
-                    </div>
+                <div className="flex flex-row items-center gap-2">
+                    <LogoutIcon fontSize="medium" />
+                    <span className="block text-base md:hidden">Logout</span>
                 </div>
             </IconButton>
-        </>
+
+            {error && <p className="text-xs text-red-500">{error}</p>}
+        </div>
     );
 }
+
+export default Logout;

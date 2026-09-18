@@ -36,7 +36,7 @@ function Reply({id}: {id: string}) {
     // @ts-ignore
     return (
         <div className={"flex flex-row gap-2 items-center w-full "}>
-            <ProfileImage name={auth.user?.displayName} imageUrl={auth.user?.photoURL} size={40} className={"rounded-full"} />
+            <ProfileImage name={auth.user?.displayName ?? ""} imageUrl={auth.user?.photoURL ?? undefined} size={40} className={"rounded-full"} />
 
             <input type="text" value={reply} onChange={(e) => setReply(e.target.value)} placeholder={"Reply..."} className={"bg-gray-800 text-white rounded-lg p-2 w-full"} />
 

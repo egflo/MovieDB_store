@@ -289,7 +289,7 @@ export default function Reviews({id}: { id: string }) {
     }
 
     const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const newLimit = event.target.value;
+        const newLimit = Number(event.target.value);
         setLimit(newLimit);
         router.push(`/movie/${id}/reviews?page=${page}&sort=${newLimit}&limit=${limit}`);
     }

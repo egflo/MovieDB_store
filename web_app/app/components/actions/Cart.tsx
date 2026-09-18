@@ -11,7 +11,6 @@ import useSWR from "swr";
 
 interface ItemPropsItemProps {
     id: string;
-    ItemComponent: React.ComponentType<{ item: Movie }>;
 }
 
 const CART_URL:string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/cart/`;
@@ -19,7 +18,7 @@ const PRODUCT_URL:string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEX
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Cart({id, ItemComponent}: ItemPropsItemProps) {
+export default function Cart({id}: ItemPropsItemProps) {
     const auth = useAuth();
     const [selected, setSelected] = useState(false);
     const [quantity, setQuantity] = useState(1);

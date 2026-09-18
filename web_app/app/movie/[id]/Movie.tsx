@@ -144,7 +144,7 @@ export default function Movie({id}: { id: string }) {
 
                         <InfiniteScrollableContainer title={"Critic Reviews"} url={CRITIC_REVIEW_URL + data.movieId + "?"} ItemComponent={CriticReviewItem} />
                         <InfiniteScrollableContainer title={'User Reviews'} token={auth.user?.idToken} url={USER_REVIEW_URL + data.id} ItemComponent={UserReviewItem} />
-                        <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={PosterItem} size={"small"} />
+                        <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={PosterItem} />
 
                         <div className={'h-[1px] bg-gray-600 mt-2 mb-2'}/>
                         <div className={"flex flex-col gap-2 w-full  "}>

@@ -5,7 +5,9 @@ import {useRouter} from "next/navigation";
 
 interface PosterProps {
     item: Movie;
-    size: "small" | "medium" | "large";
+    /** Optional so PosterItem satisfies ComponentType<{item: Movie}> when used
+     *  as an ItemComponent, which renders it with only `item`. */
+    size?: "small" | "medium" | "large";
 }
 
 function sizeClass(size: "small" | "medium" | "large") {
@@ -19,7 +21,7 @@ function sizeClass(size: "small" | "medium" | "large") {
     }
 }
 
-export default function PosterItem({ item, size }: PosterProps) {
+export default function PosterItem({ item, size = "medium" }: PosterProps) {
     const movie: Movie = item;
     const router = useRouter();
     const imageUrl = movie.poster;

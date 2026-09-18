@@ -17,7 +17,7 @@ type FavoriteProps = {
 
 export default function Favorite({id, onBookmarkAdded, onBookmarkRemoved}: FavoriteProps) {
     const auth = useAuth();
-    const [bookmark, setBookmark] = useState(null);
+    const [bookmark, setBookmark] = useState<Bookmark | null>(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export default function Favorite({id, onBookmarkAdded, onBookmarkRemoved}: Favor
                 headers: {
                     "Authorization": `Bearer ${auth.user.idToken}`
                 }
-            }).json()
+            }).json<Bookmark | null>()
 
             if (response) {
                 setBookmark(response);
@@ -63,7 +63,8 @@ export default function Favorite({id, onBookmarkAdded, onBookmarkRemoved}: Favor
             });
 
             if (response.ok) {
-                setBookmark(!bookmark);
+                const created = (await response.json()) as Bookmark;
+                setBookmark(bookmark ? null : created);
                 if (bookmark && onBookmarkRemoved) {
                     onBookmarkRemoved(id);
                 } else if (!bookmark && onBookmarkAdded) {

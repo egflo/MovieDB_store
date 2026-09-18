@@ -28,7 +28,13 @@ function Item({idx, length, item}: {idx: number, length: number, item: Movie}) {
                 <div
                     className="absolute inset-0"
                     style={{
-                        background: `linear-gradient(to bottom, rgba(${palette.colors[0].r}, ${palette.colors[0].g}, ${palette.colors[0].b}, 0.7), rgba(0, 0, 0, 0.7))`
+                        background: (() => {
+                            // auto-palette exposes swatches via findSwatches(), not a `colors` array.
+                            const [swatch] = palette.findSwatches(1);
+                            if (!swatch) return "rgba(0, 0, 0, 0.7)";
+                            const { r, g, b } = swatch.color.toRGB();
+                            return `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, 0.7), rgba(0, 0, 0, 0.7))`;
+                        })()
                     }}
                 />
             )}

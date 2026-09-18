@@ -271,8 +271,24 @@ const useDebounce = (value: any, delay: number) => {
 };
 
 const ITEM_SIZE = 35;
-// @ts-ignore
-const innerElementType = forwardRef(({ style, ...rest }, ref) => (
+
+interface FilterOption {
+    key: string | number;
+    label: string;
+    selected: boolean;
+}
+
+interface SelectedFilters {
+    genres: FilterOption[];
+    tags: FilterOption[];
+    price: FilterOption[];
+    rating: FilterOption[];
+}
+
+const innerElementType = forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement>
+>(({ style, ...rest }, ref) => (
     <div
         ref={ref}
         style={{
@@ -281,6 +297,7 @@ const innerElementType = forwardRef(({ style, ...rest }, ref) => (
         {...rest}
     />
 ));
+innerElementType.displayName = "InnerElementType";
 
 export default function Search() {
     const router = useRouter();
@@ -298,7 +315,7 @@ export default function Search() {
     const [limit, setLimit] = useState(Number(searchParams.get("limit")) || 10);
     const [sort, setSort] = useState(searchParams.get("sort") || "relevance");
     const [isExpanded, setIsExpanded] = useState(true);
-    const [selectedFilters, setSelectedFilters] = useState({
+    const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
         genres: [],
         tags: [],
         price: [],
@@ -369,7 +386,7 @@ export default function Search() {
         fetchRating();
     }, [query_param, genres_param, tags_param]);
 
-    const toggleFilter = (type: string, value: number) => {
+    const toggleFilter = (type: string, value: FilterOption["key"]) => {
 
         setSelectedFilters((prev) => {
             const currentValues = prev[type as keyof typeof prev];
@@ -687,7 +704,7 @@ export default function Search() {
                             </div>
                         </div>
 
-                        <Results query={query_param} filters={selectedFilters} page={page} sort={sort} limit={limit} />
+                        <Results query={query_param ?? ""} filters={selectedFilters} page={page} sort={sort} limit={limit} />
 
                         <div className="flex flex-row gap-2 mt-4">
                             {page > 1 && (
