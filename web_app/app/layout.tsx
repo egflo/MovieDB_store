@@ -7,6 +7,7 @@ import {clientConfig, serverConfig} from "@/lib/firebase/config";
 import {toUser} from "@/lib/firebase/UserInfo";
 import {AuthProvider} from "@/lib/firebase/AuthProvider";
 import {CartProvider} from "@/lib/context/CartContext";
+import {BookmarkProvider} from "@/lib/context/BookmarkContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,7 +45,9 @@ export default async function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
             <AuthProvider user={user}>
-                <CartProvider>{children}</CartProvider>
+                <CartProvider>
+                    <BookmarkProvider>{children}</BookmarkProvider>
+                </CartProvider>
             </AuthProvider>
         </body>
         </html>
