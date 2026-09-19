@@ -3,7 +3,7 @@
     <module name="eureka_server" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.eureka_server.EurekaServerApplication" />
     <envs>
-      <env name="SERVER_PORT" value="8761" />
+
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

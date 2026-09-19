@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 #
-# Start the whole stack locally: databases in Docker, services from Maven.
+# Start all six services locally.
 #
-#   ./scripts/dev.sh          start everything
-#   ./scripts/dev.sh stop     stop the databases too
+#   ./scripts/dev.sh
 #
-# Ctrl+C stops the services. Logs go to logs/<service>.log.
+# Assumes Mongo (27017) and Postgres (5432) are already running on this Mac,
+# which is what application.yml defaults to. Nothing else needs configuring:
+# the defaults already point at localhost with the right database names and
+# postgres/postgres credentials.
 #
-# The IntelliJ equivalent is the "0 All Services" compound run configuration,
-# but you still need the databases: docker compose -f docker-compose.dev.yml up -d
+# Ctrl+C stops everything. Logs go to logs/<service>.log.
+#
+# The IntelliJ equivalent is the "0 All Services" compound run configuration.
 
 set -euo pipefail
 
@@ -24,28 +27,14 @@ if [ -z "${JAVA_HOME:-}" ] && [ -d /opt/homebrew/opt/openjdk@25 ]; then
 fi
 echo "JAVA_HOME=${JAVA_HOME:-<unset, using default java>}"
 
-COMPOSE="docker compose -f docker-compose.dev.yml"
+# ------------------------------------------------------------ preflight
+fail=0
+nc -z localhost 27017 2>/dev/null || { echo "Mongo is not listening on 27017"; fail=1; }
+nc -z localhost 5432  2>/dev/null || { echo "Postgres is not listening on 5432"; fail=1; }
+[ "$fail" -eq 1 ] && { echo "Start your databases first."; exit 1; }
+echo "Mongo and Postgres are up."
 
-if [ "${1:-}" = "stop" ]; then
-    echo "Stopping databases..."
-    $COMPOSE down
-    exit 0
-fi
-
-# ---------------------------------------------------------------- databases
-echo "Starting Mongo and Postgres..."
-$COMPOSE up -d
-
-echo -n "Waiting for databases to report healthy"
-for _ in $(seq 1 60); do
-    unhealthy=$($COMPOSE ps --format '{{.Health}}' | grep -cv '^healthy$' || true)
-    [ "$unhealthy" -eq 0 ] && break
-    echo -n "."
-    sleep 2
-done
-echo " ok"
-
-# ---------------------------------------------------------------- services
+# ------------------------------------------------------------ services
 PIDS=()
 
 cleanup() {
@@ -55,24 +44,24 @@ cleanup() {
         kill "$pid" 2>/dev/null || true
     done
     wait 2>/dev/null || true
-    echo "Services stopped. Databases are still running (./scripts/dev.sh stop)."
 }
 trap cleanup INT TERM
 
 start() { # dir, then env assignments
     local dir=$1; shift
     echo "  -> $dir"
-    ( cd "$dir" && env "$@" mvn -q spring-boot:run ) > "$LOGS/$dir.log" 2>&1 &
+    if [ "$#" -gt 0 ]; then
+        ( cd "$dir" && env "$@" mvn -q spring-boot:run ) > "$LOGS/$dir.log" 2>&1 &
+    else
+        ( cd "$dir" && mvn -q spring-boot:run ) > "$LOGS/$dir.log" 2>&1 &
+    fi
     PIDS+=($!)
 }
 
-EUREKA=http://localhost:8761/eureka
-
 echo "Starting eureka_server..."
-start eureka_server SERVER_PORT=8761
+start eureka_server
 
-# The others retry registration, but giving Eureka a head start keeps the
-# startup logs readable.
+# The rest retry registration anyway, but waiting keeps startup logs readable.
 echo -n "Waiting for Eureka"
 for _ in $(seq 1 60); do
     curl -sf http://localhost:8761/actuator/health >/dev/null 2>&1 && break
@@ -82,18 +71,13 @@ done
 echo " ok"
 
 echo "Starting services..."
-start api_gateway       SERVER_PORT=8760 EUREKA_URI=$EUREKA
-start movie_service     SERVER_PORT=8080 GRPC_PORT=9090 EUREKA_URI=$EUREKA \
-                        MONGO_URI=mongodb://localhost:27017 MONGO_DB=moviedb
-start inventory_service SERVER_PORT=8081 GRPC_PORT=9091 EUREKA_URI=$EUREKA \
-                        POSTGRES_HOST=localhost POSTGRES_DB=inventorydb \
-                        POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres
-start order_service     SERVER_PORT=8082 GRPC_PORT=9092 EUREKA_URI=$EUREKA \
-                        POSTGRES_HOST=localhost POSTGRES_DB=orderdb \
-                        POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres \
-                        "STRIPE_SECRET=${STRIPE_SECRET:-}" "STRIPE_PUBLIC=${STRIPE_PUBLIC:-}"
-start user_service      SERVER_PORT=8083 GRPC_PORT=9093 EUREKA_URI=$EUREKA \
-                        MONGO_URI=mongodb://localhost:27017 MONGO_DB=userdb
+start api_gateway
+# Ports are pinned only so the URLs below are predictable. Left alone these
+# bind SERVER_PORT:0 — a random port — which works fine via Eureka.
+start movie_service     SERVER_PORT=8080 GRPC_PORT=9090
+start inventory_service SERVER_PORT=8081 GRPC_PORT=9091
+start order_service     SERVER_PORT=8082 GRPC_PORT=9092
+start user_service      SERVER_PORT=8083 GRPC_PORT=9093
 
 cat <<EOF
 
@@ -105,7 +89,7 @@ All services starting. Logs: $LOGS/<service>.log
 
 Frontend:  cd web_app && npm run dev
 
-Ctrl+C to stop the services.
+Ctrl+C to stop.
 EOF
 
 wait

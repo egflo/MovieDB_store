@@ -36,29 +36,23 @@ with a dead call site in `OrderService.java`.
 
 ## Running locally
 
-The services need Mongo and Postgres, which the root `docker-compose.yml` does
-not provide. `docker-compose.dev.yml` runs just those two, so the services can
-be started and restarted individually from the IDE.
+Requires Mongo on 27017 and Postgres on 5432 with databases `moviedb`, `userdb`,
+`inventorydb` and `orderdb`. The defaults in each `application.yml` already point
+there with `postgres`/`postgres` credentials, so no environment configuration is
+needed.
 
-**In IntelliJ** — run the **`0 All Services`** compound configuration. Start the
-databases first:
+**In IntelliJ** — run the **`0 All Services`** compound configuration. It starts
+all six at once; Eureka gets no head start, so expect a few registration retries
+in the logs before things settle.
 
-```
-docker compose -f docker-compose.dev.yml up -d
-```
-
-The compound starts all six at once; Eureka does not get a head start, so expect
-a few registration retries in the logs before things settle.
-
-**From a terminal** — `scripts/dev.sh` does both, and waits for Eureka before
-starting the rest:
+**From a terminal**:
 
 ```
-./scripts/dev.sh          # databases + all services, Ctrl+C to stop
-./scripts/dev.sh stop     # stop the databases too
+./scripts/dev.sh
 ```
 
-Logs land in `logs/<service>.log`.
+It checks both databases are listening, starts Eureka, waits for it, then starts
+the rest. Ctrl+C stops everything. Logs land in `logs/<service>.log`.
 
 | | |
 |---|---|
@@ -67,9 +61,11 @@ Logs land in `logs/<service>.log`.
 | movie / inventory / order / user | 8080 / 8081 / 8082 / 8083 |
 | gRPC | 9090 / 9091 / 9092 / 9093 |
 
-Ports are set explicitly by the run configurations. Left alone the services bind
-`SERVER_PORT:0` — a random port — and `user_service` has no `server:` block at
-all, so it would collide with `movie_service` on 8080.
+The HTTP and gRPC ports above are pinned by the run configurations purely so the
+URLs are predictable. Left alone, `movie_service`, `inventory_service` and
+`order_service` bind `SERVER_PORT:0` — a random port — which works fine, since
+the gateway reaches them through Eureka. `user_service` has no `server:` block
+and so takes Spring's default 8080.
 
 The frontend runs separately: `cd web_app && npm run dev`.
 
