@@ -13,6 +13,7 @@ import StarHalfIcon from "@mui/icons-material/StarHalf";
 import {Favorite, ThumbDown, ThumbUp} from "@mui/icons-material";
 import CommentIcon from '@mui/icons-material/Comment';
 import {useAuth} from "@/lib/firebase/AuthContext";
+import {freshToken} from "@/lib/api/client";
 import {SentimentState} from "@/lib/models/SentimentState";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -76,11 +77,14 @@ function ResultItem({item}: { item: Review }) {
             return;
         }
 
+        // Refresh rather than reusing the server-render snapshot, which expires
+        // an hour after the page was rendered.
+        const token = await freshToken(auth.user.idToken);
         const response = await fetch(SENTIMENT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${auth.user?.idToken}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
                 userId: auth.user?.uid,

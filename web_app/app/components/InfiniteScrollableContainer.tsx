@@ -5,19 +5,12 @@ import { debounce } from "lodash";
 import useSWRInfinite, {SWRInfiniteKeyLoader} from "swr/infinite";
 import {Page} from "@/lib/models/Page";
 import Image from "next/image";
-import { getValidIdToken } from 'next-firebase-auth-edge/lib/next/client';
-import ky from 'ky';
+import { authed } from "@/lib/api/client";
 
 async function authFetcher(idToken: string, endpoint: string) {
-   // const idToken = await getValidIdToken({
-     //   idToken,
-     //   refreshTokenUrl: '/api/refresh-token'
-    //});
-    console.log("Fetching with token", idToken);
-    const data = await ky.get(endpoint, {
-        headers: { Authorization: `Bearer ${idToken}` },
-    }).json();
-    // @ts-ignore
+    // authed() refreshes the token per request, so this keeps working past the
+    // one-hour ID token expiry.
+    const data = await authed(idToken).get(endpoint).json<Page<unknown>>();
     return data.content;
 }
 

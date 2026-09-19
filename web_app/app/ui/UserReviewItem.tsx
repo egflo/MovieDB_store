@@ -9,6 +9,7 @@ import ProfileImage from "@/app/components/ProfileImage";
 import {SentimentState} from "@/lib/models/SentimentState";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/lib/firebase/AuthContext";
+import {freshToken} from "@/lib/api/client";
 
 interface  UserReviewProps {
     item: Review
@@ -74,11 +75,14 @@ export default function UserReviewItem({ item }: UserReviewProps) {
             return;
         }
 
+        // Refresh rather than reusing the server-render snapshot, which expires
+        // an hour after the page was rendered.
+        const token = await freshToken(auth.user.idToken);
         const response = await fetch(SENTIMENT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${auth.user?.idToken}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
                 userId: auth.user?.uid,

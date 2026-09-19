@@ -7,6 +7,7 @@ import {useRef} from "react";
 import {SentimentState} from "@/lib/models/SentimentState";
 import FavoriteBorderOutlined from "@mui/icons-material/FavoriteBorderOutlined";
 import {useAuth} from "@/lib/firebase/AuthContext";
+import {freshToken} from "@/lib/api/client";
 import {debounce} from "lodash";
 
 const RATE_API : string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/sentiment/rate`;
@@ -54,11 +55,14 @@ export default function Rate({ id }: RateProps) {
         };
 
         try {
+            // Refresh rather than reusing the server-render snapshot, which
+            // expires an hour after the page was rendered.
+            const token = auth.user ? await freshToken(auth.user.idToken) : "";
             const response = await fetch(`${RATE_API}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.user?.idToken}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(body),
             });
