@@ -6,7 +6,14 @@ export const serverConfig = {
         httpOnly: true,
         secure: process.env.USE_SECURE_COOKIES === "true",
         sameSite: "lax" as const,
-        maxAge: 12 * 60 * 60 * 24,
+        // 5 days. Ordered seconds-first so the unit is unambiguous: the previous
+        // value read as "12 hours" but 12 * 60 * 60 * 24 is 12 days.
+        //
+        // The cookie carries the refresh token, so this is how long a user stays
+        // signed in without re-entering credentials, not how long an ID token
+        // lasts — those are refreshed every hour regardless. Shorten it if you
+        // want tighter re-authentication; Firebase session cookies cap at 14 days.
+        maxAge: 60 * 60 * 24 * 5,
     },
     serviceAccount: {
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
