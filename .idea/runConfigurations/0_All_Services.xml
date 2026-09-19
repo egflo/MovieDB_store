@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="0 All Services" type="CompoundRunConfigurationType">
+    <toRun name="1 eureka_server" type="SpringBootApplicationConfigurationType" />
+    <toRun name="2 api_gateway" type="SpringBootApplicationConfigurationType" />
+    <toRun name="3 movie_service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="4 inventory_service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="5 order_service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="6 user_service" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

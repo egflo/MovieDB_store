@@ -34,6 +34,45 @@ A commented-out gRPC client for it still sits in
 `order_service/src/main/java/com/order_service/service/RateService.java`, along
 with a dead call site in `OrderService.java`.
 
+## Running locally
+
+The services need Mongo and Postgres, which the root `docker-compose.yml` does
+not provide. `docker-compose.dev.yml` runs just those two, so the services can
+be started and restarted individually from the IDE.
+
+**In IntelliJ** — run the **`0 All Services`** compound configuration. Start the
+databases first:
+
+```
+docker compose -f docker-compose.dev.yml up -d
+```
+
+The compound starts all six at once; Eureka does not get a head start, so expect
+a few registration retries in the logs before things settle.
+
+**From a terminal** — `scripts/dev.sh` does both, and waits for Eureka before
+starting the rest:
+
+```
+./scripts/dev.sh          # databases + all services, Ctrl+C to stop
+./scripts/dev.sh stop     # stop the databases too
+```
+
+Logs land in `logs/<service>.log`.
+
+| | |
+|---|---|
+| Eureka dashboard | http://localhost:8761 |
+| API gateway | http://localhost:8760 |
+| movie / inventory / order / user | 8080 / 8081 / 8082 / 8083 |
+| gRPC | 9090 / 9091 / 9092 / 9093 |
+
+Ports are set explicitly by the run configurations. Left alone the services bind
+`SERVER_PORT:0` — a random port — and `user_service` has no `server:` block at
+all, so it would collide with `movie_service` on 8080.
+
+The frontend runs separately: `cd web_app && npm run dev`.
+
 ## Frontend
 
 **`web_app`** — Next.js 15 (App Router), React 19, MUI v7, Tailwind v4,

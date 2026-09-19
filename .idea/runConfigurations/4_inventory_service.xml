@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="4 inventory_service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="inventory_service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.inventory_service.InventoryServiceApplication" />
+    <envs>
+      <env name="SERVER_PORT" value="8081" />
+      <env name="GRPC_PORT" value="9091" />
+      <env name="EUREKA_URI" value="http://localhost:8761/eureka" />
+      <env name="POSTGRES_HOST" value="localhost" />
+      <env name="POSTGRES_DB" value="inventorydb" />
+      <env name="POSTGRES_USER" value="postgres" />
+      <env name="POSTGRES_PASSWORD" value="postgres" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

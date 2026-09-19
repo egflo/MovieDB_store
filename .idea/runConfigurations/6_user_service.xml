@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="6 user_service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="user_service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.user_service.UserServiceApplication" />
+    <envs>
+      <env name="SERVER_PORT" value="8083" />
+      <env name="GRPC_PORT" value="9093" />
+      <env name="EUREKA_URI" value="http://localhost:8761/eureka" />
+      <env name="MONGO_URI" value="mongodb://localhost:27017" />
+      <env name="MONGO_DB" value="userdb" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
