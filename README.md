@@ -34,12 +34,53 @@ A commented-out gRPC client for it still sits in
 `order_service/src/main/java/com/order_service/service/RateService.java`, along
 with a dead call site in `OrderService.java`.
 
-## Frontends
+## Frontend
 
-| App | Stack |
+**`web_app`** — Next.js 15 (App Router), React 19, MUI v7, Tailwind v4,
+Firebase 11 via `next-firebase-auth-edge`, Stripe. Run manually; it has no
+Dockerfile or `docker-compose.yml` entry.
+
+| Area | Routes |
 |---|---|
-| `web_app` | Next 15, React 19, MUI v7, Firebase 11 |
-| `web_store` | Next 15, React 18, MUI v5, Apollo Client, Stripe.js, Firebase 9 |
+| Catalog | `/`, `/movie/[id]`, `/movie/[id]/reviews`, `/cast/[id]`, `/search` |
+| Auth | `/login`, `/register` |
+| Commerce | `/cart`, `/checkout` |
+| Account | `/user/info`, `/user/orders`, `/user/order/[id]`, `/user/favorites`, `/user/address/{info,add,[id]}`, `/user/payments` |
 
-Neither frontend has a Dockerfile or a `docker-compose.yml` entry; both are run
-manually.
+Auth runs in edge middleware: the session cookie is read server-side in
+`app/layout.tsx` and handed to client components through `useAuth()`. The API
+gateway decodes the Firebase token and injects a `uid` header downstream, so
+callers only send `Authorization: Bearer <idToken>`.
+
+Set `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` in `web_app/.env` before using
+checkout — it ships empty, and the page will tell you so rather than failing
+obscurely.
+
+### Removed: web_store
+
+`web_store` was the original storefront (Pages Router, React 18, MUI v5, Apollo,
+formik). It was removed in September 2026 once `web_app` covered all 15 of its
+routes. The code remains in git history, tagged `web-store-last`:
+
+```
+git checkout web-store-last -- web_store
+```
+
+[docs/web_store-inventory.md](docs/web_store-inventory.md) records what was in
+it. Three API bugs were found and fixed during the port rather than carried
+over — see that file.
+
+## Known rough edges
+
+- `docker-compose.yml` defines no Mongo or Postgres containers, and the services
+  point at `localhost` from inside their own containers, so the stack does not
+  come up as written. It also still carries a broken YAML anchor
+  (`&image_prefix` used where `*image_prefix` was meant).
+- The explicit `routes:` block in the gateway config is dead — it has no
+  `StripPrefix` filter. Routing actually works through
+  `discovery.locator.enabled`, which serves `/{service-id}/**`.
+- `order_service` has no Stripe webhook handler, so no order ever advances past
+  `CREATED`. The `Status` enum's `PAID`/`SHIPPED`/`DELIVERED` values are unused.
+- `AddressController` and `PaymentController` in `order_service`, and
+  `AddressController` in `user_service`, repeat `@RequestMapping` on both class
+  and method, so their real paths are doubled (e.g. `/address/address`).

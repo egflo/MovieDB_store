@@ -1,18 +1,34 @@
 # web_store — content inventory
 
+**Status: removed September 2026.** `web_app` now covers all 15 routes listed
+below. This file stays as the record of what was in it.
+
 A reference snapshot of the `web_store` frontend, written so its contents stay
 legible without checking anything out of git.
 
-**Why this exists:** `web_store` is the older of the two frontends (first
-committed 2023-02-13, vs `web_app` on 2025-04-26), but it is the only one that
-implements the full commerce flow. If it is removed, this file records what was
-in it and where to find it again.
+**Why this exists:** `web_store` was the older of the two frontends (first
+committed 2023-02-13, vs `web_app` on 2025-04-26), and for a long time the only
+one that implemented the full commerce flow.
 
 **Recovering it:** the code stays in git history in full.
 
 ```
-git checkout <tag-or-commit> -- web_store
+git checkout web-store-last -- web_store
 ```
+
+## Bugs found during the port, fixed in web_app rather than carried over
+
+- **`Address.postalCode`** — the backend `Address` and `AddressRequest` both use
+  `postcode`. The field bound in neither direction, so postcodes silently
+  vanished on read and on write.
+- **Addresses called the wrong service** — `ORDER_SERVICE/users/address` matches
+  no mapping in `order_service`. The address book lives in `user_service`, which
+  `order_service` reads over gRPC when building an invoice.
+- **Bookmarks called the wrong service** — `BookmarkContext` pointed at
+  `movie_service`; bookmarks live in `user_service`.
+- **Un-favouriting never persisted** — the Favorite action only ever POSTed, so
+  removal flipped local state without calling `DELETE /bookmark/movie/{id}`.
+  (This one was in `web_app` too, and is fixed there.)
 
 ---
 
