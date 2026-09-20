@@ -56,23 +56,31 @@ function Item({idx, length, item}: {idx: number, length: number, item: Movie}) {
 
 
 const ENDPOINT: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/all?sortBy=popularity&limit=5`;
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+// res.json() alone treats a 404 body as a successful response, so an error
+// payload like {"status":404,...} used to flow into onSuccess, where .content
+// is undefined.
+const fetcher = async (url: string): Promise<Page<Movie>> => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText} for ${url}`);
+    }
+    return res.json();
+};
+
 const Carousel: React.FC<CarouselProps> = ({ url }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [items, setItems] = useState<Movie[]>([]);
 
-    const {data, isLoading, error} = useSWR<Page<Movie>>(ENDPOINT, fetcher, {
-        onSuccess: (data) => {
-            console.log("SWR Carousel Success", data);
-            setItems(data.content);
-        },
-        onError: (error) => {
-            console.error("SWR Carousel Error", error);
-        },
-    });
+    const {data, isLoading, error} = useSWR<Page<Movie>>(ENDPOINT, fetcher);
+
+    // Derived rather than copied into state: mirroring the response into
+    // useState is what allowed items to become undefined.
+    const items = data?.content ?? [];
 
     // Auto-slide every 5 seconds
     useEffect(() => {
+        if (items.length === 0) return;
+
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) =>
                 prevIndex === items.length - 1 ? 0 : prevIndex + 1
@@ -85,6 +93,15 @@ const Carousel: React.FC<CarouselProps> = ({ url }) => {
     const goToSlide = (index: number) => {
         setCurrentIndex(index);
     };
+
+    if (isLoading) {
+        return <div className="w-full h-[600px] animate-pulse bg-gray-800" />;
+    }
+
+    // A failed fetch should leave a gap, not take the home page down with it.
+    if (error || items.length === 0) {
+        return null;
+    }
 
     return (
         <div className="relative w-full max-w-full overflow-hidden">
