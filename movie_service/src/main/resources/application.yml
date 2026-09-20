@@ -46,7 +46,8 @@ management:
   endpoint:
     health:
       show-details: always
-      enabled: true
+      # Boot 3.5 replaced management.endpoint.<id>.enabled with .access
+      access: unrestricted
   health:
     circuitbreakers:
       enabled: true

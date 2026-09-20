@@ -15,35 +15,40 @@ spring:
     name: gateway
 
   cloud:
-      gateway:
-        globalcors:
-            corsConfigurations:
-                '[/**]':
-                  allowedOriginPatterns: "*"
-                  allowedMethods: "*"
-                  allowedHeaders: "*"
-                  allowCredentials: true
-        discovery:
+    gateway:
+      # Spring Cloud Gateway 4.3 moved this whole namespace under
+      # server.webflux. The old spring.cloud.gateway.* keys still bind via
+      # deprecated aliases but warn on every start.
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOriginPatterns: "*"
+                allowedMethods: "*"
+                allowedHeaders: "*"
+                allowCredentials: true
+          discovery:
             locator:
               enabled: true
               lowerCaseServiceId: true
-        routes:
-          - id: ${EUREKA_INSTANCE_HOSTNAME_MOVIE_SERVICE:movie-service}
-            uri: lb://${EUREKA_INSTANCE_HOSTNAME_MOVIE_SERVICE:MOVIE-SERVICE}
-            predicates:
-              - Path=/movies/**
-          - id: ${EUREKA_INSTANCE_HOSTNAME_ORDER_SERVICE:order-service}
-            uri: lb://${EUREKA_INSTANCE_HOSTNAME_ORDER_SERVICE:ORDER-SERVICE}
-            predicates:
-              - Path=/orders/**
-          - id: ${EUREKA_INSTANCE_HOSTNAME_INVENTORY_SERVICE:inventory-service}
-            uri: lb://${EUREKA_INSTANCE_HOSTNAME_INVENTORY_SERVICE:INVENTORY-SERVICE}
-            predicates:
-              - Path=/inventory/**
-          - id: ${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:user-service}
-            uri: lb://${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:USER-SERVICE}
-            predicates:
-              - Path=/user/**
+          routes:
+              - id: ${EUREKA_INSTANCE_HOSTNAME_MOVIE_SERVICE:movie-service}
+                uri: lb://${EUREKA_INSTANCE_HOSTNAME_MOVIE_SERVICE:MOVIE-SERVICE}
+                predicates:
+                  - Path=/movies/**
+              - id: ${EUREKA_INSTANCE_HOSTNAME_ORDER_SERVICE:order-service}
+                uri: lb://${EUREKA_INSTANCE_HOSTNAME_ORDER_SERVICE:ORDER-SERVICE}
+                predicates:
+                  - Path=/orders/**
+              - id: ${EUREKA_INSTANCE_HOSTNAME_INVENTORY_SERVICE:inventory-service}
+                uri: lb://${EUREKA_INSTANCE_HOSTNAME_INVENTORY_SERVICE:INVENTORY-SERVICE}
+                predicates:
+                  - Path=/inventory/**
+              - id: ${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:user-service}
+                uri: lb://${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:USER-SERVICE}
+                predicates:
+                  - Path=/user/**
 
 eureka:
   instance:
@@ -60,7 +65,8 @@ eureka:
 management:
   endpoint:
     gateway:
-      enabled: true
+      # Boot 3.5 replaced management.endpoint.<id>.enabled with .access
+      access: unrestricted
   endpoints:
     web:
       exposure:
