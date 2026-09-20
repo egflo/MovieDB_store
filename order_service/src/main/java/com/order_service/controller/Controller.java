@@ -7,12 +7,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/")
 public class Controller {
 
     @Value("${spring.application.name}")
     private String appName;
+
+    /**
+     * Service identity, reachable through the gateway at /order-service/.
+     * Reaching this handler at all means the service is serving, so the status
+     * is fixed; it does not consult the datastore.
+     */
+    @GetMapping
+    public Map<String, String> root() {
+        return Map.of("name", appName, "status", "UP");
+    }
 
     @GetMapping("/health")
     public ResponseEntity<String> health() {

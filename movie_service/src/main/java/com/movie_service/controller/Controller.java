@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.MediaType;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/")
@@ -17,10 +19,14 @@ public class Controller {
     @Value("${spring.application.name}")
     private String appName;
 
+    /**
+     * Service identity, reachable through the gateway at /movie-service/.
+     * Reaching this handler at all means the service is serving, so the status
+     * is fixed; it does not consult the datastore.
+     */
     @GetMapping
-    public String testService(HttpServletRequest request) {
-        System.out.println("I am " + request.getRequestURL().toString());
-        return request.getRequestURL().toString();
+    public Map<String, String> root() {
+        return Map.of("name", appName, "status", "UP");
     }
 
     @GetMapping("/health")
