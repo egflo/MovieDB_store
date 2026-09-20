@@ -46,6 +46,10 @@ spring:
               - Path=/user/**
 
 eureka:
+  instance:
+    # Same template the four domain services use, so the gateway reports a
+    # stable id rather than falling back to Eureka's default format.
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     registerWithEureka: true
     serviceUrl:
