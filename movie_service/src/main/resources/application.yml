@@ -37,10 +37,13 @@ dgs:
       enabled: true
 
 management:
-  endpoint:
+  # NOTE: "endpoints" (plural) is the correct key. This previously read
+  # "endpoint.web.exposure", which Spring ignores, so the "*" never applied.
+  endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info
+  endpoint:
     health:
       show-details: always
       enabled: true
