@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import Link from 'next/link';
 import CloseIcon from '@mui/icons-material/Close';
 import { Movie } from '@/lib/models/Movie';
@@ -87,7 +87,13 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
     }, [onClose, transformToOrigin]);
 
     // Grow out of the poster on mount.
-    useEffect(() => {
+    //
+    // useLayoutEffect, not useEffect: useEffect runs *after* paint, so the
+    // panel would be painted once at full size before the collapsed transform
+    // was applied — the open would flash straight to full size with no
+    // animation, while the close (which changes a transform on an already
+    // settled element) animated correctly.
+    useLayoutEffect(() => {
         const panel = panelRef.current;
         if (!panel) return;
 
@@ -102,11 +108,19 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
         panel.style.transform = from;
         panel.style.opacity = '0.4';
 
-        // Force a style flush so the browser registers the collapsed state as
-        // the start of the transition. Deliberately not requestAnimationFrame:
-        // it is throttled in hidden or backgrounded surfaces, and when it never
-        // fires the panel stays stuck at poster size instead of expanding.
-        void panel.offsetHeight;
+        // Force a style recalculation so the collapsed state becomes the
+        // transition's starting value.
+        //
+        // Reading offsetHeight is the usual trick, but it only forces *layout*,
+        // and transform is a compositor property that does not dirty layout —
+        // so the transition was starting from identity and the panel appeared
+        // at full size immediately. Reading the computed transform forces the
+        // style recalc that actually commits it.
+        //
+        // Deliberately not requestAnimationFrame either: it is throttled in
+        // hidden or backgrounded surfaces, and when it never fires the panel
+        // stays stuck at poster size.
+        void getComputedStyle(panel).transform;
 
         panel.style.transition = `transform ${DURATION_MS}ms ease, opacity ${DURATION_MS}ms ease`;
         panel.style.transform = '';
