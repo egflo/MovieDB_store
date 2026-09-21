@@ -142,7 +142,7 @@ export default function Movie({id}: { id: string }) {
                     >
                         <ScrollableContainer data={data.cast} title={"Cast & Crew"} ItemComponent={CastItem} />
 
-                        <InfiniteScrollableContainer title={"Critic Reviews"} url={CRITIC_REVIEW_URL + data.movieId + "?"} ItemComponent={CriticReviewItem} />
+                        <InfiniteScrollableContainer title={"Critic Reviews"} url={CRITIC_REVIEW_URL + data.movieId} ItemComponent={CriticReviewItem} />
                         <InfiniteScrollableContainer title={'User Reviews'} token={auth.user?.idToken} url={USER_REVIEW_URL + data.id} ItemComponent={UserReviewItem} />
                         <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={PosterItem} />
 

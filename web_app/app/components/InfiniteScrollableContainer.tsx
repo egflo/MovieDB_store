@@ -26,7 +26,14 @@ const fetcher = async (endpoint: string) => {
 const getKey: (index: number, previousPageData: Page<any>, url: string) => (null | string) = (index: number, previousPageData: Page<any>, url: string) => {
     // End of pages
     if (previousPageData && !previousPageData.content) return null;
-    return `${url}?page=${index}&limit=10`;
+
+    // This used to append "?page=..." unconditionally, so any url that already
+    // carried a query string produced a second "?" — e.g.
+    // "/movie/suggest/tt123?sortBy=rating?page=0&limit=10", which the service
+    // reads as a single sortBy value of "rating?page=0".
+    const base = url.replace(/[?&]+$/, "");
+    const separator = base.includes("?") ? "&" : "?";
+    return `${base}${separator}page=${index}&limit=10`;
 };
 
 interface InfiniteScrollableContainerProps<T> {
