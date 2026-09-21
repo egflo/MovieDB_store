@@ -8,6 +8,9 @@ interface PosterProps {
     /** Optional so PosterItem satisfies ComponentType<{item: Movie}> when used
      *  as an ItemComponent, which renders it with only `item`. */
     size?: "small" | "medium" | "large";
+    /** When given, selecting the poster calls this instead of navigating —
+     *  used by PosterCarousel to expand a preview in place. */
+    onSelect?: (item: Movie, element: HTMLElement) => void;
 }
 
 function sizeClass(size: "small" | "medium" | "large") {
@@ -21,7 +24,7 @@ function sizeClass(size: "small" | "medium" | "large") {
     }
 }
 
-export default function PosterItem({ item, size = "medium" }: PosterProps) {
+export default function PosterItem({ item, size = "medium", onSelect }: PosterProps) {
     const movie: Movie = item;
     const router = useRouter();
     const imageUrl = movie.poster;
@@ -51,7 +54,20 @@ export default function PosterItem({ item, size = "medium" }: PosterProps) {
 
     return (
         <div
-            onClick={() => router.push(`/movie/${movie.movieId}`)}
+            role="button"
+            tabIndex={0}
+            aria-label={movie.title}
+            onClick={(e) =>
+                onSelect
+                    ? onSelect(movie, e.currentTarget)
+                    : router.push(`/movie/${movie.movieId}`)
+            }
+            onKeyDown={(e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                if (onSelect) onSelect(movie, e.currentTarget);
+                else router.push(`/movie/${movie.movieId}`);
+            }}
             className={`flex items-center justify-center rounded-lg hover:transition duration-300 ease-in-out transform hover:scale-105
              cursor-pointer text-white font-bold text-xl overflow-hidden ${sizeClassName}`}
             style={{ width: sizeClassName, height: sizeClassName }}

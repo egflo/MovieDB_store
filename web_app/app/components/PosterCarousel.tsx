@@ -7,6 +7,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { Movie } from '@/lib/models/Movie';
 import { Page } from '@/lib/models/Page';
 import PosterItem from '@/app/ui/PosterItem';
+import MoviePreview from '@/app/components/MoviePreview';
 
 interface PosterCarouselProps {
     title: string;
@@ -38,6 +39,9 @@ export default function PosterCarousel({ title, url, size = 'small' }: PosterCar
     const [ready, setReady] = useState(false);
     const [activePage, setActivePage] = useState(0);
     const [pageCount, setPageCount] = useState(0);
+    // The element is kept so the preview can re-measure it on close; the row
+    // may have scrolled while it was open.
+    const [selected, setSelected] = useState<{ movie: Movie; element: HTMLElement } | null>(null);
 
     const { data, isLoading, error } = useSWR<Page<Movie>>(
         `${url}${url.includes('?') ? '&' : '?'}page=0&limit=20`,
@@ -196,7 +200,11 @@ export default function PosterCarousel({ title, url, size = 'small' }: PosterCar
                             // duplicates that exist to make the loop seamless.
                             aria-hidden={canLoop && (index < items.length || index >= items.length * 2)}
                         >
-                            <PosterItem item={movie} size={size} />
+                            <PosterItem
+                                item={movie}
+                                size={size}
+                                onSelect={(m, element) => setSelected({ movie: m, element })}
+                            />
                         </div>
                     ))}
                 </div>
@@ -210,6 +218,14 @@ export default function PosterCarousel({ title, url, size = 'small' }: PosterCar
                     <ChevronRight className="text-white" fontSize="large" />
                 </button>
             </div>
+
+            {selected && (
+                <MoviePreview
+                    movie={selected.movie}
+                    originElement={selected.element}
+                    onClose={() => setSelected(null)}
+                />
+            )}
         </section>
     );
 }
