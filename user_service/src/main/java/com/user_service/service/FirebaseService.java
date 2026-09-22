@@ -253,6 +253,7 @@ public class FirebaseService {
     }
 
     public Bookmark getBookmark(String id, String userId) {
+        LOGGER.info("Getting bookmark with ID: " + id);
         DocumentReference docRef = db.collection("users").document(userId).collection("bookmarks").document(id);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = null;
@@ -271,7 +272,9 @@ public class FirebaseService {
 
             return bookmark;
         } else {
-            throw new FirebaseServiceException("No such document!");
+            LOGGER.info("No such document!");
+            // Handle the case when the document does not exist
+            return getByMovieIdAndUserId(id, userId);
         }
     }
 

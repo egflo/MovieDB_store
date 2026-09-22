@@ -65,7 +65,6 @@ public class StripeService {
         //Create PaymentIntent
         PaymentIntent paymentIntent =
                 createPaymentIntent(customer, calculation);
-
         PaymentSheetDTO paymentSheetDTO = new PaymentSheetDTO();
         paymentSheetDTO.setPaymentIntentId(paymentIntent.getId());
         paymentSheetDTO.setEphemeralKey(ephemeralKey.getSecret());

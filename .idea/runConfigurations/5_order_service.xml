@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="5 order_service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="order_service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.order_service.OrderServiceApplication" />
+    <envs>
+      <env name="SERVER_PORT" value="8082" />
+      <env name="GRPC_PORT" value="9092" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

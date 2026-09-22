@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="6 user_service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="user_service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.user_service.UserServiceApplication" />
+    <envs>
+      <env name="SERVER_PORT" value="8083" />
+      <env name="GRPC_PORT" value="9093" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

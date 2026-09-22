@@ -8,10 +8,11 @@ import { debounce } from "lodash";
 
 interface ScrollableContainerProps<T> {
     data: T[];
+    title?: string;
     ItemComponent: React.ComponentType<{ item: T }>;
 }
 
-export default function ScrollableContainer<T>({data, ItemComponent,}: ScrollableContainerProps<T>) {
+export default function ScrollableContainer<T>({data, title, ItemComponent,}: ScrollableContainerProps<T>) {
     const router = useRouter();
     const [items, setItems] = useState<T[]>(data);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -60,55 +61,61 @@ export default function ScrollableContainer<T>({data, ItemComponent,}: Scrollabl
         };
     }, []);
 
+
     return (
-        <div
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            className="relative w-full">
-            {canScrollLeft && (
-                <Image
-                    className="absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
-                    src="/chevron.left.svg"
-                    alt="Scroll Left"
-                    width={40}
-                    height={40}
-                    onClick={() => scroll('left')}
-                    style={
-                        {
-                            opacity: hovered ? 1 : 0,
-                            transition: 'opacity 0.3s ease-in-out',
-                        }
-                    }
-                />
+        <div className="flex flex-col gap-2 w-full">
+            {title && (
+                <p className="text-lg font-bold text-gray-300">{title}</p>
             )}
-
             <div
-                ref={containerRef}
-                className="flex flew-row overflow-x-auto gap-4 whitespace-nowrap scroll-smooth no-scrollbar" >
-                {items.map((item: T, index: number) => (
-                    <div key={index} className="flex">
-                        <ItemComponent item={item} />
-                    </div>
-                ))}
-            </div>
-
-            {canScrollRight && (
-                <Image
-                    className="absolute right-0 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
-                    src="/chevron.right.svg"
-                    alt="Scroll Right"
-                    width={40}
-                    height={40}
-                    onClick={() => scroll('right')}
-                    style={
-                        {
-                            opacity: hovered ? 1 : 0,
-                            transition: 'opacity 0.3s ease-in-out',
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+                className="relative w-full">
+                {canScrollLeft && (
+                    <Image
+                        className="absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
+                        src="/chevron.left.svg"
+                        alt="Scroll Left"
+                        width={40}
+                        height={40}
+                        onClick={() => scroll('left')}
+                        style={
+                            {
+                                opacity: hovered ? 1 : 0,
+                                transition: 'opacity 0.3s ease-in-out',
+                            }
                         }
-                    }
-                />
-            )}
+                    />
+                )}
 
+                <div
+                    ref={containerRef}
+                    className="flex flew-row overflow-x-auto gap-4 whitespace-nowrap scroll-smooth no-scrollbar" >
+                    {items.map((item: T, index: number) => (
+                        <div key={index} className="flex">
+                            <ItemComponent item={item} />
+                        </div>
+                    ))}
+                </div>
+
+                {canScrollRight && (
+                    <Image
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
+                        src="/chevron.right.svg"
+                        alt="Scroll Right"
+                        width={40}
+                        height={40}
+                        onClick={() => scroll('right')}
+                        style={
+                            {
+                                opacity: hovered ? 1 : 0,
+                                transition: 'opacity 0.3s ease-in-out',
+                            }
+                        }
+                    />
+                )}
+
+            </div>
         </div>
 
     );

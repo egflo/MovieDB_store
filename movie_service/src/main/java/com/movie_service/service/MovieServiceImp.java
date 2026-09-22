@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public interface MovieServiceImp {
     Page<Movie> findAll(Pageable pageable);
@@ -18,7 +19,7 @@ public interface MovieServiceImp {
 
     Page<Movie> getSuggestions(String movieId, Pageable pageable);
 
-    Page<Movie> findMoviesByCriteria(String title, HashMap<String, String[]> criteria, Pageable pageable);
+    Page<Movie> findMoviesByCriteria(Optional<String> title, HashMap<String, String[]> criteria, Pageable pageable);
 
     Page<Movie> getMoviesByTagId(Integer tagId, Pageable pageable);
 

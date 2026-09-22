@@ -2,19 +2,36 @@ import { NextRequest, NextResponse } from "next/server";
 import { authMiddleware, redirectToHome, redirectToLogin } from "next-firebase-auth-edge";
 import { clientConfig, serverConfig } from "./lib/firebase/config";
 
-const PUBLIC_PATHS = ['/register', '/login', "/movie", "/movie/[id]"];
+// next-firebase-auth-edge compares string entries with ===, so "/movie/[id]"
+// never matched anything: no real pathname is literally that. Anything with a
+// parameter has to be a RegExp.
+//
+// Browsing is public; only the cart, checkout and /user/* need a session.
+const PUBLIC_PATHS: (string | RegExp)[] = [
+    '/',
+    '/login',
+    '/register',
+    '/search',
+    /^\/movie\/.+/,
+    /^\/cast\/.+/,
+];
+
+// Signed-in users are bounced off these; the rest of PUBLIC_PATHS stays
+// reachable, or '/' would redirect to itself forever.
+const AUTH_PAGES = ['/login', '/register'];
 
 export async function middleware(request: NextRequest) {
     return authMiddleware(request, {
         loginPath: "/api/login",
         logoutPath: "/api/logout",
+        refreshTokenPath: "/api/refresh-token",
         apiKey: clientConfig.apiKey,
         cookieName: serverConfig.cookieName,
         cookieSignatureKeys: serverConfig.cookieSignatureKeys,
         cookieSerializeOptions: serverConfig.cookieSerializeOptions,
         serviceAccount: serverConfig.serviceAccount,
         handleValidToken: async ({token, decodedToken}, headers) => {
-            if (PUBLIC_PATHS.includes(request.nextUrl.pathname)) {
+            if (AUTH_PAGES.includes(request.nextUrl.pathname)) {
                 return redirectToHome(request);
             }
 
@@ -44,10 +61,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+    // Make sure to include the path in `matcher`
     matcher: [
-        "/",
-        "/((?!_next|api|.*\\.).*)",
-        "/api/login",
-        "/api/logout",
-    ],
+        '/api/login',
+        '/api/logout',
+        '/api/refresh-token',
+        '/',
+        '/((?!_next|favicon.ico|api|.*\\.).*)'
+    ]
 };

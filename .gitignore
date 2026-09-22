@@ -5,3 +5,6 @@
 #Ignore aws template files
 docker-compose.yml
 docker_script.sh
+
+# local dev service logs
+logs/

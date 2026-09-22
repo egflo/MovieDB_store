@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import {Cast} from "@/app/models/Cast";
+import {Cast} from "@/lib/models/Cast";
 import {useRouter} from "next/navigation";
 import ProfileImage from "@/app/components/ProfileImage";
 
@@ -17,19 +17,20 @@ export default function CastItem({ item }: CastItemProps) {
     return (
         <div
             onClick={() => router.push(`/cast/${cast.id}`)}
-            className="flex flex-col items-center gap-4 cursor-pointer">
+            className="flex flex-col items-center gap-2 cursor-pointer   shadow-lg max-w-36">
 
             <ProfileImage
                 name={cast.name}
                 imageUrl={cast.photo}
-                size={140}
+                size={125}
                 />
 
-            <div className="flex flex-col items-center gap-1">
-                <h1 className="text-md font-bold text-white truncate">{cast.name}</h1>
-                <div className="text-sm font-bold text-gray-400">
-                    {cast.characters.join(", ")}
-                </div>
+            <div className="flex flex-col items-center gap-0">
+                <h1 className="text-sm font-bold text-white truncate">{cast.name}</h1>
+                    <p className="overflow-hidden text-ellipsis text-gray-400 text-sm"
+                    >
+                        {cast.characters}
+                    </p>
             </div>
         </div>
     );

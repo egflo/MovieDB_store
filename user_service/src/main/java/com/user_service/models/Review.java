@@ -63,10 +63,17 @@ public class Review {
     @Setter
     private Integer dislikes;
 
+    @Getter
+    @Setter
+    //Default value is 0
+    private Integer comments;
+
+
     public Review() {
         this.date = new Date();
         this.likes = 0;
         this.dislikes = 0;
+        this.comments = 0;
     }
 
     public Review(Review review) {

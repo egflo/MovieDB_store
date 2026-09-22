@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="2 api_gateway" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="api_gateway" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.api_gateway.ApiGatewayApplication" />
+    <envs>
+
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

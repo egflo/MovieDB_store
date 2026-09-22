@@ -18,4 +18,7 @@ public interface ReviewRepository extends MongoRepository<Review, ObjectId> {
     Page<Review> findReviewByMovieId(String id, Pageable pageable);
     Page<Review> findByTitleContainingIgnoreCase(String title, Pageable pageable);
     Page<Review> findAllByMovieId(ObjectId id, Pageable pageable);
+
+    //Find id by movie object
+    Page<Review> findByMovie_MovieId(String movieId, Pageable pageable);
 }

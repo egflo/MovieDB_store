@@ -3,10 +3,10 @@
 import useSWR from "swr";
 import ProfileImage from "@/app/components/ProfileImage";
 import {useState} from "react";
-import {Movie} from "@/app/models/Movie";
-import {Page} from "@/app/models/Page";
+import {Movie} from "@/lib/models/Movie";
+import {Page} from "@/lib/models/Page";
 import PosterItem from "@/app/ui/PosterItem";
-import {CastDetails} from "@/app/models/CastDetails";
+import {CastDetails} from "@/lib/models/CastDetails";
 
 
 interface CastProps {

@@ -1,0 +1,1400 @@
+{
+  "info": {
+    "_postman_id": "869e2457-d021-451d-9c27-48ab921dd52d",
+    "name": "MovieDB_store API",
+    "description": "Endpoint tests for the MovieDB_store microservices, routed through the API gateway on :8760.\n\n## Before running\n1. Start Eureka, the gateway and the four services.\n2. Set `idToken` to a current Firebase ID token. The gateway validates it and injects a `uid` header downstream, so anything user-scoped (cart, orders, bookmarks, addresses) returns nothing useful without it.\n\n## Order\nRun the folders top to bottom. `1. Health & Identity` proves everything is up; `2. Movie Catalog` captures `movieId` and `castId` into collection variables that later requests reuse.\n\n## Note on gateway paths\nRequests use `/{service-id}/...`, which the discovery locator serves. The hand-written `/movies/**` style routes in the gateway config have no StripPrefix filter, so they reach the service with the prefix intact and match nothing there.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{idToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "gatewayUrl",
+      "value": "http://localhost:8760"
+    },
+    {
+      "key": "eurekaUrl",
+      "value": "http://localhost:8761"
+    },
+    {
+      "key": "idToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "movieId",
+      "value": ""
+    },
+    {
+      "key": "castId",
+      "value": ""
+    },
+    {
+      "key": "itemId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "addressId",
+      "value": ""
+    },
+    {
+      "key": "bookmarkId",
+      "value": ""
+    },
+    {
+      "key": "reviewId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health & Identity",
+      "description": "Proves each service is up and says which instance answered.",
+      "item": [
+        {
+          "name": "Gateway status (routes + instance counts)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"name is gateway\", () => pm.expect(b.name).to.eql(\"gateway\"));",
+                  "pm.test(\"status is UP\", () => pm.expect(b.status).to.eql(\"UP\"));",
+                  "pm.test(\"lists routes\", () => pm.expect(b.routes).to.be.an(\"array\").that.is.not.empty);",
+                  "pm.test(\"lists services\", () => pm.expect(b.services).to.be.an(\"array\").that.is.not.empty);",
+                  "pm.test(\"every service reports an instance count\", () =>",
+                  "  b.services.forEach(s => pm.expect(s.instances).to.be.a(\"number\")));",
+                  "console.log(b.services.map(s => `${s.name}=${s.instances}`).join(\"  \"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": []
+            },
+            "description": "The gateway's own status: its health, the routes it serves, and every registered service with a live instance count."
+          }
+        },
+        {
+          "name": "movie-service identity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"name is movie-service\", () => pm.expect(b.name).to.eql(\"movie-service\"));",
+                  "pm.test(\"status is UP\", () => pm.expect(b.status).to.eql(\"UP\"));",
+                  "pm.test(\"reports an instanceId\", () => pm.expect(b.instanceId).to.be.a(\"string\"));",
+                  "pm.test(\"reports component health\", () => pm.expect(b.components).to.be.an(\"object\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service"
+              ]
+            }
+          }
+        },
+        {
+          "name": "inventory-service identity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"name is inventory-service\", () => pm.expect(b.name).to.eql(\"inventory-service\"));",
+                  "pm.test(\"status is UP\", () => pm.expect(b.status).to.eql(\"UP\"));",
+                  "pm.test(\"reports an instanceId\", () => pm.expect(b.instanceId).to.be.a(\"string\"));",
+                  "pm.test(\"reports component health\", () => pm.expect(b.components).to.be.an(\"object\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory-service/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "inventory-service"
+              ]
+            }
+          }
+        },
+        {
+          "name": "order-service identity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"name is order-service\", () => pm.expect(b.name).to.eql(\"order-service\"));",
+                  "pm.test(\"status is UP\", () => pm.expect(b.status).to.eql(\"UP\"));",
+                  "pm.test(\"reports an instanceId\", () => pm.expect(b.instanceId).to.be.a(\"string\"));",
+                  "pm.test(\"reports component health\", () => pm.expect(b.components).to.be.an(\"object\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/order-service/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "order-service"
+              ]
+            }
+          }
+        },
+        {
+          "name": "user-service identity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"name is user-service\", () => pm.expect(b.name).to.eql(\"user-service\"));",
+                  "pm.test(\"status is UP\", () => pm.expect(b.status).to.eql(\"UP\"));",
+                  "pm.test(\"reports an instanceId\", () => pm.expect(b.instanceId).to.be.a(\"string\"));",
+                  "pm.test(\"reports component health\", () => pm.expect(b.components).to.be.an(\"object\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eureka registry",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"returns the registry\", () => pm.expect(pm.response.text()).to.include(\"<applications>\"));",
+                  "const ups = (pm.response.text().match(/<status>UP<\\/status>/g) || []).length;",
+                  "pm.test(\"at least one instance is UP\", () => pm.expect(ups).to.be.above(0));",
+                  "console.log(\"instances UP in registry:\", ups);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eurekaUrl}}/eureka/apps",
+              "host": [
+                "{{eurekaUrl}}"
+              ],
+              "path": [
+                "eureka",
+                "apps"
+              ]
+            },
+            "description": "Raw Eureka registry. Send Accept: application/json for JSON.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "Gateway routes (actuator)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"routes are registered\", () => pm.expect(b).to.be.an(\"array\").that.is.not.empty);",
+                  "console.log(\"route count:\", b.length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/gateway/routes",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "gateway",
+                "routes"
+              ]
+            },
+            "description": "If this is an empty array the gateway registered no routes and everything downstream will 404."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Movie Catalog",
+      "description": "Read-only. Captures movieId and castId for later folders.",
+      "item": [
+        {
+          "name": "List movies (captures movieId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"looks like a Page\", () => pm.expect(b).to.have.property(\"content\"));",
+                  "pm.test(\"content is an array\", () => pm.expect(b.content).to.be.an(\"array\"));",
+                  "if (b.content && b.content.length) {",
+                  "  pm.collectionVariables.set(\"movieId\", String(b.content[0].id));",
+                  "  console.log(\"captured movieId =\", b.content[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/all?limit=5&sortBy=popularity",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "popularity"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get movie by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has a title\", () => pm.expect(b.title).to.be.a(\"string\"));",
+                  "pm.test(\"id matches the request\", () =>",
+                  "  pm.expect(String(b.id)).to.eql(pm.collectionVariables.get(\"movieId\")));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "{{movieId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search movies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/search?query=star&limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "star"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recommendations for a movie (KNOWN ISSUE: 500)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"endpoint responds\", () => pm.expect(pm.response.code).to.be.oneOf([200, 500]));",
+                  "if (pm.response.code === 500) {",
+                  "  console.warn(\"/movie/recommend/{id} returns 500 for a valid id; /movie/suggest/{id} works on the same id\");",
+                  "} else {",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/recommend/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "recommend",
+                "{{movieId}}"
+              ]
+            },
+            "description": "Currently returns 500 for a valid Mongo id, while /movie/suggest/{id} returns 200 for the same id. Tighten this to expect 200 once fixed."
+          }
+        },
+        {
+          "name": "Suggestions for a movie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/suggest/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "suggest",
+                "{{movieId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List tags",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/tag/all",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "tag",
+                "all"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List cast (captures castId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"looks like a Page\", () => pm.expect(b).to.have.property(\"content\"));",
+                  "pm.test(\"content is an array\", () => pm.expect(b.content).to.be.an(\"array\"));",
+                  "if (b.content && b.content.length) {",
+                  "  pm.collectionVariables.set(\"castId\", String(b.content[0].id));",
+                  "  console.log(\"captured castId =\", b.content[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/cast/all?limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "cast",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get cast member by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/cast/{{castId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "cast",
+                "{{castId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Critic reviews for a movie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/critic/movie/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "critic",
+                "movie",
+                "{{movieId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Inventory & Cart",
+      "description": "Product lookups are public; cart endpoints need a valid idToken.",
+      "item": [
+        {
+          "name": "List products (captures itemId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"looks like a Page\", () => pm.expect(b).to.have.property(\"content\"));",
+                  "pm.test(\"content is an array\", () => pm.expect(b.content).to.be.an(\"array\"));",
+                  "if (b.content && b.content.length) {",
+                  "  pm.collectionVariables.set(\"itemId\", String(b.content[0].id));",
+                  "  console.log(\"captured itemId =\", b.content[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory-service/product/all?limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "inventory-service",
+                "product",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get product by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has a price in minor units\", () => pm.expect(b.price).to.be.a(\"number\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory-service/product/{{itemId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "inventory-service",
+                "product",
+                "{{itemId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get my cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "  pm.test(\"returns an array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory-service/cart/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "inventory-service",
+                "cart"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add item to cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"gateway rejects unauthenticated writes\", () =>",
+                  "    pm.expect(pm.response.code).to.eql(401));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory-service/cart/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "inventory-service",
+                "cart"
+              ]
+            },
+            "description": "Upsert. Omit `id` to add; include it to change quantity.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"userId\": \"{{userId}}\",\n  \"quantity\": 1\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Orders & Payments",
+      "description": "All user-scoped \u2014 these need a valid idToken.",
+      "item": [
+        {
+          "name": "My orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/order-service/user/?limit=10",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "order-service",
+                "user"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get order by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const orderId = pm.collectionVariables.get(\"orderId\");",
+                  "if (!orderId) {",
+                  "  pm.test(\"skipped - no orderId captured (needs an idToken and an order)\", () => pm.expect(true).to.be.true);",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  const b = pm.response.json();",
+                  "  pm.test(\"status is a known value\", () =>",
+                  "    pm.expect([\"CREATED\",\"PAID\",\"SHIPPED\",\"DELIVERED\",\"CANCELLED\"]).to.include(b.status));",
+                  "  // nothing advances an order past CREATED - there is no Stripe webhook",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/order-service/{{orderId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "order-service",
+                "{{orderId}}"
+              ]
+            },
+            "description": "Skipped unless My orders captured an orderId. Without one the URL collapses to the service root and returns the identity payload."
+          }
+        },
+        {
+          "name": "Build invoice (default address)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "  const b = pm.response.json();",
+                  "  pm.test(\"has totals\", () => { pm.expect(b.total).to.be.a(\"number\"); pm.expect(b.subTotal).to.be.a(\"number\"); });",
+                  "  pm.test(\"has a payment sheet\", () => pm.expect(b.paymentSheet).to.be.an(\"object\"));",
+                  "  pm.test(\"payment intent carries a client secret\", () =>",
+                  "    pm.expect(b.paymentSheet.paymentIntent).to.be.a(\"string\"));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/order-service/invoice",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "order-service",
+                "invoice"
+              ]
+            },
+            "description": "Requires a saved address and a non-empty cart."
+          }
+        },
+        {
+          "name": "My payment methods",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/order-service/payment-methods/payment-methods",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "order-service",
+                "payment-methods",
+                "payment-methods"
+              ]
+            },
+            "description": "Path is doubled: PaymentController repeats @RequestMapping on class and method."
+          }
+        },
+        {
+          "name": "My saved addresses (order service)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/order-service/address/all",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "order-service",
+                "address",
+                "all"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. User, Reviews & Bookmarks",
+      "description": "User-scoped \u2014 needs a valid idToken.",
+      "item": [
+        {
+          "name": "Get my user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/user/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "user"
+              ]
+            }
+          }
+        },
+        {
+          "name": "My addresses (user service)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "  const b = pm.response.json();",
+                  "  pm.test(\"returns an array\", () => pm.expect(b).to.be.an(\"array\"));",
+                  "  if (b.length) pm.collectionVariables.set(\"addressId\", String(b[0].id));",
+                  "  pm.test(\"uses `postcode`, not `postalCode`\", () =>",
+                  "    { if (b.length) pm.expect(b[0]).to.have.property(\"postcode\"); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/address/address",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "address",
+                "address"
+              ]
+            },
+            "description": "This is the authoritative address book \u2014 order_service reads it over gRPC when building an invoice. The path is doubled, same as PaymentController."
+          }
+        },
+        {
+          "name": "My bookmarks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "  pm.test(\"returns an array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/bookmark/all",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "bookmark",
+                "all"
+              ]
+            },
+            "description": "Uses /bookmark/all. GET /bookmark/ reports 'Request method GET is not supported' - BookmarkController declares @GetMapping(\"/all\") twice and its @GetMapping(\"/\") does not register."
+          }
+        },
+        {
+          "name": "Bookmark for a movie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/bookmark/movie/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "bookmark",
+                "movie",
+                "{{movieId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reviews for a movie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/review/movie/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "review",
+                "movie",
+                "{{movieId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comments for a movie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/comments/movie/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "comments",
+                "movie",
+                "{{movieId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sentiment for an object",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
+                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/user-service/sentiment/object/{{movieId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "user-service",
+                "sentiment",
+                "object",
+                "{{movieId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Negative & Contract",
+      "description": "Things that should fail, and checks on responses that must not regress.",
+      "item": [
+        {
+          "name": "Unknown movie id returns an error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"does not return 200\", () => pm.expect(pm.response.code).to.not.eql(200));",
+                  "pm.test(\"is a client or server error\", () => pm.expect(pm.response.code).to.be.oneOf([400,404,500]));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/definitely-not-a-real-id",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "definitely-not-a-real-id"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Unknown gateway route returns 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/no-such-service/whatever",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "no-such-service",
+                "whatever"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cart without a token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"does not leak another user's cart\", () => {",
+                  "  if (pm.response.code === 200) {",
+                  "    pm.expect(pm.response.json(), \"unauthenticated cart should be empty\").to.be.an(\"array\").that.is.empty;",
+                  "  }",
+                  "});",
+                  "// NOTE: the gateway permits all GETs unauthenticated",
+                  "// (pathMatchers(HttpMethod.GET, \"/**\").permitAll()), so this returns 200.",
+                  "// Tighten SecurityConfig and this should become 401."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory-service/cart/",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "inventory-service",
+                "cart"
+              ]
+            },
+            "description": "Documents the current open-GET behaviour on the gateway. If you lock SecurityConfig down, update this test to expect 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

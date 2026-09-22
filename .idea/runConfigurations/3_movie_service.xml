@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="3 movie_service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="movie_service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.movie_service.MovieServiceApplication" />
+    <envs>
+      <env name="SERVER_PORT" value="8080" />
+      <env name="GRPC_PORT" value="9090" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
