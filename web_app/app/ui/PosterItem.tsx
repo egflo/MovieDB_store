@@ -1,7 +1,8 @@
 import {Movie} from "@/lib/models/Movie";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 import {useRouter} from "next/navigation";
+import {fallbackImage, optimizedImage} from "@/lib/image";
 
 interface PosterProps {
     item: Movie;
@@ -12,6 +13,12 @@ interface PosterProps {
      *  used by PosterCarousel to expand a preview in place. */
     onSelect?: (item: Movie, element: HTMLElement) => void;
 }
+
+const DIMENSIONS = {
+    small: [200, 300],
+    medium: [300, 450],
+    large: [400, 600],
+} as const;
 
 function sizeClass(size: "small" | "medium" | "large") {
     switch (size) {
@@ -28,29 +35,14 @@ export default function PosterItem({ item, size = "medium", onSelect }: PosterPr
     const movie: Movie = item;
     const router = useRouter();
     const imageUrl = movie.poster;
-    const [isImageValid, setIsImageValid] = useState<boolean>(true);
     const sizeClassName = sizeClass(size ? size : "small");
 
-    useEffect(() => {
-        if (!imageUrl) {
-            setIsImageValid(false);
-            return;
-        }
-
-        let isMounted = true;
-        const img = new Image();
-        img.src = imageUrl;
-        img.onload = () => {
-            if (isMounted) setIsImageValid(true);
-        };
-        img.onerror = () => {
-            if (isMounted) setIsImageValid(false);
-        };
-
-        return () => {
-            isMounted = false;
-        };
-    }, [imageUrl]);
+    // Optimized image, then fallbackImage, then the placeholder. Keyed by url,
+    // so a reused component showing a different movie starts over.
+    const [failure, setFailure] = useState<{ url: string; count: number } | null>(null);
+    const failures = imageUrl && failure?.url === imageUrl ? failure.count : 0;
+    const isImageValid = !!imageUrl && failures < 2;
+    const [width, height] = DIMENSIONS[size];
 
     return (
         <div
@@ -73,11 +65,16 @@ export default function PosterItem({ item, size = "medium", onSelect }: PosterPr
             style={{ width: sizeClassName, height: sizeClassName }}
         >
             {isImageValid && imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
-                    src={imageUrl}
+                    {...(failures === 0
+                        ? optimizedImage(imageUrl, width, height)
+                        : { src: fallbackImage(imageUrl) })}
                     alt={movie.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
-                    onError={() => setIsImageValid(false)}
+                    onError={() => setFailure({ url: imageUrl, count: failures + 1 })}
                 />
             ) : (
                 <div className="flex flex-col items-center justify-center w-full h-full isolate aspect-video  bg-gray-400/20 shadow-lg ring-1 ring-black/5 rounded-lg">

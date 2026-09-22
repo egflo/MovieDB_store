@@ -221,6 +221,7 @@ export default function PosterCarousel({ title, url, size = 'small' }: PosterCar
 
             {selected && (
                 <MoviePreview
+                    key={selected.movie.id}
                     movie={selected.movie}
                     originElement={selected.element}
                     onClose={() => setSelected(null)}

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {optimizedImage} from '@/lib/image';
 import Link from 'next/link';
 import CloseIcon from '@mui/icons-material/Close';
 import { Movie } from '@/lib/models/Movie';
@@ -146,6 +147,8 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
     }, [collapse]);
 
     const backdrop = movie.background || movie.poster;
+    // The optimizer 500s on an upstream slower than 7s; show the original then.
+    const [useOriginal, setUseOriginal] = useState(false);
 
     return (
         <div className="fixed inset-0 z-50">
@@ -179,7 +182,10 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                     {backdrop && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                            src={backdrop}
+                            {...(useOriginal
+                                ? {src: backdrop}
+                                : optimizedImage(backdrop, 1200, 675, "(max-width: 768px) 100vw, 768px"))}
+                            onError={() => setUseOriginal(true)}
                             alt=""
                             aria-hidden="true"
                             className="h-56 w-full object-cover"

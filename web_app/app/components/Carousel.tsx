@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import {optimizedImage} from '@/lib/image';
 import Link from 'next/link';
 import useSWR from "swr";
 import {Movie} from "@/lib/models/Movie";
@@ -42,6 +43,8 @@ function Item({item, length, isActive}: {item: Movie; length: number; isActive: 
     // pulled all five backgrounds through the image proxy and decoded them on
     // mount, for a gradient four of them were not showing.
     const {palette} = usePalette(isActive ? item.background : "");
+    // The optimizer 500s on an upstream slower than 7s; show the original then.
+    const [useOriginal, setUseOriginal] = useState(false);
 
     const overlay = (() => {
         if (!palette) return "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.75))";
@@ -66,7 +69,10 @@ function Item({item, length, isActive}: {item: Movie; length: number; isActive: 
         >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-                src={item.background}
+                {...(useOriginal
+                    ? {src: item.background}
+                    : optimizedImage(item.background, 1920, 1080, "100vw"))}
+                onError={() => setUseOriginal(true)}
                 alt=""
                 aria-hidden="true"
                 className="h-full w-full object-cover"

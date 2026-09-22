@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
+import { fallbackImage, optimizedImage } from "@/lib/image";
 
 interface PosterImageProps {
     name: string;
@@ -16,28 +17,11 @@ const ProfileImage: React.FC<PosterImageProps> = ({
                                                        height = 64,
                                                        className = '',
                                                    }) => {
-    const [isImageValid, setIsImageValid] = useState<boolean>(true);
-
-    useEffect(() => {
-        if (!imageUrl) {
-            setIsImageValid(false);
-            return;
-        }
-
-        let isMounted = true;
-        const img = new Image();
-        img.src = imageUrl;
-        img.onload = () => {
-            if (isMounted) setIsImageValid(true);
-        };
-        img.onerror = () => {
-            if (isMounted) setIsImageValid(false);
-        };
-
-        return () => {
-            isMounted = false;
-        };
-    }, [imageUrl]);
+    // Optimized image, then fallbackImage, then the placeholder. Keyed by url,
+    // so a reused component showing a different movie starts over.
+    const [failure, setFailure] = useState<{ url: string; count: number } | null>(null);
+    const failures = imageUrl && failure?.url === imageUrl ? failure.count : 0;
+    const isImageValid = !!imageUrl && failures < 2;
 
     const sizeClass = `w-[${width}px] h-[${height}px] min-w-[${width}px] min-h-[${height}px] max-w-[${width}px] max-h-[${height}px]`;
     return (
@@ -46,11 +30,15 @@ const ProfileImage: React.FC<PosterImageProps> = ({
             style={{ width: width, height: height }}
         >
             {isImageValid && imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
-                    src={imageUrl}
+                    {...(failures === 0
+                        ? optimizedImage(imageUrl, width, height)
+                        : { src: fallbackImage(imageUrl) })}
                     alt={name}
+                    decoding="async"
                     className="w-full h-full object-cover rounded-lg"
-                    onError={() => setIsImageValid(false)}
+                    onError={() => setFailure({ url: imageUrl, count: failures + 1 })}
                 />
             ) : (
                 <div className={`w-full h-full flex flex-col items-center justify-center bg-gray-800  rounded-lg text-white font-bold `}>
