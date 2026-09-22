@@ -174,7 +174,7 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                         type="button"
                         onClick={collapse}
                         aria-label="Close preview"
-                        className="absolute right-2 top-2 z-10 cursor-pointer rounded-full bg-black/60 p-1 hover:bg-black/80"
+                        className="absolute right-2 top-2 z-10 cursor-pointer rounded-full border border-white/15 bg-black/35 p-1 backdrop-blur-md hover:bg-black/55"
                     >
                         <CloseIcon fontSize="small" />
                     </button>
@@ -188,36 +188,53 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                             onError={() => setUseOriginal(true)}
                             alt=""
                             aria-hidden="true"
-                            className="h-56 w-full object-cover"
+                            // Fills the whole panel so the info area below has
+                            // something to blur; the spacer keeps the visible
+                            // band at its old height.
+                            className="absolute inset-0 h-full w-full object-cover"
                         />
                     )}
+                    <div className="h-56" aria-hidden="true" />
 
-                    <div className="flex flex-col gap-3 p-5">
-                        <div className="flex flex-row items-baseline gap-3">
-                            <h2 className="text-2xl font-bold">{movie.title}</h2>
-                            {movie.year != null && (
-                                <span className="text-sm text-gray-400">{movie.year}</span>
+                    <div className="relative p-5">
+                        {/* Frosted glass: a dark translucent tint for text
+                            contrast, blurred and slightly saturated so the
+                            backdrop's colour shows through. It starts 4rem up
+                            into the image and a mask fades it in over that
+                            distance, so there's no visible edge where the
+                            image ends and the glass begins. */}
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-x-0 -top-16 bottom-0 bg-neutral-950/45 backdrop-blur-2xl backdrop-saturate-150 [mask-image:linear-gradient(to_bottom,transparent,black_4rem)]"
+                        />
+
+                        <div className="relative flex flex-col gap-3">
+                            <div className="flex flex-row items-baseline gap-3">
+                                <h2 className="text-2xl font-bold">{movie.title}</h2>
+                                {movie.year != null && (
+                                    <span className="text-sm text-gray-400">{movie.year}</span>
+                                )}
+                            </div>
+
+                            {movie.plot && (
+                                <p className="line-clamp-4 text-sm text-gray-200">{movie.plot}</p>
                             )}
-                        </div>
 
-                        {movie.plot && (
-                            <p className="line-clamp-4 text-sm text-gray-200">{movie.plot}</p>
-                        )}
-
-                        <div className="flex flex-row gap-2 pt-1">
-                            <Link
-                                href={`/movie/${movie.id}`}
-                                className="rounded bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-800"
-                            >
-                                More Info
-                            </Link>
-                            <button
-                                type="button"
-                                onClick={collapse}
-                                className="cursor-pointer rounded bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
-                            >
-                                Close
-                            </button>
+                            <div className="flex flex-row gap-2 pt-1">
+                                <Link
+                                    href={`/movie/${movie.id}`}
+                                    className="rounded bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-800"
+                                >
+                                    More Info
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={collapse}
+                                    className="cursor-pointer rounded border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
+                                >
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

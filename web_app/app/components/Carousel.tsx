@@ -80,7 +80,8 @@ function Item({item, length, isActive}: {item: Movie; length: number; isActive: 
 
             <div className="absolute inset-0" style={{background: overlay}} />
 
-            <div className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-2xl bg-gray-900/70 p-4 text-white shadow-lg ring-1 ring-black/5">
+            {/* Frosted glass, matching MoviePreview's info area. */}
+            <div className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-2xl border-t border-white/15 bg-neutral-950/45 p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150">
                 <div className="flex flex-row items-center gap-2">
                     <h2 className="text-2xl font-bold">{item.title}</h2>
                     <span className="text-sm text-gray-300">{item.year}</span>
