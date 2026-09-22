@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { clientConfig, serverConfig } from "@/lib/firebase/config";
 import Link from "next/link";
 import HomePage from "@/app/HomePage";
-import Navbar from "@/app/navigation";
 import {useAuth} from "@/lib/firebase/AuthContext";
 
 

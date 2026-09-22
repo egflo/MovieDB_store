@@ -157,10 +157,13 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const SEARCH_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/search`;
 
 const createQuery = (query: string, page: number, sort: string, limit: number, filters: any) => {
-   let url =  `${SEARCH_URL}?query=${query}&page=${page}&sort=${sort}&limit=${limit}`;
-   if (!query) {
-       url = `${SEARCH_URL}?page=${page}&sort=${sort}&limit=${limit}`;
-    }
+   // `page` is 1-based in the UI; the API (Spring Data) is 0-based. Sending it
+   // unconverted skipped the first page, so a search with 10 or fewer matches
+   // showed nothing.
+   const params = `page=${page - 1}&sort=${sort}&limit=${limit}`;
+   let url = query
+       ? `${SEARCH_URL}?query=${encodeURIComponent(query)}&${params}`
+       : `${SEARCH_URL}?${params}`;
     const selectedGenres = filters.genres.filter((genre: any) => genre.selected).map((genre: any) => genre.label);
     const selectedTags = filters.tags.filter((tag: any) => tag.selected).map((tag: any) => tag.key);
 
@@ -312,6 +315,12 @@ export default function Search() {
     console.log("Tags Param: ", tags_param);
 
     const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+    // A new search (e.g. from the nav bar) starts again at page 1.
+    const [pageQuery, setPageQuery] = useState(query_param);
+    if (pageQuery !== query_param) {
+        setPageQuery(query_param);
+        setPage(1);
+    }
     const [limit, setLimit] = useState(Number(searchParams.get("limit")) || 10);
     const [sort, setSort] = useState(searchParams.get("sort") || "relevance");
     const [isExpanded, setIsExpanded] = useState(true);

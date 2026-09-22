@@ -8,6 +8,8 @@ import {toUser} from "@/lib/firebase/UserInfo";
 import {AuthProvider} from "@/lib/firebase/AuthProvider";
 import {CartProvider} from "@/lib/context/CartContext";
 import {BookmarkProvider} from "@/lib/context/BookmarkContext";
+import {Suspense} from "react";
+import NavBar from "@/app/components/NavBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,7 +48,13 @@ export default async function RootLayout({
         >
             <AuthProvider user={user}>
                 <CartProvider>
-                    <BookmarkProvider>{children}</BookmarkProvider>
+                    <BookmarkProvider>
+                        {/* NavBar reads search params, which needs a Suspense boundary. */}
+                        <Suspense fallback={null}>
+                            <NavBar />
+                        </Suspense>
+                        {children}
+                    </BookmarkProvider>
                 </CartProvider>
             </AuthProvider>
         </body>
