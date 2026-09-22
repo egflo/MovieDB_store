@@ -21,23 +21,40 @@ const OPTIMIZED_HOSTS = new Set([
  * error handling. Anything that isn't an http(s) URL on a known host (the data
  * holds "N/A" for missing posters) is passed through unchanged.
  */
-export function optimizedImage(url: string, width: number, height: number, sizes?: string) {
+/** The URL to hand the optimizer, or null if it can't optimize this one. */
+function optimizableUrl(url: string): string | null {
     let parsed: URL;
     try {
         parsed = new URL(url);
     } catch {
-        return { src: url };
+        return null;
     }
     if (!OPTIMIZED_HOSTS.has(parsed.hostname) || !/^https?:$/.test(parsed.protocol)) {
-        return { src: url };
+        return null;
     }
 
     // Most fanart.tv URLs in the data are http://, which 301s to https://.
     // Asking for https:// directly saves the optimizer a round trip.
     if (parsed.hostname === 'assets.fanart.tv') parsed.protocol = 'https:';
+    return parsed.toString();
+}
 
-    const { props } = getImageProps({ src: parsed.toString(), alt: '', width, height, sizes });
+export function optimizedImage(url: string, width: number, height: number, sizes?: string) {
+    const src = optimizableUrl(url);
+    if (!src) return { src: url };
+
+    const { props } = getImageProps({ src, alt: '', width, height, sizes });
     return { src: props.src, srcSet: props.srcSet, sizes: props.sizes };
+}
+
+/**
+ * A single optimizer URL at a fixed width, for code that reads pixels rather
+ * than displaying the image. `width` must be one of Next's configured image
+ * sizes (e.g. 256). Same-origin, so a canvas reading it isn't tainted.
+ */
+export function optimizerUrl(url: string, width: number): string | null {
+    const src = optimizableUrl(url);
+    return src ? `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75` : null;
 }
 
 /**

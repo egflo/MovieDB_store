@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Palette } from 'auto-palette';
+import { optimizerUrl } from '@/lib/image';
 
 const proxy = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/proxy-image?url=`;
 
@@ -17,9 +18,11 @@ const proxy = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVI
  */
 const MAX_EDGE = 240;
 
+export type RGB = { r: number; g: number; b: number };
+
 /** Draw the image into a small canvas and return it for extraction. */
-function downscale(img: HTMLImageElement): HTMLCanvasElement | null {
-    const { naturalWidth: w, naturalHeight: h } = img;
+function downscale(img: ImageBitmap): HTMLCanvasElement | null {
+    const { width: w, height: h } = img;
     if (!w || !h) return null;
 
     const scale = Math.min(1, MAX_EDGE / Math.max(w, h));
@@ -33,66 +36,92 @@ function downscale(img: HTMLImageElement): HTMLCanvasElement | null {
     return canvas;
 }
 
-export const usePalette = (imageUrl: string) => {
-    const [palette, setPalette] = useState<Palette | null>(null);
-    const [error, setError] = useState<string | null>(null);
+/**
+ * Fetch, decode and downscale. Decoding the fetched blob directly keeps the
+ * canvas untainted (a cross-origin <img> would taint it). createImageBitmap
+ * rather than <img>.decode(): decode() never settled in a hidden document,
+ * so a page loaded in a background tab got no colour.
+ */
+async function loadDownscaled(src: string): Promise<HTMLCanvasElement | null> {
+    const response = await fetch(src);
+    if (!response.ok) throw new Error(`${response.status} for ${src}`);
+    const bitmap = await createImageBitmap(await response.blob());
+    try {
+        return downscale(bitmap);
+    } finally {
+        bitmap.close();
+    }
+}
+
+async function extract(imageUrl: string): Promise<RGB | null> {
+    // A 256px copy from the Next image optimizer: ~10 KB and cached, against
+    // 0.8–1.5 MB for the original through the proxy. Only 240px is used anyway.
+    // The proxy stays as the fallback for hosts the optimizer doesn't cover and
+    // for a cold original that outlasts the optimizer's 7s upstream limit.
+    const viaProxy = `${proxy}${encodeURIComponent(imageUrl)}`;
+    const thumbnail = optimizerUrl(imageUrl, 256);
+    let source: HTMLCanvasElement | null;
+    try {
+        source = await loadDownscaled(thumbnail ?? viaProxy);
+    } catch (e) {
+        if (!thumbnail) throw e;
+        source = await loadDownscaled(viaProxy);
+    }
+    if (!source) return null;
+
+    // auto-palette exposes swatches via findSwatches(), not a `colors` array.
+    const [swatch] = Palette.extract(source).findSwatches(1);
+    return swatch ? swatch.color.toRGB() : null;
+}
+
+// One extraction per image for the life of the page. `pending` dedupes calls
+// made while one is in flight; `resolved` lets a revisit render the colour on
+// its first frame instead of flashing the fallback while a promise settles.
+const pending = new Map<string, Promise<RGB | null>>();
+const resolved = new Map<string, RGB | null>();
+
+export function dominantColor(imageUrl: string): Promise<RGB | null> {
+    let promise = pending.get(imageUrl);
+    if (!promise) {
+        promise = extract(imageUrl)
+            .catch((e) => {
+                console.error('Palette extraction failed', imageUrl, e);
+                return null;
+            })
+            .then((color) => {
+                resolved.set(imageUrl, color);
+                return color;
+            });
+        pending.set(imageUrl, promise);
+    }
+    return promise;
+}
+
+/**
+ * The image's dominant colour, or null until it's known (or if extraction
+ * fails). Pass enabled=false to hold off starting the work; a colour that's
+ * already known is returned either way, so a slide keeps its colour once it has
+ * one.
+ */
+export function useDominantColor(imageUrl: string, enabled = true): RGB | null {
+    const [color, setColor] = useState<RGB | null>(() => resolved.get(imageUrl) ?? null);
 
     useEffect(() => {
-        if (!imageUrl) {
-            setPalette(null);
+        if (!imageUrl) return;
+        if (resolved.has(imageUrl)) {
+            setColor(resolved.get(imageUrl) ?? null);
             return;
         }
+        if (!enabled) return;
 
         let cancelled = false;
-        let objectUrl: string | null = null;
-        const img = new window.Image();
-
-        const run = async () => {
-            try {
-                const response = await fetch(`${proxy}${encodeURIComponent(imageUrl)}`);
-                if (!response.ok) throw new Error(`proxy returned ${response.status}`);
-
-                const blob = await response.blob();
-                if (cancelled) return;
-
-                objectUrl = URL.createObjectURL(blob);
-
-                img.onload = () => {
-                    if (cancelled) return;
-                    try {
-                        const source = downscale(img);
-                        if (!source) throw new Error('image had no dimensions');
-                        setPalette(Palette.extract(source));
-                    } catch (e) {
-                        setError('Failed to extract palette');
-                        console.error(e);
-                    }
-                };
-                img.onerror = () => {
-                    // The proxy only returns 200 for an image/* body, so this
-                    // means the bytes themselves were corrupt or unsupported.
-                    if (!cancelled) setError('Image did not decode');
-                };
-                img.src = objectUrl;
-            } catch (err) {
-                if (!cancelled) {
-                    setError('Failed to extract palette');
-                    console.error(err);
-                }
-            }
-        };
-
-        run();
-
+        dominantColor(imageUrl).then((c) => {
+            if (!cancelled) setColor(c);
+        });
         return () => {
-            // Without this a slide change leaves the previous extraction to land
-            // on an unmounted component, and every blob url leaks.
             cancelled = true;
-            img.onload = null;
-            img.onerror = null;
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
         };
-    }, [imageUrl]);
+    }, [imageUrl, enabled]);
 
-    return { palette, error };
-};
+    return color;
+}

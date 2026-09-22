@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useSWR from "swr";
 import {Movie} from "@/lib/models/Movie";
 import {Page} from "@/lib/models/Page";
-import {usePalette} from "@/app/components/ColorExtract";
+import {useDominantColor} from "@/app/components/ColorExtract";
 
 const SLIDE_MS = 5000;
 
@@ -38,22 +38,15 @@ function usePrefersReducedMotion(): boolean {
     return reduced;
 }
 
-function Item({item, length, isActive}: {item: Movie; length: number; isActive: boolean}) {
-    // Only the visible slide extracts a palette. Running this for every slide
-    // pulled all five backgrounds through the image proxy and decoded them on
-    // mount, for a gradient four of them were not showing.
-    const {palette} = usePalette(isActive ? item.background : "");
+const FALLBACK_OVERLAY = "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.75))";
+
+function Item({item, length, isActive, isNext}: {item: Movie; length: number; isActive: boolean; isNext: boolean}) {
+    // Extraction starts for the visible slide and the one after it, so the
+    // colour is ready before a slide rotates in. Once known it's cached, so a
+    // slide keeps its colour while sliding out and when it comes round again.
+    const color = useDominantColor(item.background, isActive || isNext);
     // The optimizer 500s on an upstream slower than 7s; show the original then.
     const [useOriginal, setUseOriginal] = useState(false);
-
-    const overlay = (() => {
-        if (!palette) return "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.75))";
-        // auto-palette exposes swatches via findSwatches(), not a `colors` array.
-        const [swatch] = palette.findSwatches(1);
-        if (!swatch) return "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.75))";
-        const {r, g, b} = swatch.color.toRGB();
-        return `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, 0.7), rgba(0, 0, 0, 0.7))`;
-    })();
 
     return (
         <div
@@ -78,22 +71,41 @@ function Item({item, length, isActive}: {item: Movie; length: number; isActive: 
                 className="h-full w-full object-cover"
             />
 
-            <div className="absolute inset-0" style={{background: overlay}} />
+            {/* Two layers crossfading, because a gradient background can't
+                itself be transitioned. Stacking them would darken the image,
+                so the fallback fades out as the colour fades in. */}
+            <div
+                className={`absolute inset-0 transition-opacity duration-500 ${color ? "opacity-0" : "opacity-100"}`}
+                style={{background: FALLBACK_OVERLAY}}
+            />
+            <div
+                className={`absolute inset-0 transition-opacity duration-500 ${color ? "opacity-100" : "opacity-0"}`}
+                style={color ? {background: `linear-gradient(to bottom, rgba(${color.r}, ${color.g}, ${color.b}, 0.7), rgba(0, 0, 0, 0.7))`} : undefined}
+            />
 
-            {/* Frosted glass, matching MoviePreview's info area. */}
-            <div className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-2xl border-t border-white/15 bg-neutral-950/45 p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150">
-                <div className="flex flex-row items-center gap-2">
-                    <h2 className="text-2xl font-bold">{item.title}</h2>
-                    <span className="text-sm text-gray-300">{item.year}</span>
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                {/* Frosted glass, matching MoviePreview's info area: starts
+                    4rem above the caption and fades in through a mask, so
+                    there's no edge where the image ends and the glass begins. */}
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 -top-16 bottom-0 bg-neutral-950/45 backdrop-blur-2xl backdrop-saturate-150 [mask-image:linear-gradient(to_bottom,transparent,black_4rem)]"
+                />
+
+                <div className="relative">
+                    <div className="flex flex-row items-center gap-2">
+                        <h2 className="text-2xl font-bold">{item.title}</h2>
+                        <span className="text-sm text-gray-300">{item.year}</span>
+                    </div>
+                    <p className="line-clamp-3 text-sm">{item.plot}</p>
+                    <Link
+                        href={`/movie/${item.id}`}
+                        className="mt-2 inline-block cursor-pointer rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-800"
+                    >
+                        More Info
+                        <span className="sr-only"> about {item.title}</span>
+                    </Link>
                 </div>
-                <p className="line-clamp-3 text-sm">{item.plot}</p>
-                <Link
-                    href={`/movie/${item.id}`}
-                    className="mt-2 inline-block cursor-pointer rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-800"
-                >
-                    More Info
-                    <span className="sr-only"> about {item.title}</span>
-                </Link>
             </div>
         </div>
     );
@@ -173,6 +185,7 @@ export default function Carousel() {
                         item={item}
                         length={count}
                         isActive={idx === currentIndex}
+                        isNext={idx === (currentIndex + 1) % count}
                     />
                 ))}
             </div>
@@ -186,7 +199,7 @@ export default function Carousel() {
                         aria-label={`Show slide ${index + 1} of ${count}: ${item.title}`}
                         aria-current={index === currentIndex}
                         className={`h-3 w-3 cursor-pointer rounded-full transition-colors ${
-                            index === currentIndex ? "bg-blue-500" : "bg-gray-300 hover:bg-gray-100"
+                            index === currentIndex ? "bg-white" : "bg-white/40 hover:bg-white/70"
                         }`}
                     />
                 ))}
