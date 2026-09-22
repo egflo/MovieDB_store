@@ -149,6 +149,22 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
     const backdrop = movie.background || movie.poster;
     // The optimizer 500s on an upstream slower than 7s; show the original then.
     const [useOriginal, setUseOriginal] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+    const [failed, setFailed] = useState(false);
+    const imageRef = useRef<HTMLImageElement>(null);
+
+    // Placeholder while the backdrop loads: the poster from the card that was
+    // clicked. The browser already has it, so it shows immediately.
+    const [placeholder] = useState(
+        () => originElement?.querySelector('img')?.currentSrc || null,
+    );
+
+    // A backdrop already in the browser cache can finish before React attaches
+    // onLoad, which would leave the placeholder up for good.
+    useLayoutEffect(() => {
+        const img = imageRef.current;
+        if (img?.complete && img.naturalWidth > 0) setLoaded(true);
+    }, [useOriginal]);
 
     return (
         <div className="fixed inset-0 z-50">
@@ -179,19 +195,42 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                         <CloseIcon fontSize="small" />
                     </button>
 
-                    {backdrop && (
+                    {/* Stays mounted under the backdrop so the backdrop fades
+                        in over it rather than over the bare panel. Pulses only
+                        while loading; if the backdrop fails it stays as the
+                        panel's background. */}
+                    <div
+                        aria-hidden="true"
+                        className={`absolute inset-0 overflow-hidden bg-neutral-800 ${loaded || failed ? '' : 'motion-safe:animate-pulse'}`}
+                    >
+                        {placeholder && (
+                            // Blurred and scaled up so the blur has no soft
+                            // edges; dimmed so it reads as loading.
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                                src={placeholder}
+                                alt=""
+                                className="h-full w-full scale-125 object-cover opacity-60 blur-2xl"
+                            />
+                        )}
+                    </div>
+
+                    {backdrop && !failed && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
+                            ref={imageRef}
                             {...(useOriginal
                                 ? {src: backdrop}
                                 : optimizedImage(backdrop, 1200, 675, "(max-width: 768px) 100vw, 768px"))}
-                            onError={() => setUseOriginal(true)}
+                            onLoad={() => setLoaded(true)}
+                            onError={() => (useOriginal ? setFailed(true) : setUseOriginal(true))}
                             alt=""
                             aria-hidden="true"
                             // Fills the whole panel so the info area below has
                             // something to blur; the spacer keeps the visible
-                            // band at its old height.
-                            className="absolute inset-0 h-full w-full object-cover"
+                            // band at its old height. Fades in over the
+                            // placeholder once loaded.
+                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
                         />
                     )}
                     <div className="h-56" aria-hidden="true" />
