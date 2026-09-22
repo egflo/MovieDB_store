@@ -1,5 +1,6 @@
 import { Person } from '@mui/icons-material';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { optimizedImage } from '@/lib/image';
 
 interface ProfileImageProps {
     name: string;
@@ -21,28 +22,10 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
                                                        size = 64,
                                                        className = '',
                                                    }) => {
-    const [isImageValid, setIsImageValid] = useState<boolean>(true);
-
-    useEffect(() => {
-        if (!imageUrl) {
-            setIsImageValid(false);
-            return;
-        }
-
-        let isMounted = true;
-        const img = new Image();
-        img.src = imageUrl;
-        img.onload = () => {
-            if (isMounted) setIsImageValid(true);
-        };
-        img.onerror = () => {
-            if (isMounted) setIsImageValid(false);
-        };
-
-        return () => {
-            isMounted = false;
-        };
-    }, [imageUrl]);
+    // Keyed by url, so a new imageUrl gets tried again after a failure. This
+    // replaces a new Image() preload that downloaded every photo twice.
+    const [failedUrl, setFailedUrl] = useState<string | null>(null);
+    const isImageValid = !!imageUrl && failedUrl !== imageUrl;
 
     const sizeClass = `w-[${size}px] h-[${size}px]`;
     //const initials = getInitials(name);
@@ -55,11 +38,13 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
             style={{ width: size, height: size }}
         >
             {isImageValid && imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
-                    src={imageUrl}
+                    {...optimizedImage(imageUrl, size, size)}
                     alt={name}
+                    decoding="async"
                     className="w-full h-full object-cover"
-                    onError={() => setIsImageValid(false)}
+                    onError={() => setFailedUrl(imageUrl)}
                 />
             ) : (
                 <p className={`flex items-center justify-center`}

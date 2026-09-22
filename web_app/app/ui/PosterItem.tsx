@@ -77,10 +77,16 @@ export default function PosterItem({ item, size = "medium", onSelect }: PosterPr
                     onError={() => setFailure({ url: imageUrl, count: failures + 1 })}
                 />
             ) : (
-                <div className="flex flex-col items-center justify-center w-full h-full isolate aspect-video  bg-gray-400/20 shadow-lg ring-1 ring-black/5 rounded-lg">
-                    <LocalMoviesIcon fontSize="medium"/>
-                    <p className="text-sm text-white font-bold text-center m-2">
-                        {movie.title}</p>
+                // A quiet card rather than a bright grey block, so a missing
+                // poster doesn't stand out in a row of real ones.
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-neutral-800 to-neutral-900 p-4 ring-1 ring-inset ring-white/5">
+                    <LocalMoviesIcon fontSize="small" className="text-white/25" aria-hidden="true" />
+                    <p className="line-clamp-3 text-center text-sm font-medium text-white/70">
+                        {movie.title}
+                    </p>
+                    {movie.year != null && (
+                        <p className="text-xs font-normal text-white/40">{movie.year}</p>
+                    )}
                 </div>
             )}
         </div>
