@@ -19,6 +19,8 @@ import SubSection from "@/app/ui/SubSection";
 import {useAuth} from "@/lib/firebase/AuthContext";
 import React from "react";
 import {useRouter} from "next/navigation";
+import ScrollZoomBackdrop from "@/app/components/ScrollZoomBackdrop";
+import {optimizedImage} from "@/lib/image";
 
 
 const CRITIC_REVIEW_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/critic/movie/`;
@@ -26,7 +28,65 @@ const USER_REVIEW_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.en
 const SUGGESTION_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/suggest/`;
 
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+// res.json() alone treats an error body as data. The API answers an unknown
+// movie id with a 500, and rendering that error object as a movie crashed the
+// ratings section ("reading 'imdb'").
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${res.status} for ${url}`);
+    return res.json();
+};
+
+/** "David Franzoni, David Franzoni" → ["David Franzoni"]; the data repeats names. */
+function uniqueNames(list: string): string[] {
+    return [...new Set(list.split(',').map((name) => name.trim()).filter(Boolean))];
+}
+
+/** Placeholder in the shape of the page while the movie loads. */
+function MovieSkeleton() {
+    return (
+        <div role="status" aria-label="Loading movie" className="flex w-full flex-col gap-8 p-4 pt-8 motion-safe:animate-pulse">
+            <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
+                <div className="h-[310px] w-[220px] shrink-0 rounded-lg bg-white/10" />
+                <div className="flex w-full max-w-xl flex-col items-center gap-3 md:items-start">
+                    <div className="h-[60px] w-[200px] rounded bg-white/10" />
+                    <div className="h-4 w-40 rounded bg-white/5" />
+                    <div className="h-10 w-72 max-w-full rounded bg-white/5" />
+                    <div className="flex w-full flex-col gap-2">
+                        <div className="h-4 w-full rounded bg-white/5" />
+                        <div className="h-4 w-5/6 rounded bg-white/5" />
+                    </div>
+                    <div className="flex gap-2">
+                        {Array.from({length: 4}, (_, i) => (
+                            <div key={i} className="h-10 w-10 rounded-full bg-white/10" />
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+                <div className="h-6 w-32 rounded bg-white/10" />
+                <div className="flex gap-4 overflow-hidden">
+                    {Array.from({length: 8}, (_, i) => (
+                        <div key={i} className="flex shrink-0 flex-col items-center gap-2">
+                            <div className="h-[100px] w-[100px] rounded-full bg-white/10" />
+                            <div className="h-3 w-20 rounded bg-white/5" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+                <div className="h-6 w-36 rounded bg-white/10" />
+                <div className="flex gap-4 overflow-hidden">
+                    {Array.from({length: 4}, (_, i) => (
+                        <div key={i} className="h-[200px] w-[300px] shrink-0 rounded-xl bg-white/5" />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function Movie({id}: { id: string }) {
 
@@ -40,26 +100,39 @@ export default function Movie({id}: { id: string }) {
         return url && url.startsWith("http") && (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg"));
     }
 
-    if (error) return <div>Failed to load</div>
-    if (!data) return <div>Loading...</div>
+    // The API has no "not found" response (an unknown id is a 500), so any
+    // failure reads as not found, and so does a null body.
+    if (error || data === null) {
+        return (
+            <main className="mx-auto max-w-5xl px-4 py-16 text-center text-white/60">
+                We couldn&apos;t find this movie.
+            </main>
+        );
+    }
+    if (!data) return <MovieSkeleton />
+
+    // The background, else the poster; neither when the data has "N/A".
+    const backdropUrl = testURL(data.background)
+        ? data.background
+        : (typeof data.poster === 'string' && data.poster.startsWith('http') ? data.poster : null);
 
     return (
-        <div className={"flex flex-col  w-full   "}>
-            <div className={'w-screen h-[70vh] opacity-45 blur relative'}>
-                <div
-                    style={
-                        {
-                            width: '100%',
-                            height: '100%',
-                            backgroundSize: 'cover',
-                            backgroundImage: `url(${testURL(data.background) ? data.background : data.poster})`,
-                        }
-                    }>
-                </div>
-                <div className="absolute bottom-0 w-full h-full  bg-gradient-to-t from-black to-transparent" />
-            </div>
+        // isolate keeps the backdrop's -z-10 inside this page.
+        <div className={"relative isolate flex flex-col w-full"}>
+            {/* The movie's background, fixed behind the whole page and zooming
+                in as it scrolls. Lightly blurred so it stays recognisable. */}
+            {backdropUrl && (
+                <ScrollZoomBackdrop
+                    {...optimizedImage(backdropUrl, 1920, 1080, "100vw")}
+                    imageClassName="opacity-45 blur-sm"
+                    zoomFrom={1.05}
+                    zoomTo={1.25}
+                />
+            )}
 
-            <div className={'absolute top-0 left-0 w-full h-full flex flex-col align-top  p-4 gap-4'}>
+            {/* In normal flow rather than absolutely positioned over a fixed-
+                height image, so it starts below the sticky nav bar. */}
+            <div className={'flex flex-col w-full p-4 pt-8 gap-4'}>
 
                 <div className="flex flex-col items-center md:flex-row gap-4 justify-center w-full h-full">
 
@@ -69,7 +142,10 @@ export default function Movie({id}: { id: string }) {
 
                         {data.logo &&
                             <Box className={"flex justify-center items-center p-0 m-0  rounded-lg"}>
-                                <img src={data.logo} alt={data.title} className={"w-[200px] h-[75px] object-contain"} />
+                                {/* Through the optimizer: fanart.tv logos are full-size
+                                    PNGs, often http:// URLs that redirect. */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img {...optimizedImage(data.logo, 200, 75)} alt={data.title} className={"w-[200px] h-[75px] object-contain"} />
                             </Box>
                         }
                         {!data.logo &&
@@ -97,9 +173,9 @@ export default function Movie({id}: { id: string }) {
                             </div>
                         </div>
 
-                        <div className="text-sm text-white font-semibold shadow-2xl">
+                        <p className="max-w-prose text-sm leading-relaxed text-white/90">
                             {data.plot}
-                        </div>
+                        </p>
 
                         {data.genres &&
                             <div className="flex flex-row gap-2 ">
@@ -163,8 +239,8 @@ export default function Movie({id}: { id: string }) {
                                 {data.writer &&
                                     <div className={"flex flex-col gap-1"}>
                                         <div className={"flex flex-col gap-1 max-w-[200px] w-[200px] "}>
-                                            {data.writer.split(",").map((writer: string, index: number) => (
-                                                <p key={index} className="text-sm text-gray-300 font-semibold ">
+                                            {uniqueNames(data.writer).map((writer: string) => (
+                                                <p key={writer} className="text-sm text-gray-300 font-semibold ">
                                                     {writer}
                                                 </p>
                                             ))}
@@ -220,14 +296,6 @@ export default function Movie({id}: { id: string }) {
                                     </div>
                                 }
 
-                                {data.release_date &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.release_date}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Release date</span>
-                                    </div>
-                                }
 
                                 {data.runtime &&
                                     <div className={"flex flex-col gap-1"}>

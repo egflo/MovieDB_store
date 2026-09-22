@@ -17,12 +17,13 @@ export default function CriticReviewItem({ item }: CriticReviewProps) {
     }
 
     return (
-        <div className="w-[300px] h-[200px]  isolate aspect-video  rounded-xl bg-gray-400/20 shadow-lg ring-1 ring-black/5 ">
+        // overflow-hidden so nothing can spill onto the next card in the row.
+        <div className="w-[300px] h-[200px]  isolate aspect-video  overflow-hidden rounded-xl bg-gray-400/20 shadow-lg ring-1 ring-black/5 ">
 
             <div className={'flex flex-col   p-4 '}>
 
                 <div className="flex flex-row gap-2">
-                    <div className={'flex flex-col gap-0 items-center'}>
+                    <div className={'flex shrink-0 flex-col gap-0 items-center'}>
                         <img className="content__rating" style={{height: 25}}
                              src={"/rotten_tomatoes/" + review.review_state + ".png"} alt={"tomato"}></img>
                         <p className={'mt-1 text-sm font-semibold'}>
@@ -30,16 +31,19 @@ export default function CriticReviewItem({ item }: CriticReviewProps) {
                         </p>
                     </div>
 
-                    <div className={'flex flex-col gap-0'}>
-                        <p className={'text-sm font-semibold'}>
+                    {/* Takes the leftover width and truncates, so a long
+                        publication name can't push the Top Critic badge past
+                        the card's edge. */}
+                    <div className={'flex min-w-0 flex-1 flex-col gap-0'}>
+                        <p className={'truncate text-sm font-semibold'} title={review.critic_name}>
                             {review.critic_name}
                         </p>
-                        <p className={'text-sm text-gray-500'}>
+                        <p className={'truncate text-sm text-gray-500'} title={review.publication_name}>
                             {review.publication_name}
                         </p>
                     </div>
 
-                    <div className={'flex flex-col items-center gap-0'}>
+                    <div className={'flex shrink-0 flex-col items-center gap-0'}>
                         {review.isTopCritic &&
                             <div className={'flex gap-0 items-center'}>
                                 <StarIcon fontSize={'small'} sx={{color: 'red'}}/>
