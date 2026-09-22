@@ -69,8 +69,8 @@ export const usePalette = (imageUrl: string) => {
                     }
                 };
                 img.onerror = () => {
-                    // The proxy answers 200 with a 162-byte body for http:// image
-                    // urls, because it will not follow the redirect to https.
+                    // The proxy only returns 200 for an image/* body, so this
+                    // means the bytes themselves were corrupt or unsupported.
                     if (!cancelled) setError('Image did not decode');
                 };
                 img.src = objectUrl;
