@@ -3,9 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CircularProgress from "@mui/material/CircularProgress";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import {
     addAddressKeepingDefault,
@@ -16,6 +14,31 @@ import {
 } from "@/lib/api/addresses";
 import { Address } from "@/lib/models/Address";
 import { useToast } from "@/app/components/Toast";
+import { GLASS_CARD } from "@/app/ui/glass";
+import { CHIP, CHIP_ICON_SIZE } from "@/app/ui/chip";
+import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
+import { countryName } from "../regions";
+
+const CARD = `flex flex-col gap-4 rounded-2xl p-5 ${GLASS_CARD}`;
+const ACTION = "cursor-pointer text-sm text-white/70 transition-colors hover:text-white disabled:cursor-default disabled:opacity-40 disabled:hover:text-white/70";
+
+function AddressesSkeleton() {
+    const bar = "animate-pulse rounded bg-white/10";
+    return (
+        <ul aria-busy="true" aria-label="Loading addresses" className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {[0, 1].map((n) => (
+                <li key={n} className={CARD}>
+                    <span className={`h-4 w-32 ${bar}`} />
+                    <div className="flex flex-col gap-2">
+                        <span className={`h-3.5 w-40 ${bar}`} />
+                        <span className={`h-3.5 w-48 ${bar}`} />
+                    </div>
+                    <span className={`h-3.5 w-36 ${bar}`} />
+                </li>
+            ))}
+        </ul>
+    );
+}
 
 export default function Addresses() {
     const { user } = useAuth();
@@ -29,34 +52,6 @@ export default function Addresses() {
         ([, token]) => getAddresses(token),
         { revalidateOnFocus: false },
     );
-
-    if (!user) {
-        return (
-            <div className="p-6">
-                <p className="text-lg">
-                    Please{" "}
-                    <Link href="/login" className="underline">
-                        sign in
-                    </Link>{" "}
-                    to manage your addresses.
-                </p>
-            </div>
-        );
-    }
-
-    if (isLoading) {
-        return (
-            <div className="flex justify-center p-10">
-                <CircularProgress />
-            </div>
-        );
-    }
-
-    if (loadError) {
-        return <div className="p-6 text-red-500">Failed to load your addresses.</div>;
-    }
-
-    const addresses = data ?? [];
 
     async function run(id: string, action: (token: string) => Promise<unknown>, failure: string) {
         if (!user || busy) return false;
@@ -92,65 +87,84 @@ export default function Addresses() {
         });
     }
 
-    return (
-        <div className="flex flex-col gap-4 p-4">
-            <div className="flex flex-row items-center justify-between">
-                <h1 className="text-xl font-medium">Addresses</h1>
-                <Button component={Link} href="/user/address/add" variant="contained">
-                    Add address
-                </Button>
+    // The default first; the rest in the service's order.
+    const addresses = [...(data ?? [])].sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
+
+    let body: React.ReactNode;
+    if (!user) {
+        body = <p className="py-10 text-white/70">Please <Link href="/login" className="underline">sign in</Link> to manage your addresses.</p>;
+    } else if (isLoading) {
+        body = <AddressesSkeleton />;
+    } else if (loadError) {
+        body = <p className="py-10 text-white/60">Couldn’t load your addresses. Try again in a moment.</p>;
+    } else if (addresses.length === 0) {
+        body = (
+            <div className="flex flex-col items-start gap-3 py-10">
+                <p className="text-white/70">No saved addresses yet. Add one to check out faster.</p>
+                <Link href="/user/address/add" className={`${CHIP} pl-2.5 pr-3.5`}>
+                    <AddRoundedIcon sx={CHIP_ICON_SIZE} /> Add address
+                </Link>
             </div>
+        );
+    } else {
+        body = (
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {addresses.map((a) => (
+                    <li key={a.id} className={`${CARD} transition-opacity ${busy === a.id ? "opacity-60" : ""}`}>
+                        <div className="flex items-start justify-between gap-3">
+                            <p className="font-semibold">{a.firstName} {a.lastName}</p>
+                            {a.isDefault && (
+                                <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-semibold text-white/85 ring-1 ring-inset ring-white/15">
+                                    Default
+                                </span>
+                            )}
+                        </div>
+                        <address className="flex flex-1 flex-col text-sm not-italic text-white/70">
+                            <span>{a.street}</span>
+                            <span>{[a.city, [a.state, a.postcode].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span>
+                            <span>{countryName(a.country)}</span>
+                        </address>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/10 pt-3">
+                            <Link href={`/user/address/${a.id}`} className={ACTION}>Edit</Link>
+                            {!a.isDefault && (
+                                <button type="button" className={ACTION} disabled={busy !== null} onClick={() => makeDefault(a)}>
+                                    Set as default
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                className={`${ACTION} ml-auto hover:text-red-300`}
+                                disabled={busy !== null}
+                                onClick={() => remove(a)}
+                                aria-label={`Delete ${a.street}`}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        );
+    }
 
-            {addresses.length === 0 ? (
-                <p className="text-gray-500">You have no saved addresses.</p>
-            ) : (
-                <div className="flex flex-col gap-3 md:max-w-2xl">
-                    {addresses.map((a) => (
-                        <Card key={a.id} className="p-4">
-                            <div className="flex flex-row items-start justify-between gap-4">
-                                <div className="text-sm">
-                                    <p className="font-medium">
-                                        {a.firstName} {a.lastName}
-                                        {a.isDefault && (
-                                            <span className="ml-2 rounded bg-gray-200 px-2 py-0.5 text-xs dark:bg-gray-700">
-                                                Default
-                                            </span>
-                                        )}
-                                    </p>
-                                    <p className="text-gray-500">{a.street}</p>
-                                    <p className="text-gray-500">
-                                        {a.city}, {a.state} {a.postcode}
-                                    </p>
-                                    <p className="text-gray-500">{a.country}</p>
-                                </div>
-
-                                <div className="flex shrink-0 flex-row gap-1">
-                                    {!a.isDefault && (
-                                        <Button size="small" disabled={busy !== null} onClick={() => makeDefault(a)}>
-                                            {busy === a.id ? "Saving…" : "Set as default"}
-                                        </Button>
-                                    )}
-                                    <Button
-                                        component={Link}
-                                        href={`/user/address/${a.id}`}
-                                        size="small"
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        size="small"
-                                        color="error"
-                                        disabled={busy !== null}
-                                        onClick={() => remove(a)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </div>
-                            </div>
-                        </Card>
-                    ))}
+    return (
+        // isolate keeps the backdrop's -z-10 inside this page.
+        <main className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 pb-16 pt-8 text-white">
+            <FavoriteBackdrop />
+            <header className="flex flex-wrap items-end justify-between gap-3">
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-3xl font-semibold tracking-tight">Addresses</h1>
+                    <p className="h-5 text-sm text-white/60">
+                        {user && data && data.length > 0 && `${data.length} saved`}
+                    </p>
                 </div>
-            )}
-        </div>
+                {user && addresses.length > 0 && (
+                    <Link href="/user/address/add" className={`${CHIP} pl-2.5 pr-3.5`}>
+                        <AddRoundedIcon sx={CHIP_ICON_SIZE} /> Add address
+                    </Link>
+                )}
+            </header>
+            {body}
+        </main>
     );
 }
