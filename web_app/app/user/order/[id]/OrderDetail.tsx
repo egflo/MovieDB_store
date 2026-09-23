@@ -3,124 +3,154 @@
 import React from "react";
 import Link from "next/link";
 import useSWR from "swr";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Divider from "@mui/material/Divider";
-import CircularProgress from "@mui/material/CircularProgress";
+import { HTTPError } from "ky";
+import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { getOrder } from "@/lib/api/orders";
 import { formatPrice } from "@/lib/api/client";
+import { GLASS_CARD } from "@/app/ui/glass";
+import { CHIP, CHIP_ICON_SIZE } from "@/app/ui/chip";
+import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
 import StatusPill from "@/app/user/orders/StatusPill";
+import OrderThumb from "@/app/user/orders/OrderThumb";
+import { orderDateTime, orderShippingCost, paymentLabel } from "@/app/user/orders/format";
+
+const PANEL = `rounded-2xl p-5 ${GLASS_CARD}`;
+
+/** order_service answers an unknown id with 400 "Order not found for this id". */
+const isNotFound = (error: unknown) =>
+    error instanceof HTTPError && (error.response.status === 400 || error.response.status === 404);
+
+function Row({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
+    return (
+        <div className={`flex justify-between gap-4 ${strong ? "border-t border-white/10 pt-2 text-base font-semibold" : "text-sm"}`}>
+            <dt className={strong ? undefined : "text-white/60"}>{label}</dt>
+            <dd>{value}</dd>
+        </div>
+    );
+}
+
+function DetailSkeleton() {
+    const bar = "animate-pulse rounded bg-white/10";
+    return (
+        <div aria-busy="true" aria-label="Loading order" className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+                <span className={`h-8 w-48 ${bar}`} />
+                <span className={`h-4 w-56 ${bar}`} />
+            </div>
+            <div className={`flex flex-col gap-4 ${PANEL}`}>
+                {Array.from({ length: 3 }, (_, n) => (
+                    <div key={n} className="flex items-center gap-3">
+                        <span className={`h-20 w-14 ${bar}`} />
+                        <span className={`h-4 w-40 ${bar}`} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function Message({ children }: { children: React.ReactNode }) {
+    return <div className="flex flex-col items-start gap-3 py-10 text-white/70">{children}</div>;
+}
 
 export default function OrderDetail({ id }: { id: string }) {
     const { user } = useAuth();
+    // Order ids are integers; anything else is a 500 from the API.
+    const validId = /^\d+$/.test(id);
 
     const { data: order, isLoading, error } = useSWR(
-        user ? ["order", id, user.idToken] : null,
+        user && validId ? ["order", id, user.idToken] : null,
         ([, orderId, token]) => getOrder(token, orderId),
         { revalidateOnFocus: false },
     );
 
+    let body: React.ReactNode;
     if (!user) {
-        return (
-            <div className="p-6">
-                <p className="text-lg">
-                    Please{" "}
-                    <Link href="/login" className="underline">
-                        sign in
-                    </Link>{" "}
-                    to view this order.
-                </p>
-            </div>
+        body = <Message><p>Please <Link href="/login" className="underline">sign in</Link> to view this order.</p></Message>;
+    } else if (!validId || isNotFound(error)) {
+        body = <Message><p>We couldn’t find order {validId ? `#${id}` : `“${id}”`}.</p></Message>;
+    } else if (error) {
+        body = <Message><p>Couldn’t load this order. Try again in a moment.</p></Message>;
+    } else if (isLoading || !order) {
+        body = <DetailSkeleton />;
+    } else {
+        const currency = order.currency?.toUpperCase();
+        const price = (minor: number) => formatPrice(minor, currency);
+        const shipping = orderShippingCost(order);
+        const ship = order.shipping;
+        const payment = paymentLabel(order);
+
+        body = (
+            <>
+                <header className="flex flex-wrap items-end justify-between gap-3">
+                    <div className="flex flex-col gap-1">
+                        <h1 className="text-3xl font-semibold tracking-tight">Order #{order.id}</h1>
+                        <p className="text-sm text-white/60">Placed {orderDateTime(order.created)}</p>
+                    </div>
+                    <StatusPill status={order.status} />
+                </header>
+
+                {/* grid-cols-1 (minmax(0, 1fr)) on phones: an implicit column sized
+                    to its content kept long titles from truncating and widened the page. */}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_320px] md:items-start">
+                    <section aria-label="Items" className={`flex flex-col gap-4 ${PANEL}`}>
+                        <ul className="flex flex-col divide-y divide-white/10">
+                            {order.items?.map((item) => (
+                                <li key={item.id} className="flex items-center gap-4 py-3 first:pt-0">
+                                    <Link href={`/movie/${item.itemId}`} className="group flex min-w-0 flex-1 items-center gap-4">
+                                        <OrderThumb url={item.photo} width={56} height={80} className="block h-20 w-14" />
+                                        <div className="flex min-w-0 flex-col gap-0.5">
+                                            <span className="truncate font-medium group-hover:underline">{item.description}</span>
+                                            {item.quantity > 1 && (
+                                                <span className="text-sm text-white/60">{item.quantity} × {price(item.price)}</span>
+                                            )}
+                                        </div>
+                                    </Link>
+                                    <span className="shrink-0 text-sm">{price(item.price * item.quantity)}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <dl className="flex flex-col gap-1.5 border-t border-white/10 pt-4">
+                            <Row label="Subtotal" value={price(order.subTotal)} />
+                            {shipping > 0 && <Row label="Shipping" value={price(shipping)} />}
+                            <Row label="Tax" value={price(order.tax)} />
+                            <Row label="Total" value={price(order.total)} strong />
+                        </dl>
+                    </section>
+
+                    <div className="flex flex-col gap-4">
+                        {ship && (
+                            <section className={`flex flex-col gap-1 text-sm ${PANEL}`}>
+                                <h2 className="mb-1 text-base font-semibold">Shipping to</h2>
+                                <p>{ship.firstName} {ship.lastName}</p>
+                                <p className="text-white/70">{ship.street}</p>
+                                <p className="text-white/70">
+                                    {[ship.city, [ship.state, ship.postcode].filter(Boolean).join(" ")].filter(Boolean).join(", ")}
+                                </p>
+                                <p className="text-white/70">{ship.country}</p>
+                            </section>
+                        )}
+                        {payment && (
+                            <section className={`flex flex-col gap-1 text-sm ${PANEL}`}>
+                                <h2 className="mb-1 text-base font-semibold">Payment</h2>
+                                <p>{payment}</p>
+                            </section>
+                        )}
+                    </div>
+                </div>
+            </>
         );
     }
-
-    if (isLoading) {
-        return (
-            <div className="flex justify-center p-10">
-                <CircularProgress />
-            </div>
-        );
-    }
-
-    if (error || !order) {
-        return <div className="p-6 text-red-500">Could not load that order.</div>;
-    }
-
-    const ship = order.shipping;
 
     return (
-        <div className="flex flex-col gap-4 p-4 md:max-w-3xl">
-            <div className="flex flex-row items-center justify-between">
-                <div>
-                    <h1 className="text-xl font-medium">Order #{order.id}</h1>
-                    <p className="text-sm text-gray-500">
-                        Placed {new Date(order.created).toLocaleString()}
-                    </p>
-                </div>
-                <StatusPill status={order.status} />
-            </div>
-
-            <Card>
-                <CardContent className="flex flex-col gap-3">
-                    {order.items?.map((i) => (
-                        <div key={i.id} className="flex flex-row items-center gap-3">
-                            {i.photo && (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                    src={i.photo}
-                                    alt={i.description}
-                                    className="h-20 w-14 rounded object-cover"
-                                />
-                            )}
-                            <div className="flex grow flex-col text-sm">
-                                <span className="font-medium">{i.description}</span>
-                                <span className="text-gray-500">
-                                    Qty {i.quantity} · SKU {i.sku}
-                                </span>
-                            </div>
-                            <span className="text-sm">
-                                {formatPrice(i.price * i.quantity)}
-                            </span>
-                        </div>
-                    ))}
-
-                    <Divider className="my-1" />
-
-                    <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Subtotal</span>
-                        <span>{formatPrice(order.subTotal)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Tax</span>
-                        <span>{formatPrice(order.tax)}</span>
-                    </div>
-                    <div className="flex justify-between text-base font-medium">
-                        <span>Total</span>
-                        <span>{formatPrice(order.total)}</span>
-                    </div>
-                </CardContent>
-            </Card>
-
-            {ship && (
-                <Card>
-                    <CardContent className="flex flex-col gap-1 text-sm">
-                        <h2 className="text-base font-medium">Shipping to</h2>
-                        <p>
-                            {ship.firstName} {ship.lastName}
-                        </p>
-                        <p className="text-gray-500">{ship.street}</p>
-                        <p className="text-gray-500">
-                            {ship.city}, {ship.state} {ship.postcode}
-                        </p>
-                        <p className="text-gray-500">{ship.country}</p>
-                    </CardContent>
-                </Card>
-            )}
-
-            <Link href="/user/orders" className="text-sm underline">
-                Back to orders
+        // isolate keeps the backdrop's -z-10 inside this page.
+        <main className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-16 pt-8 text-white">
+            <FavoriteBackdrop />
+            <Link href="/user/orders" className={`${CHIP} w-fit pl-2 pr-3.5`}>
+                <ChevronLeftRoundedIcon sx={CHIP_ICON_SIZE} /> Orders
             </Link>
-        </div>
+            {body}
+        </main>
     );
 }

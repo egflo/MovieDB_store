@@ -12,6 +12,7 @@ import type { SvgIconComponent } from "@mui/icons-material";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { useBookmarks } from "@/lib/context/BookmarkContext";
 import { getOrders } from "@/lib/api/orders";
+import { orderStatusLabel } from "@/app/user/orders/format";
 import { getAddresses } from "@/lib/api/addresses";
 import { getPaymentMethods } from "@/lib/api/payments";
 import { formatPrice } from "@/lib/api/client";
@@ -72,7 +73,7 @@ function OrdersSummary({ token }: { token: string }) {
             ) : (
                 <>
                     <span className="text-white/85">{plural(data.totalElements, "order")}</span>
-                    <span>Latest {shortDate(latest.created)} · {formatPrice(latest.total)} · {capitalize(latest.status)}</span>
+                    <span>Latest {shortDate(latest.created)} · {formatPrice(latest.total)} · {orderStatusLabel(latest.status)}</span>
                 </>
             )}
         </Summary>
