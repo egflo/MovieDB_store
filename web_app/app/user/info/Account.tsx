@@ -15,10 +15,11 @@ import { getOrders } from "@/lib/api/orders";
 import { getAddresses } from "@/lib/api/addresses";
 import { getPaymentMethods } from "@/lib/api/payments";
 import { formatPrice } from "@/lib/api/client";
-import { optimizedImage } from "@/lib/image";
+import { optimizedImage, optimizerUrl } from "@/lib/image";
 import { GLASS_CARD } from "@/app/ui/glass";
 import ProfileImage from "@/app/components/ProfileImage";
 import { Logout } from "@/app/components/actions/Logout";
+import ScrollZoomBackdrop from "@/app/components/ScrollZoomBackdrop";
 
 const plural = (n: number, one: string, many = `${one}s`) => `${n.toLocaleString()} ${n === 1 ? one : many}`;
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
@@ -138,6 +139,23 @@ function PaymentsSummary({ token }: { token: string }) {
     );
 }
 
+/**
+ * The most recently saved favourite's backdrop behind the whole page, as a
+ * heavily blurred colour wash (like the cast page), so the glass cards have
+ * something to frost. Over the flat page background the blur had nothing to
+ * show. None until favourites load, or if there are none.
+ */
+function AccountBackdrop() {
+    const { bookmarks } = useBookmarks();
+    const latest = [...bookmarks]
+        .sort((a, b) => Date.parse(b.created) - Date.parse(a.created))
+        .find((b) => b.movie?.background || b.movie?.poster);
+    const image: string | undefined = latest && (latest.movie.background || latest.movie.poster);
+    if (!image) return null;
+    // Blurred this much, a 256px thumbnail looks the same as the original.
+    return <ScrollZoomBackdrop src={optimizerUrl(image, 256) ?? image} />;
+}
+
 export default function Account() {
     const { user } = useAuth();
 
@@ -158,7 +176,9 @@ export default function Account() {
     const token = user.idToken;
 
     return (
-        <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-16 pt-8 text-white">
+        // isolate keeps the backdrop's -z-10 inside this page.
+        <main className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-16 pt-8 text-white">
+            <AccountBackdrop />
             <header className="flex flex-wrap items-center gap-4">
                 <ProfileImage
                     name={user.displayName ?? user.email ?? "You"}
