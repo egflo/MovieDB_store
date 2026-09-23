@@ -14,7 +14,7 @@ import { CHIP } from "@/app/ui/chip";
 import Pager from "@/app/ui/Pager";
 import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
 import StatusPill from "./StatusPill";
-import OrderThumb from "./OrderThumb";
+import PosterThumb from "@/app/ui/PosterThumb";
 import { orderDate, orderItems, orderTitles } from "./format";
 
 /** getOrders' default, so page 1 shares its cache entry with the account page's Orders card. */
@@ -47,7 +47,7 @@ function OrderRow({ order }: { order: Order }) {
                             // Just the first on phones, where the row is narrow; it
                             // carries the "+N" as a corner badge instead of a tile.
                             <span key={item.id} className={n > 0 ? "hidden sm:block" : "relative"}>
-                                <OrderThumb url={item.photo} width={44} height={64} className="block h-16 w-11" />
+                                <PosterThumb url={item.photo} width={44} height={64} className="block h-16 w-11" />
                                 {n === 0 && items.length > 1 && (
                                     <span className="absolute -bottom-1 -right-1 rounded-full bg-neutral-900/90 px-1.5 text-[11px] font-semibold leading-5 text-white ring-1 ring-white/20 sm:hidden">
                                         +{items.length - 1}

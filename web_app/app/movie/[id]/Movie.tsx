@@ -281,7 +281,7 @@ export default function Movie({id}: { id: string }) {
 
 
                         <div className="flex flex-row gap-2 ">
-                            <Cart id={data.id} />
+                            <Cart id={data.id} title={data.title} />
                             <Favorite id={data.id} title={data.title} />
                             <Rate id={data.id} />
                             <Share  id={data.id} />

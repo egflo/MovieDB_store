@@ -7,11 +7,11 @@ import { fallbackImage, optimizedImage } from "@/lib/image";
 const isImageUrl = (value?: string) => !!value && /^https?:\/\//.test(value);
 
 /**
- * A small poster for an order line, sized by `className` (e.g. "h-16 w-11").
+ * A small poster for a cart or order line, sized by `className` (e.g. "h-16 w-11").
  * Like PosterItem: the resized image, then fanart's small preview, then a
  * quiet placeholder. Originals are 0.8–1.5 MB, far too much for a thumbnail.
  */
-export default function OrderThumb({ url, width, height, className = "" }: {
+export default function PosterThumb({ url, width, height, className = "" }: {
     url?: string; width: number; height: number; className?: string;
 }) {
     const [failures, setFailures] = useState(0);

@@ -4,6 +4,12 @@ import { Cart } from "@/lib/models/Cart";
 
 const CART = url("inventory", "cart/");
 
+/**
+ * Most copies of one title a cart line may hold. Enforced only here (the
+ * inventory service has no limit), on the cart page and the add button.
+ */
+export const MAX_PER_TITLE = 4;
+
 /** GET /cart/ as the inventory service actually returns it. */
 interface CartResponse {
     id: number;
@@ -35,7 +41,9 @@ export async function getCart(token: string): Promise<Cart[]> {
         if (e instanceof HTTPError && e.response.status === 404) return [];
         throw e;
     }
-    return (cart.items ?? []).map((line) => ({
+    // Sorted by line id (the order they were added): the service returns them
+    // in no fixed order, so lines swapped places between loads.
+    return [...(cart.items ?? [])].sort((a, b) => a.id - b.id).map((line) => ({
         id: line.id,
         itemId: line.itemId,
         userId: cart.userId,
@@ -51,14 +59,21 @@ export async function getCart(token: string): Promise<Cart[]> {
 }
 
 /**
- * Upsert a cart line. The inventory service treats POST /cart/ as an upsert
- * keyed on the row id, so omit `id` to add and pass it to change quantity.
+ * Add copies of a title. POST /cart/ (CartService.add) finds the line by
+ * itemId and *adds* `quantity` to it, creating it if needed. It ignores any
+ * line id, so it can't set a quantity: see setCartQuantity.
  */
-export function saveCartItem(
-    token: string,
-    item: { id?: number; userId: string; itemId: string; quantity: number },
-) {
+export function addToCart(token: string, item: { itemId: string; userId: string; quantity: number }) {
     return authed(token).post(CART, { json: item }).json<Cart>();
+}
+
+/**
+ * Set a line's quantity. POST /cart/{id} (CartService.update) replaces it.
+ * The cart page's - and + used to send the new quantity to POST /cart/,
+ * which added it on: - on a line of 3 made it 5.
+ */
+export function setCartQuantity(token: string, id: number, quantity: number) {
+    return authed(token).post(`${CART}${id}`, { json: { quantity } }).json<Cart>();
 }
 
 export function deleteCartItem(token: string, id: number) {
