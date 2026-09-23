@@ -33,14 +33,16 @@ function SectionCard({ href, title, Icon, children }: {
     return (
         <Link
             href={href}
-            className={`group flex items-center gap-4 rounded-2xl p-5 transition-colors hover:bg-white/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${GLASS_CARD}`}
+            className={`group flex items-start gap-4 rounded-2xl p-5 transition-colors hover:bg-white/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${GLASS_CARD}`}
         >
-            <Icon sx={{ fontSize: 28 }} className="shrink-0 self-start text-white/80" />
+            {/* Top-aligned with the title: the grid stretches each row to its
+                tallest card, and centring left shorter cards' text below the icon. */}
+            <Icon sx={{ fontSize: 28 }} className="-mt-0.5 shrink-0 text-white/80" />
             <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <h2 className="font-semibold">{title}</h2>
                 <div className="flex min-h-10 flex-col gap-0.5 text-sm text-white/60">{children}</div>
             </div>
-            <ChevronRightRoundedIcon className="shrink-0 text-white/40 transition-colors group-hover:text-white/80" />
+            <ChevronRightRoundedIcon className="shrink-0 self-center text-white/40 transition-colors group-hover:text-white/80" />
         </Link>
     );
 }
