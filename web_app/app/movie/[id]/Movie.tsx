@@ -13,6 +13,7 @@ import Favorite from "@/app/components/actions/Favorite";
 import Rate from "@/app/components/actions/Rate";
 import Share from "@/app/components/actions/Share";
 import {Tag} from "@/lib/models/Tag";
+import type {Movie as MovieModel} from "@/lib/models/Movie";
 import Box from "@mui/material/Box";
 import PosterImage from "@/app/components/PosterImage";
 import SubSection from "@/app/ui/SubSection";
@@ -40,6 +41,12 @@ const fetcher = async (url: string) => {
 /** "David Franzoni, David Franzoni" → ["David Franzoni"]; the data repeats names. */
 function uniqueNames(list: string): string[] {
     return [...new Set(list.split(',').map((name) => name.trim()).filter(Boolean))];
+}
+
+/** Related posters at the small size (200x300) rather than PosterItem's
+ *  default medium; the row only passes `item`, so the size is fixed here. */
+function RelatedPoster({item}: { item: MovieModel }) {
+    return <PosterItem item={item} size="small" />;
 }
 
 /** Placeholder in the shape of the page while the movie loads. */
@@ -220,7 +227,7 @@ export default function Movie({id}: { id: string }) {
 
                         <InfiniteScrollableContainer title={"Critic Reviews"} url={CRITIC_REVIEW_URL + data.movieId} ItemComponent={CriticReviewItem} />
                         <InfiniteScrollableContainer title={'User Reviews'} token={auth.user?.idToken} url={USER_REVIEW_URL + data.id} ItemComponent={UserReviewItem} />
-                        <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={PosterItem} />
+                        <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={RelatedPoster} />
 
                         <div className={'h-[1px] bg-gray-600 mt-2 mb-2'}/>
                         <div className={"flex flex-col gap-2 w-full  "}>

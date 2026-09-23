@@ -79,7 +79,9 @@ export default function PosterItem({ item, size = "medium", onSelect }: PosterPr
             ) : (
                 // A quiet card rather than a bright grey block, so a missing
                 // poster doesn't stand out in a row of real ones.
-                <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-neutral-800 to-neutral-900 p-4 ring-1 ring-inset ring-white/5">
+                // whitespace-normal: scrolling rows set nowrap, which kept long
+                // titles on one line and clipped them at both edges.
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 whitespace-normal rounded-lg bg-gradient-to-b from-neutral-800 to-neutral-900 p-4 ring-1 ring-inset ring-white/5">
                     <LocalMoviesIcon fontSize="small" className="text-white/25" aria-hidden="true" />
                     <p className="line-clamp-3 text-center text-sm font-medium text-white/70">
                         {movie.title}
