@@ -21,7 +21,10 @@ import { orderDate, orderItems, orderTitles } from "./format";
 const PAGE_SIZE = 20;
 const THUMBS = 3;
 
-const ROW = `flex items-center gap-4 rounded-2xl p-4 ${GLASS_CARD}`;
+const ROW = `flex flex-col rounded-2xl px-4 pb-4 pt-3 ${GLASS_CARD}`;
+/** The header line (order number left, date right) over a faint divider. */
+const ROW_HEAD = "flex items-baseline justify-between gap-4 border-b border-white/10 pb-2.5";
+const ROW_BODY = "flex items-center gap-4 pt-3";
 
 function OrderRow({ order }: { order: Order }) {
     const items = orderItems(order);
@@ -32,40 +35,43 @@ function OrderRow({ order }: { order: Order }) {
                 href={`/user/order/${order.id}`}
                 className={`group transition-colors hover:bg-white/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${ROW}`}
             >
-                {/* Fixed width (three 44px thumbs, a "+N" tile and their gaps;
-                    one thumb on phones) so the text lines up across orders. */}
-                <span className="flex w-11 shrink-0 gap-1.5 sm:w-[194px]" aria-hidden>
-                    {items.slice(0, THUMBS).map((item, n) => (
-                        // Just the first on phones, where the row is narrow; it
-                        // carries the "+N" as a corner badge instead of a tile.
-                        <span key={item.id} className={n > 0 ? "hidden sm:block" : "relative"}>
-                            <OrderThumb url={item.photo} width={44} height={64} className="block h-16 w-11" />
-                            {n === 0 && items.length > 1 && (
-                                <span className="absolute -bottom-1 -right-1 rounded-full bg-neutral-900/90 px-1.5 text-[11px] font-semibold leading-5 text-white ring-1 ring-white/20 sm:hidden">
-                                    +{items.length - 1}
-                                </span>
-                            )}
-                        </span>
-                    ))}
-                    {/* Titles past the third: a poster-sized tile with the count. */}
-                    {items.length > THUMBS && (
-                        <span className="hidden h-16 w-11 items-center justify-center rounded-md bg-white/[0.08] text-sm font-semibold text-white/80 ring-1 ring-inset ring-white/15 sm:flex">
-                            +{items.length - THUMBS}
-                        </span>
-                    )}
-                </span>
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <p className="font-semibold">
-                        Order #{order.id} <span className="font-normal text-white/60">· {orderDate(order.created)}</span>
-                    </p>
-                    <p className="truncate text-sm text-white/75">{orderTitles(order)}</p>
-                    <p className="text-xs text-white/50">{count} {count === 1 ? "item" : "items"}</p>
+                <div className={ROW_HEAD}>
+                    <span className="font-semibold">Order #{order.id}</span>
+                    <span className="text-sm text-white/60">{orderDate(order.created)}</span>
                 </div>
-                <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className="font-semibold">{formatPrice(order.total, order.currency?.toUpperCase())}</span>
-                    <StatusPill status={order.status} />
+                <div className={ROW_BODY}>
+                    {/* Fixed width (three 44px thumbs, a "+N" tile and their gaps;
+                        one thumb on phones) so the text lines up across orders. */}
+                    <span className="flex w-11 shrink-0 gap-1.5 sm:w-[194px]" aria-hidden>
+                        {items.slice(0, THUMBS).map((item, n) => (
+                            // Just the first on phones, where the row is narrow; it
+                            // carries the "+N" as a corner badge instead of a tile.
+                            <span key={item.id} className={n > 0 ? "hidden sm:block" : "relative"}>
+                                <OrderThumb url={item.photo} width={44} height={64} className="block h-16 w-11" />
+                                {n === 0 && items.length > 1 && (
+                                    <span className="absolute -bottom-1 -right-1 rounded-full bg-neutral-900/90 px-1.5 text-[11px] font-semibold leading-5 text-white ring-1 ring-white/20 sm:hidden">
+                                        +{items.length - 1}
+                                    </span>
+                                )}
+                            </span>
+                        ))}
+                        {/* Titles past the third: a poster-sized tile with the count. */}
+                        {items.length > THUMBS && (
+                            <span className="hidden h-16 w-11 items-center justify-center rounded-md bg-white/[0.08] text-sm font-semibold text-white/80 ring-1 ring-inset ring-white/15 sm:flex">
+                                +{items.length - THUMBS}
+                            </span>
+                        )}
+                    </span>
+                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                        <p className="truncate text-sm text-white/85">{orderTitles(order)}</p>
+                        <p className="text-xs text-white/50">{count} {count === 1 ? "item" : "items"}</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5">
+                        <span className="font-semibold">{formatPrice(order.total, order.currency?.toUpperCase())}</span>
+                        <StatusPill status={order.status} />
+                    </div>
+                    <ChevronRightRoundedIcon className="shrink-0 text-white/40 transition-colors group-hover:text-white/80" />
                 </div>
-                <ChevronRightRoundedIcon className="shrink-0 text-white/40 transition-colors group-hover:text-white/80" />
             </Link>
         </li>
     );
@@ -76,12 +82,15 @@ function OrdersSkeleton() {
         <ul className="flex flex-col gap-3" aria-busy="true" aria-label="Loading orders">
             {Array.from({ length: 4 }, (_, n) => (
                 <li key={n} className={ROW}>
-                    <span className="h-16 w-11 animate-pulse rounded-md bg-white/10" />
-                    <div className="flex flex-1 flex-col gap-2">
-                        <span className="h-4 w-48 animate-pulse rounded bg-white/10" />
-                        <span className="h-3.5 w-64 max-w-full animate-pulse rounded bg-white/10" />
+                    <div className={ROW_HEAD}>
+                        <span className="h-4 w-24 animate-pulse rounded bg-white/10" />
+                        <span className="h-3.5 w-20 animate-pulse rounded bg-white/10" />
                     </div>
-                    <span className="h-4 w-16 animate-pulse rounded bg-white/10" />
+                    <div className={ROW_BODY}>
+                        <span className="h-16 w-11 animate-pulse rounded-md bg-white/10" />
+                        <span className="h-3.5 w-64 max-w-full flex-1 animate-pulse rounded bg-white/10" />
+                        <span className="h-4 w-16 animate-pulse rounded bg-white/10" />
+                    </div>
                 </li>
             ))}
         </ul>
