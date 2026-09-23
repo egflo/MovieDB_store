@@ -168,3 +168,9 @@ svg{
 .ListItemEven {
   background-color: #f8f8f0;
 }
+
+/* Toast entrance (app/components/Toast.tsx): a short rise and fade in. */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -10,6 +10,7 @@ import {CartProvider} from "@/lib/context/CartContext";
 import {BookmarkProvider} from "@/lib/context/BookmarkContext";
 import {Suspense} from "react";
 import NavBar from "@/app/components/NavBar";
+import {ToastProvider} from "@/app/components/Toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,11 +51,13 @@ export default async function RootLayout({
             <AuthProvider user={user}>
                 <CartProvider>
                     <BookmarkProvider>
-                        {/* NavBar reads search params, which needs a Suspense boundary. */}
-                        <Suspense fallback={null}>
-                            <NavBar />
-                        </Suspense>
-                        {children}
+                        <ToastProvider>
+                            {/* NavBar reads search params, which needs a Suspense boundary. */}
+                            <Suspense fallback={null}>
+                                <NavBar />
+                            </Suspense>
+                            {children}
+                        </ToastProvider>
                     </BookmarkProvider>
                 </CartProvider>
             </AuthProvider>
