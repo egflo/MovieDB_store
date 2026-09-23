@@ -25,3 +25,33 @@ export function ratingsHeading(keys: string[]): string {
     if (!rated.length) return 'Not rated';
     return `Rated ${rated.join(', ')}${notRated ? ' or not rated' : ''}`;
 }
+
+/**
+ * Prices in the URL are whole or decimal dollars (`pmin=15&pmax=19.99`); the
+ * API takes cents. Either end may be open. Every price in the data is between
+ * $10 and $25, in whole dollars.
+ */
+export const PRICE_MAX = 1000;
+
+/** A price from the URL or an input, or null if missing or out of range. */
+export function parsePrice(value: string | null | undefined): number | null {
+    if (value == null || value.trim() === '') return null;
+    const price = Number(value);
+    return Number.isFinite(price) && price >= 0 && price <= PRICE_MAX ? Math.round(price * 100) / 100 : null;
+}
+
+const dollars = (n: number) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
+
+/** "$15–$19", "$20 and up", "Up to $14", or null. */
+export function priceLabel(min: number | null, max: number | null): string | null {
+    if (min !== null && max !== null) return min === max ? dollars(min) : `${dollars(min)}–${dollars(max)}`;
+    if (min !== null) return `${dollars(min)} and up`;
+    if (max !== null) return `Up to ${dollars(max)}`;
+    return null;
+}
+
+/** The page heading and tab title for a price filter alone. */
+export function priceHeading(min: number | null, max: number | null): string | null {
+    const label = priceLabel(min, max);
+    return label && `Movies ${label.replace(/^Up to/, 'up to')}`;
+}

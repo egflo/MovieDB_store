@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import Search from "./Search"
-import {ratingsHeading} from "./filters"
+import {parsePrice, priceHeading, ratingsHeading} from "./filters"
 
-/** "Action · MovieDB", "“star” · MovieDB", "Rated R · MovieDB", or "Search · MovieDB". */
+/** "Action · MovieDB", "“star” · MovieDB", "Rated R · MovieDB", "Movies $20 and up · MovieDB", or "Search · MovieDB". */
 export async function generateMetadata({
                                            searchParams,
                                        }: {
@@ -22,7 +22,9 @@ export async function generateMetadata({
     if (query) return { title: `“${query}”` };
     if (genres.length) return { title: genres.join(' & ') };
     if (rated.length) return { title: ratingsHeading(rated) };
-    if (years) return { title: `Movies from ${years}` };
+    if (years) return { title: from ? `Movies from ${years}` : `Movies ${years}` };
+    const prices = priceHeading(parsePrice(first(params.pmin)), parsePrice(first(params.pmax)));
+    if (prices) return { title: prices };
     return { title: 'Search' };
 }
 

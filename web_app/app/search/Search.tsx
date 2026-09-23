@@ -13,7 +13,7 @@ import {Page} from "@/lib/models/Page";
 import {CHIP, CHIP_ICON_SIZE, CHIP_SX} from "@/app/ui/chip";
 import {GLASS_CARD} from "@/app/ui/glass";
 import {MOVIE_GRID, MovieCard, MovieGridSkeleton} from "@/app/ui/MovieCard";
-import {CONTENT_RATINGS, ratingLabel, ratingsHeading} from "./filters";
+import {CONTENT_RATINGS, parsePrice, PRICE_MAX, priceHeading, priceLabel, ratingLabel, ratingsHeading} from "./filters";
 
 // res.json() alone treats an error body as data.
 const fetcher = async (url: string) => {
@@ -39,6 +39,8 @@ export const SORTS = {
     rating: {label: 'Top rated', params: 'sortBy=ratings.imdb'},
     newest: {label: 'Newest', params: 'sortBy=year'},
     oldest: {label: 'Oldest', params: 'sortBy=year&direction=1'},
+    cheapest: {label: 'Price: low to high', params: 'sortBy=price&direction=1'},
+    priciest: {label: 'Price: high to low', params: 'sortBy=price'},
 } as const;
 export type SortKey = keyof typeof SORTS;
 export const DEFAULT_SORT: SortKey = 'popular';
@@ -66,6 +68,13 @@ const DECADES: {label: string; from?: number; to?: number}[] = [
 const YEAR_MIN = 1880; // the oldest film in the data is from 1894
 const YEAR_MAX = 2030;
 
+/** Quick price bands, in dollars; every price in the data is a whole dollar. */
+const PRICE_BANDS: {min?: number; max?: number}[] = [
+    {max: 14},
+    {min: 15, max: 19},
+    {min: 20},
+];
+
 /** "2008", "2000–2009", "2000 onwards", "Up to 1979", or null. */
 function yearsLabel(from: number | null, to: number | null): string | null {
     if (from && to) return from === to ? String(from) : `${from}–${to}`;
@@ -90,6 +99,8 @@ interface SearchFilters {
     ratings: string[];
     yearFrom: number | null;
     yearTo: number | null;
+    priceMin: number | null;
+    priceMax: number | null;
 }
 
 function searchUrl(f: SearchFilters, sort: SortKey, page: number, limit: number) {
@@ -104,6 +115,9 @@ function searchUrl(f: SearchFilters, sort: SortKey, page: number, limit: number)
     }
     if (f.yearFrom) params.push(`yearFrom=${f.yearFrom}`);
     if (f.yearTo) params.push(`yearTo=${f.yearTo}`);
+    // Dollars in the UI, cents in the API.
+    if (f.priceMin !== null) params.push(`priceMin=${Math.round(f.priceMin * 100)}`);
+    if (f.priceMax !== null) params.push(`priceMax=${Math.round(f.priceMax * 100)}`);
     return `${SEARCH_URL}?${params.join('&')}`;
 }
 
@@ -124,35 +138,43 @@ function ToggleChip({on, onClick, children}: { on: boolean; onClick: () => void;
 }
 
 /**
- * From/To year boxes. Typing only edits a draft; it's applied on Enter or when
- * the box loses focus, so the results don't reload on every keystroke. Fill
- * both with the same year for a single year, or leave either empty.
+ * A pair of From/To boxes (years, prices). Typing only edits a draft; it's
+ * applied on Enter or when the box loses focus, so the results don't reload on
+ * every keystroke. Either may be left empty, and reversed ends are swapped.
  */
-function YearRange({from, to, onChange}: { from: number | null; to: number | null; onChange: (from: number | null, to: number | null) => void }) {
-    const [draftFrom, setDraftFrom] = useState(from ? String(from) : '');
-    const [draftTo, setDraftTo] = useState(to ? String(to) : '');
-    // Follow the URL when it changes elsewhere (decade chips, chip removal, back).
-    useEffect(() => setDraftFrom(from ? String(from) : ''), [from]);
-    useEffect(() => setDraftTo(to ? String(to) : ''), [to]);
+function RangeInputs({from, to, parse, onChange, placeholders, labels, min, max, decimal = false}: {
+    from: number | null; to: number | null;
+    parse: (value: string) => number | null;
+    onChange: (from: number | null, to: number | null) => void;
+    placeholders: [string, string]; labels: [string, string];
+    min: number; max: number; decimal?: boolean;
+}) {
+    const show = (n: number | null) => (n === null ? '' : String(n));
+    const [draftFrom, setDraftFrom] = useState(show(from));
+    const [draftTo, setDraftTo] = useState(show(to));
+    // Follow the URL when it changes elsewhere (quick chips, chip removal, back).
+    useEffect(() => setDraftFrom(show(from)), [from]);
+    useEffect(() => setDraftTo(show(to)), [to]);
 
     const apply = () => {
-        let f = parseYear(draftFrom);
-        let t = parseYear(draftTo);
-        if (f && t && f > t) [f, t] = [t, f];
-        setDraftFrom(f ? String(f) : '');
-        setDraftTo(t ? String(t) : '');
+        let f = parse(draftFrom);
+        let t = parse(draftTo);
+        if (f !== null && t !== null && f > t) [f, t] = [t, f];
+        setDraftFrom(show(f));
+        setDraftTo(show(t));
         if (f !== from || t !== to) onChange(f, t);
     };
     const box = "h-9 w-full min-w-0 rounded-full bg-white/10 px-3.5 text-sm outline-none ring-1 ring-inset ring-white/10 placeholder:text-white/40 focus:ring-white/25";
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') apply(); };
+    const common = {type: 'number', inputMode: decimal ? 'decimal' : 'numeric', step: decimal ? 'any' : 1, min, max, onBlur: apply, onKeyDown, className: box} as const;
 
     return (
         <div className="flex items-center gap-2">
-            <input type="number" inputMode="numeric" min={YEAR_MIN} max={YEAR_MAX} placeholder="From" aria-label="From year"
-                   value={draftFrom} onChange={(e) => setDraftFrom(e.target.value)} onBlur={apply} onKeyDown={onKeyDown} className={box} />
+            <input {...common} placeholder={placeholders[0]} aria-label={labels[0]}
+                   value={draftFrom} onChange={(e) => setDraftFrom(e.target.value)} />
             <span className="text-white/40">–</span>
-            <input type="number" inputMode="numeric" min={YEAR_MIN} max={YEAR_MAX} placeholder="To" aria-label="To year"
-                   value={draftTo} onChange={(e) => setDraftTo(e.target.value)} onBlur={apply} onKeyDown={onKeyDown} className={box} />
+            <input {...common} placeholder={placeholders[1]} aria-label={labels[1]}
+                   value={draftTo} onChange={(e) => setDraftTo(e.target.value)} />
         </div>
     );
 }
@@ -255,6 +277,8 @@ export default function Search() {
     const ratings = splitParam(searchParams.get("rated")).filter((key) => CONTENT_RATINGS.some((r) => r.key === key));
     const yearFrom = parseYear(searchParams.get("from"));
     const yearTo = parseYear(searchParams.get("to"));
+    const priceMin = parsePrice(searchParams.get("pmin"));
+    const priceMax = parsePrice(searchParams.get("pmax"));
     const page = Math.max(1, Number(searchParams.get("page")) || 1);
     const limitParam = Number(searchParams.get("limit"));
     const limit = (PAGE_SIZES as readonly number[]).includes(limitParam) ? limitParam : DEFAULT_PAGE_SIZE;
@@ -262,7 +286,7 @@ export default function Search() {
     const sort: SortKey = sortParam && sortParam in SORTS ? (sortParam as SortKey) : DEFAULT_SORT;
 
     const {data, error, isLoading} = useSWR<Page<Movie>>(
-        searchUrl({query, genres, tags, ratings, yearFrom, yearTo}, sort, page, limit), fetcher, {keepPreviousData: true});
+        searchUrl({query, genres, tags, ratings, yearFrom, yearTo, priceMin, priceMax}, sort, page, limit), fetcher, {keepPreviousData: true});
     const {data: allTags} = useSWR<TagOption[]>(TAGS_URL, async (url: string) =>
         (await fetcher(url)).map((t: { tag_id: number; name: string }) => ({id: t.tag_id, name: t.name})),
         {revalidateOnFocus: false});
@@ -297,17 +321,20 @@ export default function Search() {
     const toggleTag = (id: string) => updateFilters({tags: toggleIn(tags, id)});
     const toggleRating = (key: string) => updateFilters({rated: toggleIn(ratings, key)});
     const setYears = (from: number | null, to: number | null) => updateFilters({from, to});
-    const clearFilters = () => updateFilters({genres: null, tags: null, rated: null, from: null, to: null});
+    const setPrices = (pmin: number | null, pmax: number | null) => updateFilters({pmin, pmax});
+    const clearFilters = () => updateFilters({genres: null, tags: null, rated: null, from: null, to: null, pmin: null, pmax: null});
     const years = yearsLabel(yearFrom, yearTo);
+    const prices = priceLabel(priceMin, priceMax);
 
     const heading = query ? `“${query}”`
         : genres.length ? genres.join(' & ')
         : tags.length ? tags.map(tagName).join(', ')
         : ratings.length ? ratingsHeading(ratings)
-        : years ? `Movies from ${years}`
+        : years ? (yearFrom ? `Movies from ${years}` : `Movies ${years.replace(/^Up to/, 'up to')}`)
+        : prices ? priceHeading(priceMin, priceMax)
         : 'All movies';
     const total = data?.totalElements;
-    const activeCount = genres.length + tags.length + ratings.length + (years ? 1 : 0);
+    const activeCount = genres.length + tags.length + ratings.length + (years ? 1 : 0) + (prices ? 1 : 0);
 
     return (
         <main className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 pb-16 pt-8 text-white">
@@ -351,6 +378,10 @@ export default function Search() {
                     <Chip key="years" label={years} onDelete={() => setYears(null, null)}
                           deleteIcon={<CloseRoundedIcon aria-label="Remove year filter" />} sx={ACTIVE_CHIP_SX} />
                 )}
+                {prices && (
+                    <Chip key="prices" label={prices} onDelete={() => setPrices(null, null)}
+                          deleteIcon={<CloseRoundedIcon aria-label="Remove price filter" />} sx={ACTIVE_CHIP_SX} />
+                )}
                 {activeCount > 1 && (
                     <button type="button" onClick={clearFilters} className="cursor-pointer px-2 text-sm text-white/60 underline-offset-4 hover:text-white hover:underline">
                         Clear all
@@ -388,13 +419,31 @@ export default function Search() {
                         </section>
                         <section className="flex flex-col gap-2">
                             <h2 className="text-sm font-semibold text-white/70">Years</h2>
-                            <YearRange from={yearFrom} to={yearTo} onChange={setYears} />
+                            <RangeInputs from={yearFrom} to={yearTo} onChange={setYears} parse={parseYear}
+                                         placeholders={['From', 'To']} labels={['From year', 'To year']} min={YEAR_MIN} max={YEAR_MAX} />
                             <div className="flex flex-wrap gap-1.5">
                                 {DECADES.map((d) => {
                                     const on = (d.from ?? null) === yearFrom && (d.to ?? null) === yearTo;
                                     return (
                                         <ToggleChip key={d.label} on={on} onClick={() => (on ? setYears(null, null) : setYears(d.from ?? null, d.to ?? null))}>
                                             {d.label}
+                                        </ToggleChip>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                        <section className="flex flex-col gap-2">
+                            <h2 className="text-sm font-semibold text-white/70">Price</h2>
+                            <RangeInputs from={priceMin} to={priceMax} onChange={setPrices} parse={parsePrice}
+                                         placeholders={['$ Min', '$ Max']} labels={['Minimum price in dollars', 'Maximum price in dollars']}
+                                         min={0} max={PRICE_MAX} decimal />
+                            <div className="flex flex-wrap gap-1.5">
+                                {PRICE_BANDS.map((b) => {
+                                    const [min, max] = [b.min ?? null, b.max ?? null];
+                                    const on = min === priceMin && max === priceMax;
+                                    return (
+                                        <ToggleChip key={priceLabel(min, max)} on={on} onClick={() => (on ? setPrices(null, null) : setPrices(min, max))}>
+                                            {priceLabel(min, max)}
                                         </ToggleChip>
                                     );
                                 })}
