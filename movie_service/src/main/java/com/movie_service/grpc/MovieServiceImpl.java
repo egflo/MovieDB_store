@@ -4,6 +4,7 @@ package com.movie_service.grpc;
 import com.movie_service.repository.MovieRepository;
 import com.movie_service.service.MovieService;
 import com.movie_service.models.Movie;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.bson.types.ObjectId;
@@ -29,6 +30,11 @@ public class MovieServiceImpl extends MovieServiceGrpc.MovieServiceImplBase {
     @Autowired
     MovieRepository repository;
 
+    /** Protobuf strings can't be null; send "" for a missing field. */
+    private static String orEmpty(String value) {
+        return value == null ? "" : value;
+    }
+
     @Override
     public void getMovie(MovieRequest request, StreamObserver<MovieResponse> responseObserver) {
 
@@ -37,7 +43,7 @@ public class MovieServiceImpl extends MovieServiceGrpc.MovieServiceImplBase {
         Movie movie = present.orElse(null);
 
         if(movie == null) {
-            responseObserver.onError(new Exception("Movie not found"));
+            responseObserver.onError(Status.NOT_FOUND.withDescription("Movie not found: " + id).asRuntimeException());
             return;
         }
 
@@ -45,24 +51,27 @@ public class MovieServiceImpl extends MovieServiceGrpc.MovieServiceImplBase {
 
         //Create empty list of genres
         List<Genre> genres = new ArrayList<>();
-        for (String genre : movie.getGenres()) {
+        for (String genre : movie.getGenres() == null ? List.<String>of() : movie.getGenres()) {
             Genre g = Genre.newBuilder().setName(genre).build();
             genres.add(g);
         }
 
         //Create response
         MovieResponse response = MovieResponse.newBuilder()
-                .setId(movie.getId())
-                .setTitle(movie.getTitle())
-                .setYear(movie.getYear())
-                .setRated(movie.getRated())
-                .setRuntime(movie.getRuntime())
-                .setBackground(movie.getBackground())
-                .setPlot(movie.getPlot())
-                .setDirector(movie.getDirector())
-                .setPoster(movie.getPoster())
-                .setSku(movie.getMovieId())
-                .setLogo(movie.getLogo())
+                // Protobuf setters throw on null, and most movies lack some of
+                // these (about 95% have no content rating), so a null here made
+                // every such movie fail: they couldn't be favourited.
+                .setId(orEmpty(movie.getId()))
+                .setTitle(orEmpty(movie.getTitle()))
+                .setYear(movie.getYear() == null ? 0 : movie.getYear())
+                .setRated(orEmpty(movie.getRated()))
+                .setRuntime(orEmpty(movie.getRuntime()))
+                .setBackground(orEmpty(movie.getBackground()))
+                .setPlot(orEmpty(movie.getPlot()))
+                .setDirector(orEmpty(movie.getDirector()))
+                .setPoster(orEmpty(movie.getPoster()))
+                .setSku(orEmpty(movie.getMovieId()))
+                .setLogo(orEmpty(movie.getLogo()))
                 //Genres is list of strings
                 .addAllGenres(genres)
                 .build();
