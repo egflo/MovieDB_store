@@ -72,6 +72,18 @@ public class MovieDAO {
             allCriteria.add(years);
         }
 
+        if (filters.containsKey("priceMin") || filters.containsKey("priceMax") || filters.containsKey("priced")) {
+            // Movie.price is a copy of the inventory price; movies without one
+            // (not yet synced, or no product) are left out rather than sorting
+            // first. So are the ~11k untitled stub records: they have products,
+            // hence prices, so they'd otherwise sit at the end of every price.
+            Criteria price = Criteria.where("price").exists(true);
+            if (filters.containsKey("priceMin")) price = price.gte(Integer.parseInt(filters.get("priceMin")[0]));
+            if (filters.containsKey("priceMax")) price = price.lte(Integer.parseInt(filters.get("priceMax")[0]));
+            allCriteria.add(price);
+            allCriteria.add(Criteria.where("title").exists(true).ne(""));
+        }
+
         if (filters.containsKey("rated")) {
             allCriteria.add(Criteria.where("rated").in((Object[]) filters.get("rated")));
         }
@@ -100,6 +112,14 @@ public class MovieDAO {
         // Apply all criteria together if any exist
         if (!allCriteria.isEmpty()) {
             query.addCriteria(new Criteria().andOperator(allCriteria.toArray(new Criteria[0])));
+        }
+
+        // Thousands of movies share each price, and Mongo doesn't order ties
+        // stably, so pages could repeat or skip movies. Break ties by _id, in
+        // the same direction so the {price, _id} index still serves the sort.
+        Sort.Order byPrice = pageable.getSort().getOrderFor("price");
+        if (byPrice != null) {
+            query.with(Sort.by(byPrice.getDirection(), "_id"));
         }
 
         Sort sort = pageable.getSort();

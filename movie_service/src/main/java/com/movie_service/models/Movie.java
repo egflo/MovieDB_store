@@ -1,6 +1,7 @@
 package com.movie_service.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -58,6 +59,15 @@ public class Movie {
 
     @Field("keywords")
     List<Tag> tags;
+
+    /**
+     * Copy of the inventory price in cents, kept only so search can filter and
+     * sort by it. inventory_service owns the price; PriceSyncService refreshes
+     * this, so it can lag a price change by up to prices.sync-interval. Hidden
+     * from JSON for that reason: the live price is inventory's /product/{id}.
+     */
+    @JsonIgnore
+    Integer price;
 
     public Movie() {
     }
@@ -257,6 +267,14 @@ public Movie(String movieId, String title, Integer year, String rated, String ru
 
     public void setPopularity(Double popularity) {
         this.popularity = popularity;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
     public Long getRevenue() {

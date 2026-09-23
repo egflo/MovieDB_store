@@ -438,6 +438,106 @@
           }
         },
         {
+          "name": "Search by exact price ($20)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"finds movies at $20\", () => pm.expect(body.totalElements).to.be.above(0));",
+                  "// Untitled stub records have prices too; price searches must leave them out.",
+                  "pm.test(\"every result has a title\", () => body.content.forEach(m => pm.expect(m.title).to.be.a('string').and.not.empty));",
+                  "pm.collectionVariables.set(\"price20Total\", body.totalElements);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/search?priceMin=2000&priceMax=2000&limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "priceMin",
+                  "value": "2000"
+                },
+                {
+                  "key": "priceMax",
+                  "value": "2000"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search from $20, cheapest first",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"an open range finds more than one price\", () => pm.expect(body.totalElements).to.be.above(Number(pm.collectionVariables.get(\"price20Total\"))));",
+                  "pm.test(\"every result has a title\", () => body.content.forEach(m => pm.expect(m.title).to.be.a('string').and.not.empty));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/search?priceMin=2000&sortBy=price&direction=1&limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "priceMin",
+                  "value": "2000"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "price"
+                },
+                {
+                  "key": "direction",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
           "name": "Recommendations for a movie (KNOWN ISSUE: 500)",
           "event": [
             {

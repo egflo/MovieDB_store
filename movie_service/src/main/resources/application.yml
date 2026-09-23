@@ -124,3 +124,8 @@ resilience4j:
         limitRefreshPeriod: 1s
         timeoutDuration: 0s
 
+
+prices:
+  # How often PriceSyncService copies prices from inventory_service onto movies
+  # for the search price filter. A failed run is retried after a minute.
+  sync-interval: ${PRICE_SYNC_INTERVAL:PT1H}

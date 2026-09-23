@@ -72,7 +72,9 @@ public class MovieController {
             @RequestParam Optional<String> tags,
             @RequestParam Optional<String> rated,
             @RequestParam Optional<Integer> yearFrom,
-            @RequestParam Optional<Integer> yearTo
+            @RequestParam Optional<Integer> yearTo,
+            @RequestParam Optional<Integer> priceMin,
+            @RequestParam Optional<Integer> priceMax
     ) {
         Sort.Direction sortDirection = Sort.Direction.DESC;
         if (direction.isPresent()) {
@@ -90,10 +92,18 @@ public class MovieController {
         // Inclusive; either end may be left open. The same year twice is one year.
         yearFrom.ifPresent(y -> filters.put("yearFrom", new String[]{String.valueOf(y)}));
         yearTo.ifPresent(y -> filters.put("yearTo", new String[]{String.valueOf(y)}));
+        // In cents, inclusive; either end may be left open.
+        priceMin.ifPresent(p -> filters.put("priceMin", new String[]{String.valueOf(p)}));
+        priceMax.ifPresent(p -> filters.put("priceMax", new String[]{String.valueOf(p)}));
         // Ranking by rating alone put obscure titles with a handful of votes
         // first, so rating sorts only count films with enough votes.
         if (sortBy.filter(s -> s.startsWith("ratings.imdb")).isPresent()) {
             filters.put("minVotes", new String[]{String.valueOf(MIN_VOTES_FOR_RATING_SORT)});
+        }
+        // Price sorts go through the criteria query too, which breaks ties
+        // and leaves out records that can't be listed (see MovieDAO).
+        if (sortBy.filter("price"::equals).isPresent()) {
+            filters.put("priced", new String[0]);
         }
 
         if (!filters.isEmpty()) {
