@@ -4,8 +4,6 @@ import React, {useEffect, useMemo, useState} from "react";
 import useSWR from 'swr';
 import {Chip} from "@mui/material";
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
-import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { FixedSizeList as List } from "react-window";
 import {Movie} from "@/lib/models/Movie";
@@ -13,6 +11,7 @@ import {Page} from "@/lib/models/Page";
 import {CHIP, CHIP_ICON_SIZE, CHIP_SX} from "@/app/ui/chip";
 import {GLASS_CARD} from "@/app/ui/glass";
 import {MOVIE_GRID, MovieCard, MovieGridSkeleton} from "@/app/ui/MovieCard";
+import Pager from "@/app/ui/Pager";
 import {CONTENT_RATINGS, parsePrice, PRICE_MAX, priceHeading, priceLabel, ratingLabel, ratingsHeading} from "./filters";
 
 // res.json() alone treats an error body as data.
@@ -176,23 +175,6 @@ function RangeInputs({from, to, parse, onChange, placeholders, labels, min, max,
             <input {...common} placeholder={placeholders[1]} aria-label={labels[1]}
                    value={draftTo} onChange={(e) => setDraftTo(e.target.value)} />
         </div>
-    );
-}
-
-function Pager({page, totalPages, onPage}: { page: number; totalPages: number; onPage: (n: number) => void }) {
-    if (totalPages <= 1) return null;
-    return (
-        <nav aria-label="Pages" className="flex items-center justify-center gap-3 pt-2">
-            <button type="button" className={`${CHIP} cursor-pointer pl-2 pr-3.5`} disabled={page <= 1} onClick={() => onPage(page - 1)}>
-                <ChevronLeftRoundedIcon sx={CHIP_ICON_SIZE} /> Previous
-            </button>
-            <span className="text-sm text-white/70" aria-current="page">
-                Page {page.toLocaleString()} of {totalPages.toLocaleString()}
-            </span>
-            <button type="button" className={`${CHIP} cursor-pointer pl-3.5 pr-2`} disabled={page >= totalPages} onClick={() => onPage(page + 1)}>
-                Next <ChevronRightRoundedIcon sx={CHIP_ICON_SIZE} />
-            </button>
-        </nav>
     );
 }
 
