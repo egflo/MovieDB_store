@@ -17,6 +17,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/movie")
 public class MovieController {
+    /** Votes a film needs to count when results are sorted by rating. */
+    private static final int MIN_VOTES_FOR_RATING_SORT = 1000;
+
     @Autowired
     private MovieService service;
 
@@ -66,7 +69,10 @@ public class MovieController {
             @PathVariable Optional<String> title,
             @RequestParam Optional<String> query,
             @RequestParam Optional<String> genres,
-            @RequestParam Optional<String> tags
+            @RequestParam Optional<String> tags,
+            @RequestParam Optional<String> rated,
+            @RequestParam Optional<Integer> yearFrom,
+            @RequestParam Optional<Integer> yearTo
     ) {
         Sort.Direction sortDirection = Sort.Direction.DESC;
         if (direction.isPresent()) {
@@ -79,12 +85,18 @@ public class MovieController {
         query.ifPresent(s -> filters.put("query", s.split("_")));
         genres.ifPresent(s -> filters.put("genres", s.split("_")));
         tags.ifPresent(s -> filters.put("tags", s.split("_")));
+        // Content ratings (G, PG-13, ...): any of the "_"-separated values.
+        rated.ifPresent(s -> filters.put("rated", s.split("_")));
+        // Inclusive; either end may be left open. The same year twice is one year.
+        yearFrom.ifPresent(y -> filters.put("yearFrom", new String[]{String.valueOf(y)}));
+        yearTo.ifPresent(y -> filters.put("yearTo", new String[]{String.valueOf(y)}));
+        // Ranking by rating alone put obscure titles with a handful of votes
+        // first, so rating sorts only count films with enough votes.
+        if (sortBy.filter(s -> s.startsWith("ratings.imdb")).isPresent()) {
+            filters.put("minVotes", new String[]{String.valueOf(MIN_VOTES_FOR_RATING_SORT)});
+        }
 
-        System.out.println("title: " + title);
-        System.out.println("filters: " + filters);
-
-        if (genres.isPresent() || tags.isPresent() ||
-                query.isPresent()) {
+        if (!filters.isEmpty()) {
             return new ResponseEntity<>(service.findMoviesByCriteria(
                     title,
                     filters,

@@ -28,45 +28,65 @@ public class MovieDAO {
     public MovieDAO() {
     }
 
+    /**
+     * Escape regex metacharacters so user text matches literally. Passed
+     * straight to $regex, a search for "(" was an invalid pattern and a 500.
+     */
+    private static String literal(String text) {
+        return text.replaceAll("[\\\\^$.|?*+()\\[\\]{}]", "\\\\$0");
+    }
+
     public Page<Movie> findMovieByParams(Optional<String> title, HashMap<String, String[]> filters, Pageable pageable) {
 
         Query query = new Query().with(pageable);
         List<Criteria> allCriteria = new ArrayList<>();
 
         if (title.isPresent()) {
-            System.out.println("title: " + title);
-            allCriteria.add(Criteria.where("title").regex(title.get(), "i"));
+            allCriteria.add(Criteria.where("title").regex(literal(title.get()), "i"));
 
             //query.addCriteria(Criteria.where("title").regex(title.get(), "i"));
         }
 
         if (filters.containsKey("query")) {
-            System.out.println("query: " + filters.get("query"));
-            allCriteria.add(Criteria.where("title").regex(filters.get("query")[0], "i"));
+            allCriteria.add(Criteria.where("title").regex(literal(filters.get("query")[0]), "i"));
             //uery.addCriteria(Criteria.where("title").regex(filters.get("query")[0], "i"));
         }
 
         if (filters.containsKey("genres")) {
             List<Criteria> genreCriteria = new ArrayList<>();
             for (String genre : filters.get("genres")) {
-                System.out.println("genre: " + genre);
                 allCriteria.add(Criteria.where("genres").in(genre));
             }
             // query.addCriteria(new Criteria().andOperator(genreCriteria.toArray(new Criteria[genreCriteria.size()])));
         }
         if (filters.containsKey("year")) {
-            System.out.println("year: " + filters.get("year"));
             allCriteria.add(Criteria.where("year").is(Integer.parseInt(filters.get("year")[0])));
+        }
+
+        if (filters.containsKey("yearFrom") || filters.containsKey("yearTo")) {
+            Criteria years = Criteria.where("year");
+            // With no lower bound, start at 1: a few records store an unknown
+            // year as 0, which "up to 1979" would otherwise include.
+            years = years.gte(filters.containsKey("yearFrom") ? Integer.parseInt(filters.get("yearFrom")[0]) : 1);
+            if (filters.containsKey("yearTo")) years = years.lte(Integer.parseInt(filters.get("yearTo")[0]));
+            allCriteria.add(years);
+        }
+
+        if (filters.containsKey("rated")) {
+            allCriteria.add(Criteria.where("rated").in((Object[]) filters.get("rated")));
         }
 
         if (filters.containsKey("tags")) {
             List<Criteria> tagCriteria = new ArrayList<>();
             for (String tag : filters.get("tags")) {
-                System.out.println("tag: " + tag);
                 allCriteria.add(Criteria.where("keywords.tag_id").is(Integer.parseInt(tag)));
                 //tagCriteria.add(Criteria.where("keywords.tag_id").is(Integer.parseInt(tag)));
             }
             //query.addCriteria(new Criteria().andOperator(tagCriteria.toArray(new Criteria[tagCriteria.size()])));
+        }
+
+        if (filters.containsKey("minVotes")) {
+            allCriteria.add(Criteria.where("ratings.numOfVotes").gte(Integer.parseInt(filters.get("minVotes")[0])));
         }
 
         if (filters.containsKey("cast")) {
@@ -88,7 +108,10 @@ public class MovieDAO {
         Page<Movie> page = PageableExecutionUtils.getPage(
                 mongoTemplate.find(query, Movie.class, "movies"),
                 pageable,
-                () -> mongoTemplate.count(query, Movie.class, "movies")
+                // Count without the page's skip/limit. Counting the paged query
+                // capped the total at one page, so clients couldn't tell how
+                // many results or pages there were.
+                () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), Movie.class, "movies")
         );
 
         return page;
