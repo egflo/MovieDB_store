@@ -15,7 +15,7 @@ import Pager from "@/app/ui/Pager";
 import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
 import StatusPill from "./StatusPill";
 import OrderThumb from "./OrderThumb";
-import { orderDate, orderTitles } from "./format";
+import { orderDate, orderItems, orderTitles } from "./format";
 
 /** getOrders' default, so page 1 shares its cache entry with the account page's Orders card. */
 const PAGE_SIZE = 20;
@@ -24,7 +24,7 @@ const THUMBS = 3;
 const ROW = `flex items-center gap-4 rounded-2xl p-4 ${GLASS_CARD}`;
 
 function OrderRow({ order }: { order: Order }) {
-    const items = order.items ?? [];
+    const items = orderItems(order);
     const count = items.reduce((n, i) => n + i.quantity, 0);
     return (
         <li>
@@ -32,15 +32,27 @@ function OrderRow({ order }: { order: Order }) {
                 href={`/user/order/${order.id}`}
                 className={`group transition-colors hover:bg-white/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${ROW}`}
             >
-                {/* Fixed width (three 44px thumbs and their gaps; one on phones)
-                    so the text lines up across orders with fewer items. */}
-                <span className="flex w-11 shrink-0 gap-1.5 sm:w-36" aria-hidden>
+                {/* Fixed width (three 44px thumbs, a "+N" tile and their gaps;
+                    one thumb on phones) so the text lines up across orders. */}
+                <span className="flex w-11 shrink-0 gap-1.5 sm:w-[194px]" aria-hidden>
                     {items.slice(0, THUMBS).map((item, n) => (
-                        // Just the first on phones, where the row is narrow.
-                        <span key={item.id} className={n > 0 ? "hidden sm:block" : undefined}>
+                        // Just the first on phones, where the row is narrow; it
+                        // carries the "+N" as a corner badge instead of a tile.
+                        <span key={item.id} className={n > 0 ? "hidden sm:block" : "relative"}>
                             <OrderThumb url={item.photo} width={44} height={64} className="block h-16 w-11" />
+                            {n === 0 && items.length > 1 && (
+                                <span className="absolute -bottom-1 -right-1 rounded-full bg-neutral-900/90 px-1.5 text-[11px] font-semibold leading-5 text-white ring-1 ring-white/20 sm:hidden">
+                                    +{items.length - 1}
+                                </span>
+                            )}
                         </span>
                     ))}
+                    {/* Titles past the third: a poster-sized tile with the count. */}
+                    {items.length > THUMBS && (
+                        <span className="hidden h-16 w-11 items-center justify-center rounded-md bg-white/[0.08] text-sm font-semibold text-white/80 ring-1 ring-inset ring-white/15 sm:flex">
+                            +{items.length - THUMBS}
+                        </span>
+                    )}
                 </span>
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <p className="font-semibold">

@@ -13,7 +13,7 @@ import { CHIP, CHIP_ICON_SIZE } from "@/app/ui/chip";
 import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
 import StatusPill from "@/app/user/orders/StatusPill";
 import OrderThumb from "@/app/user/orders/OrderThumb";
-import { orderDateTime, orderShippingCost, paymentLabel } from "@/app/user/orders/format";
+import { orderDateTime, orderItems, orderShippingCost, paymentLabel } from "@/app/user/orders/format";
 
 const PANEL = `rounded-2xl p-5 ${GLASS_CARD}`;
 
@@ -96,7 +96,7 @@ export default function OrderDetail({ id }: { id: string }) {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_320px] md:items-start">
                     <section aria-label="Items" className={`flex flex-col gap-4 ${PANEL}`}>
                         <ul className="flex flex-col divide-y divide-white/10">
-                            {order.items?.map((item) => (
+                            {orderItems(order).map((item) => (
                                 <li key={item.id} className="flex items-center gap-4 py-3 first:pt-0">
                                     <Link href={`/movie/${item.itemId}`} className="group flex min-w-0 flex-1 items-center gap-4">
                                         <OrderThumb url={item.photo} width={56} height={80} className="block h-20 w-14" />

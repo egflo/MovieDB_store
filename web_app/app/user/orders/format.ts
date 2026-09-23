@@ -12,9 +12,16 @@ export function orderShippingCost(order: Pick<Order, "total" | "subTotal" | "tax
     return Math.max(0, order.total - order.subTotal - order.tax);
 }
 
+/**
+ * An order's lines in a stable order (by line id, i.e. as added). The API
+ * returns them in no particular order, so posters and titles reshuffled on
+ * every load.
+ */
+export const orderItems = (order: Pick<Order, "items">) => [...(order.items ?? [])].sort((a, b) => a.id - b.id);
+
 /** "Gladiator", "Gladiator and The Dark Knight", "Gladiator, The Dark Knight + 2 more". */
 export function orderTitles(order: Pick<Order, "items">): string {
-    const titles = (order.items ?? []).map((i) => i.description).filter(Boolean);
+    const titles = orderItems(order).map((i) => i.description).filter(Boolean);
     if (titles.length <= 1) return titles[0] ?? "";
     if (titles.length === 2) return `${titles[0]} and ${titles[1]}`;
     return `${titles[0]}, ${titles[1]} + ${titles.length - 2} more`;
