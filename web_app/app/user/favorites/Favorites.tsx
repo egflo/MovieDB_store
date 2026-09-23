@@ -7,6 +7,7 @@ import { useBookmarks } from "@/lib/context/BookmarkContext";
 import {MOVIE_GRID, MovieCard, MovieGridSkeleton} from "@/app/ui/MovieCard";
 import SignInDialog from "@/app/components/SignInDialog";
 import {CHIP} from "@/app/ui/chip";
+import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
 
 /**
  * The signed-in user's favourites, in the same cards and grid as search
@@ -56,7 +57,9 @@ export default function Favorites() {
     }
 
     return (
-        <main className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 pb-16 pt-8 text-white">
+        // isolate keeps the backdrop's -z-10 inside this page.
+        <main className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 pb-16 pt-8 text-white">
+            <FavoriteBackdrop />
             <header className="flex flex-col gap-1">
                 <h1 className="text-3xl font-semibold tracking-tight">Favorites</h1>
                 <p className="h-5 text-sm text-white/60">
