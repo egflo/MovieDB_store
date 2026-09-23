@@ -9,6 +9,7 @@ import {useAuth} from "@/lib/firebase/AuthContext";
 import {useCart} from "@/lib/context/CartContext";
 import {saveCartItem} from "@/lib/api/cart";
 import useSWR from "swr";
+import {CHIP, CHIP_ICON_SIZE} from "@/app/ui/chip";
 
 
 interface ItemPropsItemProps {
@@ -71,14 +72,10 @@ export default function Cart({id}: ItemPropsItemProps) {
             disabled={!data }
             onClick={handleSelected}
 
-            className="flex flex-row items-center justify-center gap-1 rounded-full p-2 bg-gray-900  hover:border-gray-800 hover:shadow-lg cursor-pointer ">
-            <ShoppingBagOutlined
-                className={"size-6 md:size-6 "} />
-
-            <div className='flex flex-col items-center justify-center'>
-                <p className="text-white font-bold text-xs">
-                    {priceFormatter(data)}</p>
-            </div>
+            // Styled like the genre chips above it.
+            className={`${CHIP} cursor-pointer px-3.5`}>
+            <ShoppingBagOutlined sx={CHIP_ICON_SIZE} />
+            <span>{priceFormatter(data)}</span>
         </button>
     )
 }

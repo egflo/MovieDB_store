@@ -9,6 +9,7 @@ import FavoriteBorderOutlined from "@mui/icons-material/FavoriteBorderOutlined";
 import {useAuth} from "@/lib/firebase/AuthContext";
 import {freshToken} from "@/lib/api/client";
 import {debounce} from "lodash";
+import {CHIP_ICON_SIZE, CHIP_ICON_SX} from "@/app/ui/chip";
 
 const RATE_API : string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/sentiment/rate`;
 
@@ -121,7 +122,7 @@ export default function Rate({ id }: RateProps) {
                     >
                         {/* Left side button - ThumbDown */}
                         <div
-                            className="absolute transition-all duration-300 ease-in-out bg-gray-900 hover:bg-gray-800 rounded-full"
+                            className="absolute rounded-full transition-all duration-300 ease-in-out"
                             style={{
                                 transform: hovered ? 'translateX(-100%)' : 'translateX(0)',
                                 opacity: hovered ? 1 : 0,
@@ -131,28 +132,30 @@ export default function Rate({ id }: RateProps) {
                         >
                             <IconButton
                                 onClick={() => handleSelected(SentimentState.DISLIKE)}
-                                className="">
-                                <ThumbDownAltOutlined sx={{ color: 'white' }} />
+                                aria-label="Dislike"
+                                sx={CHIP_ICON_SX}>
+                                <ThumbDownAltOutlined sx={CHIP_ICON_SIZE} />
                             </IconButton>
                         </div>
 
                         {/* Center button - ThumbUp */}
-                        <div className="z-10 bg-gray-900 hover:bg-gray-800 rounded-full  transition-all duration-300 ease-in-out">
+                        <div className="z-10 rounded-full transition-all duration-300 ease-in-out">
                             <IconButton
                                 onClick={() => handleSelected(SentimentState.LIKE)}
-                                className="="
+                                aria-label="Like"
+                                sx={CHIP_ICON_SX}
                                 style={{
                                     transition: 'all 0.3s ease-in-out',
                                     transform: hovered ? 'scale(1.1)' : 'scale(1)',
                                 }}
                             >
-                                <ThumbUpOffAltOutlined sx={{ color: 'white' }} />
+                                <ThumbUpOffAltOutlined sx={CHIP_ICON_SIZE} />
                             </IconButton>
                         </div>
 
                         {/* Right side button - Favorite */}
                         <div
-                            className="absolute transition-all duration-300 ease-in-out bg-gray-900 hover:bg-gray-800 rounded-full"
+                            className="absolute rounded-full transition-all duration-300 ease-in-out"
                             style={{
                                 transform: hovered ? 'translateX(100%)' : 'translateX(0)',
                                 opacity: hovered ? 1 : 0,
@@ -162,8 +165,9 @@ export default function Rate({ id }: RateProps) {
                         >
                             <IconButton
                                 onClick={() => handleSelected(SentimentState.LOVE)}
-                                className="">
-                                <FavoriteBorderOutlined sx={{ color: 'white' }} />
+                                aria-label="Love"
+                                sx={CHIP_ICON_SX}>
+                                <FavoriteBorderOutlined sx={CHIP_ICON_SIZE} />
                             </IconButton>
                         </div>
                     </div>

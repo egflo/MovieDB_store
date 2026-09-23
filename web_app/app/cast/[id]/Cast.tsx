@@ -5,7 +5,7 @@ import ProfileImage from "@/app/components/ProfileImage";
 import {useEffect, useId, useRef, useState} from "react";
 import {Movie} from "@/lib/models/Movie";
 import {Page} from "@/lib/models/Page";
-import PosterItem from "@/app/ui/PosterItem";
+import {MOVIE_GRID, MovieCard, MovieGridSkeleton} from "@/app/ui/MovieCard";
 import {CastDetails} from "@/lib/models/CastDetails";
 import {optimizerUrl} from "@/lib/image";
 import ScrollZoomBackdrop from "@/app/components/ScrollZoomBackdrop";
@@ -52,23 +52,11 @@ function lifespan(dob?: string, dod?: string): string | null {
     return null;
 }
 
-// Left-aligned so the posters line up with the heading above them; centred on
-// phones, where a single column would otherwise hug the left edge.
-const FILM_GRID = "grid grid-cols-[repeat(auto-fill,200px)] justify-center sm:justify-start gap-x-4 gap-y-6";
-
 function FilmsSkeleton() {
     return (
-        <div role="status" aria-label="Loading films" className="flex flex-col gap-4 motion-safe:animate-pulse">
-            <div className="h-6 w-40 rounded bg-white/10" />
-            <div className={FILM_GRID}>
-                {Array.from({length: 8}, (_, i) => (
-                    <div key={i} className="flex flex-col gap-2">
-                        <div className="h-[300px] w-[200px] rounded-lg bg-white/5" />
-                        <div className="h-4 w-3/4 rounded bg-white/10" />
-                        <div className="h-3 w-1/2 rounded bg-white/5" />
-                    </div>
-                ))}
-            </div>
+        <div className="flex flex-col gap-4">
+            <div className="h-6 w-40 rounded bg-white/10 motion-safe:animate-pulse" />
+            <MovieGridSkeleton count={8} label="Loading films" />
         </div>
     );
 }
@@ -96,23 +84,17 @@ function Films({castId}: { castId: string }) {
             {films.length === 0 ? (
                 <p className="text-sm text-white/60">No films found.</p>
             ) : (
-                <ul className={FILM_GRID}>
-                    {films.map((movie) => {
-                        const meta = [roleFor(movie, castId), movie.year].filter(Boolean).join(' · ');
-                        return (
-                            <li key={movie.id} className="flex flex-col gap-2">
-                                <PosterItem item={movie} size="small" />
-                                <div className="flex w-[200px] flex-col">
-                                    <p className="truncate text-sm font-medium text-white" title={movie.title}>
-                                        {movie.title}
-                                    </p>
-                                    {meta && (
-                                        <p className="truncate text-xs text-white/50" title={meta}>{meta}</p>
-                                    )}
-                                </div>
-                            </li>
-                        );
-                    })}
+                // The shared poster card, with this person's role in place of
+                // the genre: "Writer · 1989", "as Arthur Fleck · 2019".
+                <ul className={MOVIE_GRID}>
+                    {films.map((movie) => (
+                        <li key={movie.id}>
+                            <MovieCard
+                                movie={movie}
+                                meta={[roleFor(movie, castId), movie.year].filter(Boolean).join(' · ')}
+                            />
+                        </li>
+                    ))}
                 </ul>
             )}
 

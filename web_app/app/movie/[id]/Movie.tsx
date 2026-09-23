@@ -7,7 +7,6 @@ import CastItem from "@/app/ui/CastItem";
 import CriticReviewItem from "@/app/ui/CriticReviewItem";
 import UserReviewItem from "@/app/ui/UserReviewItem";
 import {Chip} from "@mui/material";
-import PosterItem from "@/app/ui/PosterItem";
 import Cart from "@/app/components/actions/Cart";
 import Favorite from "@/app/components/actions/Favorite";
 import Rate from "@/app/components/actions/Rate";
@@ -16,12 +15,14 @@ import {Tag} from "@/lib/models/Tag";
 import type {Movie as MovieModel} from "@/lib/models/Movie";
 import Box from "@mui/material/Box";
 import PosterImage from "@/app/components/PosterImage";
-import SubSection from "@/app/ui/SubSection";
+import SubSection, {formatRuntime} from "@/app/ui/SubSection";
 import {useAuth} from "@/lib/firebase/AuthContext";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import ScrollZoomBackdrop from "@/app/components/ScrollZoomBackdrop";
 import {optimizedImage} from "@/lib/image";
+import {CHIP_SX} from "@/app/ui/chip";
+import {MovieCard} from "@/app/ui/MovieCard";
 
 
 const CRITIC_REVIEW_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/critic/movie/`;
@@ -43,17 +44,40 @@ function uniqueNames(list: string): string[] {
     return [...new Set(list.split(',').map((name) => name.trim()).filter(Boolean))];
 }
 
-/** Related posters at the small size (200x300) rather than PosterItem's
- *  default medium; the row only passes `item`, so the size is fixed here. */
+/** Related movies as the shared poster card (glass caption, score, heart), at
+ *  the fixed small size a scrolling row needs. The row only passes `item`. */
 function RelatedPoster({item}: { item: MovieModel }) {
-    return <PosterItem item={item} size="small" />;
+    return <MovieCard movie={item} size="small" />;
+}
+
+/**
+ * The Information grid's entries, in display order, skipping empty fields so
+ * they don't leave gaps. Awards is wide: it's a sentence, not a name.
+ */
+function infoItems(data: any): { label: string; values: string[]; wide?: boolean }[] {
+    const items: { label: string; values: string[]; wide?: boolean }[] = [];
+    const add = (label: string, value: unknown, wide = false) => {
+        if (typeof value === 'string' && value.trim() && value !== 'N/A') items.push({label, values: [value.trim()], wide});
+    };
+    add('Director', data.director);
+    if (data.writer) {
+        const writers = uniqueNames(data.writer);
+        if (writers.length) items.push({label: writers.length > 1 ? 'Writers' : 'Writer', values: writers});
+    }
+    add('Production', data.production);
+    add('Language', data.language);
+    add('Country', data.country);
+    add('Box office', data.boxOffice);
+    add('Runtime', formatRuntime(data.runtime) ?? undefined);
+    add('Awards', data.awards, true);
+    return items;
 }
 
 /** Placeholder in the shape of the page while the movie loads. */
 function MovieSkeleton() {
     return (
-        <div role="status" aria-label="Loading movie" className="flex w-full flex-col gap-8 p-4 pt-8 motion-safe:animate-pulse">
-            <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
+        <div role="status" aria-label="Loading movie" className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 pb-4 pt-8 motion-safe:animate-pulse">
+            <div className="flex w-full flex-col items-center gap-6 md:flex-row md:items-start">
                 <div className="h-[310px] w-[220px] shrink-0 rounded-lg bg-white/10" />
                 <div className="flex w-full max-w-xl flex-col items-center gap-3 md:items-start">
                     <div className="h-[60px] w-[200px] rounded bg-white/10" />
@@ -95,6 +119,55 @@ function MovieSkeleton() {
     );
 }
 
+/** Poster size when there's nothing to match, and on phones, where the
+ *  poster sits above the details rather than beside them. */
+const POSTER_MIN = {width: 220, height: 310};
+const POSTER_ASPECT = 2 / 3;
+/** A wider poster narrows the details column, which can make it wrap and grow
+ *  taller, which widens the poster again. That settles, but on a narrow
+ *  window it could settle very large, so cap it. */
+const POSTER_MAX_HEIGHT = 480;
+
+/**
+ * Poster dimensions that match the height of the details column beside it,
+ * at the poster's 2:3 shape, never smaller than POSTER_MIN. Only applies from
+ * the md breakpoint, where the two sit side by side. Measured with a
+ * ResizeObserver because CSS can't reliably derive a width from a stretched
+ * height.
+ */
+function usePosterMatchingHeight(details: React.RefObject<HTMLElement | null>, ready: boolean) {
+    const [size, setSize] = useState(POSTER_MIN);
+
+    useEffect(() => {
+        const el = details.current;
+        if (!ready || !el) return;
+        const sideBySide = window.matchMedia('(min-width: 768px)');
+
+        const update = () => {
+            if (!sideBySide.matches) {
+                setSize(POSTER_MIN);
+                return;
+            }
+            const measured = Math.round(el.getBoundingClientRect().height);
+            const height = Math.min(POSTER_MAX_HEIGHT, Math.max(POSTER_MIN.height, measured));
+            const width = Math.round(height * POSTER_ASPECT);
+            // Bail out on no change so a resize doesn't re-render needlessly.
+            setSize((prev) => (prev.height === height && prev.width === width ? prev : {width, height}));
+        };
+
+        update();
+        const observer = new ResizeObserver(update);
+        observer.observe(el);
+        sideBySide.addEventListener('change', update);
+        return () => {
+            observer.disconnect();
+            sideBySide.removeEventListener('change', update);
+        };
+    }, [details, ready]);
+
+    return size;
+}
+
 export default function Movie({id}: { id: string }) {
 
     const auth = useAuth();
@@ -102,6 +175,9 @@ export default function Movie({id}: { id: string }) {
 
     const URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/${id}`;
     const { data, error } = useSWR(URL, fetcher);
+    // Above the early returns so hook order stays fixed.
+    const detailsRef = useRef<HTMLDivElement>(null);
+    const poster = usePosterMatchingHeight(detailsRef, !!data);
 
     const testURL = (url: string) => {
         return url && url.startsWith("http") && (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg"));
@@ -139,20 +215,27 @@ export default function Movie({id}: { id: string }) {
 
             {/* In normal flow rather than absolutely positioned over a fixed-
                 height image, so it starts below the sticky nav bar. */}
-            <div className={'flex flex-col w-full p-4 pt-8 gap-4'}>
+            {/* One centred column for the whole page, so the poster, the
+                section headings and every row share the same left edge. */}
+            <div className={'mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 pb-4 pt-8'}>
 
-                <div className="flex flex-col items-center md:flex-row gap-4 justify-center w-full h-full">
+                {/* Starts at the column's left edge rather than centring on its
+                    own, which put it on a different edge from the sections. */}
+                <div className="flex w-full flex-col items-center gap-6 md:flex-row md:items-start">
 
-                    <PosterImage  name={data.title} imageUrl={data.poster} width={220} height={310} className={"rounded-lg"} />
+                    {/* Sized to match the details column's height (md and up). */}
+                    <PosterImage  name={data.title} imageUrl={data.poster} width={poster.width} height={poster.height} className={"shrink-0 rounded-lg"} />
 
-                    <div className="flex flex-col items-center md:items-start gap-1 ">
+                    <div ref={detailsRef} className="flex flex-col items-center md:items-start gap-1 ">
 
                         {data.logo &&
                             <Box className={"flex justify-center items-center p-0 m-0  rounded-lg"}>
                                 {/* Through the optimizer: fanart.tv logos are full-size
-                                    PNGs, often http:// URLs that redirect. */}
+                                    PNGs, often http:// URLs that redirect. Left-aligned
+                                    in its box from md up, so a narrow logo starts at
+                                    the column's edge like the rows below it. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img {...optimizedImage(data.logo, 200, 75)} alt={data.title} className={"w-[200px] h-[75px] object-contain"} />
+                                <img {...optimizedImage(data.logo, 200, 75)} alt={data.title} className={"w-[200px] h-[75px] object-contain md:object-left"} />
                             </Box>
                         }
                         {!data.logo &&
@@ -162,6 +245,18 @@ export default function Movie({id}: { id: string }) {
                         }
 
                         <SubSection movie={data} />
+                        {data.genres &&
+                            <div className="flex flex-row flex-wrap gap-2 ">
+                                {data.genres.map((genre:string) => (
+                                    <Chip
+                                        key={genre}
+                                        onClick={() =>  router.push(`/search/?genres=${genre}`)}
+                                        sx={CHIP_SX}
+                                        label={genre}
+                                    />
+                                ))}
+                            </div>
+                        }
                         <RatingsSection movie={data} />
 
                         <div className={"hidden md:flex flex-row gap-4"}>
@@ -184,31 +279,10 @@ export default function Movie({id}: { id: string }) {
                             {data.plot}
                         </p>
 
-                        {data.genres &&
-                            <div className="flex flex-row gap-2 ">
-                                {data.genres.map((genre:string, index: number) => (
-                                    <div key={index}>
-                                        <Chip
-                                            className={'text-sm font-semibold bg-gray-900'}
-                                            onClick={() =>  router.push(`/search/?genres=${genre}`)}
-                                            sx={{
-                                                backgroundColor: 'rgba(0,0,0,0.6)',
-                                                color: 'white',
-                                                "&:hover": {
-                                                    backgroundColor: "rgba(100,100,100,0.4)",
-                                                },
-                                                cursor: 'pointer',
-                                            }}
-                                            label={genre}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        }
 
                         <div className="flex flex-row gap-2 ">
                             <Cart id={data.id} />
-                            <Favorite id={data.id} />
+                            <Favorite id={data.id} title={data.title} />
                             <Rate id={data.id} />
                             <Share  id={data.id} />
                         </div>
@@ -233,87 +307,19 @@ export default function Movie({id}: { id: string }) {
                         <div className={"flex flex-col gap-2 w-full  "}>
                             <p className="text-lg font-bold text-gray-300">Information</p>
 
-                            <div className={"information-container flex flex-wrap gap-6"}>
-                                {data.director &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.director}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Director</span>
+                            {/* A real grid, so every item sits in an even column
+                                (value above label, like the details up top); the
+                                long awards line gets a full row of its own. */}
+                            <dl className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-3 lg:grid-cols-4">
+                                {infoItems(data).map(({label, values, wide}) => (
+                                    <div key={label} className={`flex min-w-0 flex-col-reverse gap-1 ${wide ? 'col-span-full' : ''}`}>
+                                        <dt className="text-sm text-gray-400">{label}</dt>
+                                        <dd className="flex flex-col text-sm font-semibold text-gray-200">
+                                            {values.map((value) => <span key={value}>{value}</span>)}
+                                        </dd>
                                     </div>
-                                }
-
-                                {data.writer &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <div className={"flex flex-col gap-1 max-w-[200px] w-[200px] "}>
-                                            {uniqueNames(data.writer).map((writer: string) => (
-                                                <p key={writer} className="text-sm text-gray-300 font-semibold ">
-                                                    {writer}
-                                                </p>
-                                            ))}
-
-                                        </div>
-
-                                        <span className="text-sm text-gray-400"> Writer(s)</span>
-                                    </div>
-                                }
-
-                                {data.language &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.language}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Language</span>
-                                    </div>
-                                }
-
-                                {data.production &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.production}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Production</span>
-                                    </div>
-                                }
-
-                                {data.country &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.country}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Country</span>
-                                    </div>
-                                }
-
-                                {data.awards &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.awards}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Awards</span>
-                                    </div>
-                                }
-
-                                {data.boxOffice &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.boxOffice}
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Box office</span>
-                                    </div>
-                                }
-
-
-                                {data.runtime &&
-                                    <div className={"flex flex-col gap-1"}>
-                                        <p className="text-sm text-gray-300 font-semibold ">
-                                            {data.runtime} min
-                                        </p>
-                                        <span className="text-sm text-gray-400"> Runtime</span>
-                                    </div>
-                                }
-
-                            </div>
+                                ))}
+                            </dl>
 
                             <div className={"flex flex-col gap-2 w-full "}>
                                 <p className="text-lg font-bold text-gray-300">Keywords</p>

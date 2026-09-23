@@ -8,7 +8,7 @@ export default function RatingsSection({ movie }: { movie: Movie }) {
 
         if (!imdb) {
             return (
-                <div className="flex flex-row gap-2 bg-black rounded-lg p-2 items-center justify-center m-1">
+                <div className="flex flex-row gap-2 bg-black rounded-lg p-2 items-center justify-center my-1">
                     <img className="w-[45px] h-[20px] object-cover"
                          src={"/imdb.png"}
                          alt={"IMDB"}
@@ -19,7 +19,7 @@ export default function RatingsSection({ movie }: { movie: Movie }) {
         }
 
         return (
-            <div className="flex flex-row gap-2 bg-black rounded-lg p-2 items-center justify-center m-1">
+            <div className="flex flex-row gap-2 bg-black rounded-lg p-2 items-center justify-center my-1">
                 <img className="w-[45px] h-[20px] object-cover"
                      src={"/imdb.png"}
                      alt={"IMDB"}

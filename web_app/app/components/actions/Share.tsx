@@ -5,8 +5,8 @@ import Card from "@mui/material/Card";
 import {Backdrop, CardHeader} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import {ShareOutlined} from "@mui/icons-material";
+import {CHIP_ICON_SIZE, CHIP_ICON_SX} from "@/app/ui/chip";
 
 type ShareProps = {
     id: string;
@@ -43,16 +43,14 @@ export default function Share(props: ShareProps) {
 
     return (
         <>
-                <Box className="bg-gray-900 hover:bg-gray-800 rounded-full">
-                    <IconButton
-                        onClick={handleShare}
-                        aria-label="share"
-                        color={selected ? "primary" : "inherit"}
-                    >
-
-                        <ShareOutlined/>
-                    </IconButton>
-                </Box>
+                {/* A round chip, styled like the genre chips above it. */}
+                <IconButton
+                    onClick={handleShare}
+                    aria-label="share"
+                    sx={CHIP_ICON_SX}
+                >
+                    <ShareOutlined sx={CHIP_ICON_SIZE}/>
+                </IconButton>
 
 
                 <Backdrop
