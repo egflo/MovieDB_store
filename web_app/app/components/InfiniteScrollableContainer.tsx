@@ -6,6 +6,7 @@ import useSWRInfinite, {SWRInfiniteKeyLoader} from "swr/infinite";
 import {Page} from "@/lib/models/Page";
 import Image from "next/image";
 import { authed } from "@/lib/api/client";
+import ScrollEdge from "@/app/components/ScrollEdge";
 
 async function authFetcher(idToken: string, endpoint: string) {
     // authed() refreshes the token per request, so this keeps working past the
@@ -166,7 +167,8 @@ export default function InfiniteScrollableContainer<T>({token, title, url, ItemC
                             ))}
                         </div>
 
-                        <div className="absolute right-0 top-0 w-14 h-full bg-gradient-to-l from-black to-transparent " />
+                        <ScrollEdge side="left" visible={canScrollLeft} />
+                        <ScrollEdge side="right" visible={canScrollRight} />
 
                         {canScrollRight && (
                             <Image

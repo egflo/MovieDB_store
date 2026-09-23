@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
+import ScrollEdge from "@/app/components/ScrollEdge";
 import React, { useState, useRef, useEffect } from "react";
 import { debounce } from "lodash";
 
@@ -97,6 +98,9 @@ export default function ScrollableContainer<T>({data, title, ItemComponent,}: Sc
                         </div>
                     ))}
                 </div>
+
+                <ScrollEdge side="left" visible={canScrollLeft} />
+                <ScrollEdge side="right" visible={canScrollRight} />
 
                 {canScrollRight && (
                     <Image
