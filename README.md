@@ -38,10 +38,15 @@ with a dead call site in `OrderService.java`.
 
 Requires Mongo on 27017 and Postgres on 5432 with databases `moviedb`, `userdb`,
 `inventorydb` and `orderdb`. The defaults in each `application.yml` already point
-there with `postgres`/`postgres` credentials, so no environment configuration is
+there with `postgres`/`postgres` credentials, so no database configuration is
 needed.
 
-**In IntelliJ** — run the **`0 All Services`** compound configuration. It starts
+Credentials (the Stripe keys and the Firebase service account) live in an
+untracked `secrets/` directory at the repo root; see
+[secrets/README.md](secrets/README.md) to set it up. Without it the gateway and
+`user_service` fail at startup, and checkout fails.
+
+**In IntelliJ** — run the **`MovieDB Services`** compound configuration. It starts
 all six at once; Eureka gets no head start, so expect a few registration retries
 in the logs before things settle.
 

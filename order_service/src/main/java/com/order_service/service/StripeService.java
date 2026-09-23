@@ -54,6 +54,9 @@ public class StripeService {
 
     @PostConstruct
     public void init() {
+        if (secretKey.isBlank()) {
+            LOGGER.warning("STRIPE_SECRET is not set; payment calls will fail. See secrets/README.md.");
+        }
         Stripe.apiKey = secretKey;
     }
 

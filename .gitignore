@@ -8,3 +8,13 @@ docker_script.sh
 
 # local dev service logs
 logs/
+
+# Local secrets (Stripe keys, Firebase service account). Only the README and
+# the example file are tracked; see secrets/README.md.
+/secrets/*
+!/secrets/README.md
+!/secrets/local.env.example
+
+# Service accounts used to live in src/main/resources, where they were copied
+# into target/ and the jar. Keep any stray copy out of git.
+service-account.json

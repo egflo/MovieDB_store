@@ -4,12 +4,16 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  config:
+    # FIREBASE_PROJECT_ID; see secrets/README.md. Env vars override it.
+    import: optional:file:${SECRETS_DIR:../secrets}/local.env[.properties]
+
   security:
       oauth2:
         resourceserver:
           jwt:
             jwk-set-uri: ${JWK_SET_URI:https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com}
-            issuer-uri: ${ISSUR_URI:https://securetoken.google.com/}
+            issuer-uri: https://securetoken.google.com/${FIREBASE_PROJECT_ID:}
 
   application:
     name: gateway
@@ -49,6 +53,11 @@ spring:
                 uri: lb://${EUREKA_INSTANCE_HOSTNAME_USER_SERVICE:USER-SERVICE}
                 predicates:
                   - Path=/user/**
+
+app:
+  firebase:
+    # Kept out of the repo and the jar; see secrets/README.md.
+    service-account: ${FIREBASE_SERVICE_ACCOUNT:file:${SECRETS_DIR:../secrets}/firebase-service-account.json}
 
 eureka:
   instance:

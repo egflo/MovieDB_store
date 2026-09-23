@@ -15,13 +15,21 @@ import java.io.IOException;
 
 @Configuration
 public class FirebaseConfiguration {
-    @Value("classpath:service-account.json")
+    @Value("${app.firebase.service-account}")
     Resource serviceAccount;
 
     @Bean
     FirebaseAuth firebaseAuth() throws IOException {
+        if (!serviceAccount.exists()) {
+            throw new IOException("Firebase service account not found at " + serviceAccount
+                    + ". See secrets/README.md.");
+        }
+        GoogleCredentials credentials;
+        try (var in = serviceAccount.getInputStream()) {
+            credentials = GoogleCredentials.fromStream(in);
+        }
         var options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                .setCredentials(credentials)
                 .build();
         var firebaseApp = FirebaseApp.initializeApp(options);
         return FirebaseAuth.getInstance(firebaseApp);

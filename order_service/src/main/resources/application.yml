@@ -1,5 +1,8 @@
 app:
 spring:
+  config:
+    # STRIPE_SECRET and STRIPE_PUBLIC; see secrets/README.md. Env vars override it.
+    import: optional:file:${SECRETS_DIR:../secrets}/local.env[.properties]
   application:
     name: ${EUREKA_INSTANCE_HOSTNAME:order-service}
   datasource:
@@ -45,9 +48,9 @@ grpc:
 
 stripe:
   secret:
-    key: ${STRIPE_SECRET:your_stripe_secret_key}
+    key: ${STRIPE_SECRET:}
   public:
-    key: ${STRIPE_PUBLIC:your_stripe_public_key}
+    key: ${STRIPE_PUBLIC:}
 
 management:
   # NOTE: "endpoints" (plural) is the correct key. This previously read

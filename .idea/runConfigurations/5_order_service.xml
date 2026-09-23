@@ -2,6 +2,7 @@
   <configuration default="false" name="5 order_service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="order_service" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.order_service.OrderServiceApplication" />
+    <option name="WORKING_DIRECTORY" value="$MODULE_WORKING_DIR$" />
     <envs>
       <env name="SERVER_PORT" value="8082" />
       <env name="GRPC_PORT" value="9092" />

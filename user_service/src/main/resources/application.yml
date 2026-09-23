@@ -1,6 +1,7 @@
 app:
   firebase:
-    path: ${FIREBASE_PATH:service-account.json}
+    # Kept out of the repo and the jar; see secrets/README.md.
+    service-account: ${FIREBASE_SERVICE_ACCOUNT:file:${SECRETS_DIR:../secrets}/firebase-service-account.json}
 
 spring:
   application:

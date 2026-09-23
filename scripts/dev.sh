@@ -11,7 +11,10 @@
 #
 # Ctrl+C stops everything. Logs go to logs/<service>.log.
 #
-# The IntelliJ equivalent is the "0 All Services" compound run configuration.
+# Credentials come from ../secrets (see secrets/README.md); each service runs
+# from its own module directory so that relative path resolves.
+#
+# The IntelliJ equivalent is the "MovieDB Services" compound run configuration.
 
 set -euo pipefail
 
