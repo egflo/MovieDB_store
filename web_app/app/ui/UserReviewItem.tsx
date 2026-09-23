@@ -131,7 +131,7 @@ export default function UserReviewItem({ item }: UserReviewProps) {
                 <div className={'flex flex-row gap-2 items-center'}>
                     <ProfileImage
                         name={review.user.displayName}
-                        imageUrl={review.user.displayName}
+                        imageUrl={review.user.profileImage}
                         size={30}
                     />
                     <p className={'text-sm font-semibold'}>

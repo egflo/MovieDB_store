@@ -34,7 +34,7 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
         { revalidateOnFocus: false },
     );
 
-    const bookmarks = data?.content ?? [];
+    const bookmarks = data ?? [];
 
     async function add(movieId: string) {
         if (!user) return;

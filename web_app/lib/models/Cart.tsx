@@ -12,6 +12,7 @@ export interface Cart {
         id: string;
         title: string;
         poster: string;
-        year: number;
+        // The cart service doesn't send a year.
+        year?: number;
     }
 }

@@ -25,7 +25,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     // Keyed by url, so a new imageUrl gets tried again after a failure. This
     // replaces a new Image() preload that downloaded every photo twice.
     const [failedUrl, setFailedUrl] = useState<string | null>(null);
-    const isImageValid = !!imageUrl && failedUrl !== imageUrl;
+    // Only real image addresses: records hold values like "none", and a bare
+    // word was requested relative to the page (/movie/none, /movie/<name>),
+    // making the server render a whole movie page per avatar.
+    const isUrl = !!imageUrl && /^(https?:\/\/|\/)/.test(imageUrl);
+    const isImageValid = isUrl && failedUrl !== imageUrl;
 
     const sizeClass = `w-[${size}px] h-[${size}px]`;
     //const initials = getInitials(name);

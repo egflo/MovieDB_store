@@ -138,7 +138,7 @@ export default function Review() {
             <div className={"sm:flex flex-col  md:grid grid-cols-[auto_185px] bg-gray-800 rounded-lg"}>
                 <div className={"flex flex-col gap-1 p-5"}>
                     <div className={"flex flex-row gap-2 items-center"}>
-                        <ProfileImage name={review.user.displayName} imageUrl={review.user.profile} size={40} className={"rounded-full"} />
+                        <ProfileImage name={review.user.displayName} imageUrl={review.user.profileImage} size={40} className={"rounded-full"} />
                         <span className={"text-sm text-gray-300  font-bold"}>{review.user.displayName}</span>
                     </div>
 
