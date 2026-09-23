@@ -2,6 +2,7 @@ import React, {DependencyList, EffectCallback, useEffect, useRef, useState} from
 import Link from "next/link";
 import {CriticReview} from "@/lib/models/CriticReview";
 import StarIcon from '@mui/icons-material/Star';
+import {GLASS_CARD} from "@/app/ui/glass";
 
 interface  CriticReviewProps {
     item: CriticReview
@@ -18,7 +19,7 @@ export default function CriticReviewItem({ item }: CriticReviewProps) {
 
     return (
         // overflow-hidden so nothing can spill onto the next card in the row.
-        <div className="w-[300px] h-[200px]  isolate aspect-video  overflow-hidden rounded-xl bg-gray-400/20 shadow-lg ring-1 ring-black/5 ">
+        <div className={`w-[300px] h-[200px] isolate overflow-hidden rounded-xl ${GLASS_CARD}`}>
 
             <div className={'flex flex-col   p-4 '}>
 
@@ -38,7 +39,7 @@ export default function CriticReviewItem({ item }: CriticReviewProps) {
                         <p className={'truncate text-sm font-semibold'} title={review.critic_name}>
                             {review.critic_name}
                         </p>
-                        <p className={'truncate text-sm text-gray-500'} title={review.publication_name}>
+                        <p className={'truncate text-sm text-white/55'} title={review.publication_name}>
                             {review.publication_name}
                         </p>
                     </div>
@@ -73,7 +74,7 @@ export default function CriticReviewItem({ item }: CriticReviewProps) {
                 </div>
 
                 <div className={'flex flex-row justify-between items-center'}>
-                    <p className={'text-sm text-gray-500'}>
+                    <p className={'text-sm text-white/55'}>
                         {formatDateString(review.creation_date)}
                     </p>
                     <Link href={review.review_url} target="_blank" className={'text-blue-500 hover:underline'}>

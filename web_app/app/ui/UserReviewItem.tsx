@@ -10,6 +10,7 @@ import {SentimentState} from "@/lib/models/SentimentState";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/lib/firebase/AuthContext";
 import {freshToken} from "@/lib/api/client";
+import {GLASS_CARD} from "@/app/ui/glass";
 
 interface  UserReviewProps {
     item: Review
@@ -124,7 +125,7 @@ export default function UserReviewItem({ item }: UserReviewProps) {
     }
 
     return (
-        <div className=" w-[300px] h-[280px] isolate aspect-video  rounded-xl bg-gray-400/20 shadow-lg ring-1 ring-black/5">
+        <div className={`w-[300px] h-[280px] isolate overflow-hidden rounded-xl ${GLASS_CARD}`}>
             <div className={'flex flex-col gap-1  rounded-lg p-4 h-full w-full  '}>
 
                 <div className={'flex flex-row gap-2 items-center'}>
@@ -183,7 +184,7 @@ export default function UserReviewItem({ item }: UserReviewProps) {
 
 
                 <div className={'flex flex-row  items-center justify-between'}>
-                    <p className={'text-sm text-gray-500'}>
+                    <p className={'text-sm text-white/55'}>
                         {formatDateString(review.date)}
                     </p>
 
@@ -196,7 +197,7 @@ export default function UserReviewItem({ item }: UserReviewProps) {
                                     handleSentimentChange(SentimentState.LIKE);
                                 }}
                             />
-                            <p className={'text-sm text-gray-500'}>
+                            <p className={'text-sm text-white/55'}>
                                 {likeCount}
                             </p>
                         </div>
@@ -209,7 +210,7 @@ export default function UserReviewItem({ item }: UserReviewProps) {
                                     handleSentimentChange(SentimentState.DISLIKE);
                                 }}
                             />
-                            <p className={'text-sm text-gray-500'}>
+                            <p className={'text-sm text-white/55'}>
                                 {dislikeCount}
                             </p>
                         </div>
