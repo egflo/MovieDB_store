@@ -73,20 +73,22 @@ public class ItemServiceImp extends ItemServiceGrpc.ItemServiceImplBase {
     @Override
     public void getItems(ItemsRequest request, StreamObserver<ItemsResponse> responseObserver) {
         ItemsResponse.Builder response = ItemsResponse.newBuilder();
-        for (String id : request.getIdsList()) {
-            Optional<Product> item = itemRepository.findItemById(id);
-            ItemResponse itemResponse = ItemResponse.newBuilder()
-                    .setId(item.get().getId())
-                    .setSku(item.get().getSKU())
-                    .setPrice(item.get().getPrice())
-                    .setQuantity(item.get().getQuantity())
-                    .setCurrency(item.get().getCurrency())
-                    .setType(1)
-                    .setStatus(item.get().getStatus().toString())
-                    .setCreated(item.get().getCreated().getTime())
-                    .setUpdated(item.get().getUpdated().getTime())
-                    .build();
-            response.addItems(itemResponse);
+        // One query for the whole batch (movie_service's price sync asks for
+        // hundreds at a time). Unknown ids are left out of the response rather
+        // than failing the batch, which item.get() used to do.
+        for (Product item : itemRepository.findAllById(request.getIdsList())) {
+            ItemResponse.Builder itemResponse = ItemResponse.newBuilder()
+                    .setId(item.getId())
+                    .setQuantity(item.getQuantity())
+                    .setType(1);
+            // Protobuf setters throw on null.
+            if (item.getSKU() != null) itemResponse.setSku(item.getSKU());
+            if (item.getPrice() != null) itemResponse.setPrice(item.getPrice());
+            if (item.getCurrency() != null) itemResponse.setCurrency(item.getCurrency());
+            if (item.getStatus() != null) itemResponse.setStatus(item.getStatus().toString());
+            if (item.getCreated() != null) itemResponse.setCreated(item.getCreated().getTime());
+            if (item.getUpdated() != null) itemResponse.setUpdated(item.getUpdated().getTime());
+            response.addItems(itemResponse.build());
         }
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
