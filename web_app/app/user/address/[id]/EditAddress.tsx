@@ -3,10 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth } from "@/lib/firebase/AuthContext";
-import { getAddress, updateAddress } from "@/lib/api/addresses";
+import { addressesKey, getAddress, updateAddressKeepingDefault } from "@/lib/api/addresses";
 import AddressForm from "../AddressForm";
 
 export default function EditAddress({ id }: { id: string }) {
@@ -55,9 +55,14 @@ export default function EditAddress({ id }: { id: string }) {
                 initial={initial}
                 submitLabel="Save changes"
                 onSubmit={async (address) => {
-                    await updateAddress(user.idToken, id, address);
+                    await updateAddressKeepingDefault(user.idToken, id, address);
+                    // Refresh the cached list and this address (router.refresh()
+                    // didn't touch SWR's cache).
+                    await Promise.all([
+                        mutate(addressesKey(user.idToken)),
+                        mutate(["address", id, user.idToken]),
+                    ]);
                     router.push("/user/address/info");
-                    router.refresh();
                 }}
             />
         </div>

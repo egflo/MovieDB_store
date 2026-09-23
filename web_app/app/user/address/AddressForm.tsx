@@ -4,6 +4,7 @@ import React, { FormEvent, useState } from "react";
 import Button from "@mui/material/Button";
 import { Address } from "@/lib/models/Address";
 import { EMPTY_ADDRESS } from "@/lib/api/addresses";
+import { useToast } from "@/app/components/Toast";
 
 type Draft = Omit<Address, "id">;
 
@@ -26,10 +27,13 @@ export default function AddressForm({
     submitLabel: string;
     onSubmit: (address: Draft) => Promise<void>;
 }) {
+    const toast = useToast();
     const [draft, setDraft] = useState<Draft>(initial ?? EMPTY_ADDRESS);
     const [errors, setErrors] = useState<Partial<Record<keyof Draft, string>>>({});
-    const [submitError, setSubmitError] = useState<string | null>(null);
     const [pending, setPending] = useState(false);
+    // Unticking the current default would leave no default, which checkout
+    // relies on. Another address has to be made the default instead.
+    const lockDefault = Boolean(initial?.isDefault);
 
     function set<K extends keyof Draft>(name: K, value: Draft[K]) {
         setDraft((d) => ({ ...d, [name]: value }));
@@ -49,14 +53,15 @@ export default function AddressForm({
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        setSubmitError(null);
         if (!validate() || pending) return;
 
         setPending(true);
         try {
             await onSubmit(draft);
         } catch (e) {
-            setSubmitError((e as Error).message || "Could not save the address");
+            // Not e.message: that's ky's "Request failed with status code 500 …".
+            console.warn("Failed to save address", e);
+            toast({ message: "Couldn’t save the address. Try again.", tone: "error" });
         } finally {
             setPending(false);
         }
@@ -86,12 +91,16 @@ export default function AddressForm({
                 <input
                     type="checkbox"
                     checked={draft.isDefault}
+                    disabled={lockDefault}
                     onChange={(e) => set("isDefault", e.target.checked)}
                 />
                 Use as my default address
             </label>
-
-            {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+            {lockDefault && (
+                <p className="-mt-2 text-xs text-gray-400">
+                    This is your default. To change it, set another address as the default.
+                </p>
+            )}
 
             <Button type="submit" variant="contained" disabled={pending}>
                 {pending ? "Saving…" : submitLabel}

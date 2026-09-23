@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/firebase/AuthContext";
-import { addAddress } from "@/lib/api/addresses";
+import { mutate } from "swr";
+import { addAddressKeepingDefault, addressesKey } from "@/lib/api/addresses";
 import AddressForm from "../AddressForm";
 
 export default function AddAddress() {
@@ -32,9 +33,11 @@ export default function AddAddress() {
             <AddressForm
                 submitLabel="Save address"
                 onSubmit={async (address) => {
-                    await addAddress(user.idToken, address);
+                    await addAddressKeepingDefault(user.idToken, address);
+                    // Refresh the cached list (router.refresh() didn't touch it),
+                    // so the list and the account card show the new address.
+                    await mutate(addressesKey(user.idToken));
                     router.push("/user/address/info");
-                    router.refresh();
                 }}
             />
         </div>

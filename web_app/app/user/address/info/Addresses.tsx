@@ -7,15 +7,25 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth } from "@/lib/firebase/AuthContext";
-import { getAddresses, deleteAddress } from "@/lib/api/addresses";
+import {
+    addAddressKeepingDefault,
+    addressesKey,
+    deleteAddressKeepingDefault,
+    getAddresses,
+    makeDefaultAddress,
+} from "@/lib/api/addresses";
+import { Address } from "@/lib/models/Address";
+import { useToast } from "@/app/components/Toast";
 
 export default function Addresses() {
     const { user } = useAuth();
+    const toast = useToast();
+    // The address being changed; every action waits while one is in flight,
+    // since changing the default rewrites several addresses.
     const [busy, setBusy] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
 
     const { data, isLoading, error: loadError, mutate } = useSWR(
-        user ? ["addresses", user.idToken] : null,
+        user ? addressesKey(user.idToken) : null,
         ([, token]) => getAddresses(token),
         { revalidateOnFocus: false },
     );
@@ -48,18 +58,38 @@ export default function Addresses() {
 
     const addresses = data ?? [];
 
-    async function remove(id: string) {
-        if (!user) return;
+    async function run(id: string, action: (token: string) => Promise<unknown>, failure: string) {
+        if (!user || busy) return false;
         setBusy(id);
-        setError(null);
         try {
-            await deleteAddress(user.idToken, id);
-            await mutate();
-        } catch {
-            setError("Could not delete that address");
+            await action(user.idToken);
+            return true;
+        } catch (e) {
+            console.warn(failure, e);
+            toast({ message: `${failure}. Try again.`, tone: "error" });
+            return false;
         } finally {
+            await mutate();
             setBusy(null);
         }
+    }
+
+    const makeDefault = (a: Address) =>
+        run(a.id!, (token) => makeDefaultAddress(token, a.id!), "Couldn’t change your default address");
+
+    // No confirm step: Undo puts it back (as a new address with the same
+    // details, and the default again if it was).
+    async function remove(a: Address) {
+        const done = await run(a.id!, (token) => deleteAddressKeepingDefault(token, a), "Couldn’t delete that address");
+        if (!done) return;
+        const { id: _id, ...fields } = a;
+        toast({
+            message: `Deleted ${a.street}`,
+            action: {
+                label: "Undo",
+                onClick: () => { run("undo", (token) => addAddressKeepingDefault(token, fields), "Couldn’t restore that address"); },
+            },
+        });
     }
 
     return (
@@ -70,8 +100,6 @@ export default function Addresses() {
                     Add address
                 </Button>
             </div>
-
-            {error && <p className="text-sm text-red-500">{error}</p>}
 
             {addresses.length === 0 ? (
                 <p className="text-gray-500">You have no saved addresses.</p>
@@ -97,6 +125,11 @@ export default function Addresses() {
                                 </div>
 
                                 <div className="flex shrink-0 flex-row gap-1">
+                                    {!a.isDefault && (
+                                        <Button size="small" disabled={busy !== null} onClick={() => makeDefault(a)}>
+                                            {busy === a.id ? "Saving…" : "Set as default"}
+                                        </Button>
+                                    )}
                                     <Button
                                         component={Link}
                                         href={`/user/address/${a.id}`}
@@ -107,8 +140,8 @@ export default function Addresses() {
                                     <Button
                                         size="small"
                                         color="error"
-                                        disabled={busy === a.id}
-                                        onClick={() => a.id && remove(a.id)}
+                                        disabled={busy !== null}
+                                        onClick={() => remove(a)}
                                     >
                                         Delete
                                     </Button>
