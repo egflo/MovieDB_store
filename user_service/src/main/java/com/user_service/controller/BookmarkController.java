@@ -2,6 +2,7 @@ package com.user_service.controller;
 
 import com.user_service.DTO.BookmarkRequest;
 import com.user_service.DTO.Response;
+import com.user_service.models.Bookmark;
 import com.user_service.service.BookmarkService;
 import com.user_service.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +56,21 @@ public class BookmarkController {
         return new ResponseEntity<>("Bookmark Deleted", HttpStatus.OK);
     }
 
+    /**
+     * Remove the signed-in user's bookmark for a movie. This was an empty stub
+     * that answered 200 without deleting anything, so un-favouriting never
+     * worked: the heart turned back on at the next refresh.
+     */
     @DeleteMapping("/movie/{id}")
     public ResponseEntity<?> deleteBookmark(
             @RequestHeader("uid") String subject,
             @PathVariable String id) {
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        Bookmark bookmark = service.getByMovieIdAndUserId(id, subject);
+        if (bookmark == null) {
+            return new ResponseEntity<>("Bookmark not found", HttpStatus.NOT_FOUND);
+        }
+        service.deleteBookmark(bookmark.getId(), subject);
+        return new ResponseEntity<>("Bookmark Deleted", HttpStatus.OK);
     }
 
     @GetMapping("/all")

@@ -290,7 +290,14 @@ public class FirebaseService {
         if (document.exists()) {
             Bookmark item = document.toObject(Bookmark.class);
             assert item != null;
-            docRef.delete();
+            // Wait for the delete to commit. Without .get() the response went
+            // out first, and a client re-reading its bookmarks straight away
+            // still saw this one, so the heart stayed filled.
+            try {
+                docRef.delete().get();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new FirebaseServiceException("Error deleting bookmark with id: " + id);
+            }
         } else {
             throw new FirebaseServiceException("No such document!");
         }
