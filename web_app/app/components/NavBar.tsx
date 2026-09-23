@@ -13,7 +13,19 @@ import { useCart } from '@/lib/context/CartContext';
  * Site-wide top bar: wordmark, search, cart and account. Frosted glass to
  * match the poster preview and hero caption; sticky, so content scrolls
  * under it and shows through the blur.
+ *
+ * On CLEAR_AT_TOP pages the bar starts transparent, with only the search
+ * pill and icon buttons visible, and fades into the glass once the page
+ * scrolls. Those pages put imagery at the very top, behind the bar.
  */
+const CLEAR_AT_TOP: RegExp[] = [
+    /^\/$/,          // home: the hero starts under the bar (HomePage's -mt-14)
+    /^\/movie\//,    // movie: its backdrop is fixed behind the whole page
+];
+const SCROLLED_PX = 8;
+/** Icon buttons get their own frosted circle while the bar is transparent. */
+const ICON_CLEAR = 'bg-black/25 backdrop-blur-md';
+
 export default function NavBar() {
     const router = useRouter();
     const pathname = usePathname();
@@ -23,6 +35,20 @@ export default function NavBar() {
 
     const inputRef = useRef<HTMLInputElement>(null);
     const [query, setQuery] = useState('');
+
+    const clearAtTop = CLEAR_AT_TOP.some((route) => route.test(pathname));
+    const [scrolled, setScrolled] = useState(false);
+    const clear = clearAtTop && !scrolled;
+
+    // Only the crossing of the threshold changes state, so this re-renders
+    // twice per trip down and back up, not on every scroll event.
+    useEffect(() => {
+        if (!clearAtTop) return;
+        const onScroll = () => setScrolled(window.scrollY > SCROLLED_PX);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [clearAtTop, pathname]);
 
     // Keep the field in step with the search page's own query, and clear it
     // when leaving search.
@@ -52,14 +78,22 @@ export default function NavBar() {
     };
 
     return (
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/60 text-white backdrop-blur-xl backdrop-saturate-150">
+        <header
+            // The divider is an inset shadow, not a border, so the bar is exactly
+            // h-14 and HomePage's -mt-14 lines the hero up with the top edge.
+            className={`sticky top-0 z-40 text-white transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
+                clear
+                    ? 'bg-transparent shadow-none backdrop-blur-[0px]'
+                    : 'bg-neutral-950/60 shadow-[inset_0_-1px_0_rgba(255,255,255,0.1)] backdrop-blur-xl backdrop-saturate-150'
+            }`}
+        >
             <nav className="mx-auto flex h-14 items-center gap-4 px-4 sm:px-6" aria-label="Main">
                 <Link href="/" className="text-lg font-semibold tracking-tight">
                     MovieDB
                 </Link>
 
                 <form role="search" onSubmit={submit} className="ml-auto">
-                    <label className="group flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/10 transition-colors focus-within:bg-white/15 focus-within:ring-white/25">
+                    <label className="group flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/10 backdrop-blur-md transition-colors focus-within:bg-white/15 focus-within:ring-white/25">
                         <SearchRoundedIcon fontSize="small" className="text-white/60" aria-hidden="true" />
                         <span className="sr-only">Search movies</span>
                         <input
@@ -87,7 +121,7 @@ export default function NavBar() {
                 <Link
                     href="/cart"
                     aria-label={count > 0 ? `Cart, ${count} item${count === 1 ? '' : 's'}` : 'Cart'}
-                    className="relative rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                    className={`relative rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white ${clear ? ICON_CLEAR : ''}`}
                 >
                     <ShoppingBagOutlinedIcon fontSize="small" />
                     {count > 0 && (
@@ -100,7 +134,7 @@ export default function NavBar() {
                 <Link
                     href={user ? '/user/info' : '/login'}
                     aria-label={user ? 'Account' : 'Sign in'}
-                    className="rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                    className={`rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white ${clear ? ICON_CLEAR : ''}`}
                 >
                     <PersonOutlineRoundedIcon fontSize="small" />
                 </Link>
