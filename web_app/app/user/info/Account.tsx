@@ -131,7 +131,7 @@ function PaymentsSummary({ token }: { token: string }) {
     return (
         <Summary loading={isLoading} error={error}>
             {!card ? (
-                <span>No saved cards. One you use at checkout is saved here.</span>
+                <span>No saved cards yet</span>
             ) : (
                 <>
                     <span className="text-white/85">{capitalize(card.brand)} •••• {card.last4}</span>
