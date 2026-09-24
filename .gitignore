@@ -27,3 +27,6 @@ service-account.json
 # metadata). Only the shared run configurations are tracked.
 /.idea/*
 !/.idea/runConfigurations/
+
+# AI tool project config (created by an IDE plug-in); local only.
+/.ai/
