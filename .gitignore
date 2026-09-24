@@ -18,3 +18,7 @@ logs/
 # Service accounts used to live in src/main/resources, where they were copied
 # into target/ and the jar. Keep any stray copy out of git.
 service-account.json
+
+# Private working notes, kept locally only.
+/CLAUDE.md
+/docs/WORKPLAN.md
