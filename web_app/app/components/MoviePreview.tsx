@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import {optimizedImage} from '@/lib/image';
+import {optimizedImage, optimizerUrl} from '@/lib/image';
 import Link from 'next/link';
 import CloseIcon from '@mui/icons-material/Close';
 import { Movie } from '@/lib/models/Movie';
+import Box from "@mui/material/Box";
+import MoreLikeThis from './MoreLikeThis';
+import AboutMovie from './AboutMovie';
 
 const DURATION_MS = 300;
 
@@ -52,11 +55,14 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
 
         if (final.width === 0 || final.height === 0) return null;
 
+        // One scale for both axes, from the top edge (transform-origin top
+        // centre): with More Like This the panel is far taller than a poster,
+        // and fitting its height too squashed it into a sliver. It grows from
+        // the poster's width and top edge instead.
         const dx = origin.left + origin.width / 2 - (final.left + final.width / 2);
-        const dy = origin.top + origin.height / 2 - (final.top + final.height / 2);
-        const sx = origin.width / final.width;
-        const sy = origin.height / final.height;
-        return `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+        const dy = origin.top - final.top;
+        const scale = origin.width / final.width;
+        return `translate(${dx}px, ${dy}px) scale(${scale})`;
     }, [originElement]);
 
     const collapse = useCallback(() => {
@@ -167,24 +173,27 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
     }, [useOriginal]);
 
     return (
-        <div className="fixed inset-0 z-50">
+        // Scrolls, since More Like This and About make the panel taller than
+        // the screen; overscroll-contain keeps the page behind still.
+        <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain">
             <div
                 ref={backdropRef}
                 onClick={collapse}
-                className="absolute inset-0 bg-black/70 transition-opacity duration-300"
+                className="fixed inset-0 bg-black/70 transition-opacity duration-300"
             />
 
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
+            {/* Clicks in the margins fall through to the backdrop and close. */}
+            <div className="pointer-events-none relative flex min-h-full items-start justify-center px-4 py-10">
                 <div
                     ref={panelRef}
                     role="dialog"
                     aria-modal="true"
                     aria-label={movie.title}
                     tabIndex={-1}
-                    // The panel scales as a whole, so keep the transform origin
-                    // at its centre to match the translate maths above.
-                    style={{ transformOrigin: 'center center' }}
-                    className="pointer-events-auto relative w-full max-w-xl overflow-hidden rounded-xl bg-neutral-900 text-white shadow-2xl outline-none"
+                    // The panel scales as a whole from its top edge, to match
+                    // the translate maths in transformToOrigin.
+                    style={{ transformOrigin: 'top center' }}
+                    className="pointer-events-auto relative w-full max-w-2xl overflow-hidden rounded-xl bg-neutral-900 text-white shadow-2xl outline-none"
                 >
                     <button
                         type="button"
@@ -195,13 +204,38 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                         <CloseIcon fontSize="small" />
                     </button>
 
+                    {/* The backdrop carried on below the hero: a small, heavily
+                        blurred, dimmed copy that fades out over ~700px, so the
+                        film's colour seeps through More Like This. The hero's
+                        image, placeholder and glass fade out over their last
+                        8rem onto this layer, so there's no edge where the hero
+                        ends. 256px is plenty at this blur. Fades in with the
+                        hero image; skipped if it failed. */}
+                    {backdrop && !failed && (
+                        <div
+                            aria-hidden="true"
+                            className={`pointer-events-none absolute inset-x-0 top-0 h-[1200px] overflow-hidden transition-opacity duration-300 [mask-image:linear-gradient(to_bottom,black_40%,transparent)] ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                        >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={optimizerUrl(backdrop, 256) ?? backdrop}
+                                alt=""
+                                className="h-full w-full scale-125 object-cover opacity-60 blur-3xl saturate-150"
+                            />
+                        </div>
+                    )}
+
+                    {/* The hero: backdrop, placeholder and info. Its own
+                        positioned box, so the absolutely placed images cover
+                        this part only, not More Like This below. */}
+                    <div className="relative">
                     {/* Stays mounted under the backdrop so the backdrop fades
                         in over it rather than over the bare panel. Pulses only
                         while loading; if the backdrop fails it stays as the
                         panel's background. */}
                     <div
                         aria-hidden="true"
-                        className={`absolute inset-0 overflow-hidden bg-neutral-800 ${loaded || failed ? '' : 'motion-safe:animate-pulse'}`}
+                        className={`absolute inset-0 overflow-hidden bg-neutral-800 [mask-image:linear-gradient(to_bottom,black_calc(100%-10rem),transparent_calc(100%-3rem))] ${loaded || failed ? '' : 'motion-safe:animate-pulse'}`}
                     >
                         {placeholder && (
                             // Blurred and scaled up so the blur has no soft
@@ -230,34 +264,101 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                             // something to blur; the spacer keeps the visible
                             // band at its old height. Fades in over the
                             // placeholder once loaded.
-                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                            className={`absolute inset-0 h-full w-full object-cover [mask-image:linear-gradient(to_bottom,black_calc(100%-10rem),transparent_calc(100%-3rem))] transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
                         />
                     )}
                     <div className="h-56" aria-hidden="true" />
 
                     <div className="relative p-5">
-                        {/* Frosted glass: a dark translucent tint for text
-                            contrast, blurred and slightly saturated so the
-                            backdrop's colour shows through. It starts 4rem up
-                            into the image and a mask fades it in over that
-                            distance, so there's no visible edge where the
-                            image ends and the glass begins. */}
+                        {/* Frosted glass behind the text: a progressive blur.
+                            One layer faded in over 4rem left a visible seam on
+                            detailed backdrops (Shawshank: a face sharp above a
+                            line, blurred below). Three layers, each fading in a
+                            little lower, stack light, medium, then full blur
+                            with the dark tint: from 3rem above the text to 5rem
+                            into it, leaving the top of the image sharp. At the
+                            bottom the order matters: the photo is fully faded
+                            3rem before the hero ends, and only then does the
+                            blur fade, over those last 3rem. Blur fading with
+                            the photo brought it back into focus; blur stopping
+                            dead left a lighter band with a hard edge. */}
                         <div
                             aria-hidden="true"
-                            className="pointer-events-none absolute inset-x-0 -top-16 bottom-0 bg-neutral-950/45 backdrop-blur-2xl backdrop-saturate-150 [mask-image:linear-gradient(to_bottom,transparent,black_4rem)]"
+                            className="pointer-events-none absolute inset-x-0 -top-12 bottom-0 backdrop-blur-[3px] [mask-image:linear-gradient(to_bottom,transparent,black_3rem,black_calc(100%-3rem),transparent)]"
                         />
-
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-x-0 -top-12 bottom-0 backdrop-blur-md [mask-image:linear-gradient(to_bottom,transparent_1.5rem,black_5rem,black_calc(100%-3rem),transparent)]"
+                        />
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-x-0 -top-12 bottom-0 backdrop-blur-2xl backdrop-saturate-150 [mask-image:linear-gradient(to_bottom,transparent_3rem,black_8rem,black_calc(100%-3rem),transparent)]"
+                        />
+                        {/* The tint, separate so it can fade out gently over the
+                            last 8rem rather than the blur's last 3rem. */}
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-x-0 -top-12 bottom-0 bg-neutral-950/45 [mask-image:linear-gradient(to_bottom,transparent_3rem,black_8rem,black_calc(100%-8rem),transparent)]"
+                        />
                         <div className="relative flex flex-col gap-3">
-                            <div className="flex flex-row items-baseline gap-3">
-                                <h2 className="text-2xl font-bold">{movie.title}</h2>
-                                {movie.year != null && (
-                                    <span className="text-sm text-gray-400">{movie.year}</span>
-                                )}
-                            </div>
+
+
+                            {movie.logo &&
+                                <Box className={"flex justify-left items-left p-0 m-0  rounded-lg "}>
+                                    {/* Through the optimizer: fanart.tv logos are full-size
+                                    PNGs, often http:// URLs that redirect. Left-aligned
+                                    in its box from md up, so a narrow logo starts at
+                                    the column's edge like the rows below it. */}
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img {...optimizedImage(movie.logo, 200, 75)} alt={movie.title} className={"w-[200px] h-[75px] object-contain md:object-left"} />
+                                </Box>
+                            }
+                            {!movie.logo &&
+                                <div className="flex flex-row items-baseline gap-3">
+                                    <h2 className="text-2xl font-bold">{movie.title}</h2>
+                                    {movie.year != null && (
+                                        <span className="text-sm text-gray-400">{movie.year}</span>
+                                    )}
+                                </div>
+                            }
+
+                            {movie.genres && movie.genres.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                    {movie.genres.map((genre) => (
+                                        <span
+                                            key={genre}
+                                            className="rounded-full outline outline-1 outline-white/15 px-3 py-1 text-xs font-medium  text-gray-200"
+                                        >
+                                            {genre}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
 
                             {movie.plot && (
                                 <p className="line-clamp-4 text-sm text-gray-200">{movie.plot}</p>
                             )}
+
+                            <div className={"hidden md:flex flex-row gap-4"}>
+                                <div className={" flex flex-col"}>
+                                    <p className="text-sm text-white font-semibold shadow-2xl">
+                                        {movie.director}
+                                    </p>
+                                    <span className="text-sm text-gray-400"> Director</span>
+                                </div>
+
+                                <div className={" flex flex-col"}>
+                                    <p className="text-sm text-white font-semibold shadow-2xl">
+                                        {movie.production}
+                                    </p>
+                                    <span className="text-sm text-gray-400"> Production</span>
+                                </div>
+                            </div>
+
+
+
+
+
 
                             <div className="flex flex-row gap-2 pt-1">
                                 <Link
@@ -275,6 +376,13 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    </div>
+
+                    {/* relative: above the blurred backdrop layer. */}
+                    <div className="relative flex flex-col gap-8 px-5 pb-8 pt-4">
+                        <MoreLikeThis movie={movie} />
+                        <AboutMovie movie={movie} />
                     </div>
                 </div>
             </div>
