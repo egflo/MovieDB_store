@@ -13,7 +13,7 @@ import { GLASS_CARD } from "@/app/ui/glass";
 import { CHIP, CHIP_ICON_SIZE } from "@/app/ui/chip";
 import FavoriteBackdrop from "@/app/ui/FavoriteBackdrop";
 import AddCardForm from "./AddCardForm";
-import { brandName, expiry, isExpired } from "./cards";
+import { cardName, expiry, isExpired } from "./cards";
 
 const PANEL = `rounded-2xl p-5 ${GLASS_CARD}`;
 const CARD = `flex flex-col gap-4 ${PANEL}`;
@@ -48,7 +48,7 @@ function CardTile({ method, busy, onMakeDefault, onRemove }: {
     const card = method.card ?? method;
     const expired = isExpired(card.exp_month, card.exp_year);
     const exp = expiry(card.exp_month, card.exp_year);
-    const name = `${brandName(card.brand)} •••• ${card.last4}`;
+    const name = cardName(method);
 
     return (
         <li className={`${CARD} transition-opacity ${busy === method.id ? "opacity-60" : ""}`}>

@@ -26,3 +26,9 @@ export function isExpired(month?: number, year?: number, now = new Date()) {
     if (!month || !year) return false;
     return year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1);
 }
+
+/** "Visa •••• 4242". Stripe nests the details under `card`; older data had them at the top. */
+export function cardName(method: { brand?: string; last4?: string; card?: { brand?: string; last4?: string } }) {
+    const card = method.card ?? method;
+    return `${brandName(card.brand)} •••• ${card.last4}`;
+}

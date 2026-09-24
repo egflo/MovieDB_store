@@ -8,3 +8,14 @@ import { loadStripe } from "@stripe/stripe-js";
 const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 export const stripePromise = PUBLISHABLE_KEY ? loadStripe(PUBLISHABLE_KEY) : null;
+
+/** The Payment Element's look on the site's dark glass panels. */
+export const STRIPE_APPEARANCE = {
+    theme: "night" as const,
+    variables: {
+        colorBackground: "#262626",
+        colorText: "#ffffff",
+        borderRadius: "12px",
+        fontSizeBase: "14px",
+    },
+};
