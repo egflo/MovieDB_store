@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, signOut } from "firebase/auth";
-import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "@/app/ui/Spinner";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { app } from "@/lib/firebase/firebase";
 import { CHIP, CHIP_ICON_SIZE } from "@/app/ui/chip";
@@ -39,7 +39,7 @@ export function Logout() {
     return (
         <button type="button" onClick={handleLogout} disabled={pending} className={`${CHIP} cursor-pointer pl-3 pr-3.5`}>
             {pending
-                ? <CircularProgress size={16} color="inherit" aria-label="Signing out" />
+                ? <Spinner size={16} label="Signing out" />
                 : <LogoutIcon sx={CHIP_ICON_SIZE} />}
             Sign out
         </button>

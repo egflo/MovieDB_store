@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from "next/navigation";
 import { ShoppingBagOutlined} from "@mui/icons-material";
-import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "@/app/ui/Spinner";
 import {useAuth} from "@/lib/firebase/AuthContext";
 import {useCart} from "@/lib/context/CartContext";
 import {addToCart, MAX_PER_TITLE} from "@/lib/api/cart";
@@ -94,7 +94,7 @@ export default function Cart({id, title}: ItemPropsItemProps) {
                 // Styled like the genre chips above it.
                 className={`${CHIP} cursor-pointer px-3.5`}>
                 {pending
-                    ? <CircularProgress size={16} color="inherit" />
+                    ? <Spinner size={16} />
                     : <ShoppingBagOutlined sx={CHIP_ICON_SIZE} />}
                 <span>{data && priceFormatter(data)}</span>
             </button>

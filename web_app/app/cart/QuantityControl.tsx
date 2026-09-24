@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Add, Remove, DeleteOutline } from "@mui/icons-material";
-import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "@/app/ui/Spinner";
 import { Cart } from "@/lib/models/Cart";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { setCartQuantity, deleteCartItem, MAX_PER_TITLE } from "@/lib/api/cart";
@@ -54,7 +54,7 @@ export default function QuantityControl({ item }: { item: Cart }) {
                     <Remove sx={{ fontSize: 18 }} />
                 </button>
                 <span className="min-w-7 text-center text-sm tabular-nums" aria-live="polite" aria-label={`Quantity ${item.quantity}`}>
-                    {pending ? <CircularProgress size={14} color="inherit" /> : item.quantity}
+                    {pending ? <Spinner size={12} className="align-[-1px]" /> : item.quantity}
                 </span>
                 <button type="button" className={ROUND} aria-label={`More copies of ${item.movie.title}`}
                         disabled={pending || item.quantity >= MAX_PER_TITLE} onClick={() => setQuantity(item.quantity + 1)}>

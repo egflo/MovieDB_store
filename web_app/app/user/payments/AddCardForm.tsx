@@ -2,7 +2,7 @@
 
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "@/app/ui/Spinner";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { addPaymentMethod, setDefaultPaymentMethod } from "@/lib/api/payments";
 import { stripePromise } from "@/lib/stripe";
@@ -142,7 +142,7 @@ function CardForm({ makeDefault, onAdded, onCancel }: Props) {
                     disabled={!stripe || !ready || pending}
                     className="flex h-11 min-w-32 cursor-pointer items-center justify-center gap-2 rounded-full bg-white px-6 font-semibold text-black transition-colors hover:bg-white/85 disabled:cursor-default disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
-                    {pending && <CircularProgress size={16} color="inherit" />}
+                    {pending && <Spinner />}
                     {pending ? "Saving…" : "Save card"}
                 </button>
                 <button type="button" onClick={onCancel} className="cursor-pointer text-sm text-white/60 underline-offset-4 hover:text-white hover:underline">

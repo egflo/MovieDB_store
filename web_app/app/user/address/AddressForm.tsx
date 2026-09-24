@@ -2,7 +2,7 @@
 
 import React, { FormEvent, useState } from "react";
 import Link from "next/link";
-import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "@/app/ui/Spinner";
 import { Address } from "@/lib/models/Address";
 import { EMPTY_ADDRESS } from "@/lib/api/addresses";
 import { useToast } from "@/app/components/Toast";
@@ -186,7 +186,7 @@ export default function AddressForm({
                     disabled={pending}
                     className="flex h-11 min-w-36 cursor-pointer items-center justify-center gap-2 rounded-full bg-white px-6 font-semibold text-black transition-colors hover:bg-white/85 disabled:cursor-default disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
-                    {pending && <CircularProgress size={16} color="inherit" />}
+                    {pending && <Spinner />}
                     {pending ? "Saving…" : submitLabel}
                 </button>
                 <Link href={cancelHref} className="text-sm text-white/60 underline-offset-4 hover:text-white hover:underline">

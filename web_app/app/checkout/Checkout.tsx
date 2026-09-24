@@ -9,7 +9,7 @@ import { stripePromise } from "@/lib/stripe";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
-import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "@/app/ui/Spinner";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { useCart } from "@/lib/context/CartContext";
 import { getAddresses } from "@/lib/api/addresses";
@@ -100,7 +100,7 @@ export default function Checkout() {
                 <section className="flex flex-col gap-2">
                     <h2 className="text-lg font-medium">Shipping address</h2>
                     {addressesLoading ? (
-                        <CircularProgress size={24} />
+                        <Spinner size={24} label="Loading addresses" />
                     ) : (
                         <AddressSelector
                             addresses={addresses ?? []}
@@ -118,7 +118,7 @@ export default function Checkout() {
                             Choose a shipping address first.
                         </p>
                     ) : invoiceLoading ? (
-                        <CircularProgress size={24} />
+                        <Spinner size={24} label="Preparing payment" />
                     ) : invoiceError || !invoice ? (
                         <p className="text-sm text-red-500">
                             Could not prepare your payment.
