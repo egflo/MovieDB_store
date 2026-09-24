@@ -184,7 +184,7 @@ export default function Payments() {
                     <h2 className="text-lg font-semibold">Add a card</h2>
                     <AddCardForm
                         makeDefault={!methods.some((m) => m.isDefault)}
-                        onAdded={() => { setAdding(false); mutate(); }}
+                        onAdded={async () => { await mutate(); setAdding(false); }}
                         onCancel={() => setAdding(false)}
                     />
                 </section>
