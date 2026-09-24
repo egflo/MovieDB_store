@@ -5,6 +5,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { HTTPError } from "ky";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { getOrder } from "@/lib/api/orders";
 import { formatPrice } from "@/lib/api/client";
@@ -50,11 +51,32 @@ function DetailSkeleton() {
     );
 }
 
+/**
+ * Shown when checkout brings you here: the order is placed and paid. No
+ * receipt-email promise: Stripe doesn't send receipts in test mode.
+ */
+function PlacedBanner({ total, payment }: { total: string; payment: string | null }) {
+    return (
+        <section role="status" className={`flex flex-col gap-4 sm:flex-row sm:items-center ${PANEL}`}>
+            <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300 ring-1 ring-inset ring-emerald-300/30">
+                <CheckRoundedIcon sx={{ fontSize: 24 }} />
+            </span>
+            <div className="flex flex-1 flex-col gap-0.5">
+                <p className="text-lg font-semibold">Thanks, your order is placed</p>
+                <p className="text-sm text-white/70">
+                    {total} {payment ? payment.replace(/^Paid/, "paid") : "paid"}. You’ll find it any time under Orders.
+                </p>
+            </div>
+            <Link href="/" className={`${CHIP} w-fit shrink-0 px-4`}>Keep browsing</Link>
+        </section>
+    );
+}
+
 function Message({ children }: { children: React.ReactNode }) {
     return <div className="flex flex-col items-start gap-3 py-10 text-white/70">{children}</div>;
 }
 
-export default function OrderDetail({ id }: { id: string }) {
+export default function OrderDetail({ id, justPlaced = false }: { id: string; justPlaced?: boolean }) {
     const { user } = useAuth();
     // Order ids are integers; anything else is a 500 from the API.
     const validId = /^\d+$/.test(id);
@@ -83,6 +105,7 @@ export default function OrderDetail({ id }: { id: string }) {
 
         body = (
             <>
+                {justPlaced && <PlacedBanner total={price(order.total)} payment={payment} />}
                 <header className="flex flex-wrap items-end justify-between gap-3">
                     <div className="flex flex-col gap-1">
                         <h1 className="text-3xl font-semibold tracking-tight">Order #{order.id}</h1>
@@ -126,7 +149,7 @@ export default function OrderDetail({ id }: { id: string }) {
                                 <p>{ship.firstName} {ship.lastName}</p>
                                 <p className="text-white/70">{ship.street}</p>
                                 <p className="text-white/70">
-                                    {[ship.city, [ship.state, ship.postcode].filter(Boolean).join(" ")].filter(Boolean).join(", ")}
+                                    {[ship.city, [ship.state, ship.postalCode].filter(Boolean).join(" ")].filter(Boolean).join(", ")}
                                 </p>
                                 <p className="text-white/70">{ship.country}</p>
                             </section>

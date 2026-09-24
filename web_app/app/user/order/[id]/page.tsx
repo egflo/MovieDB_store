@@ -13,9 +13,13 @@ export async function generateMetadata({
 
 export default async function Page({
     params,
+    searchParams,
 }: {
     params: Promise<{ id: string }>;
+    searchParams: Promise<{ placed?: string }>;
 }) {
     const { id } = await params;
-    return <OrderDetail id={id} />;
+    // Checkout lands here with ?placed=1 to show the confirmation.
+    const { placed } = await searchParams;
+    return <OrderDetail id={id} justPlaced={placed === "1"} />;
 }

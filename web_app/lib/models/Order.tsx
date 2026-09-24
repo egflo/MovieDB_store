@@ -8,7 +8,8 @@
         street: string;
         city: string;
         state: string;
-        postcode: string;
+        /** Shipping.getPostalCode() in order_service, so the JSON says postalCode, not postcode. */
+        postalCode: string;
         country: string;
     }
 
