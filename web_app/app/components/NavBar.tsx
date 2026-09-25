@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import { useAuth } from '@/lib/firebase/AuthContext';
 import { useCart } from '@/lib/context/CartContext';
+import SearchPalette from './SearchPalette';
 
 /**
- * Site-wide top bar: wordmark, search, cart and account. Frosted glass to
+ * Site-wide top bar: wordmark, search, cart and account. Search is a button
+ * that opens SearchPalette (suggestions as you type); "/" or Cmd/Ctrl+K open
+ * it from anywhere. Frosted glass to
  * match the poster preview and hero caption; sticky, so content scrolls
  * under it and shows through the blur.
  *
@@ -27,14 +30,16 @@ const SCROLLED_PX = 8;
 const ICON_CLEAR = 'bg-black/25 backdrop-blur-md';
 
 export default function NavBar() {
-    const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const { user } = useAuth();
     const { count } = useCart();
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [query, setQuery] = useState('');
+    const [searchOpen, setSearchOpen] = useState(false);
+    const searchButton = useRef<HTMLButtonElement>(null);
+    const closeSearch = useCallback(() => setSearchOpen(false), []);
+    // On the search page the button shows, and the box starts with, its query.
+    const currentQuery = pathname === '/search' ? searchParams.get('query') ?? '' : '';
 
     const clearAtTop = CLEAR_AT_TOP.some((route) => route.test(pathname));
     const [scrolled, setScrolled] = useState(false);
@@ -50,32 +55,23 @@ export default function NavBar() {
         return () => window.removeEventListener('scroll', onScroll);
     }, [clearAtTop, pathname]);
 
-    // Keep the field in step with the search page's own query, and clear it
-    // when leaving search.
-    useEffect(() => {
-        setQuery(pathname === '/search' ? searchParams.get('query') ?? '' : '');
-    }, [pathname, searchParams]);
+    // Leaving the page (a suggestion, "See all", Back) closes the box.
+    useEffect(() => setSearchOpen(false), [pathname, searchParams]);
 
-    // "/" focuses search from anywhere, unless the user is already typing.
+    // Cmd/Ctrl+K opens search from anywhere; "/" too, unless the user is typing.
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
-            if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+            const commandK = e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey) && !e.altKey;
+            const slash = e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey;
+            if (!commandK && !slash) return;
             const target = e.target as HTMLElement;
-            if (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+            if (slash && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return;
             e.preventDefault();
-            inputRef.current?.focus();
+            setSearchOpen(true);
         };
         document.addEventListener('keydown', onKey);
         return () => document.removeEventListener('keydown', onKey);
     }, []);
-
-    const submit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const q = query.trim();
-        if (!q) return;
-        inputRef.current?.blur();
-        router.push(`/search?query=${encodeURIComponent(q)}`);
-    };
 
     return (
         <header
@@ -92,31 +88,20 @@ export default function NavBar() {
                     MovieDB
                 </Link>
 
-                <form role="search" onSubmit={submit} className="ml-auto">
-                    <label className="group flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/10 backdrop-blur-md transition-colors focus-within:bg-white/15 focus-within:ring-white/25">
-                        <SearchRoundedIcon fontSize="small" className="text-white/60" aria-hidden="true" />
-                        <span className="sr-only">Search movies</span>
-                        <input
-                            ref={inputRef}
-                            type="search"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Escape') inputRef.current?.blur();
-                                // Submit explicitly rather than rely on the
-                                // browser's implicit submission; preventDefault
-                                // stops that too, so it never fires twice.
-                                if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
-                                    e.preventDefault();
-                                    e.currentTarget.form?.requestSubmit();
-                                }
-                            }}
-                            placeholder="Search"
-                            enterKeyHint="search"
-                            className="w-28 bg-transparent text-sm outline-none transition-[width] duration-200 placeholder:text-white/50 focus:w-44 sm:w-40 sm:focus:w-64 [&::-webkit-search-cancel-button]:hidden"
-                        />
-                    </label>
-                </form>
+                <button
+                    ref={searchButton}
+                    type="button"
+                    onClick={() => setSearchOpen(true)}
+                    aria-haspopup="dialog"
+                    aria-label={currentQuery ? `Search movies and people, current search: ${currentQuery}` : 'Search movies and people'}
+                    // A round icon button like cart and account on phones; a
+                    // search-field-shaped pill with its shortcut from sm up.
+                    className={`ml-auto flex cursor-pointer items-center gap-2 rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white sm:bg-white/10 sm:px-3 sm:py-1.5 sm:text-white/60 sm:ring-1 sm:ring-white/10 sm:backdrop-blur-md sm:hover:bg-white/15 ${clear ? ICON_CLEAR : ''}`}
+                >
+                    <SearchRoundedIcon fontSize="small" aria-hidden="true" className="sm:text-white/60" />
+                    <span className="hidden w-32 truncate text-left text-sm sm:block">{currentQuery || 'Search'}</span>
+                    <kbd className="hidden rounded px-1.5 font-sans text-[11px] leading-5 text-white/45 ring-1 ring-inset ring-white/15 sm:block">/</kbd>
+                </button>
 
                 <Link
                     href="/cart"
@@ -139,6 +124,7 @@ export default function NavBar() {
                     <PersonOutlineRoundedIcon fontSize="small" />
                 </Link>
             </nav>
+            {searchOpen && <SearchPalette initialText={currentQuery} onClose={closeSearch} returnFocusTo={searchButton} />}
         </header>
     );
 }
