@@ -1,6 +1,7 @@
 package com.movie_service.controller;
 
 
+import com.movie_service.service.AutocompleteService;
 import com.movie_service.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,19 @@ public class MovieController {
 
     @Autowired
     private MovieService service;
+
+    @Autowired
+    private AutocompleteService autocomplete;
+
+    /**
+     * Search-box suggestions: a few slim rows ranked by how the title matches
+     * (see AutocompleteService). Blank text gives an empty list.
+     */
+    @GetMapping("/autocomplete")
+    public ResponseEntity<?> autocomplete(@RequestParam(defaultValue = "") String q,
+                                          @RequestParam Optional<Integer> limit) {
+        return ResponseEntity.ok(autocomplete.movies(q, limit.orElse(null)));
+    }
 
 
     @GetMapping("/all")

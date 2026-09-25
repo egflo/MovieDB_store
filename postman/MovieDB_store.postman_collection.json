@@ -438,6 +438,170 @@
           }
         },
         {
+          "name": "Autocomplete movies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const rows = pm.response.json();",
+                  "pm.test(\"array of at most 6 (default limit)\", () => { pm.expect(rows).to.be.an(\"array\").that.is.not.empty; pm.expect(rows.length).to.be.at.most(6); });",
+                  "pm.test(\"slim rows: id, movieId, title, year, poster, ratings only\", () => rows.forEach(r => pm.expect(Object.keys(r)).to.have.members([\"id\", \"movieId\", \"title\", \"year\", \"poster\", \"ratings\"])));",
+                  "pm.test(\"titles starting with the text rank first\", () => pm.expect(rows[0].title.toLowerCase().startsWith(\"bat\")).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/autocomplete?q=bat",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "autocomplete"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "bat"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Autocomplete movies ignores accents",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const rows = pm.response.json();",
+                  "pm.test(\"\\\"amelie\\\" finds Am\u00e9lie\", () => pm.expect(rows.map(r => r.title)).to.include(\"Am\u00e9lie\"));",
+                  "pm.test(\"limit is honoured\", () => pm.expect(rows.length).to.be.at.most(3));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/autocomplete?q=amelie&limit=3",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "autocomplete"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "amelie"
+                },
+                {
+                  "key": "limit",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Autocomplete with blank text is empty",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "pm.test(\"empty array, not an error\", () => pm.expect(pm.response.json()).to.eql([]));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/autocomplete?q=%20%20",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "autocomplete"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "%20%20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Autocomplete people",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const rows = pm.response.json();",
+                  "pm.test(\"array of at most 6\", () => { pm.expect(rows).to.be.an(\"array\").that.is.not.empty; pm.expect(rows.length).to.be.at.most(6); });",
+                  "pm.test(\"rows carry id, name, roles, knownFor, films\", () => rows.forEach(r => { pm.expect(r.id).to.match(/^nm\\d+$/); pm.expect(r.name).to.be.a(\"string\"); pm.expect(r.roles).to.be.an(\"array\").that.is.not.empty; pm.expect(r.knownFor).to.be.a(\"string\"); pm.expect(r.films).to.be.above(0); }));",
+                  "pm.test(\"a word of the first name starts with the text\", () => pm.expect(/(^|[\\s\\-.])nolan/i.test(rows[0].name)).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/cast/autocomplete?q=nolan",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "cast",
+                "autocomplete"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "nolan"
+                }
+              ]
+            }
+          }
+        },
+        {
           "name": "Search by exact price ($20)",
           "event": [
             {

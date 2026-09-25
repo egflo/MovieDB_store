@@ -1,5 +1,6 @@
 package com.movie_service.controller;
 
+import com.movie_service.service.AutocompleteService;
 import com.movie_service.service.CastService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,19 @@ import java.util.Optional;
 public class CastController {
     @Autowired
     private CastService service;
+
+    @Autowired
+    private AutocompleteService autocomplete;
+
+    /**
+     * Search-box suggestions for people credited in the store's films (see
+     * AutocompleteService). Blank text gives an empty list.
+     */
+    @GetMapping("/autocomplete")
+    public ResponseEntity<?> autocomplete(@RequestParam(defaultValue = "") String q,
+                                          @RequestParam Optional<Integer> limit) {
+        return ResponseEntity.ok(autocomplete.people(q, limit.orElse(null)));
+    }
 
 
     @GetMapping("/all")
