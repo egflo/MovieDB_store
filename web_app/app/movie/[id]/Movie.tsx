@@ -1,6 +1,7 @@
 "use client"
 import useSWR from 'swr';
 import RatingsSection from "@/app/ui/RatingsSection";
+import GenreChips from "@/app/ui/GenreChips";
 import InfiniteScrollableContainer from "@/app/components/InfiniteScrollableContainer";
 import ScrollableContainer from "@/app/components/ScrollableContainer";
 import CastItem from "@/app/ui/CastItem";
@@ -245,18 +246,7 @@ export default function Movie({id}: { id: string }) {
                         }
 
                         <SubSection movie={data} />
-                        {data.genres &&
-                            <div className="flex flex-row flex-wrap gap-2 ">
-                                {data.genres.map((genre:string) => (
-                                    <Chip
-                                        key={genre}
-                                        onClick={() =>  router.push(`/search/?genres=${genre}`)}
-                                        sx={CHIP_SX}
-                                        label={genre}
-                                    />
-                                ))}
-                            </div>
-                        }
+                        <GenreChips genres={data.genres} />
                         <RatingsSection movie={data} />
 
                         <div className={"hidden md:flex flex-row gap-4"}>

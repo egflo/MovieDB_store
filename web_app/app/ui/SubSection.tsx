@@ -28,9 +28,9 @@ export default function SubSection({ movie }: { movie: Movie }) {
             <span
                 key="rated"
                 aria-label={`Rated ${rated}`}
-                // h-5 matches the text's 20px line height; the border sits
-                // inside it, so the badge is no taller than the words.
-                className="inline-flex h-5 items-center rounded-[4px] px-1.5 leading-none ring-1 ring-inset ring-white/70"
+                // h-[18px] fits the 12px text's line; the border sits inside
+                // it, so the badge is no taller than the words.
+                className="inline-flex h-[18px] items-center rounded-[3px] px-1 text-[11px] leading-none ring-1 ring-inset ring-white/35"
             >
                 {rated}
             </span>,
@@ -41,10 +41,12 @@ export default function SubSection({ movie }: { movie: Movie }) {
     if (items.length === 0) return null;
 
     return (
-        <div className="flex flex-row flex-wrap items-center gap-2 text-sm font-semibold leading-5 text-white">
+        // Small and grey: supporting detail under the title, not competing
+        // with it or with the scores row.
+        <div className="flex flex-row flex-wrap items-center gap-1.5 text-xs font-medium leading-5 text-white/60">
             {items.map((item, i) => (
-                <span key={i} className="flex items-center gap-2">
-                    {i > 0 && <span aria-hidden="true" className="text-white/60">•</span>}
+                <span key={i} className="flex items-center gap-1.5">
+                    {i > 0 && <span aria-hidden="true" className="text-white/30">•</span>}
                     {item}
                 </span>
             ))}

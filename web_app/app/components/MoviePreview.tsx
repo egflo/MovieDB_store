@@ -8,6 +8,12 @@ import { Movie } from '@/lib/models/Movie';
 import Box from "@mui/material/Box";
 import MoreLikeThis from './MoreLikeThis';
 import AboutMovie from './AboutMovie';
+import Favorite from '@/app/components/actions/Favorite';
+import Rate from '@/app/components/actions/Rate';
+import SubSection from '@/app/ui/SubSection';
+import RatingsSection from '@/app/ui/RatingsSection';
+import GenreChips from '@/app/ui/GenreChips';
+import { PRIMARY_PILL } from '@/app/ui/chip';
 
 const DURATION_MS = 300;
 
@@ -314,26 +320,19 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
                                 </Box>
                             }
                             {!movie.logo &&
-                                <div className="flex flex-row items-baseline gap-3">
-                                    <h2 className="text-2xl font-bold">{movie.title}</h2>
-                                    {movie.year != null && (
-                                        <span className="text-sm text-gray-400">{movie.year}</span>
-                                    )}
-                                </div>
+                                <h2 className="text-2xl font-bold">{movie.title}</h2>
                             }
 
-                            {movie.genres && movie.genres.length > 0 && (
-                                <div className="flex flex-wrap gap-2">
-                                    {movie.genres.map((genre) => (
-                                        <span
-                                            key={genre}
-                                            className="rounded-full outline outline-1 outline-white/15 px-3 py-1 text-xs font-medium  text-gray-200"
-                                        >
-                                            {genre}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
+                            {/* Year • content rating (PG-13...) • runtime, as on the
+                                movie page. The year used to show only beside a
+                                text title. */}
+                            <SubSection movie={movie} />
+
+                            {/* Each genre links to the search page filtered by it. */}
+                            <GenreChips genres={movie.genres} />
+
+                            {/* Every review score, on its own row, as on the movie page. */}
+                            <RatingsSection movie={movie} />
 
                             {movie.plot && (
                                 <p className="line-clamp-4 text-sm text-gray-200">{movie.plot}</p>
@@ -360,20 +359,15 @@ export default function MoviePreview({ movie, originElement, onClose }: MoviePre
 
 
 
-                            <div className="flex flex-row gap-2 pt-1">
-                                <Link
-                                    href={`/movie/${movie.id}`}
-                                    className="rounded bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-800"
-                                >
-                                    More Info
+                            {/* The home hero's pair plus the movie page's rating
+                                button. Closing is the ✕ at the top, Esc, or a
+                                click outside. */}
+                            <div className="flex flex-row items-center gap-2 pt-1">
+                                <Link href={`/movie/${movie.id}`} className={PRIMARY_PILL}>
+                                    More info<span className="sr-only"> about {movie.title}</span>
                                 </Link>
-                                <button
-                                    type="button"
-                                    onClick={collapse}
-                                    className="cursor-pointer rounded border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
-                                >
-                                    Close
-                                </button>
+                                <Favorite id={movie.id} title={movie.title} />
+                                <Rate id={movie.id} />
                             </div>
                         </div>
                     </div>
