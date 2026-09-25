@@ -11,9 +11,9 @@ export default function HomePage() {
         // the top of this page; see CLEAR_AT_TOP in NavBar.
         <main className="-mt-14 flex min-h-screen flex-col justify-start">
             <Carousel />
-            <PosterCarousel title="Most Rated" url={`${MOVIES}?sortBy=ratings.numOfVotes`} />
-            <PosterCarousel title="Popular" url={`${MOVIES}?sortBy=popularity`} />
-            <PosterCarousel title="Box Office" url={`${MOVIES}?sortBy=revenue`} />
+            <PosterCarousel title="Most Rated" url={`${MOVIES}?sortBy=ratings.numOfVotes`} seeAllHref="/search?sort=votes" />
+            <PosterCarousel title="Popular" url={`${MOVIES}?sortBy=popularity`} seeAllHref="/search?sort=popular" />
+            <PosterCarousel title="Box Office" url={`${MOVIES}?sortBy=revenue`} seeAllHref="/search?sort=boxOffice" />
         </main>
     );
 }

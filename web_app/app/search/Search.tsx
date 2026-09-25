@@ -36,6 +36,9 @@ const TAGS_URL = `${API}/movie/tag/all`;
 export const SORTS = {
     popular: {label: 'Popular', params: 'sortBy=popularity'},
     rating: {label: 'Top rated', params: 'sortBy=ratings.imdb'},
+    // The home page rows' "See all" (Most Rated, Box Office).
+    votes: {label: 'Most rated', params: 'sortBy=ratings.numOfVotes'},
+    boxOffice: {label: 'Box office', params: 'sortBy=revenue'},
     newest: {label: 'Newest', params: 'sortBy=year'},
     oldest: {label: 'Oldest', params: 'sortBy=year&direction=1'},
     cheapest: {label: 'Price: low to high', params: 'sortBy=price&direction=1'},

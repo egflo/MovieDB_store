@@ -44,3 +44,11 @@ export const CHIP_ICON_SX = {
 
 /** Icon size inside a chip. */
 export const CHIP_ICON_SIZE = { fontSize: 20 } as const;
+
+/**
+ * The white pill for a page's main action on the dark glass ("More info" in
+ * the home hero and the movie preview): 40px tall, black semibold text.
+ */
+export const PRIMARY_PILL =
+    'flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-black transition-colors hover:bg-white/85 ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black';

@@ -174,3 +174,10 @@ svg{
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* The home hero's progress bar: the lit bar fills over one slide's time, and
+   the carousel moves on when it ends, so pausing the animation pauses autoplay. */
+@keyframes hero-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
