@@ -12,10 +12,10 @@ import java.util.Optional;
 public interface OrderServiceImp {
 
     public Page<Order> searchByText(String text, String userId, PageRequest pageRequest);
-    public Order getOrder(Integer id);
+    public Order getOrder(Integer id, String userId);
     public Order createOrder(OrderRequest orderRequest) throws StripeException;
 
-    public RefundDTO deleteOrder(Integer id);
+    public RefundDTO deleteOrder(Integer id, String userId);
 
     public void cancelOrder(Integer id);
 

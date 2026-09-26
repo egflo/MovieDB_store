@@ -18,21 +18,6 @@ public class UserController {
     @Autowired
     private FirebaseService firebaseService;
 
-    @GetMapping
-    public List<User> getAllUsers() throws ExecutionException, InterruptedException {
-        return firebaseService.getAllUsers();
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody UserRequest user) {
-        return ResponseEntity.ok(firebaseService.createUser(user));
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
-        firebaseService.deleteUser(id);
-    }
-
     @GetMapping("/")
     public ResponseEntity<?> getUser(@RequestHeader(value = "uid", required = true) String subject) {
         return ResponseEntity.ok(firebaseService.getUser(subject));

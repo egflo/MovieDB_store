@@ -281,11 +281,17 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
-                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
-                  "const b = pm.response.json();",
-                  "pm.test(\"routes are registered\", () => pm.expect(b).to.be.an(\"array\").that.is.not.empty);",
-                  "console.log(\"route count:\", b.length);"
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "if (!authed) {",
+                  "  // Only the catalogue, public reviews and status pages are open (SecurityConfig PUBLIC_GETS).",
+                  "  pm.test(\"needs a token\", () => pm.response.to.have.status(401));",
+                  "} else {",
+                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "  const b = pm.response.json();",
+                  "  pm.test(\"routes are registered\", () => pm.expect(b).to.be.an(\"array\").that.is.not.empty);",
+                  "  console.log(\"route count:\", b.length);",
+                  "}"
                 ]
               }
             }
@@ -1246,7 +1252,7 @@
           }
         },
         {
-          "name": "My saved addresses (order service)",
+          "name": "Admin: all shipping addresses (needs ADMIN)",
           "event": [
             {
               "listen": "test",
@@ -1255,13 +1261,14 @@
                 "exec": [
                   "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
                   "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "// Admin endpoints live under /<service>/admin and need the ADMIN role",
+                  "// (Firebase custom claim, set with scripts/grant-role.sh).",
                   "if (!authed) {",
-                  "  pm.test(\"skipped - set idToken to exercise this endpoint\", () =>",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 500]));",
-                  "  console.log(\"no idToken; got\", pm.response.code, \"-\", pm.response.text().slice(0, 80));",
+                  "  pm.test(\"needs a token\", () => pm.response.to.have.status(401));",
                   "} else {",
-                  "  pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
-                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "  pm.test(\"200 for an admin, 403 for anyone else\", () =>",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 403]));",
+                  "  console.log(\"admin route answered\", pm.response.code);",
                   "}"
                 ]
               }
@@ -1271,12 +1278,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{gatewayUrl}}/order-service/address/all",
+              "raw": "{{gatewayUrl}}/order-service/admin/address/all",
               "host": [
                 "{{gatewayUrl}}"
               ],
               "path": [
                 "order-service",
+                "admin",
                 "address",
                 "all"
               ]
@@ -1598,7 +1606,11 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
-                  "pm.test(\"status is 404\", () => pm.response.to.have.status(404));"
+                  "const authed = !!pm.request.headers.get(\"Authorization\");",
+                  "// Routes are private unless listed as public, so without a token even an",
+                  "// unknown one answers 401 (which also doesn't reveal which routes exist).",
+                  "pm.test(authed ? \"status is 404\" : \"status is 401\", () =>",
+                  "  pm.response.to.have.status(authed ? 404 : 401));"
                 ]
               }
             }
@@ -1627,21 +1639,22 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
-                  "pm.test(\"does not leak another user's cart\", () => {",
-                  "  if (pm.response.code === 200) {",
-                  "    pm.expect(pm.response.json(), \"unauthenticated cart should be empty\").to.be.an(\"array\").that.is.empty;",
-                  "  }",
-                  "});",
-                  "// NOTE: the gateway permits all GETs unauthenticated",
-                  "// (pathMatchers(HttpMethod.GET, \"/**\").permitAll()), so this returns 200.",
-                  "// Tighten SecurityConfig and this should become 401."
+                  "// Sent with no Authorization header (and a forged uid header), so the",
+                  "// gateway must refuse it rather than pass the uid through.",
+                  "pm.test(\"gateway rejects it\", () => pm.response.to.have.status(401));"
                 ]
               }
             }
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "uid",
+                "value": "someone-else",
+                "description": "Forged identity; the gateway must strip it."
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/inventory-service/cart/",
               "host": [

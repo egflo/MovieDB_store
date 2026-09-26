@@ -79,12 +79,8 @@ public class ReviewService implements ReviewServiceImp {
     }
 
     @Override
-    public ReviewDTO updateReview(String id, ReviewRequest reviewRequest) {
-        if (!repository.existsById(new ObjectId(id))) {
-            throw new IdNotFoundException("Review with id " + id + " not found");
-        }
-
-        Review review = repository.findById(new ObjectId(id)).get();
+    public ReviewDTO updateReview(String id, String userId, ReviewRequest reviewRequest) {
+        Review review = ownReview(id, userId);
         review.setRating(reviewRequest.rating());
         review.setLove(reviewRequest.love());
         review.setContent(reviewRequest.content());
@@ -93,18 +89,25 @@ public class ReviewService implements ReviewServiceImp {
 
         Review updatedReview = repository.save(review);
         ReviewDTO reviewDTO = new ReviewDTO(updatedReview);
-        Optional<Sentiment> sentiment = sentimentService.getSentimentByUserIdAndObjectId(reviewRequest.getUserId(), new ObjectId(id));
+        Optional<Sentiment> sentiment = sentimentService.getSentimentByUserIdAndObjectId(userId, new ObjectId(id));
         sentiment.ifPresent(value -> reviewDTO.setSentiment(sentiment.get()));
 
         return reviewDTO;
     }
 
     @Override
-    public void deleteReview(String id) {
-        if (!repository.existsById(new ObjectId(id))) {
-            throw new IdNotFoundException("Review with id " + id + " not found");
-        }
-        repository.deleteById(new ObjectId(id));
+    public void deleteReview(String id, String userId) {
+        repository.delete(ownReview(id, userId));
+    }
+
+    /**
+     * A review the caller wrote. Someone else's gets the same answer as a
+     * missing one, so it can be neither changed nor told apart.
+     */
+    private Review ownReview(String id, String userId) {
+        return repository.findById(new ObjectId(id))
+                .filter(review -> userId.equals(review.getUserId()))
+                .orElseThrow(() -> new IdNotFoundException("Review with id " + id + " not found"));
     }
 
     @Override

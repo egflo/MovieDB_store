@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 public interface ShippingServiceImp {
-    public Shipping getAddress(Integer id);
+    public Shipping getAddress(Integer id, String userId);
     public Shipping createAddress(AddressDTO addressDTO);
 
     public  Shipping updateAddress(AddressDTO addressDTO);
 
-    public void deleteAddress(Integer id);
+    public void deleteAddress(Integer id, String userId);
 
     public Page<Shipping> getAllAddresses(PageRequest pageRequest);
     public Page<Shipping> getAddressesByFirstName(String firstName, PageRequest pageRequest);

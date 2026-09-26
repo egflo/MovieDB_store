@@ -38,7 +38,9 @@ public class UserManagement {
     }
 
     public boolean isUserAdmin(String token) throws FirebaseAuthException {
-        return firebaseAuth.verifyIdToken(token).getClaims().get("role").toString().equals("admin");
+        // setUserClaims writes {"roles": [...]}, the claim SecurityConfig reads.
+        Object roles = firebaseAuth.verifyIdToken(token).getClaims().get("roles");
+        return roles instanceof List<?> list && list.contains(Role.ADMIN.name());
     }
 
     public boolean isUserAuthenticated(String token) throws FirebaseAuthException {

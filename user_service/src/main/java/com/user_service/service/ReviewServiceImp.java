@@ -15,9 +15,9 @@ public interface ReviewServiceImp {
 
     ReviewDTO createReview(ReviewRequest reviewRequest);
 
-    void deleteReview(String id);
+    void deleteReview(String id, String userId);
 
-    ReviewDTO updateReview(String id, ReviewRequest reviewRequest);
+    ReviewDTO updateReview(String id, String userId, ReviewRequest reviewRequest);
 
     Page<ReviewDTO> getAllReviews(Optional<String> userId, PageRequest pageRequest);
 

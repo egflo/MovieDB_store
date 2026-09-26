@@ -26,8 +26,9 @@ public class ShippingService implements ShippingServiceImp {
         this.addressRepository = addressRepository;
     }
 
-    public Shipping getAddress(Integer id) {
-        return addressRepository.findById(id)
+    /** The shipping address of one of the caller's orders; anyone else's reads as missing. */
+    public Shipping getAddress(Integer id, String userId) {
+        return addressRepository.findByIdAndOrderUserId(id.longValue(), userId)
                 .orElseThrow(() -> new AddressException("Address not found for this id :: " + id));
     }
 
@@ -65,8 +66,8 @@ public class ShippingService implements ShippingServiceImp {
     }
 
     @Override
-    public void deleteAddress(Integer id) {
-        addressRepository.deleteById(id);
+    public void deleteAddress(Integer id, String userId) {
+        addressRepository.delete(getAddress(id, userId));
     }
 
     public Page<Shipping> getAllAddresses(PageRequest pageRequest) {

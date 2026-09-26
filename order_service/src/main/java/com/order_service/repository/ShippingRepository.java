@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface ShippingRepository extends JpaRepository<Shipping, Integer> {
     Optional<Shipping> findById(Long id);
 
+    Optional<Shipping> findByIdAndOrderUserId(Long id, String userId);
+
     Page<Shipping> findAllByFirstName(String firstName, Pageable page);
 
     Page<Shipping> findAllByLastName(String lastName, Pageable page);

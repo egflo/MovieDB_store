@@ -28,9 +28,16 @@ public class ReviewRequest {
 
     private final @NonNull Boolean love; // sentiment of the review (required)
 
-    private final @NonNull String userId; // sentiment of the review (required)
+    // Author of the review. Ignored in the body: the controller replaces it
+    // with the signed-in caller's uid (withUserId).
+    private final String userId;
 
     public String getUserId() {
         return userId;
+    }
+
+    /** The same review, written by {@code userId}. */
+    public ReviewRequest withUserId(String userId) {
+        return new ReviewRequest(title, content, movieId, rating, love, userId);
     }
 }

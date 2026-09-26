@@ -71,7 +71,7 @@ public class CommentController {
             @PathVariable String id,
             @RequestBody Comment updatedComment) {
 
-        Comment comment = commentService.updateComment(new ObjectId(id), updatedComment);
+        Comment comment = commentService.updateComment(new ObjectId(id), subject, updatedComment);
         if (comment != null) {
             return new ResponseEntity<>(comment, HttpStatus.OK);
         }
@@ -81,7 +81,7 @@ public class CommentController {
     // Delete a comment
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@RequestHeader("uid") String subject, @PathVariable String id) {
-        commentService.deleteComment(new ObjectId(id));
+        commentService.deleteComment(new ObjectId(id), subject);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -5,6 +5,7 @@ import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +38,19 @@ class Error {
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+
+    /**
+     * A user route reached without the uid header the gateway sets from a
+     * verified token: the caller isn't signed in. Without this it fell through
+     * to the catch-all below as a 500.
+     */
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<?> handleMissingRequestHeader(MissingRequestHeaderException e) {
+        if ("uid".equalsIgnoreCase(e.getHeaderName())) {
+            return new ResponseEntity<>("Sign in required", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler({InventoryException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)

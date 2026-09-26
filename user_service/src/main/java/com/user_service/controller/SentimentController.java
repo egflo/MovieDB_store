@@ -1,6 +1,8 @@
 package com.user_service.controller;
 
+import com.user_service.DTO.SentimentDTO;
 import com.user_service.DTO.SentimentRequest;
+import com.user_service.exception.IdNotFoundException;
 import com.user_service.service.SentimentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,35 +20,18 @@ public class SentimentController {
     private SentimentService service;
 
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAll(
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
-    ) {
-
-        return new ResponseEntity<>(service.getAllSentiments(PageRequest.of(
-                page.orElse(0),
-                limit.orElse(10),
-                Sort.by(sortBy.orElse("date"))
-        )), HttpStatus.OK);
-    }
-
-
-    @GetMapping("/object/{id}/user/{userId}")
-    public ResponseEntity<?> findByUserIdAndObjectId(
-            @PathVariable String id,
-            @PathVariable String userId
-    ) {
-        return new ResponseEntity<>(service.findByUserIdAndObjectId(id, userId), HttpStatus.OK);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(
             @RequestHeader("uid") String subject,
             @PathVariable String id
     ) {
-        return new ResponseEntity<>(service.getSentiment(id), HttpStatus.OK);
+        // Only the caller's own; someone else's reads as missing.
+        SentimentDTO sentiment = service.getSentiment(id);
+        if (!subject.equals(sentiment.getUserId())) {
+            throw new IdNotFoundException("Sentiment not found with id: " + id);
+        }
+        return new ResponseEntity<>(sentiment, HttpStatus.OK);
     }
 
 

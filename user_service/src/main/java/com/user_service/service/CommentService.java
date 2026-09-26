@@ -64,8 +64,8 @@ public class CommentService {
     }
 
     // Update an existing comment
-    public Comment updateComment(ObjectId id, Comment updatedComment) {
-        Optional<Comment> existingComment = commentRepository.findById(id);
+    public Comment updateComment(ObjectId id, String userId, Comment updatedComment) {
+        Optional<Comment> existingComment = ownComment(id, userId);
         if (existingComment.isPresent()) {
             Comment comment = existingComment.get();
             comment.setText(updatedComment.getText());
@@ -77,12 +77,17 @@ public class CommentService {
         throw new IdNotFoundException("Comment Not Found");
     }
 
-    public void deleteComment(ObjectId id) {
-        if(commentRepository.findById(id).isEmpty()) {
-            throw new IdNotFoundException("Comment Not Found");
-        }
+    public void deleteComment(ObjectId id, String userId) {
+        Comment comment = ownComment(id, userId)
+                .orElseThrow(() -> new IdNotFoundException("Comment Not Found"));
 
-        commentRepository.deleteById(id);
+        commentRepository.delete(comment);
+    }
+
+    /** A comment the caller wrote; someone else's reads as missing. */
+    private Optional<Comment> ownComment(ObjectId id, String userId) {
+        return commentRepository.findById(id)
+                .filter(comment -> userId.equals(comment.getUserId()));
     }
 
     public List<CommentDTO> getCommentsByReview(String reviewId, Optional<String> userId, String sortBy) {

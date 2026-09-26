@@ -21,6 +21,10 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+
 import java.util.List;
 
 @Configuration
@@ -28,19 +32,71 @@ import java.util.List;
 @EnableReactiveMethodSecurity
 @Slf4j
 public class SecurityConfig {
+
+    /**
+     * GETs anyone may make without signing in: the catalogue, public reviews
+     * and status pages. Everything else needs a token, so a new route is
+     * private until it's added here.
+     */
+    private static final String[] PUBLIC_GETS = {
+            "/",                                    // gateway status
+            "/movie-service/**",                    // movies, cast, critics, image proxy
+            "/inventory-service/product/**",        // price and stock
+            "/user-service/review/**",              // user reviews
+            "/user-service/comments/**",            // comments on reviews
+            "/inventory-service", "/inventory-service/", "/inventory-service/health",
+            "/order-service", "/order-service/", "/order-service/health",
+            "/user-service", "/user-service/", "/user-service/health",
+    };
+
+    /** Actuator endpoints monitoring may read without a token. */
+    private static final String[] PUBLIC_ACTUATOR = {
+            "/actuator/health", "/actuator/health/**", "/actuator/info",
+    };
+
+    /**
+     * Staff only (the ADMIN role). Each service serves its admin endpoints
+     * from AdminController under /admin, so a new one is covered by where it
+     * lives. Checked before PUBLIC_GETS so no public prefix can open one.
+     */
+    private static final String[] ADMIN_PATHS = {
+            "/*-service/admin/**",
+            "/user-claims/**",                      // granting roles
+            "/actuator/**",                         // env, mappings, routes
+    };
+
     @Bean
     public SecurityWebFilterChain SecurityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(csrf -> csrf.disable())  // Disable CSRF for API
                 .authorizeExchange(auth -> auth
                         .pathMatchers("/public/**").permitAll()  // Open paths
-                        .pathMatchers(HttpMethod.GET, "/**").permitAll() // Allow all GET requests
-                        .pathMatchers(HttpMethod.PUT).authenticated() // Secure PUT, POST, DELETE
-                        .anyExchange().authenticated() // Secure other paths
+                        .pathMatchers(HttpMethod.GET, PUBLIC_ACTUATOR).permitAll()
+                        .pathMatchers(ADMIN_PATHS).hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, PUBLIC_GETS).permitAll()
+                        .anyExchange().authenticated()
                 )
 
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt())  // Use JWT for OAuth2
+                // JWTConfig's decoder checks the signature, issuer and audience.
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
+                        .jwtAuthenticationConverter(firebaseRoles())))
                 .build();
+    }
+
+    /**
+     * Firebase custom claim {"roles": ["ADMIN", ...]} to Spring roles
+     * (ROLE_ADMIN). Only the Admin SDK can set it: scripts/GrantRole.java, or
+     * POST /user-claims/{uid} by an existing admin. A change reaches the
+     * user's next ID token (they refresh within the hour, or sign in again).
+     */
+    private static ReactiveJwtAuthenticationConverterAdapter firebaseRoles() {
+        JwtGrantedAuthoritiesConverter roles = new JwtGrantedAuthoritiesConverter();
+        roles.setAuthoritiesClaimName("roles");
+        roles.setAuthorityPrefix("ROLE_");
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(roles);
+        return new ReactiveJwtAuthenticationConverterAdapter(converter);
     }
 
     // This method provides the AuthenticationManager required by Spring Security

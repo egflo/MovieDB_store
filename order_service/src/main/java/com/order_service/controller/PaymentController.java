@@ -31,10 +31,7 @@ public class PaymentController {
 
     @DeleteMapping("/payment-methods/{id}")
     public ResponseEntity<?> deletePaymentMethods(@RequestHeader(value = "uid", required = true) String userId, @PathVariable String id) {
-        //String token = headers.get("authorization").get(0).split(" ")[1].trim();
-        //DecodedJWT jwt = JWT.decode(token);
-        // String subject = jwt.getSubject();
-        stripeService.deletePaymentMethod(id);
+        stripeService.deletePaymentMethod(userId, id);
         return ResponseEntity.ok("Payment Deleted");
     }
 }

@@ -4,6 +4,7 @@ import com.order_service.dto.AddressDTO;
 import com.order_service.dto.PaymentMethodDTO;
 import com.order_service.dto.PaymentSheetDTO;
 import com.order_service.dto.UserDTO;
+import com.order_service.exception.IdNotFoundException;
 import com.order_service.exception.StripeServiceException;
 import com.order_service.grpc.CartService;
 import com.order_service.grpc.UserService;
@@ -381,10 +382,38 @@ public class StripeService {
         }
     }
 
+    /**
+     * A payment method by id, if the caller may use it: attached to their
+     * customer, or (only when {@code allowUnattached}) not attached to anyone
+     * yet, which is how a newly entered card arrives. Anything else, including
+     * an id Stripe doesn't know, is "not found", so another customer's card
+     * can't be told apart from a missing one.
+     */
+    private PaymentMethod ownPaymentMethod(Customer customer, String paymentMethodId,
+                                           boolean allowUnattached) throws StripeException {
+        PaymentMethod paymentMethod;
+        try {
+            paymentMethod = PaymentMethod.retrieve(paymentMethodId);
+        } catch (InvalidRequestException e) {
+            if ("resource_missing".equals(e.getCode())) {
+                throw new IdNotFoundException("Payment method not found");
+            }
+            throw e;
+        }
+
+        String owner = paymentMethod.getCustomer();
+        boolean mine = customer.getId().equals(owner);
+        if (!mine && !(allowUnattached && owner == null)) {
+            throw new IdNotFoundException("Payment method not found");
+        }
+        return paymentMethod;
+    }
+
     public void setDefaultPaymentMethod(String userId, String paymentMethodId) {
         try {
             // Retrieve the user from your service
             Customer customer = getCustomer(userId);
+            ownPaymentMethod(customer, paymentMethodId, false);
 
             // Update the customer's default payment method
             CustomerUpdateParams params = CustomerUpdateParams.builder()
@@ -408,7 +437,7 @@ public class StripeService {
         try {
             Customer customer = getCustomer(userId);
 
-            PaymentMethod paymentMethod = PaymentMethod.retrieve(paymentMethodId);
+            PaymentMethod paymentMethod = ownPaymentMethod(customer, paymentMethodId, true);
             paymentMethod.attach(PaymentMethodAttachParams.builder()
                     .setCustomer(customer.getId())
                     .build());
@@ -441,9 +470,10 @@ public class StripeService {
     }
 
 
-    public void deletePaymentMethod(String paymentMethodId)  {
+    public void deletePaymentMethod(String userId, String paymentMethodId)  {
         try {
-            PaymentMethod paymentMethod = PaymentMethod.retrieve(paymentMethodId);
+            Customer customer = getCustomer(userId);
+            PaymentMethod paymentMethod = ownPaymentMethod(customer, paymentMethodId, false);
             paymentMethod.detach();
         } catch (StripeException e) {
             throw new StripeServiceException(e.getMessage(), e);

@@ -29,7 +29,7 @@ public class ReviewController {
             @RequestHeader("uid") String subject,
             @RequestBody ReviewRequest request
     ) {
-        return new ResponseEntity<>(service.createReview(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.createReview(request.withUserId(subject)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -46,7 +46,7 @@ public class ReviewController {
             @PathVariable String id,
             @RequestBody ReviewRequest request
     ) {
-        return new ResponseEntity<>(service.updateReview(id, request), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateReview(id, userId, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -54,7 +54,7 @@ public class ReviewController {
             @RequestHeader("uid") String userId,
             @PathVariable String id
     ) {
-        service.deleteReview(id);
+        service.deleteReview(id, userId);
         return new ResponseEntity<>("Review deleted", HttpStatus.OK);
     }
 

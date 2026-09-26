@@ -24,107 +24,23 @@ public class AddressController {
 
     @GetMapping("/{id}")
     public @ResponseBody ResponseEntity<?> getAddressById(
-            @RequestHeader(value = "uid", required = true) Optional<String> userId,
+            @RequestHeader(value = "uid", required = true) String userId,
             @PathVariable(value = "id") Integer id)
     {
-        return ResponseEntity.ok(addressService.getAddress(id));
-    }
-
-    @PostMapping("/")
-    @ResponseBody
-    public ResponseEntity<?> addAddress(
-            @RequestHeader(value = "uid", required = true) Optional<String> userId,
-            @RequestBody AddressDTO request) {
-
-        return new ResponseEntity<>(addressService.createAddress(request), HttpStatus.CREATED);
+        return ResponseEntity.ok(addressService.getAddress(id, userId));
     }
 
 
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> deleteAddress(
-            @RequestHeader(value = "uid", required = true) Optional<String> userId,
+            @RequestHeader(value = "uid", required = true) String userId,
             @PathVariable(value = "id") Integer id) {
 
-        addressService.deleteAddress(id);
+        addressService.deleteAddress(id, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     *
-     *    ADMIN METHODS
-     * **/
-
-    @GetMapping(path="/all")
-    public @ResponseBody
-    ResponseEntity<?> getAllUsers(
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
-    ) {
-        // This returns a JSON or XML with the movies
-        return ResponseEntity.ok(addressService.getAllAddresses(
-                PageRequest.of(
-                        page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
-                )
-        ));
-    }
-
-    @GetMapping("/firstname/{fname}")
-    public ResponseEntity<?> getAddressByFirstName(
-            @PathVariable(value = "fname") String fname,
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
-    ) {
-        // This returns a JSON or XML with the movies
-        return ResponseEntity.ok(addressService.getAddressesByFirstName(
-                fname,
-                PageRequest.of(
-                        page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
-                )
-        ));
-    }
-
-    @GetMapping("/lastname/{lname}")
-    public ResponseEntity<?> getCustomerByLastName(
-            @PathVariable(value = "lname") String lname,
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
-    ) {
-        // This returns a JSON or XML with the movies
-        return ResponseEntity.ok(addressService.getAddressesByLastName(
-                lname,
-                PageRequest.of(
-                        page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
-                )
-        ));
-    }
-
-    @GetMapping("/postcode/{postcode}")
-    public ResponseEntity<?> getCustomerByPostCode(
-            @PathVariable(value = "postcode") String postcode,
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
-    ) {
-        // This returns a JSON or XML with the movies
-        return ResponseEntity.ok(addressService.getAddressesByPostcode(
-                postcode,
-                PageRequest.of(
-                        page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
-                )
-        ));
-    }
 
 
 }

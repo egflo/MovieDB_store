@@ -55,50 +55,5 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     *
-     *    ADMIN METHODS
-     * **/
 
-    @GetMapping("/all")
-    public ResponseEntity<?> findAll(
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy
-    ) {
-
-        return ResponseEntity.ok(cartService.getAll(
-                PageRequest.of(
-                        page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
-                )
-        ));
-
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findCartById(
-            @PathVariable Integer id) {
-
-          return ResponseEntity.ok(cartService.findById(id));
-    }
-
-    @GetMapping("/item/{id}")
-    public ResponseEntity<?> findCartByMovieId(
-            @PathVariable String id,
-            @RequestParam Optional<Integer> limit,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy) {
-
-
-        return ResponseEntity.ok(cartService.findAllByItemId(
-                id,
-                PageRequest.of(
-                        page.orElse(0),
-                        limit.orElse(5),
-                        Sort.Direction.ASC, sortBy.orElse("id")
-                )
-        ));
-    }
 }

@@ -32,32 +32,7 @@ public class ItemController {
         return ResponseEntity.ok(service.getItemById(id));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> add(@RequestHeader HttpHeaders headers, @RequestBody ItemDTO request) {
-        return new ResponseEntity(service.add(request), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/")
-    public ResponseEntity<?> update(@RequestHeader HttpHeaders headers,
-                                        @RequestBody ItemDTO request) {
-
-        return new ResponseEntity<>(service.update(request), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@RequestHeader HttpHeaders headers,
-                                                     @PathVariable String id) {
-
-        service.delete(id);
-        String message = "Item with id: " + id + " deleted successfully";
-        return ResponseEntity.ok(message);
-    }
-
-    /**
-     *
-     *    ADMIN METHODS
-     * **/
-
+    /** The whole catalogue with prices; public, like GET /{id}. */
     @GetMapping("/all")
     public ResponseEntity<?> findAll(
             @RequestParam Optional<Integer> limit,

@@ -184,9 +184,13 @@ public class OrderService implements OrderServiceImp {
         return orderRepository.findByOrderItemDescription(text, userId, pageRequest);
     }
 
+    /**
+     * One of the caller's orders. Someone else's order gets the same answer as
+     * a missing one, so ids can't be probed for which orders exist.
+     */
     @Override
-    public Order getOrder(Integer id) {
-        return orderRepository.findById(id)
+    public Order getOrder(Integer id, String userId) {
+        return orderRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new OrderException("Order not found for this id :: " + id));
     }
 
@@ -289,9 +293,9 @@ public class OrderService implements OrderServiceImp {
     }
 
     @Override
-    public RefundDTO deleteOrder(Integer id) {
+    public RefundDTO deleteOrder(Integer id, String userId) {
 
-        Optional<Order> order = orderRepository.findById(id);
+        Optional<Order> order = orderRepository.findByIdAndUserId(id, userId);
         if(order.isPresent()) {
             Order orderToDelete = order.get();
             //Set status to cancelled

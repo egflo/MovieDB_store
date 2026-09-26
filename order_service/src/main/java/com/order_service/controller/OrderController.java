@@ -87,15 +87,19 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody ResponseEntity<?> getOrder(@PathVariable(value = "id") Integer id) {
+    public @ResponseBody ResponseEntity<?> getOrder(
+            @RequestHeader(value = "uid", required = true) String userId,
+            @PathVariable(value = "id") Integer id) {
 
-        return new ResponseEntity<>(orderService.getOrder(id), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getOrder(id, userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public @ResponseBody ResponseEntity<?> deleteOrder(@PathVariable(value = "id") Integer id) {
+    public @ResponseBody ResponseEntity<?> deleteOrder(
+            @RequestHeader(value = "uid", required = true) String userId,
+            @PathVariable(value = "id") Integer id) {
 
-        return new ResponseEntity<>(orderService.deleteOrder(id), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.deleteOrder(id, userId), HttpStatus.OK);
     }
 
     @GetMapping("/user/")
@@ -149,25 +153,6 @@ public class OrderController {
                 )), HttpStatus.OK);
     }
 
-
-    @GetMapping("/all")
-    public @ResponseBody ResponseEntity<?> getAllOrders(    @RequestParam Optional<Integer> limit,
-                                                            @RequestParam Optional<Integer> page,
-                                                            @RequestParam Optional<String> sortBy,
-                                                            @RequestParam Optional<Integer> direction) {
-        Sort.Direction sortDirection = Sort.Direction.DESC;
-        if (direction.isPresent()) {
-            if (direction.get() == 1) {
-                sortDirection = Sort.Direction.ASC;
-            }
-        }
-
-        return new ResponseEntity<>(orderService.getAllOrders(PageRequest.of(
-                page.orElse(0),
-                limit.orElse(10),
-                Sort.by(sortDirection, sortBy.orElse("id"))
-        )), HttpStatus.OK);
-    }
 
 
 }
