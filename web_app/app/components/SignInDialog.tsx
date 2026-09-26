@@ -8,15 +8,7 @@ import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {app} from "@/lib/firebase/firebase";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {GLASS_CARD} from "@/app/ui/glass";
-
-/** Firebase's error codes, in words a person can act on. */
-function friendlyError(error: unknown): string {
-    const code = (error as { code?: string })?.code ?? '';
-    if (/invalid-credential|wrong-password|user-not-found|invalid-email/.test(code)) return 'That email and password don’t match an account.';
-    if (code.includes('too-many-requests')) return 'Too many attempts. Wait a moment and try again.';
-    if (code.includes('network-request-failed')) return 'Couldn’t reach the sign-in service. Check your connection.';
-    return 'Couldn’t sign you in. Please try again.';
-}
+import {friendlyError} from "@/lib/firebase/errors";
 
 interface SignInDialogProps {
     open: boolean;

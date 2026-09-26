@@ -2,15 +2,24 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "@/lib/firebase/firebase";
+import { friendlyError } from "@/lib/firebase/errors";
+
+/**
+ * Where to go after signing in: the page the middleware sent us here from
+ * (?redirect=/user/info), if it's a path on this site, else home.
+ */
+function afterSignIn(): string {
+    const target = new URLSearchParams(window.location.search).get("redirect") ?? "";
+    // "//host" and "/\host" would leave the site.
+    return /^\/(?![/\\])/.test(target) ? target : "/";
+}
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const router = useRouter();
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();
@@ -24,15 +33,19 @@ export default function Login() {
             );
             const idToken = await credential.user.getIdToken();
 
-            await fetch("/api/login", {
+            const res = await fetch("/api/login", {
                 headers: {
                     Authorization: `Bearer ${idToken}`,
                 },
             });
+            if (!res.ok) throw new Error(`session ${res.status}`);
 
-            router.push("/");
+            // A full load, not router.push: client navigation keeps the root
+            // layout, which holds the signed-in user, so the header stayed
+            // on "Sign in" until a reload. replace() keeps /login out of Back.
+            window.location.replace(afterSignIn());
         } catch (e) {
-            setError((e as Error).message);
+            setError(friendlyError(e));
         }
     }
 
