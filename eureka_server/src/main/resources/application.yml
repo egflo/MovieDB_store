@@ -3,8 +3,11 @@ spring:
   application:
     name: eureka-server
 
+# Loopback only: a registry open to the network would let anyone register a
+# fake instance and have the gateway route users to it.
 server:
   port: 8761
+  address: ${SERVER_ADDRESS:127.0.0.1}
 eureka:
   client:
     registerWithEureka: false

@@ -15,8 +15,13 @@ spring:
     show-sql: true
     database: postgresql
 
+# Only this machine can reach the service: outside callers go through the
+# gateway, which is the only thing that may set the uid header the
+# controllers trust. SERVER_ADDRESS / GRPC_ADDRESS / INSTANCE_HOST open it
+# up again where a private network does that job (e.g. containers).
 server:
   port: ${SERVER_PORT:0}
+  address: ${SERVER_ADDRESS:127.0.0.1}
 
 eureka:
   client:
@@ -25,10 +30,15 @@ eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
     preferIpAddress: ${PREFER_IP_ADDRESS:false}
+    # Registered as loopback, matching server.address: the gateway and gRPC
+    # clients on this machine connect there, whatever the Wi-Fi address is.
+    hostname: ${INSTANCE_HOST:127.0.0.1}
+    ip-address: ${INSTANCE_HOST:127.0.0.1}
 
 grpc:
   server:
     port: ${GRPC_PORT:0}
+    address: ${GRPC_ADDRESS:127.0.0.1}
   client:
     inventory-grpc-server:
       address: ${GRPC_INVENTORY_ADDRESS:discovery:///inventory-service}
