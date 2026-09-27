@@ -19,9 +19,9 @@ import java.util.*;
  * service account from secrets/.
  *
  *   scripts/grant-role.sh --list                     users holding any role
- *   scripts/grant-role.sh admin@admin.com            that user's roles
- *   scripts/grant-role.sh admin@admin.com ADMIN      add a role
- *   scripts/grant-role.sh admin@admin.com --revoke ADMIN
+ *   scripts/grant-role.sh user@example.com           that user's roles
+ *   scripts/grant-role.sh user@example.com ADMIN     add a role
+ *   scripts/grant-role.sh user@example.com --revoke ADMIN
  *                                                    remove it and sign the user
  *                                                    out everywhere, so it applies now
  *

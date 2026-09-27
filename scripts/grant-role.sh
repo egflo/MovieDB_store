@@ -4,8 +4,8 @@
 # See scripts/GrantRole.java for what each form does.
 #
 #   ./scripts/grant-role.sh --list
-#   ./scripts/grant-role.sh admin@admin.com ADMIN
-#   ./scripts/grant-role.sh admin@admin.com --revoke ADMIN
+#   ./scripts/grant-role.sh user@example.com ADMIN
+#   ./scripts/grant-role.sh user@example.com --revoke ADMIN
 #
 # Runs GrantRole.java as a single-file program on the gateway's classpath (it
 # already has the Firebase Admin SDK), with the service account from secrets/.
