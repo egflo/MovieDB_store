@@ -2,12 +2,12 @@ package com.inventory_service.service;
 
 
 import com.inventory_service.DTO.ItemDTO;
-import com.inventory_service.NullAwareUtils;
 import com.inventory_service.exception.IdNotFoundException;
 import com.inventory_service.model.Product;
 import com.inventory_service.model.Status;
 import com.inventory_service.model.Type;
 import com.inventory_service.repository.CartRepository;
+import com.inventory_service.repository.CategoryRepository;
 import com.inventory_service.repository.ItemRepository;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,13 @@ public class ItemService implements ItemServiceImp {
 
     static final int LIMIT = 10;
 
+    static final String MOVIE_CATEGORY = "Movie";
+
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private ItemTransactionService transactionService;
@@ -54,14 +59,8 @@ public class ItemService implements ItemServiceImp {
                 throw new RuntimeException("Invalid transaction type");
             }
 
-            //Update status
-            if (product.getQuantity() == 0) {
-                product.setStatus(Status.OUT_OF_STOCK);
-            } else if (product.getQuantity() < LIMIT) {
-                product.setStatus(Status.LIMITED);
-            } else {
-                product.setStatus(Status.IN_STOCK);
-            }
+            product.setStatus(statusFor(product.getQuantity()));
+            product.setUpdated(new Date());
 
             //Create transaction
             transactionService.createTransaction(itemId, quantity, type, "Inventory update for item: " + itemId + " :: Type: " + type);
@@ -79,27 +78,85 @@ public class ItemService implements ItemServiceImp {
         return itemRepository.findAll(pagable);
     }
 
+    /**
+     * Stock status from the quantity. Zero or below is out of stock: cart adds
+     * can push a quantity negative (they don't check stock), and those used to
+     * read as LIMITED.
+     */
+    static Status statusFor(int quantity) {
+        if (quantity <= 0) return Status.OUT_OF_STOCK;
+        if (quantity < LIMIT) return Status.LIMITED;
+        return Status.IN_STOCK;
+    }
+
+    /** New products: id is the movie's id (movie_service), SKU its IMDb id. */
     @Override
     public Product add(ItemDTO request) {
-        Product item = new Product();
-        item.setSKU(request.getSKU());
-        item.setId(request.getId());
-        item.setQuantity(request.getQuantity());
-        item.setPrice(request.getPrice());
-        item.setCurrency(request.getCurrency());
+        if (request.getId() == null || request.getId().isBlank()) {
+            throw new IllegalArgumentException("A product needs the movie's id");
+        }
+        if (request.getSKU() == null || request.getSKU().isBlank()) {
+            throw new IllegalArgumentException("A product needs a SKU (the movie's IMDb id)");
+        }
+        if (itemRepository.existsById(request.getId())) {
+            throw new IllegalArgumentException("A product for " + request.getId() + " already exists");
+        }
+        int quantity = request.getQuantity() == null ? 0 : request.getQuantity();
+        validate(request.getPrice(), quantity);
 
+        Product item = new Product();
+        item.setId(request.getId());
+        item.setSKU(request.getSKU());
+        item.setPrice(request.getPrice());
+        item.setCurrency(request.getCurrency() == null ? "usd" : request.getCurrency());
+        item.setQuantity(quantity);
+        // The constructor's IN_STOCK default was wrong for anything under LIMIT.
+        item.setStatus(statusFor(quantity));
+        // Every product so far is a movie; without this the type was null.
+        categoryRepository.findByName(MOVIE_CATEGORY).ifPresent(item::setType);
+
+        Product saved = itemRepository.save(item);
+        if (quantity != 0) {
+            transactionService.createTransaction(saved.getId(), quantity, Type.STOCK_ADJUSTMENT,
+                    "New product " + saved.getId() + " with " + quantity + " in stock");
+        }
+        return saved;
+    }
+
+    /**
+     * Admin edit: price, currency and quantity, each only if sent. This used to
+     * copy every non-null DTO field with BeanUtils, which silently skipped
+     * `status` (a String in the DTO, an enum here) and never recomputed it, so
+     * statuses drifted from the quantities. The status is now always derived,
+     * which also repairs a drifted one on the next save.
+     */
+    @Override
+    public Product update(ItemDTO request) {
+        Product item = itemRepository.findById(request.getId())
+                .orElseThrow(() -> new IdNotFoundException("Item not found for this id :: " + request.getId()));
+
+        Integer price = request.getPrice() != null ? request.getPrice() : item.getPrice();
+        int quantity = request.getQuantity() != null ? request.getQuantity() : item.getQuantity();
+        validate(price, quantity);
+
+        item.setPrice(price);
+        if (request.getCurrency() != null) item.setCurrency(request.getCurrency());
+        if (quantity != item.getQuantity()) {
+            transactionService.createTransaction(item.getId(), quantity, Type.STOCK_ADJUSTMENT,
+                    "Admin set stock of " + item.getId() + " from " + item.getQuantity() + " to " + quantity);
+            item.setQuantity(quantity);
+        }
+        item.setStatus(statusFor(item.getQuantity()));
+        item.setUpdated(new Date());
         return itemRepository.save(item);
     }
 
-    @Override
-    public Product update(ItemDTO request) {
-        Optional<Product> itemOpt = itemRepository.findById(request.getId());
-        if (itemOpt.isPresent()) {
-            Product item = itemOpt.get();
-            NullAwareUtils.copyNonNullProperties(request, item);
-            return itemRepository.save(item);
-        } else {
-            throw new RuntimeException("Item not found for this id :: " + request.getId());
+    private static void validate(Integer price, int quantity) {
+        if (price == null || price <= 0) {
+            throw new IllegalArgumentException("Price must be more than 0 (in cents)");
+        }
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity can't be negative");
         }
     }
 
