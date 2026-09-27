@@ -105,7 +105,13 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         //corsConfig.setAllowedOrigins(List.of("*"));
-        corsConfig.setAllowedOriginPatterns(List.of("http://*:3000, https://*.vercel.app"));
+        // The browser apps: web_app (3000), admin_app (3001), and Vercel
+        // deployments. This list is what applies, not the gateway's
+        // globalcors in application.yml.
+        corsConfig.setAllowedOriginPatterns(List.of(
+                "http://*:3000",
+                "http://*:3001",
+                "https://*.vercel.app"));
         corsConfig.setMaxAge(3600L);
         corsConfig.addAllowedMethod("*");
         corsConfig.addAllowedHeader("*");
