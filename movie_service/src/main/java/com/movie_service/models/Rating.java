@@ -89,6 +89,10 @@ public class Rating
         return rottenTomatoesAudienceStatus;
     }
 
+    public void setRottenTomatoesAudienceStatus(String rottenTomatoesAudienceStatus) {
+        this.rottenTomatoesAudienceStatus = rottenTomatoesAudienceStatus;
+    }
+
     public String getRottenTomatoesStatus() {
         return rottenTomatoesStatus;
     }

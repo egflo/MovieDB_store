@@ -290,7 +290,8 @@ public Movie(String movieId, String title, Integer year, String rated, String ru
     }
 
     public void setKeywords(List<Tag> setTags) {
-        this.tags = tags;
+        // Assigned the field to itself before 2026-09-26, so it never did anything.
+        this.tags = setTags;
     }
 
 }
