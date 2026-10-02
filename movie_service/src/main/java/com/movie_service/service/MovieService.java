@@ -4,7 +4,6 @@ package com.movie_service.service;
 
 import com.movie_service.DAO.MovieDAO;
 import com.movie_service.exception.IdNotFoundException;
-import com.movie_service.grpc.ItemService;
 import com.movie_service.models.Movie;
 import com.movie_service.models.Suggestion;
 import com.movie_service.models.Tag;
@@ -13,7 +12,6 @@ import com.movie_service.repository.SuggestionRepository;
 import com.movie_service.repository.TagRepository;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
-import org.proto.grpc.ItemResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +40,6 @@ public class MovieService implements MovieServiceImp {
     @Autowired
     private TagRepository tagRepository;
 
-    @Autowired
-    private ItemService itemService;
-
 
     @Override
     public Page<Movie> findAll(Pageable pageable) {
@@ -61,15 +56,16 @@ public class MovieService implements MovieServiceImp {
         API api = new API(repository);
         //api.background(id);
         Optional<Movie> present = repository.getMovieByMovieId(id);
+        // No inventory lookup here: it used to ask inventory for the product
+        // and throw the answer away, so a movie without a product (or
+        // inventory being down) turned its page into a 500.
         if (present.isPresent()) {
-            ItemResponse Response = itemService.getItemBySku(id);
             Movie movie = present.get();
             return movie;
         }
 
        present = repository.getMovieById(new ObjectId(id));
         if (present.isPresent()) {
-            ItemResponse Response = itemService.getItem(id);
             Movie movie = present.get();
             return movie;
         }
