@@ -914,6 +914,266 @@
               ]
             }
           }
+        },
+        {
+          "name": "Review counts per source",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const counts = pm.response.json();",
+                  "pm.test(\"lists every critic and user source\", () => { pm.expect(counts.critic).to.have.all.keys(\"rt\", \"metacritic\"); pm.expect(counts.user).to.have.all.keys(\"imdb\", \"letterboxd\", \"metacritic\"); });",
+                  "pm.test(\"The Dark Knight has reviews from all five\", () => [counts.critic.rt, counts.critic.metacritic, counts.user.imdb, counts.user.letterboxd, counts.user.metacritic].forEach(n => pm.expect(n).to.be.above(0)));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/movie/tt0468569/counts",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "movie",
+                "tt0468569",
+                "counts"
+              ]
+            },
+            "description": "Reviews collected from other sites, per source (The Dark Knight, by IMDb id). The page uses it to show only the sources with content."
+          }
+        },
+        {
+          "name": "Critic reviews: Rotten Tomatoes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const page = pm.response.json();",
+                  "pm.test(\"a page of 5\", () => { pm.expect(page.content).to.have.lengthOf(5); pm.expect(page.totalElements).to.be.above(5); });",
+                  "pm.test(\"rows are Rotten Tomatoes reviews in the shared critic shape\", () => page.content.forEach(r => { pm.expect(r.source).to.eql(\"rt\"); pm.expect(r.movieId).to.eql(\"tt0468569\"); pm.expect(r.state).to.be.oneOf([\"fresh\", \"rotten\"]); pm.expect(r.topCritic).to.be.a(\"boolean\"); pm.expect(r).to.include.keys(\"critic\", \"publication\", \"score\", \"scoreNormalized\", \"sentiment\", \"text\", \"url\", \"date\"); }));",
+                  "pm.test(\"newest first\", () => { const d = page.content.map(r => r.date).filter(Boolean); pm.expect(d).to.eql([...d].sort().reverse()); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/critic/rt/movie/tt0468569?limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "critic",
+                "rt",
+                "movie",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Critic reviews: Metacritic, highest score first",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const page = pm.response.json();",
+                  "pm.test(\"rows are Metacritic reviews\", () => page.content.forEach(r => { pm.expect(r.source).to.eql(\"metacritic\"); pm.expect(r.sentiment).to.be.oneOf([\"positive\", \"mixed\", \"negative\"]); pm.expect(r.state).to.be.null; }));",
+                  "pm.test(\"scores descend\", () => { const s = page.content.map(r => r.scoreNormalized); pm.expect(s).to.eql([...s].sort((a, b) => b - a)); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/critic/metacritic/movie/tt0468569?sortBy=score&limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "critic",
+                "metacritic",
+                "movie",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "score"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "User reviews: IMDb",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const page = pm.response.json();",
+                  "pm.test(\"rows are IMDb reviews with an author and a rating out of 10\", () => page.content.forEach(r => { pm.expect(r.source).to.eql(\"imdb\"); pm.expect(r.rating).to.be.within(1, 10); pm.expect(r.user.id).to.be.a(\"string\"); pm.expect(r.user.name).to.be.a(\"string\"); pm.expect(r.url).to.include(\"imdb.com\"); }));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/user/imdb/movie/tt0468569?limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "user",
+                "imdb",
+                "movie",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "User reviews: Letterboxd, most liked first",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const page = pm.response.json();",
+                  "pm.test(\"rows are Letterboxd reviews\", () => page.content.forEach(r => { pm.expect(r.source).to.eql(\"letterboxd\"); pm.expect(r.liked).to.be.a(\"boolean\"); pm.expect(r.user.name).to.be.a(\"string\"); }));",
+                  "pm.test(\"likes descend\", () => { const l = page.content.map(r => r.likes); pm.expect(l).to.eql([...l].sort((a, b) => b - a)); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/user/letterboxd/movie/tt0468569?sortBy=likes&limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "user",
+                "letterboxd",
+                "movie",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "likes"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "User reviews: Metacritic (limit capped at 50)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "const page = pm.response.json();",
+                  "pm.test(\"at most 50 a page\", () => { pm.expect(page.size).to.eql(50); pm.expect(page.content).to.have.lengthOf(50); });",
+                  "pm.test(\"rows are Metacritic user reviews\", () => page.content.forEach(r => { pm.expect(r.source).to.eql(\"metacritic\"); pm.expect(r.rating).to.be.within(0, 10); }));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/user/metacritic/movie/tt0468569?limit=500",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "user",
+                "metacritic",
+                "movie",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "500"
+                }
+              ]
+            }
+          }
         }
       ]
     },
@@ -1668,6 +1928,119 @@
             "description": "Documents the current open-GET behaviour on the gateway. If you lock SecurityConfig down, update this test to expect 401.",
             "auth": {
               "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "Reviews from an unknown source are 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "pm.test(\"says which sources exist\", () => pm.expect(pm.response.json().message).to.include(\"rt, metacritic\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/critic/imdb/movie/tt0468569",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "critic",
+                "imdb",
+                "movie",
+                "tt0468569"
+              ]
+            },
+            "description": "IMDb is a user-review source, not a critic one."
+          }
+        },
+        {
+          "name": "Reviews with an unknown sortBy are 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "pm.test(\"says which sorts exist\", () => pm.expect(pm.response.json().message).to.include(\"date, rating\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/user/metacritic/movie/tt0468569?sortBy=likes",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "user",
+                "metacritic",
+                "movie",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "likes"
+                }
+              ]
+            },
+            "description": "Metacritic user reviews have no likes."
+          }
+        },
+        {
+          "name": "Reviews for an unknown movie are an empty page",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is JSON\", () => pm.response.to.be.json);",
+                  "pm.test(\"no rows\", () => { const page = pm.response.json(); pm.expect(page.content).to.eql([]); pm.expect(page.totalElements).to.eql(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/reviews/user/imdb/movie/tt0000000",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "reviews",
+                "user",
+                "imdb",
+                "movie",
+                "tt0000000"
+              ]
             }
           }
         }
