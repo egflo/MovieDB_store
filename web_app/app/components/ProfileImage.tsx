@@ -7,6 +7,9 @@ interface ProfileImageProps {
     imageUrl?: string;
     size?: number;
     className?: string;
+    /** Load imageUrl as it is, for hosts the image optimizer doesn't allow
+     *  (other sites' avatars, which are already small). */
+    direct?: boolean;
 }
 
 const getInitials = (name: string): string => {
@@ -21,6 +24,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
                                                        imageUrl,
                                                        size = 64,
                                                        className = '',
+                                                       direct = false,
                                                    }) => {
     // Keyed by url, so a new imageUrl gets tried again after a failure. This
     // replaces a new Image() preload that downloaded every photo twice.
@@ -44,7 +48,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
             {isImageValid && imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                    {...optimizedImage(imageUrl, size, size)}
+                    {...(direct ? {src: imageUrl, loading: 'lazy' as const} : optimizedImage(imageUrl, size, size))}
                     alt={name}
                     decoding="async"
                     className="w-full h-full object-cover"

@@ -7,6 +7,9 @@ import ScrollableContainer from "@/app/components/ScrollableContainer";
 import CastItem from "@/app/ui/CastItem";
 import CriticReviewItem from "@/app/ui/CriticReviewItem";
 import UserReviewItem from "@/app/ui/UserReviewItem";
+import WebReviewItem from "@/app/ui/WebReviewItem";
+import ReviewSources from "@/app/components/ReviewSources";
+import type {ReviewCounts} from "@/lib/models/WebReview";
 import {Chip} from "@mui/material";
 import Cart from "@/app/components/actions/Cart";
 import Favorite from "@/app/components/actions/Favorite";
@@ -26,7 +29,8 @@ import {CHIP_SX} from "@/app/ui/chip";
 import {MovieCard} from "@/app/ui/MovieCard";
 
 
-const CRITIC_REVIEW_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/critic/movie/`;
+// Reviews collected from other sites: /critic/{source}/movie/{tt}, /user/{source}/movie/{tt}, /movie/{tt}/counts.
+const REVIEWS_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/reviews`;
 const USER_REVIEW_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/review/movie/`;
 const SUGGESTION_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/suggest/`;
 
@@ -176,6 +180,9 @@ export default function Movie({id}: { id: string }) {
 
     const URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/${id}`;
     const { data, error } = useSWR(URL, fetcher);
+    // Which sites have reviews for this movie, so only those are offered. A
+    // failure just leaves the two review sections out.
+    const { data: reviewCounts } = useSWR<ReviewCounts>(data?.movieId ? `${REVIEWS_URL}/movie/${data.movieId}/counts` : null, fetcher);
     // Above the early returns so hook order stays fixed.
     const detailsRef = useRef<HTMLDivElement>(null);
     const poster = usePosterMatchingHeight(detailsRef, !!data);
@@ -289,7 +296,30 @@ export default function Movie({id}: { id: string }) {
                     >
                         <ScrollableContainer data={data.cast} title={"Cast & Crew"} ItemComponent={CastItem} />
 
-                        <InfiniteScrollableContainer title={"Critic Reviews"} url={CRITIC_REVIEW_URL + data.movieId} ItemComponent={CriticReviewItem} />
+                        {reviewCounts &&
+                            <ReviewSources
+                                title={"Critic Reviews"}
+                                ItemComponent={CriticReviewItem}
+                                cardHeight="h-[270px]"
+                                sources={[
+                                    {key: 'rt', label: 'Rotten Tomatoes', icon: '/rotten_tomatoes/fresh.png', count: reviewCounts.critic.rt, url: `${REVIEWS_URL}/critic/rt/movie/${data.movieId}`},
+                                    {key: 'metacritic', label: 'Metacritic', icon: '/metacritic.png', count: reviewCounts.critic.metacritic, url: `${REVIEWS_URL}/critic/metacritic/movie/${data.movieId}`},
+                                ]}
+                            />
+                        }
+                        {reviewCounts &&
+                            <ReviewSources
+                                title={"Reviews From the Web"}
+                                ItemComponent={WebReviewItem}
+                                cardHeight="h-[280px]"
+                                sources={[
+                                    {key: 'imdb', label: 'IMDb', icon: '/imdb.png', count: reviewCounts.user.imdb, url: `${REVIEWS_URL}/user/imdb/movie/${data.movieId}`},
+                                    {key: 'letterboxd', label: 'Letterboxd', icon: '/letterboxd.svg', count: reviewCounts.user.letterboxd, url: `${REVIEWS_URL}/user/letterboxd/movie/${data.movieId}`},
+                                    {key: 'metacritic', label: 'Metacritic', icon: '/metacritic.png', count: reviewCounts.user.metacritic, url: `${REVIEWS_URL}/user/metacritic/movie/${data.movieId}`},
+                                ]}
+                            />
+                        }
+                        {/* Other sites' user reviews above; the store's own below them. */}
                         <InfiniteScrollableContainer title={'User Reviews'} token={auth.user?.idToken} url={USER_REVIEW_URL + data.id} ItemComponent={UserReviewItem} />
                         <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={RelatedPoster} />
 

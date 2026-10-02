@@ -24,9 +24,11 @@ const fetcher = async (endpoint: string) => {
 // A function to get the SWR key of each page,
 // its return value will be accepted by `fetcher`.
 // If `null` is returned, the request of that page won't start.
-const getKey: (index: number, previousPageData: Page<any>, url: string) => (null | string) = (index: number, previousPageData: Page<any>, url: string) => {
-    // End of pages
-    if (previousPageData && !previousPageData.content) return null;
+const getKey: (index: number, previousPageData: unknown[] | null, url: string) => (null | string) = (index: number, previousPageData: unknown[] | null, url: string) => {
+    // End of pages. The fetchers return a page's `content`, so this is an
+    // array; it used to test `.content` on it, which is never there, so no
+    // row ever loaded past its first 10.
+    if (previousPageData && previousPageData.length === 0) return null;
 
     // This used to append "?page=..." unconditionally, so any url that already
     // carried a query string produced a second "?" — e.g.
@@ -45,9 +47,11 @@ interface InfiniteScrollableContainerProps<T> {
     // The url is required, it will be used to fetch the data
     url: string;
     ItemComponent: React.ComponentType<{ item: T }>;
+    /** Shown while the first page loads, instead of "Loading...". */
+    placeholder?: React.ReactNode;
 }
 
-export default function InfiniteScrollableContainer<T>({token, title, url, ItemComponent }: InfiniteScrollableContainerProps<T>) {
+export default function InfiniteScrollableContainer<T>({token, title, url, ItemComponent, placeholder }: InfiniteScrollableContainerProps<T>) {
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -128,7 +132,7 @@ export default function InfiniteScrollableContainer<T>({token, title, url, ItemC
     }, [size, setSize, isValidating]);
 
     if (error) return <div>Error loading items.</div>;
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return placeholder ? <>{placeholder}</> : <div>Loading...</div>;
     if (items.length === 0) return <div></div>;
     return (
 
