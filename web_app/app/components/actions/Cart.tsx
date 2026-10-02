@@ -21,7 +21,15 @@ interface ItemPropsItemProps {
 
 const PRODUCT_URL:string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_INVENTORY_SERVICE_NAME}/product/`;
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+// null for a movie with no product (inventory answers 404): res.json()
+// alone handed the error body to priceFormatter, which threw and took the
+// whole movie page down.
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`${res.status} for ${url}`);
+    return res.json();
+};
 
 function priceFormatter(item: any) {
     const convert = item.price / 100;
@@ -83,6 +91,16 @@ export default function Cart({id, title}: ItemPropsItemProps) {
 
     if (error) return <div>Failed to load {error.message}</div>
     if (isLoading) return <div>Loading...</div>
+
+    // Movies newer than the catalogue's stock have no product yet.
+    if (!data) {
+        return (
+            <span className={`${CHIP} px-3.5 opacity-50`}>
+                <ShoppingBagOutlined sx={CHIP_ICON_SIZE} />
+                <span>Not for sale yet</span>
+            </span>
+        );
+    }
 
     return (
         <>
