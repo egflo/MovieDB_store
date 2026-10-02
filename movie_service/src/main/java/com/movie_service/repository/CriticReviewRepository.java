@@ -16,5 +16,6 @@ public interface CriticReviewRepository extends MongoRepository<CriticReview, Ob
 
     Optional<CriticReview> findReviewById(ObjectId id);
     Page<CriticReview> findReviewByMovieId(String movie_id, Pageable pageable);
+    long countByMovieId(String movieId);
 
 }

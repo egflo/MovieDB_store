@@ -11,10 +11,15 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
+/**
+ * A Rotten Tomatoes critic review. The collection was "critic_reviews" until
+ * the other review sources arrived; the class keeps its name because
+ * /critic/movie/{id} still returns it as is.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
-@Document(collection = "critic_reviews")
+@Document(collection = "rotten_tomatoes_critic_reviews")
 public class CriticReview {
 
     @Id
@@ -43,6 +48,9 @@ public class CriticReview {
 
     String sentiment;
 
+    /** The score on a 0-100 scale; null when the critic gave none (about 30%). */
+    Double scoreNormalized;
+
 
     public CriticReview(String id, Date creation_date, String critic_name, Integer isTopCritic, String movieId, String publication_name, Integer review_id, String review_state, String review_url, String text, String score, String sentiment) {
         this.id = id;
@@ -60,7 +68,7 @@ public class CriticReview {
     }
 
     public Boolean getIsTopCritic() {
-        return isTopCritic == 1;
+        return isTopCritic != null && isTopCritic == 1;
     }
 
 }
