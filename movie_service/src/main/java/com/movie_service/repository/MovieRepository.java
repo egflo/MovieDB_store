@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
     Optional<Movie> getMovieById(ObjectId id);
     Optional<Movie> getMovieByMovieId(String id);
     Page<Movie> findMovieByGenresContains(String genre, Pageable pageable);
+    List<Movie> findByMovieIdIn(Collection<String> movieIds);
 
     @Query(value = "{ 'cast.castId' : ?0 }")
     Page<Movie> findMovieByCastId (String castId, Pageable pageable);

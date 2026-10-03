@@ -5,9 +5,11 @@ package com.movie_service.service;
 import com.movie_service.DAO.MovieDAO;
 import com.movie_service.exception.IdNotFoundException;
 import com.movie_service.models.Movie;
+import com.movie_service.models.Recommendation;
 import com.movie_service.models.Suggestion;
 import com.movie_service.models.Tag;
 import com.movie_service.repository.MovieRepository;
+import com.movie_service.repository.RecommendationRepository;
 import com.movie_service.repository.SuggestionRepository;
 import com.movie_service.repository.TagRepository;
 import org.apache.commons.io.IOUtils;
@@ -39,6 +41,9 @@ public class MovieService implements MovieServiceImp {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private RecommendationRepository recommendationRepository;
 
 
     @Override
@@ -83,13 +88,36 @@ public class MovieService implements MovieServiceImp {
     }
 
     @Override
-    public Page<Movie> recommendMovies(String movieId, Pageable pageable) {
-        Optional<Movie> movie = repository.getMovieByMovieId(movieId);
-        if (movie.isPresent()) {
-            List<String> genres = movie.get().getGenres();
-            return repository.findMovieByGenresContains(genres.get(0), pageable);
+    public Page<Movie> recommendMovies(String id, Pageable pageable) {
+        // Takes the IMDb id or the Mongo id, like findByMovieId.
+        String movieId = id.startsWith("tt") || !ObjectId.isValid(id)
+                ? id
+                : repository.getMovieById(new ObjectId(id)).map(Movie::getMovieId).orElse(id);
+
+        // The movie's precomputed list, best first. It used to return any
+        // movies sharing the first genre. No list (an untitled stub, an
+        // unknown id) is an empty page.
+        List<String> ranked = recommendationRepository.findByMovieId(movieId)
+                .map(Recommendation::getRecommendationIds)
+                .orElse(List.of());
+
+        int from = (int) Math.min(pageable.getOffset(), ranked.size());
+        int to = Math.min(from + pageable.getPageSize(), ranked.size());
+        List<String> pageIds = ranked.subList(from, to);
+
+        // One query for the page, then back into the list's order.
+        Map<String, Movie> byId = new HashMap<>();
+        for (Movie movie : repository.findByMovieIdIn(pageIds)) {
+            byId.put(movie.getMovieId(), movie);
         }
-        throw new IdNotFoundException("Movie with id " + movieId + " not found");
+        List<Movie> movies = new ArrayList<>();
+        for (String recommended : pageIds) {
+            Movie movie = byId.get(recommended);
+            if (movie != null) movies.add(movie);
+        }
+
+        // Unsorted: the order is the ranking, whatever sort was asked for.
+        return new PageImpl<>(movies, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), ranked.size());
     }
 
 
