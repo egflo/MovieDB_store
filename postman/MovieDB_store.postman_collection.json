@@ -708,7 +708,7 @@
           }
         },
         {
-          "name": "Recommendations for a movie (KNOWN ISSUE: 500)",
+          "name": "Recommendations for a movie",
           "event": [
             {
               "listen": "test",
@@ -716,12 +716,8 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
-                  "pm.test(\"endpoint responds\", () => pm.expect(pm.response.code).to.be.oneOf([200, 500]));",
-                  "if (pm.response.code === 500) {",
-                  "  console.warn(\"/movie/recommend/{id} returns 500 for a valid id; /movie/suggest/{id} works on the same id\");",
-                  "} else {",
-                  "  pm.test(\"body is JSON\", () => pm.response.to.be.json);",
-                  "}"
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"body is a page\", () => pm.expect(pm.response.json().content).to.be.an(\"array\"));"
                 ]
               }
             }
@@ -741,7 +737,48 @@
                 "{{movieId}}"
               ]
             },
-            "description": "Currently returns 500 for a valid Mongo id, while /movie/suggest/{id} returns 200 for the same id. Tighten this to expect 200 once fixed."
+            "description": "The movie's precomputed recommendations, best first; takes the Mongo id or the IMDb id. (It used to answer 500, then any movies sharing the first genre.)"
+          }
+        },
+        {
+          "name": "Recommendations are the ranked list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "const page = pm.response.json();",
+                  "pm.test(\"20 recommendations, 5 on this page\", () => { pm.expect(page.totalElements).to.eql(20); pm.expect(page.content).to.have.lengthOf(5); });",
+                  "pm.test(\"best first: The Dark Knight leads to Batman Begins\", () => pm.expect(page.content[0].title).to.eql(\"Batman Begins\"));",
+                  "pm.test(\"never the movie itself\", () => page.content.forEach(m => pm.expect(m.movieId).to.not.eql(\"tt0468569\")));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/recommend/tt0468569?limit=5",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "recommend",
+                "tt0468569"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
           }
         },
         {
@@ -2039,6 +2076,38 @@
                 "user",
                 "imdb",
                 "movie",
+                "tt0000000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recommendations for an unknown movie are an empty page",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"responds within 5s\", () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"no rows\", () => { const page = pm.response.json(); pm.expect(page.content).to.eql([]); pm.expect(page.totalElements).to.eql(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/movie-service/movie/recommend/tt0000000",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "movie-service",
+                "movie",
+                "recommend",
                 "tt0000000"
               ]
             }
