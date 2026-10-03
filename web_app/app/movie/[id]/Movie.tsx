@@ -32,7 +32,9 @@ import {MovieCard} from "@/app/ui/MovieCard";
 // Reviews collected from other sites: /critic/{source}/movie/{tt}, /user/{source}/movie/{tt}, /movie/{tt}/counts.
 const REVIEWS_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/reviews`;
 const USER_REVIEW_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_USER_SERVICE_NAME}/review/movie/`;
-const SUGGESTION_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/suggest/`;
+// The movie's ranked recommendations (every titled movie has 20). The older
+// /movie/suggest/ covers under 5% of movies.
+const RECOMMEND_URL: string = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/recommend/`;
 
 
 // res.json() alone treats an error body as data. The API answers an unknown
@@ -321,7 +323,7 @@ export default function Movie({id}: { id: string }) {
                         }
                         {/* Other sites' user reviews above; the store's own below them. */}
                         <InfiniteScrollableContainer title={'User Reviews'} token={auth.user?.idToken} url={USER_REVIEW_URL + data.id} ItemComponent={UserReviewItem} />
-                        <InfiniteScrollableContainer title={"Related"} url={SUGGESTION_URL + data.movieId + "?sortBy=rating"} ItemComponent={RelatedPoster} />
+                        <InfiniteScrollableContainer title={"Related"} url={RECOMMEND_URL + data.movieId} ItemComponent={RelatedPoster} />
 
                         <div className={'h-[1px] bg-gray-600 mt-2 mb-2'}/>
                         <div className={"flex flex-col gap-2 w-full  "}>

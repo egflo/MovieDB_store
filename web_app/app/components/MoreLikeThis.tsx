@@ -7,9 +7,10 @@ import { Movie } from "@/lib/models/Movie";
 import { Page } from "@/lib/models/Page";
 import { MovieCard } from "@/app/ui/MovieCard";
 
-const SUGGEST_URL = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/suggest/`;
-/** Fetch more than we show, so the 12 shown can be the ones with posters. */
-const FETCH = 24;
+const RECOMMEND_URL = `${process.env.NEXT_PUBLIC_API_URL}/${process.env.NEXT_PUBLIC_MOVIE_SERVICE_NAME}/movie/recommend/`;
+/** Fetch more than we show, so the 12 shown can be the ones with posters.
+ *  A movie has 20 recommendations. */
+const FETCH = 20;
 /** At most four rows of three. */
 const MAX = 12;
 /** Two rows before the expand line. */
@@ -26,7 +27,7 @@ const hasPoster = (m: Movie) => typeof m.poster === "string" && /^https?:\/\//.t
 const GRID = "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4";
 
 /**
- * "More Like This" for the movie preview: up to 12 of the movie's suggestions
+ * "More Like This" for the movie preview: up to 12 of the movie's recommendations
  * as poster cards, two rows at first. A line with a round chevron slides the
  * rest open (and shut). Titles with a poster come first; many suggestions
  * have none. Renders nothing if there are no suggestions.
@@ -34,14 +35,14 @@ const GRID = "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4";
 export default function MoreLikeThis({ movie }: { movie: Movie }) {
     const [expanded, setExpanded] = useState(false);
     const { data, error, isLoading } = useSWR<Page<Movie>>(
-        movie.movieId ? `${SUGGEST_URL}${movie.movieId}?sortBy=rating&page=0&limit=${FETCH}` : null,
+        movie.movieId ? `${RECOMMEND_URL}${movie.movieId}?page=0&limit=${FETCH}` : null,
         fetcher,
         { revalidateOnFocus: false },
     );
 
     const movies = (data?.content ?? [])
         .filter((m) => m.id !== movie.id && m.title)
-        // Stable: keeps the rating order within each group.
+        // Stable: keeps the recommendations' ranking within each group.
         .sort((a, b) => Number(hasPoster(b)) - Number(hasPoster(a)))
         .slice(0, MAX);
 
